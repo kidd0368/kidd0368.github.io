@@ -97,6 +97,12 @@ details.how[open] summary::before { content:'▾ '; }
 details.how .hb { margin-top:6px; padding:9px 12px; background:var(--wash); border-radius:9px;
   font-size:12.5px; color:var(--ink-2); line-height:1.65; }
 #commentary p { margin:7px 0; font-size:13.5px; line-height:1.75; }
+.stages { display:flex; gap:8px; margin:2px 0 12px; }
+.stages .st { flex:1; padding:8px 12px; border-radius:9px; border:1px solid var(--ring); font-size:12px; color:var(--ink-3); background:var(--surface-1); }
+.stages .st b { display:block; font-size:12.5px; color:var(--ink-3); }
+.stages .st.on { background:var(--wash); border-color:var(--axis); color:var(--ink-2); }
+.stages .st.on b { color:var(--ink-1); }
+@media (max-width:700px){ .stages { flex-direction:column; } }
 #verdict { margin:4px 0 14px; padding:12px 16px; background:var(--wash); border-radius:11px; border-left:4px solid var(--s1); }
 #verdict:empty { display:none; }
 #verdict .v0 { font-size:11.5px; letter-spacing:.06em; color:var(--ink-3); margin-bottom:4px; }
@@ -137,6 +143,7 @@ a { color:var(--s1); text-decoration:none; }
   <div class="card" id="commentary" style="margin-bottom:14px">
     <div class="hd"><div><h3>本期解讀</h3><div class="desc">依當期讀數自動生成（定位 → 證據 → 條件），可直接複製使用。</div></div>
     <div class="spacer"></div><button class="ghost" id="copyComm">複製</button></div>
+    <div class="stages" id="stages"></div>
     <div id="verdict"></div>
     <div id="commBody"></div>
   </div>
@@ -370,7 +377,8 @@ function genVerdict(){
   } else if(C.zone==='late'){
     main='去槓桿進入尾聲（指數 '+fmtN(C.score,0)+'，出清 '+uPct+'%）'+(retreat?'，強制賣壓已明顯退潮':'')+'——可以開始關注基本面接手的訊號。';
   } else {
-    main='去槓桿走到'+(C.zone==='high'?'初中期':'中後期')+'（指數 '+fmtN(C.score,0)+'，本輪超額槓桿已出清 '+uPct+'%）：'
+    const stg=IND.stage?['','第一階段（觸發追繳）','第二階段'+(U.U>=0.6?'後期':'')+'（強平主導）','第三階段（企穩回歸）'][IND.stage.n]:null;
+    main='去槓桿走到'+(C.zone==='high'?'初中期':'中後期')+(stg?'＝三階段劇本的'+stg:'')+'（指數 '+fmtN(C.score,0)+'，本輪超額槓桿已出清 '+uPct+'%）：'
       +(retreat&&stable?'最兇的強制拋售大概率已經過去':'強制賣壓尚未衰竭')
       +((P.margin_total||0)>=90?'，但槓桿存量仍堆在歷史頂部':'')
       +((P.rv20||0)>=80?'、市場波動仍極端':'')
@@ -383,7 +391,16 @@ function genVerdict(){
   }
   return {main,watch};
 }
+function renderStages(){
+  const box=$('#stages'); if(!IND.stage){box.innerHTML='';return;}
+  const n=IND.stage.n;
+  const D=[['① 觸發追繳','價格快跌，融資戶集中收到追加保證金通知'],
+           ['② 強平主導','被動賣盤持續釋放，波動最大的階段'],
+           ['③ 企穩回歸','融資止穩、新增平倉回落，基本面重新定價']];
+  box.innerHTML=D.map((d,i)=>'<div class="st'+(i+1===n?' on':'')+'"><b>'+d[0]+(i+1===n?'（目前）':'')+'</b>'+d[1]+'</div>').join('');
+}
 function renderComment(){
+  renderStages();
   const v=genVerdict();
   $('#verdict').innerHTML='<div class="v0">一句話結論</div><div class="v1">'+v.main+'</div><div class="v2">'+v.watch+'</div>';
   const box=$('#commBody'); box.innerHTML='';
@@ -405,11 +422,12 @@ const CARDS=[
   series:[{name:'融資/預託金 %',key:'margin_dep',color:'--s1',type:'line'}], yFmt:v=>fmtN(v,0)+'%',
   panel2:{t:'投資者預託金（兆₩）',series:[{name:'預託金',key:'deposit',color:'--s2',type:'area'}],yFmt:v=>fmtN(v,0)}},
  {id:'fb',t:'斷頭賣壓（強制平倉）', d:'散戶繳不出保證金時，券商直接砍倉賣出的金額。斷頭單不看價格、不問基本面——「被動賣盤」最純粹的證據。',
-  how:'下跌自我強化的引擎就在這裡：股價跌 → 保證金不足 → 券商<b>強制砍倉（斷頭）</b> → 賣壓再壓低股價 → 更多人被斷頭。上圖長條飆高＝斷頭潮正在發生；<b>連續數日回落</b>＝最兇的拋壓大概率已過，正是訊號①「技術性賣壓衰竭」等的畫面。下圖比率回答「欠款的人裡有多大比例被砍」——金額會隨市場規模水漲船高，比率更適合跨期比較。（韓文原詞 반대매매，台股俗稱「斷頭」）',
+  how:'下跌自我強化的引擎就在這裡：股價跌 → 保證金不足 → 券商<b>強制砍倉（斷頭）</b> → 賣壓再壓低股價 → 更多人被斷頭。上圖長條飆高＝斷頭潮正在發生；<b>連續數日回落</b>＝最兇的拋壓大概率已過，正是訊號①「技術性賣壓衰竭」等的畫面。下圖比率回答「欠款的人裡有多大比例被砍」——金額會隨市場規模水漲船高，比率更適合跨期比較。<b>注意時滯</b>：斷頭多於次日開盤執行、統計再約 +1 日——暴跌日的斷頭高峰通常出現在其後 1-2 個交易日的數據中，別看暴跌當天數字小就以為沒事。（韓文原詞 반대매매，台股俗稱「斷頭」）',
+  fn:()=>IND.stage&&IND.stage.bandae_mtd!=null?('本月累計斷頭金額 '+fmtN(IND.stage.bandae_mtd,0)+' 億₩（KOFIA 未繳款口徑；券商信用戶強制清算為另一口徑，媒體數字可能略異）'):'',
   series:[{name:'斷頭金額(億₩)',key:'bandae_amt',color:'--s1',type:'bar'}], yFmt:v=>fmtN(v,0), zero:true,
   panel2:{t:'斷頭比率＝斷頭金額 ÷ 散戶未繳款（%，5日均）',series:[{name:'斷頭比率5日均',key:'bandae_ratio_ma',color:'--s6',type:'line'}],yFmt:v=>fmtN(v,1)+'%'}},
  {id:'kx',t:'KOSPI 指數與市場應激', d:'指數走勢＋20日年化已實現波動率（VKOSPI 替代，待 KRX 解鎖後切換）。',
-  how:'判讀基準很直接：<b>波動率回到歷史均值（百分位 50）以下之前，市場仍處「主動降槓桿」階段</b>，其間的反彈都屬技術性，不是風險充分釋放後的穩定狀態。指數本身只是背景板——去槓桿分析裡，波動率何時「熄火」比指數點位更重要。',
+  how:'判讀基準很直接：<b>波動率回到歷史均值（百分位 50）以下之前，市場仍處「主動降槓桿」階段</b>，其間的反彈都屬技術性，不是風險充分釋放後的穩定狀態。指數本身只是背景板——去槓桿分析裡，波動率何時「熄火」比指數點位更重要。<b>估值不是底</b>：本輪動態 PE 已跌至約 6 倍、低於 2008 年金融危機——但高槓桿市場的底部由流動性與強平壓力決定，不由估值決定；估值低是反彈的燃料，不是止跌的理由。',
   series:[{name:'KOSPI',key:'kospi_idx',color:'--s1',type:'line'}], yFmt:v=>fmtN(v,0),
   panel2:{t:'20日年化波動率 %',series:[{name:'已實現波動率',key:'rv20',color:'--s5',type:'line'}],yFmt:v=>fmtN(v,0)+'%'}},
  {id:'tv',t:'成交熱度與融資消化天數', d:'成交活躍度回到歷史均值之前，代表籌碼仍在激烈換手、降槓桿仍在進行。',
@@ -463,7 +481,7 @@ function etfCard(){
   d.append(el('h3',null,'槓桿ETF出清程度（三星電子／SK海力士 單股2倍）'));
   if(IND.etf&&IND.etf.enabled){ /* future: charts injected by pipeline */ }
   else {
-    d.append(el('div','desc','市場焦點指標：追蹤三星電子/SK海力士的單股2倍槓桿ETF共14檔，截至7/8已有13檔跌破2萬韓元發行價；SK海力士槓桿ETF規模自峰值167億美元縮至78億（-53%）。'));
+    d.append(el('div','desc','關鍵在「份額」而非「規模」：截至7/10，槓桿ETF總規模較高點下降37.8%，但幾乎全來自淨值回落——ETF份額對應資產反而由19.9兆增至26.7兆韓元（+34.5%）＝槓桿倉位根本沒出清，一旦反彈規模將自動回升。風險敞口（規模×倍數）占三星/海力士流通市值1.88%，仍遠高於美國同類約1.1%。'));
     const dt=el('details','how'); dt.innerHTML='<summary>怎麼看這張圖</summary><div class="hb">槓桿 ETF 每日再平衡會「越漲越買、越跌越賣」，規模夠大時足以主導三星電子／SK海力士的定價（極端交易日曾占個股總成交約六成）。屆時看兩個數：<b>AUM 距峰值萎縮幅度</b>＝已釋放的風險；<b>距 4 月底基期的剩餘規模</b>＝還沒退出的槓桿倉。規模停止快速萎縮，是訊號①「技術性賣壓衰竭」成立的必要條件之一。</div>'; d.append(dt);
     d.append(el('div','pending','⏳ 此模組待 KRX Data Marketplace 登入後自動補齊（逐檔規模淨值歷史、跌破發行價家數、再平衡衝擊估算）。目前綜合指數未計入ETF分項（權重已重新歸一）。'));
   }

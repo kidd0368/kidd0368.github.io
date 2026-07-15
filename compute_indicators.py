@@ -30,7 +30,7 @@ CONFIG = {
     },
     "etf_weight": 15.0,
     "signal2_manual": {"status": "watch", "note": "大型雲服務商財報將至，關注AI資本開支指引"},
-    "signal3_manual": {"status": "watch", "note": "韓監管已多次釋放收緊訊號；關注限空/穩定基金等措施"},
+    "signal3_manual": {"status": "watch", "note": "7/16 韓政府四大經濟部門協調會議研究單股槓桿ETF對策；關注提高准入門檻、強化適當性審核、限制新發"},
 }
 
 def parse_bulk(path):
@@ -257,6 +257,20 @@ def compute(bulk, etf=None, hist=None):
            ("mid", "45-70 中後期：去化進行中") if score >= 45 else \
            ("late", "25-45 尾聲：接近出清") if score >= 25 else ("done", "<25 大致出清")
 
+    # 三階段判定（去槓桿標準劇本：①快跌觸發追繳 ②強平主導 ③企穩回歸基本面）
+    bp_now = last_pctl("bandae_amt")
+    rv_now = last_pctl("rv20")
+    if (d5 is not None and d5 > -0.01) and (bp_now is None or bp_now < 50) and (rv_now is None or rv_now < 70):
+        stage, stage_label = 3, "第三階段：融資企穩、新增平倉回落，市場重新回歸基本面定價"
+    elif U < 0.25 and (d5 is None or d5 < -0.015):
+        stage, stage_label = 1, "第一階段：價格快跌，融資帳戶集中觸發追加保證金"
+    else:
+        stage = 2
+        stage_label = "第二階段" + ("後期" if U >= 0.6 else "") + "：強制平倉持續釋放、被動賣盤主導，波動最大的時期"
+    # 當月累計斷頭金額（억원）
+    cur_month = dates[-1][:6]
+    bandae_mtd = round(sum(v for i, v in enumerate(S["bandae_amt"]) if v is not None and dates[i][:6] == cur_month), 0)
+
     s1_ok_bandae = (last_pctl("bandae_amt") or 50) < 50
     s1_ok_margin = d5 is not None and d5 > -0.01
     s1_ok_etf = (etf is None) or (etf.get("aum_d5") is None) or etf["aum_d5"] > -0.02
@@ -323,6 +337,8 @@ def compute(bulk, etf=None, hist=None):
                    "excess_peak": round(peak_v - base_v, 2), "excess_now": round(cur - base_v, 2)},
         "composite": {"score": score, "zone": zone[0], "zone_label": zone[1],
                       "parts": {k: round(v, 2) for k, v in parts.items()}},
+        "stage": {"n": stage, "label": stage_label,
+                  "bandae_mtd": bandae_mtd, "bandae_pctl": bp_now, "rv_pctl": rv_now},
         "signals": {
             "s1": {"status": s1, "label": "技術性賣壓衰竭",
                    "detail": ("斷頭金額5日均百分位 " + (str(last_pctl('bandae_amt')) if (not partial or sketch is not None) else "待完整歷史")
