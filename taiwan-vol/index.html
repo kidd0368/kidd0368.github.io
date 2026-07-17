@@ -243,7 +243,7 @@
 
     <section class="card">
       <h2>強勢股波動 vs 全市場</h2>
-      <div class="desc">把「較20個交易日前累積漲最多(頭尾相比)的前15%股票」(強勢股)挑出來,看它們每天晃得比全市場兇多少。藍線遠離灰線=投機資金集中衝飆股——2018被動元件、2021航運狂潮都是這樣現形的;兩線貼近甚至交叉=全面性恐慌,強弱勢一起跌</div>
+      <div class="desc"><b>縱軸是「每天平均漲跌幅度」(振幅/波動),不是股價</b> — 所以股票大跌時線反而往上衝,因為每天的跳動變大。把「較20個交易日前累積漲最多(頭尾相比)的前15%股票」(強勢股)挑出來,看它們每天晃得比全市場兇多少。藍線遠離灰線=投機資金集中衝飆股——2018被動元件、2021航運狂潮都是這樣現形的;兩線貼近甚至交叉=全面性恐慌,強弱勢一起跌</div>
       <div class="legend">
         <span class="li"><span class="lkey blue"></span>強勢股平均|漲跌|(20日均)</span>
         <span class="li"><span class="lkey gray"></span>全市場母體(20日均)</span>
@@ -253,7 +253,7 @@
 
     <section class="card">
       <h2>主流代表股:資金聚焦的領導群</h2>
-      <div class="desc">定義:「較兩個月前(40個交易日)的頭尾累積漲幅」排名前15% × 市值≥200億 × 近40日成交金額占全市場比重≥0.3% — 讓資金自己投票選出主流,不需要產業分類。領導股的波動能不能收斂、能不能止跌,是大盤要回穩前的先決觀察</div>
+      <div class="desc">定義:「較兩個月前(40個交易日)的頭尾累積漲幅」排名前15% × 市值≥200億 × 近40日成交金額占全市場比重≥0.3% — 讓資金自己投票選出主流,不需要產業分類。<b>下方圖的縱軸同樣是「每天平均振幅」不是股價</b>;領導股的波動能不能收斂、能不能止跌,是大盤要回穩前的先決觀察</div>
       <div class="rg-hist" id="ldstatus" style="margin:6px 0 10px"></div>
       <div class="legend">
         <span class="li"><span class="lkey blue"></span>主流股平均|漲跌|(20日均)</span>
@@ -299,7 +299,7 @@
 
     <footer>
       資料來源:2018/1–2026/7 歷史種子為 CMoney 匯出資料;其後由台灣證券交易所、櫃買中心公開資訊每日自動更新(GitHub Actions,平日 17:50 與 21:50 各檢查一次),市值每月以公開股本自動校正。波動率以對數報酬計算、年化係數 √252;表列單日漲跌為簡單報酬,與盤後行情一致。<br>
-      頁面產生於 2026-07-18 02:10 (台北時間) · <a href="../" style="color:inherit">← 回首頁</a>
+      頁面產生於 2026-07-18 02:43 (台北時間) · <a href="../" style="color:inherit">← 回首頁</a>
     </footer>
   </div>
 </div>
@@ -580,7 +580,7 @@ function renderCharts(i0, i1) {
 
   drawChart($('c3'), i0, i1, {
     height: 280,
-    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%',
+    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%', title: '縱軸=個股彼此分歧程度〔振幅〕,不是股價',
       series: [{ arr: D.disp, cls: 'gray', thin: 1 }, { arr: D.disp20, cls: 'blue', label: 1 }] }],
   }, i => [
     { k: '當日離散度', v: D.disp[i] == null ? null : fmt2(D.disp[i]) + '%', key: 'gray' },
@@ -590,7 +590,7 @@ function renderCharts(i0, i1) {
 
   drawChart($('c5'), i0, i1, {
     height: 280,
-    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%',
+    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%', title: '縱軸=每天平均漲跌幅度〔振幅/波動〕,不是股價',
       series: [{ arr: D.mabs20, cls: 'gray' }, { arr: D.sabs20, cls: 'blue', label: 1 }] }],
   }, i => [
     { k: '強勢股|漲跌|20日', v: D.sabs20[i] == null ? null : fmt2(D.sabs20[i]) + '%', key: 'blue' },
@@ -602,7 +602,7 @@ function renderCharts(i0, i1) {
 
   drawChart($('c6'), i0, i1, {
     height: 280,
-    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%',
+    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%', title: '縱軸=每天平均漲跌幅度〔振幅/波動〕,不是股價',
       series: [{ arr: D.mabs20, cls: 'gray' }, { arr: D.ldabs20, cls: 'blue', label: 1 }] }],
   }, i => [
     { k: '主流股|漲跌|20日', v: D.ldabs20[i] == null ? null : fmt2(D.ldabs20[i]) + '%', key: 'blue' },
@@ -614,7 +614,7 @@ function renderCharts(i0, i1) {
 
   drawChart($('c4'), i0, i1, {
     height: 280,
-    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%', area: { of: 1 },
+    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%', area: { of: 1 }, title: '縱軸=當日大漲大跌股票的占比,不是股價',
       series: [{ arr: D.p5, cls: 'gray', thin: 1 }, { arr: D.p520, cls: 'blue', label: 1 }] }],
   }, i => [
     { k: '當日 |≥5%| 占比', v: D.p5[i] == null ? null : fmt1(D.p5[i]) + '%', key: 'gray' },
