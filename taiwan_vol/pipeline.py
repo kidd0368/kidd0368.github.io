@@ -37,6 +37,7 @@ EVENTS = {
     '2025-04-08': '關稅恐慌延續', '2025-04-09': '關稅恐慌延續', '2025-04-10': '美方宣布關稅暫緩90天,大反彈',
     '2026-06-08': '全球AI/科技股賣壓,台積電盤中重挫', '2026-06-10': '科技股賣壓延續',
     '2026-06-24': '美科技股重挫拖累', '2026-06-26': '史上第三大跌點,失守45,000',
+    '2026-07-17': '717慘案:崩跌2,953點,史上最大跌點',
 }
 
 # ------------------------------------------------------------------ 抓取 ----
@@ -357,12 +358,33 @@ def cmd_update():
         added += 1
         time.sleep(3)
 
-    if added:
+    # 自癒:歷史列若缺指數收盤價(端點當晚失敗或種子缺日),重試官方來源回補(每次最多10列)
+    healed = 0
+    for c in ('taiex_close', 'otc_close'):
+        m[c] = pd.to_numeric(m[c], errors='coerce')
+    holes = m.index[m['taiex_close'].isna() | m['otc_close'].isna()]
+    for i in list(holes)[-10:]:
+        d0 = datetime.strptime(m.at[i, 'date'], '%Y-%m-%d').date()
+        if pd.isna(m.at[i, 'taiex_close']):
+            tv, _, _ = fetch_twse(d0)
+            if tv is not None:
+                m.at[i, 'taiex_close'] = tv; healed += 1
+                print(f'  [heal] 回補 {d0} 加權指數 = {tv}')
+            time.sleep(2)
+        if pd.isna(m.at[i, 'otc_close']):
+            ov, _, _ = fetch_tpex(d0)
+            if ov is not None:
+                m.at[i, 'otc_close'] = ov; healed += 1
+                print(f'  [heal] 回補 {d0} 櫃買指數 = {ov}')
+            time.sleep(2)
+
+    if added or healed:
         for c in ['disp', 'absmove', 's_mean', 's_abs', 'mkt50_abs']:
             if c in m: m[c] = pd.to_numeric(m[c], errors='coerce').round(4)
         m.to_csv(mfile, index=False, encoding='utf-8')
-        save_state(R, caps, meta)
-    print(f'完成:新增 {added} 個交易日。')
+        if added:
+            save_state(R, caps, meta)
+    print(f'完成:新增 {added} 個交易日,回補 {healed} 個缺值。')
 
 # ------------------------------------------------------------------ 市值校正 ----
 
@@ -436,20 +458,29 @@ def cmd_build():
     m = pd.read_csv(os.path.join(DATA, 'metrics.csv'))
     for c in m.columns:
         if c != 'date': m[c] = pd.to_numeric(m[c], errors='coerce')
-    lr = np.log(m['taiex_close'] / m['taiex_close'].shift(1)) * 100
-    ret = (m['taiex_close'] / m['taiex_close'].shift(1) - 1) * 100
-    olr = np.log(m['otc_close'] / m['otc_close'].shift(1)) * 100
-    v20 = lr.rolling(20).std(ddof=1) * np.sqrt(252)
-    v60 = lr.rolling(60).std(ddof=1) * np.sqrt(252)
-    v252 = lr.rolling(252).std(ddof=1) * np.sqrt(252)
-    ov20 = olr.rolling(20).std(ddof=1) * np.sqrt(252)
-    disp20 = m['disp'].rolling(20).mean()
-    am20 = m['absmove'].rolling(20).mean()
-    p520 = m['pct5'].rolling(20).mean()
-    sabs20 = m['s_abs'].rolling(20).mean()
-    mabs20 = m['mkt50_abs'].rolling(20).mean()
+
+    def idx_series(close):
+        """個別日期缺收盤價時,在「有值的子序列」上算報酬與滾動波動,再對回原索引(缺日不會炸斷整段窗)"""
+        c = close.dropna()
+        lr_c = np.log(c / c.shift(1)) * 100
+        ret_c = (c / c.shift(1) - 1) * 100
+        out = {}
+        for w in (20, 60, 252):
+            out[w] = (lr_c.rolling(w).std(ddof=1) * np.sqrt(252)).reindex(close.index)
+        return ret_c.reindex(close.index), out
+
+    ret, tv = idx_series(m['taiex_close'])
+    v20, v60, v252 = tv[20], tv[60], tv[252]
+    _, ov = idx_series(m['otc_close'])
+    ov20 = ov[20]
+    roll = lambda s, w=20, mp=15: s.rolling(w, min_periods=mp).mean()
+    disp20 = roll(m['disp'])
+    am20 = roll(m['absmove'])
+    p520 = roll(m['pct5'])
+    sabs20 = roll(m['s_abs'])
+    mabs20 = roll(m['mkt50_abs'])
     heat = sabs20 / mabs20
-    svol20 = m['s_mean'].rolling(20).std(ddof=1) * np.sqrt(252)
+    svol20 = m['s_mean'].rolling(20, min_periods=15).std(ddof=1) * np.sqrt(252)
 
     r2 = lambda s, nd: [None if pd.isna(v) else round(float(v), nd) for v in s]
     D = {'date': m['date'].tolist(), 'close': r2(m['taiex_close'], 1), 'ret': r2(ret, 2),
