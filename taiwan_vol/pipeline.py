@@ -561,11 +561,13 @@ def current_leaders():
         lastchg = R[cols].iloc[-1]
         rows = []
         for cd in cols:
+            momv, ddv = float(momp[cd]), float(dd[cd])
+            peak = ((1 + momv / 100) / (1 + ddv / 100) - 1) * 100   # 兩個月內最高曾漲多少
             rows.append({'code': cd, 'name': str(names.get(cd, cd)),
-                         'mom': round(float(momp[cd]), 1),
+                         'mom': round(momv, 1), 'peak': round(peak, 1),
                          'cap': int(round(float(caps.get(cd, 0)))),
                          'share': round(float(share40[cd]), 2),
-                         'dd': round(float(dd[cd]), 1),
+                         'dd': round(ddv, 1),
                          'chg': None if pd.isna(lastchg[cd]) else round(float(lastchg[cd]), 2)})
         rows.sort(key=lambda r: -r['share'])
         return {'rows': rows[:15],
