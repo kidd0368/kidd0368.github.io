@@ -1,0 +1,46 @@
+name: taiwan-vol-update
+
+on:
+  schedule:
+    - cron: '50 9 * * 1-5'    # 台北 17:50 平日
+    - cron: '50 13 * * 1-5'   # 台北 21:50 第二次檢查(補抓較晚發布或第一次失敗)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: taiwan-vol
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install deps
+        run: pip install --quiet pandas numpy requests
+
+      - name: Fetch new trading days
+        run: python taiwan_vol/pipeline.py update
+
+      - name: Build dashboard page
+        run: python taiwan_vol/pipeline.py build
+
+      - name: Commit & push if changed
+        run: |
+          git config user.name 'taiwan-vol-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add taiwan_vol/data taiwan-vol/index.html
+          if git diff --cached --quiet; then
+            echo 'No changes.'
+          else
+            git commit -m "taiwan-vol: auto update $(TZ=Asia/Taipei date +'%Y-%m-%d %H:%M')"
+            git pull --rebase origin main
+            git push
+          fi
