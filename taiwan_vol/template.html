@@ -129,6 +129,8 @@
 
   .prose { font-size: 14px; line-height: 1.85; color: var(--text-1); }
   .prose p { margin: 8px 0; }
+  .prose p.lead { font-size: 15.5px; font-weight: 650; line-height: 1.9; padding: 10px 14px;
+    background: var(--page); border-left: 3px solid var(--s-blue); border-radius: 6px; }
   .prose strong { font-weight: 650; }
   .prose .hl { font-weight: 650; }
   .kb { background: var(--page); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-top: 10px; }
@@ -164,7 +166,7 @@
 
     <section class="card">
       <h2>加權指數與滾動年化波動率</h2>
-      <div class="desc">上:加權指數收盤價(灰點為極端日,滑過可看事件) 下:以最近20日/60日「日對數報酬標準差 × √252」年化</div>
+      <div class="desc">上:大盤走勢(灰點=出大事的日子,滑鼠移上去看是什麼事)。下:大盤的「晃動程度」——線越高,代表最近指數每天上上下下越劇烈;藍線(近20天)竄高就是市場進入動盪期</div>
       <div class="legend">
         <span class="li"><span class="lkey gray"></span>收盤價</span>
         <span class="li"><span class="lkey blue"></span>20日年化波動率</span>
@@ -175,7 +177,7 @@
 
     <section class="card">
       <h2>加權 vs 櫃買:20日年化波動率</h2>
-      <div class="desc">櫃買(中小型股)的波動幾乎恆常高於加權,兩者背離時代表大小型股風險不同步</div>
+      <div class="desc">藍=大型股(加權)、綠=中小型股(櫃買)。綠線幾乎永遠在藍線上面——小股票天生比較會晃;兩條線的距離突然拉大,代表中小型股風險特別高的時期</div>
       <div class="legend">
         <span class="li"><span class="lkey blue"></span>加權指數</span>
         <span class="li"><span class="lkey green"></span>櫃買指數</span>
@@ -185,7 +187,7 @@
 
     <section class="card">
       <h2>全市場橫斷面離散度</h2>
-      <div class="desc">每天全體上市櫃個股漲跌幅的標準差 — 量「個股彼此分歧的程度」,和指數波動是不同的資訊</div>
+      <div class="desc">量「同一天裡,不同股票的表現差多大」。低=大家一起漲一起跌,看大盤就夠;高=有人大漲有人大跌,選對選錯股票差很多——這是大盤指數完全看不出來的資訊</div>
       <div class="legend">
         <span class="li"><span class="lkey gray"></span>每日離散度</span>
         <span class="li"><span class="lkey blue"></span>20日平均</span>
@@ -195,7 +197,7 @@
 
     <section class="card">
       <h2>極端變動個股占比(|漲跌| ≥ 5%)</h2>
-      <div class="desc">當天有多少比例的個股大漲或大跌超過5% — 指數平靜但這裡竄高,代表檯面下正在劇烈輪動</div>
+      <div class="desc">當天漲或跌超過5%的股票,占全市場的百分比。平常大約一成以下;竄到五成以上就是全市場劇烈震盪的日子。指數沒什麼動、這裡卻升高=檯面下正在激烈換手輪動</div>
       <div class="legend">
         <span class="li"><span class="lswatch"></span>20日平均</span>
         <span class="li"><span class="lkey gray"></span>每日值</span>
@@ -205,7 +207,7 @@
 
     <section class="card">
       <h2>強勢股波動 vs 全市場</h2>
-      <div class="desc">強勢股=前20日累積漲幅前15%(市值≥50億,每日重新篩選、不含當天避免前視偏誤)。熱度比飆高=投機資金集中在領漲股(歷史上2018/6被動元件、2021/7航運都在此現形);跌到1以下=全面性恐慌、強弱勢齊跌</div>
+      <div class="desc">把「最近20天漲最多的前15%股票」(強勢股)挑出來,看它們每天晃得比全市場兇多少。藍線遠離灰線=投機資金集中衝飆股——2018被動元件、2021航運狂潮都是這樣現形的;兩線貼近甚至交叉=全面性恐慌,強弱勢一起跌</div>
       <div class="legend">
         <span class="li"><span class="lkey blue"></span>強勢股平均|漲跌|(20日均)</span>
         <span class="li"><span class="lkey gray"></span>全市場母體(20日均)</span>
@@ -219,7 +221,7 @@
     </section>
 
     <section class="card">
-      <h2>目前狀態解讀</h2>
+      <h2>白話解盤:現在市場什麼狀態?</h2>
       <div class="prose" id="interp"></div>
       <div class="kb">
         <h3>這些指標怎麼算?</h3>
@@ -615,28 +617,72 @@ function renderTable(i0, i1) {
   tb.appendChild(frag);
 }
 
-/* ---------- 解讀 ---------- */
+/* ---------- 白話解讀 ---------- */
+function lastVal(a) { for (let i = a.length - 1; i >= 0; i--) if (a[i] != null) return a[i]; return null; }
+function quantile(arr, q) {
+  const v = arr.filter(x => x != null).slice().sort((a, b) => a - b);
+  return v.length ? v[Math.min(v.length - 1, Math.floor(q * v.length))] : null;
+}
 function renderInterp() {
   const p = $('interp'); p.textContent = '';
-  const [lv] = volLevel(S.v20);
-  const heat = S.v20 > S.v60 ? '短期(20日)高於中期(60日 ' + fmt1(S.v60) + '%),波動仍在升溫或高檔盤旋'
-                             : '短期(20日)已低於中期(60日 ' + fmt1(S.v60) + '%),波動正在自高點降溫';
-  const paras = [
-    '截至 ' + S.asof + ',加權指數收在 ' + fcomma(S.close) + ' 點,20日年化波動率為 ' + fmt1(S.v20) + '%,高於這 8 年半裡 ' + S.v20_pct + '% 的交易日,屬於「' + lv + '」區間(全樣本中位數 ' + fmt1(S.v20_med) + '%)。' + heat + '。',
-    '櫃買指數 20日年化波動率 ' + fmt1(S.ov20) + '%(歷史分位 ' + S.ov20_pct + '%),' + (S.ov20 > S.v20 ? '中小型股的震盪明顯大於大型權值股。' : '罕見地低於加權指數,大型股反而是波動來源。'),
-    '全市場橫斷面離散度 20日均為 ' + fmt2(S.disp20) + '%(歷史分位 ' + S.disp20_pct + '%),個股平均每天絕對漲跌 ' + fmt2(S.am20) + '%。離散度' + (S.disp20_pct >= 75 ? '偏高:個股走勢分歧、類股輪動劇烈,選股(而非指數方向)是目前報酬與風險的主要來源。' : (S.disp20_pct >= 25 ? '處於正常區間。' : '偏低:個股齊漲齊跌,指數方向主導一切。')),
-    '歷史峰值出現在 ' + S.v20_max_date + '(20日年化 ' + fmt1(S.v20_max) + '%,對應 2025 年 4 月關稅股災)。目前樣本涵蓋 ' + S.n_stocks.toLocaleString() + ' 檔上市櫃普通股。',
-  ];
+  const SQ = Math.sqrt(252);
+  const dv = S.v20 / SQ;                     // 大盤平均一天晃動(%)
+  const dvTyp = S.v20_med / SQ;              // 平常水準
+  const pts = Math.round(S.close * dv / 100 / 10) * 10;   // 換算成指數點數
+  const ratio = S.v20 / S.v20_med;
+  const dOtc = S.ov20 / SQ;
+  const lvTxt = S.v20 < 12 ? '很平靜' : S.v20 < 18 ? '正常' : S.v20 < 25 ? '偏高' : S.v20 < 35 ? '很高(高度警戒)' : '極端(危機等級)';
+
+  const lead = document.createElement('p');
+  lead.className = 'lead';
+  lead.textContent = '一句話:現在台股的震盪程度「' + lvTxt + '」。大盤平均一天上下晃約 ±' + dv.toFixed(1) + '%'
+    + '(以現在的指數位置,大約一天 ±' + pts.toLocaleString() + ' 點),是過去八年半平常水準(±' + dvTyp.toFixed(1) + '%)的 '
+    + ratio.toFixed(1) + ' 倍。';
+  p.appendChild(lead);
+
+  const add = (title, txt) => {
+    const e = document.createElement('p');
+    const b = document.createElement('strong'); b.textContent = title + ' ';
+    e.appendChild(b); e.appendChild(document.createTextNode(txt));
+    p.appendChild(e);
+  };
+
+  add('這樣算少見嗎?',
+    '算。過去 ' + S.days.toLocaleString() + ' 個交易日裡,只有 ' + (100 - S.v20_pct) + '% 的日子比現在更震盪。'
+    + (S.v20 > S.v60
+      ? '而且近20天比近60天更晃,動盪還在升溫,先別急著當沒事。'
+      : '不過近20天(' + fmt1(S.v20) + '%)已經比近60天(' + fmt1(S.v60) + '%)低,代表正從前陣子的高峰慢慢降溫,只是還沒回到平常水準。'));
+
+  add('中小型股呢?',
+    '更晃。櫃買指數平均一天約 ±' + dOtc.toFixed(1) + '%,'
+    + (S.ov20 > S.v20 * 1.3 ? '明顯比大盤劇烈——手上如果多是中小型股,實際感受到的震盪會比看大盤指數強得多。'
+                            : '跟大盤差距不大,大小型股風險目前算同步。'));
+
+  add('個股之間差很大嗎?',
+    '平均一檔股票一天動 ±' + fmt2(S.am20) + '%(注意:比大盤的 ±' + dv.toFixed(1) + '% 大,因為個股彼此漲跌會互相抵消掉一部分)。'
+    + (S.disp20_pct >= 75
+      ? '而且「同一天有人大漲、有人大跌」的分歧程度在歷史前 ' + (100 - S.disp20_pct) + '% 高檔——這種盤選對或選錯股票,結果天差地遠,選股比看大盤方向更重要。'
+      : (S.disp20_pct >= 25
+        ? '個股之間的分歧程度屬正常,大盤方向和選股影響各半。'
+        : '個股幾乎齊漲齊跌,大盤方向決定一切,選股空間小。')));
+
   if (S.heat != null) {
-    const hdesc = S.heat_pct >= 85
-      ? '投機熱度明顯集中在領漲股 — 歷史上這種讀值多出現在題材狂潮期(如2018/6被動元件、2021/7航運),通常伴隨強勢股回檔風險上升。'
-      : (S.heat_pct <= 15
-        ? '熱度比異常低 — 強弱勢股齊漲齊跌,多為全面性恐慌或無主流的盤面。'
-        : '投機熱度處於常態區間,強勢股相對大盤的波動溢價沒有極端化。');
-    paras.push('強勢股(前20日漲幅前15%,共 ' + S.s_k + ' 檔)目前平均每天絕對漲跌是全市場的 ' + fmt2(S.heat) + ' 倍(歷史分位 ' + S.heat_pct + '%,中位數 ' + fmt2(S.heat_med) + '×),強勢組合20日年化波動 ' + fmt1(S.svol20) + '%。' + hdesc);
+    const sAbs = lastVal(D.sabs20);
+    const mania = quantile(D.heat, 0.95);
+    add('飆股圈過熱了嗎?',
+      '最近20天漲最多的那批股票(強勢股,共 ' + S.s_k + ' 檔)平均一天晃 ±' + fmt2(sAbs) + '%,是全市場的 ' + fmt2(S.heat) + ' 倍。'
+      + (S.heat_pct >= 85
+        ? '這已經進入歷史高檔——2018被動元件、2021航運那種全民瘋飆股的時期,就是這個數字衝破 ' + fmt2(mania) + ' 倍。投機最熱的地方,通常也是回檔時最痛的地方。'
+        : (S.heat_pct <= 15
+          ? '這個倍數異常低,強勢弱勢一起跌——通常是全面恐慌盤才會這樣。'
+          : '屬於正常範圍(歷史中位 ' + fmt2(S.heat_med) + ' 倍);要到 ' + fmt2(mania) + ' 倍以上才算2018被動元件、2021航運那種狂潮等級。')));
   }
-  for (const t of paras) { const e = document.createElement('p'); e.textContent = t; p.appendChild(e); }
-  $('kbstats').textContent = '台股 8.5 年統計:20日年化波動率中位數 ' + fmt1(S.v20_med) + '%、最高 ' + fmt1(S.v20_max) + '%(' + S.v20_max_date + ')。';
+
+  add('所以我該怎麼看?',
+    '波動率是溫度計,不是買賣訊號。它告訴你:現在單日大漲大跌都是「常態」而不是意外,部位大小和心理預期要照這個溫度調整;歷史經驗上,高溫多半出現在大跌中或大跌後(這次是6月全球AI股賣壓的餘波),要等大盤回到平均一天 ±1% 以內,才算真正回穩。參考座標:歷史最高溫在 '
+    + S.v20_max_date + '(2025年4月關稅股災,一天平均晃 ±' + (S.v20_max / SQ).toFixed(1) + '%)。');
+
+  $('kbstats').textContent = '台股 8.5 年統計:20日年化波動率中位數 ' + fmt1(S.v20_med) + '%(≈平常一天 ±' + (S.v20_med / SQ).toFixed(1) + '%)、最高 ' + fmt1(S.v20_max) + '%(' + S.v20_max_date + ',≈一天 ±' + (S.v20_max / SQ).toFixed(1) + '%)。年化與單日的換算:年化 ÷ √252 ≈ 單日。';
 }
 
 /* ---------- 篩選與總渲染 ---------- */
