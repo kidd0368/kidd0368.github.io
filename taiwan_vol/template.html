@@ -72,6 +72,20 @@
   .spark .ln { fill: none; stroke: var(--baseline); stroke-width: 1.5; }
   .spark .cur { fill: var(--s-blue); }
 
+  .rg-status { font-size: 17px; font-weight: 650; display: flex; align-items: center; gap: 9px; margin: 2px 0 8px; }
+  .rg-status .dot { width: 11px; height: 11px; border-radius: 50%; flex: none; }
+  .rg-why { font-size: 12.5px; color: var(--muted); margin-bottom: 10px; }
+  .rg-text { font-size: 14px; line-height: 1.85; margin-bottom: 12px; }
+  .rg-hist { font-size: 13px; color: var(--text-2); background: var(--page); border-radius: 8px;
+    padding: 9px 12px; line-height: 1.75; margin-bottom: 12px; }
+  .qmap { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 560px; }
+  .qcell { border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; font-size: 12.5px;
+    color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .qcell .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; opacity: .55; }
+  .qcell.cur { border-color: var(--baseline); box-shadow: inset 0 0 0 1px var(--baseline);
+    color: var(--text-1); font-weight: 650; }
+  .qcell.cur .dot { opacity: 1; }
+  .rg-note { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
   .filters { display: flex; gap: 6px; align-items: center; margin: 4px 0 14px; flex-wrap: wrap; }
   .filters .flab { font-size: 13px; color: var(--text-2); margin-right: 4px; }
   .fbtn { border: 1px solid var(--border); background: var(--surface-1); color: var(--text-2);
@@ -156,6 +170,28 @@
 
     <section class="tiles" id="tiles"></section>
 
+    <section class="card">
+      <h2>盤勢定位:多空 × 穩定度</h2>
+      <div id="regime"></div>
+      <details class="tblv">
+        <summary>四象限的判定規則(定義)</summary>
+        <div class="kb" style="margin-top:8px">
+          <ul>
+            <li><strong>多頭</strong>:指數收盤站在「半年線」(120日均線)之上,<strong>且</strong>距最近一年最高收盤的回檔不到10% — 趨勢向上、離高點不遠。</li>
+            <li><strong>空頭</strong>:指數收盤跌破半年線,<strong>且</strong>距一年高點已回檔超過10% — 趨勢向下、跌勢已成。</li>
+            <li><strong>過渡/盤整</strong>:兩條件不同時成立(例如仍在半年線上但已回檔逾10%;或跌破半年線但離高點還近) — 方向未定。</li>
+            <li><strong>不穩定</strong>:20日年化波動率歷史分位 ≥70% <strong>且</strong>仍在升溫(高於20個交易日前);<strong>或</strong>分位 ≥90%(不論升降)。其餘為「穩定」。</li>
+            <li>門檻取用理由:半年線為台股常用多空生命線;「距一年高點回檔10%」用以區分高檔震盪與跌勢已成;波動分位70/90對應「明顯偏高」與「極端」。參數皆可依經驗再調。</li>
+          </ul>
+        </div>
+      </details>
+      <details class="tblv">
+        <summary>四象限完整回測統計(2018–今)</summary>
+        <div class="tscroll"><table class="dt" id="qstats"></table></div>
+      </details>
+      <div class="rg-note" id="rgnote"></div>
+    </section>
+
     <div class="filters" id="filters" role="group" aria-label="時間範圍">
       <span class="flab">時間範圍</span>
       <button class="fbtn" data-win="252">近1年</button>
@@ -213,6 +249,19 @@
         <span class="li"><span class="lkey gray"></span>全市場母體(20日均)</span>
       </div>
       <div id="c5"></div>
+    </section>
+
+    <section class="card">
+      <h2>主流代表股:資金聚焦的領導群</h2>
+      <div class="desc">定義:近40日累積漲幅前15% × 市值≥200億 × 近40日成交金額占全市場比重≥0.3% — 讓資金自己投票選出主流,不需要產業分類。領導股的波動能不能收斂、能不能止跌,是大盤要回穩前的先決觀察</div>
+      <div class="rg-hist" id="ldstatus" style="margin:6px 0 10px"></div>
+      <div class="legend">
+        <span class="li"><span class="lkey blue"></span>主流股平均|漲跌|(20日均)</span>
+        <span class="li"><span class="lkey gray"></span>全市場母體(20日均)</span>
+      </div>
+      <div id="c6"></div>
+      <div class="tblnote" id="ldnote"></div>
+      <div class="tscroll"><table class="dt" id="ldtable"></table></div>
     </section>
 
     <section class="card">
@@ -551,6 +600,18 @@ function renderCharts(i0, i1) {
     { k: '強勢股漲跌停占比', v: D.slim[i] == null ? null : fmt1(D.slim[i]) + '%' },
   ]);
 
+  drawChart($('c6'), i0, i1, {
+    height: 280,
+    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%',
+      series: [{ arr: D.mabs20, cls: 'gray' }, { arr: D.ldabs20, cls: 'blue', label: 1 }] }],
+  }, i => [
+    { k: '主流股|漲跌|20日', v: D.ldabs20[i] == null ? null : fmt2(D.ldabs20[i]) + '%', key: 'blue' },
+    { k: '全市場母體20日', v: D.mabs20[i] == null ? null : fmt2(D.mabs20[i]) + '%', key: 'gray' },
+    { k: '合計成交比重', v: D.ldshare[i] == null ? null : fmt1(D.ldshare[i]) + '%' },
+    { k: '平均距40日高', v: D.lddd[i] == null ? null : fmt1(D.lddd[i]) + '%' },
+    { k: '主流股檔數', v: D.ldn[i] == null ? null : D.ldn[i] + ' 檔' },
+  ]);
+
   drawChart($('c4'), i0, i1, {
     height: 280,
     panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%', area: { of: 1 },
@@ -617,8 +678,113 @@ function renderTable(i0, i1) {
   tb.appendChild(frag);
 }
 
-/* ---------- 白話解讀 ---------- */
+/* ---------- 盤勢定位 ---------- */
+const QMETA = {
+  Q1: { name: '多頭 + 穩定', color: 'var(--down-good)',
+    text: '健康趨勢。指數在半年線之上、離高點不遠,而且震盪溫和——多頭最舒服的樣子,順勢即可,不必自己嚇自己。' },
+  Q2: { name: '多頭 + 不穩定', color: 'var(--warn)',
+    text: '強勢盤隱憂成型(警戒)。指數還在高檔,但大漲大跌的頻率與幅度明顯放大——高檔換手激烈、多空分歧擴大。歷史上這不代表立刻轉空(漲勢常常還會延續一段),但出現大回檔的機率明顯升高,該檢視部位大小、降低槓桿、想好退場條件。' },
+  Q3: { name: '空頭 + 不穩定', color: 'var(--s-blue)',
+    text: '恐慌高潮區(留意反轉)。跌了一大段之後震盪飆到極端——歷史上台股的大底幾乎都出現在這種恐慌高潮附近。不是叫你梭哈接刀,而是:這裡開始「跌深反轉」的機率結構明顯轉向有利,適合分批、留資金、盯反轉條件(單日恐慌極值後波動開始收斂、指數跌不動)。' },
+  Q4: { name: '空頭 + 穩定陰跌', color: 'var(--up-bad)',
+    text: '空頭續行,最危險的一區。跌勢中波動反而不高=沒有恐慌、還沒洗完——歷史上這個狀態之後再殺一波(>10%)的機率是四個象限中最高的。別把「安靜」當成「止穩」。' },
+  T: { name: '過渡 / 盤整', color: 'var(--muted)',
+    text: '多空條件都不滿足的整理段。方向未表態,歷史上這裡的波動通常在收斂,等突破再說。' },
+};
+function renderRegime() {
+  const RG = D.regime;
+  const box = $('regime');
+  if (!RG || !RG.cur) { box.textContent = '資料不足,無法定位。'; return; }
+  const cur = RG.cur, meta = QMETA[cur.q];
+  const st = (RG.stats || []).find(s => s.q === cur.q);
+  box.textContent = '';
+  const s1 = document.createElement('div'); s1.className = 'rg-status';
+  const d1 = document.createElement('span'); d1.className = 'dot'; d1.style.background = meta.color;
+  const t1 = document.createElement('span'); t1.textContent = '現在:' + meta.name;
+  s1.appendChild(d1); s1.appendChild(t1); box.appendChild(s1);
+  const why = document.createElement('div'); why.className = 'rg-why';
+  why.textContent = '判定依據:指數在半年線' + (cur.above_ma ? '之上' : '之下') + ' · 距一年高點 ' + cur.dd252 + '% · 波動率歷史分位 ' + cur.v20pct + '%' + (cur.rise > 0 ? '(升溫中)' : '(降溫中)') + ' · 近20日單日|漲跌|≥1.5% 有 ' + cur.bigd + ' 天';
+  box.appendChild(why);
+  const tx = document.createElement('div'); tx.className = 'rg-text'; tx.textContent = meta.text;
+  box.appendChild(tx);
+  if (st) {
+    const h = document.createElement('div'); h.className = 'rg-hist';
+    h.textContent = '歷史統計:2018年至今處於這個象限的 ' + st.n + ' 個交易日,其後60個交易日 — 中位數報酬 ' + signed(st.f60, 1) + '%、上漲機率 ' + st.win + '%、期間出現 >10% 大回檔的機率 ' + st.dn10 + '%、出現 >10% 大反彈的機率 ' + st.up10 + '%。(統計描述,不是預測保證)';
+    box.appendChild(h);
+  }
+  const map = document.createElement('div'); map.className = 'qmap';
+  for (const k of ['Q1', 'Q2', 'Q4', 'Q3']) {
+    const cell = document.createElement('div'); cell.className = 'qcell' + (k === cur.q ? ' cur' : '');
+    const dd = document.createElement('span'); dd.className = 'dot'; dd.style.background = QMETA[k].color;
+    const tt = document.createElement('span'); tt.textContent = QMETA[k].name;
+    cell.appendChild(dd); cell.appendChild(tt); map.appendChild(cell);
+  }
+  box.appendChild(map);
+  // 統計表
+  const tb = $('qstats'); tb.textContent = '';
+  const hd = ['象限', '樣本天數', '60日中位報酬', '60日上漲機率', '60日內跌>10%', '60日內漲>10%'];
+  const trh = document.createElement('tr');
+  hd.forEach(x => { const th = document.createElement('th'); th.textContent = x; trh.appendChild(th); });
+  tb.appendChild(trh);
+  for (const s of RG.stats || []) {
+    const tr = document.createElement('tr');
+    [[QMETA[s.q].name, 'ev'], [s.n, ''], [signed(s.f60, 1) + '%', s.f60 < 0 ? 'neg' : 'pos'],
+     [s.win + '%', ''], [s.dn10 + '%', ''], [s.up10 + '%', '']]
+      .forEach(([v, c]) => { const td = document.createElement('td'); if (c) td.className = c; td.textContent = v; tr.appendChild(td); });
+    tb.appendChild(tr);
+  }
+  $('rgnote').textContent = '驗證註記:以2018–2026年8.5年資料回測。底部端訊號較可靠——6次大底(2019/1、2020/3、2021/5、2022/10、2024/8、2025/4)有5次出現「恐慌高潮」特徵(波動飆上90分位+單日恐慌暴跌);頭部端只能捕捉「內生性」頭部(如2025/2、2026/6高檔震盪擴大),突發外生衝擊(COVID、日圓平倉)事前無徵兆,且2022年初的大頭部出現在極度平靜中——所以「多頭+穩定」不等於絕對安全,它只是說風險機率較低。';
+}
+
+/* ---------- 主流代表股 ---------- */
 function lastVal(a) { for (let i = a.length - 1; i >= 0; i--) if (a[i] != null) return a[i]; return null; }
+function valAgo(a, k) { let seen = 0; for (let i = a.length - 1; i >= 0; i--) if (a[i] != null && ++seen > k) return a[i]; return null; }
+function ldVerdict() {
+  const dd = lastVal(D.lddd), ddPrev = valAgo(D.lddd, 20);
+  const ab = lastVal(D.ldabs20), abPrev = valAgo(D.ldabs20, 20);
+  if (dd == null) return null;
+  if (dd > -8) return ['健康:領導群仍守在波段高檔附近,多頭結構完整。', 'var(--down-good)'];
+  if (dd <= -15) {
+    const easing = ddPrev != null && dd > ddPrev + 2 && ab != null && abPrev != null && ab < abPrev;
+    return easing
+      ? ['重挫後開始修復:距高點缺口與波動同步收斂中,持續觀察能否站穩。', 'var(--warn)']
+      : ['領導股重挫中、尚未止穩 — 資金最集中的地方還在失血,大盤要回穩,通常要先看到這裡的波動收斂、跌勢停住。', 'var(--up-bad)'];
+  }
+  return [ddPrev != null && dd > ddPrev + 2 ? '回檔後修復中:距高點缺口正在收斂。' : '回檔壓力測試中:領導群自高點回落,觀察是否止穩。', 'var(--warn)'];
+}
+function renderLeaders() {
+  const L = D.leaders;
+  const st = $('ldstatus');
+  const dd = lastVal(D.lddd), share = lastVal(D.ldshare), n = lastVal(D.ldn);
+  const v = ldVerdict();
+  st.textContent = '';
+  if (dd != null && v) {
+    const dot = document.createElement('span');
+    dot.style.cssText = 'display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;background:' + v[1];
+    st.appendChild(dot);
+    st.appendChild(document.createTextNode('目前主流股 ' + n + ' 檔,合計吃掉全市場 ' + fmt1(share) + '% 的成交金額;平均距40日波段高點 ' + fmt1(dd) + '%。' + v[0]));
+  } else {
+    st.textContent = '主流股資料不足。';
+  }
+  const tb = $('ldtable'); tb.textContent = '';
+  if (!L || !L.rows) { $('ldnote').textContent = ''; return; }
+  $('ldnote').textContent = '目前名單(依成交比重,顯示前 ' + L.rows.length + ' 檔/共 ' + L.n + ' 檔,基準日 ' + L.asof + ')';
+  const hd = ['代號', '名稱', '40日漲幅', '市值(億)', '成交比重', '距40日高', '當日漲跌'];
+  const trh = document.createElement('tr');
+  hd.forEach(h => { const th = document.createElement('th'); th.textContent = h; trh.appendChild(th); });
+  tb.appendChild(trh);
+  for (const r of L.rows) {
+    const tr = document.createElement('tr');
+    [[r.code, ''], [r.name, 'ev'], [signed(r.mom, 1) + '%', r.mom < 0 ? 'neg' : 'pos'],
+     [r.cap.toLocaleString(), ''], [fmt2(r.share) + '%', ''],
+     [fmt1(r.dd) + '%', r.dd <= -15 ? 'neg' : ''],
+     [r.chg == null ? '–' : signed(r.chg, 2) + '%', r.chg < 0 ? 'neg' : r.chg > 0 ? 'pos' : '']]
+      .forEach(([vv, c]) => { const td = document.createElement('td'); if (c) td.className = c; td.textContent = vv; tr.appendChild(td); });
+    tb.appendChild(tr);
+  }
+}
+
+/* ---------- 白話解讀 ---------- */
 function quantile(arr, q) {
   const v = arr.filter(x => x != null).slice().sort((a, b) => a - b);
   return v.length ? v[Math.min(v.length - 1, Math.floor(q * v.length))] : null;
@@ -678,6 +844,15 @@ function renderInterp() {
           : '屬於正常範圍(歷史中位 ' + fmt2(S.heat_med) + ' 倍);要到 ' + fmt2(mania) + ' 倍以上才算2018被動元件、2021航運那種狂潮等級。')));
   }
 
+  {
+    const dd = lastVal(D.lddd), share = lastVal(D.ldshare), v = ldVerdict();
+    if (dd != null && v) {
+      add('主流領導股還好嗎?',
+        '這波資金最集中的領導群(合計成交比重 ' + fmt1(share) + '%)目前平均距波段高點 ' + fmt1(dd) + '%。' + v[0]
+        + ' 原理:領頭羊是資金與信心的載體,歷史上大盤要止穩回升,幾乎都要先看到領導股「跌不動了、波動收斂」;反之指數還撐著但領導股先崩,就是你該提高警覺的訊號。');
+    }
+  }
+
   add('所以我該怎麼看?',
     '波動率是溫度計,不是買賣訊號。它告訴你:現在單日大漲大跌都是「常態」而不是意外,部位大小和心理預期要照這個溫度調整;歷史經驗上,高溫多半出現在大跌中或大跌後(這次是6月全球AI股賣壓的餘波),要等大盤回到平均一天 ±1% 以內,才算真正回穩。參考座標:歷史最高溫在 '
     + S.v20_max_date + '(2025年4月關稅股災,一天平均晃 ±' + (S.v20_max / SQ).toFixed(1) + '%)。');
@@ -703,6 +878,8 @@ $('filters').addEventListener('click', e => {
 let rsz;
 addEventListener('resize', () => { clearTimeout(rsz); rsz = setTimeout(renderAll, 150); });
 
+renderRegime();
+renderLeaders();
 renderInterp();
 renderAll();
 </script>

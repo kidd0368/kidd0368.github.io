@@ -22,6 +22,7 @@ OUT_HTML = os.path.normpath(os.path.join(BASE, '..', 'taiwan-vol', 'index.html')
 TPL = os.path.join(BASE, 'template.html')
 
 LOOKBACK, TOP_PCT, MIN_CAP, MIN_OBS, MIN_UNIV = 20, 0.15, 50.0, 15, 300
+LD_WIN, LD_TOP, LD_CAP, LD_SHARE = 40, 0.15, 200.0, 0.3   # 主流代表股:40日動能前15%×市值≥200億×成交比重≥0.3%
 STATE_DAYS, MAX_CATCHUP = 90, 15
 CODE_RE = re.compile(r'^[1-9][0-9]{3}$')   # 4碼普通股(排除00xx ETF/權證/特別股/TDR)
 TW_TZ = timezone(timedelta(hours=8))
@@ -79,8 +80,8 @@ def fetch_twse(date):
     if r is None: return None, None, {}
     try: j = r.json()
     except Exception: return None, None, {}
-    if j.get('stat') != 'OK' or not j.get('tables'): return None, None, {}
-    taiex, stocks, closes = None, {}, {}
+    if j.get('stat') != 'OK' or not j.get('tables'): return None, None, {}, {}
+    taiex, stocks, closes, turns = None, {}, {}, {}
     for t in j['tables']:
         fields = t.get('fields') or []
         title = t.get('title') or ''
@@ -91,6 +92,7 @@ def fetch_twse(date):
                     taiex = _f(row[i_close]); break
         if '證券代號' in fields and '收盤價' in fields and '漲跌價差' in fields:
             ic = fields.index('證券代號'); ip = fields.index('收盤價'); id_ = fields.index('漲跌價差')
+            iv = fields.index('成交金額') if '成交金額' in fields else None
             isign = next((k for k, f0 in enumerate(fields) if '漲跌(' in f0), None)
             for row in t.get('data') or []:
                 code = str(row[ic]).strip()
@@ -105,13 +107,16 @@ def fetch_twse(date):
                 if pct is not None:
                     stocks[code] = pct
                     closes[code] = close
-    return taiex, (stocks or None), closes
+                    if iv is not None:
+                        tv = _f(row[iv])
+                        if tv: turns[code] = tv / 1000.0        # 元→千元(與種子一致)
+    return taiex, (stocks or None), closes, turns
 
 
 def fetch_twse_openapi_fallback(date):
     """備援:openapi 只有最新交易日。FMTQIK補指數(整月)、STOCK_DAY_ALL補個股"""
     ds_roc = f'{date.year - 1911}{date.strftime("%m%d")}'
-    taiex, stocks, closes = None, {}, {}
+    taiex, stocks, closes, turns = None, {}, {}, {}
     r = _get('https://openapi.twse.com.tw/v1/exchangeReport/FMTQIK')
     if r is not None:
         try:
@@ -131,15 +136,17 @@ def fetch_twse_openapi_fallback(date):
                 if pct is not None:
                     stocks[code] = pct
                     closes[code] = close
+                    tv = _f(row.get('TradeValue'))
+                    if tv: turns[code] = tv / 1000.0
         except Exception: pass
-    return taiex, (stocks or None), closes
+    return taiex, (stocks or None), closes, turns
 
 
 def fetch_tpex(date):
-    """櫃買:多端點嘗試。回 (otc_index_close, {code: pct}, {code: close});任一項可為None/{}"""
+    """櫃買:多端點嘗試。回 (otc_index_close, {code: pct}, {code: close}, {code: 成交金額千元});任一項可為None/{}"""
     roc = f'{date.year - 1911}/{date.strftime("%m/%d")}'
     iso = date.strftime('%Y/%m/%d')
-    idx, stocks, closes = None, {}, {}
+    idx, stocks, closes, turns = None, {}, {}, {}
 
     # --- 個股候選端點 ---
     cands = [
@@ -155,7 +162,7 @@ def fetch_tpex(date):
         except Exception: continue
         got = _parse_tpex_stocks(j, date)
         if got:
-            stocks, closes = got
+            stocks, closes, turns = got
             print(f'  [tpex] 個股來源: {url.split("tpex.org.tw")[-1]} ({len(stocks)}檔)')
             break
 
@@ -176,7 +183,7 @@ def fetch_tpex(date):
             idx = got
             print(f'  [tpex] 指數來源: {url.split("tpex.org.tw")[-1]} = {got}')
             break
-    return idx, (stocks or None), closes
+    return idx, (stocks or None), closes, turns
 
 
 def _iter_row_dicts(j):
@@ -200,14 +207,15 @@ def _roc_match(s, date):
 
 
 def _parse_tpex_stocks(j, date):
-    out, oc = {}, {}
+    out, oc, ot = {}, {}, {}
     for fields, data in _iter_row_dicts(j):
-        if fields:  # 表格式:欄名找 代號/收盤/漲跌
+        if fields:  # 表格式:欄名找 代號/收盤/漲跌/成交金額
             def col(*names):
                 for k, f0 in enumerate(fields):
                     if any(nm in str(f0) for nm in names): return k
                 return None
             ic, ip, ich = col('代號', 'Code'), col('收盤', 'Close'), col('漲跌', 'Change')
+            iv = col('成交金額', 'Amount', 'TradeValue')
             if ic is None or ip is None or ich is None: continue
             for row in data:
                 code = str(row[ic]).strip()
@@ -216,6 +224,9 @@ def _parse_tpex_stocks(j, date):
                 pct = _pct_from(close, _f(row[ich]))
                 if pct is not None:
                     out[code] = pct; oc[code] = close
+                    if iv is not None:
+                        tv = _f(row[iv])
+                        if tv: ot[code] = tv / 1000.0
         else:
             for row in data:
                 if isinstance(row, dict):  # openapi list-of-dict
@@ -228,6 +239,8 @@ def _parse_tpex_stocks(j, date):
                     pct = _pct_from(close, chg)
                     if pct is not None:
                         out[code] = pct; oc[code] = close
+                        tv = next((_f(row[k]) for k in row if 'TransactionAmount' in k or 'TradeValue' in k or '成交金額' in str(k)), None)
+                        if tv: ot[code] = tv / 1000.0
                 elif isinstance(row, list) and len(row) >= 4:  # aaData: [代號,名稱,收盤,漲跌,...]
                     code = str(row[0]).strip()
                     if not CODE_RE.match(code): continue
@@ -235,7 +248,7 @@ def _parse_tpex_stocks(j, date):
                     pct = _pct_from(close, _f(row[3]))
                     if pct is not None:
                         out[code] = pct; oc[code] = close
-    return (out, oc) if len(out) >= 200 else None   # 上櫃普通股應有數百檔
+    return (out, oc, ot) if len(out) >= 200 else None   # 上櫃普通股應有數百檔
 
 
 def _parse_tpex_index(j, date):
@@ -258,25 +271,46 @@ def _parse_tpex_index(j, date):
 
 def load_state():
     R = pd.read_csv(os.path.join(DATA, 'state_returns.csv'), index_col=0)
+    T = pd.read_csv(os.path.join(DATA, 'state_turnover.csv'), index_col=0)
     caps = pd.read_csv(os.path.join(DATA, 'state_caps.csv'), index_col=0)['cap']
     meta = pd.read_csv(os.path.join(DATA, 'state_meta.csv'), index_col=0)['obs']
     caps.index = caps.index.astype(str); meta.index = meta.index.astype(str)
-    R.columns = R.columns.astype(str)
-    return R, caps, meta
+    R.columns = R.columns.astype(str); T.columns = T.columns.astype(str)
+    return R, T, caps, meta
 
 
-def save_state(R, caps, meta):
+def save_state(R, T, caps, meta):
     R.tail(STATE_DAYS).round(2).to_csv(os.path.join(DATA, 'state_returns.csv'), encoding='utf-8')
+    T.tail(STATE_DAYS).round(0).to_csv(os.path.join(DATA, 'state_turnover.csv'), encoding='utf-8')
     caps.round(2).to_csv(os.path.join(DATA, 'state_caps.csv'), encoding='utf-8')
     meta.astype(int).to_csv(os.path.join(DATA, 'state_meta.csv'), encoding='utf-8')
 
 
-def compute_day(R_hist, today, caps_prev, meta_prev):
+def compute_day(R_hist, today, caps_prev, meta_prev, T_hist=None, today_turn=None):
     """R_hist: 不含今天的狀態寬表; today: Series(code→pct)。回當日指標dict"""
     today = today.clip(-10, 10)
     obs_after = meta_prev.reindex(today.index).fillna(0) + 1
     eligible = today[obs_after >= 6]                      # 排除上市未滿5日
     row = {'n': int(len(eligible))}
+
+    # ---- 主流代表股(40日動能×市值×成交金額比重,選股基準到t-1) ----
+    if T_hist is not None and len(T_hist) >= 30 and len(R_hist) >= 30:
+        t40 = T_hist.tail(LD_WIN)
+        share40 = t40.mean() / t40.sum(axis=1).mean() * 100
+        mom40 = np.log1p(R_hist.tail(LD_WIN) / 100).sum(min_count=30)
+        rk = mom40.rank(pct=True)
+        cap_ok = caps_prev.reindex(mom40.index) >= LD_CAP
+        sel = (rk >= 1 - LD_TOP) & cap_ok & (share40.reindex(mom40.index) >= LD_SHARE)
+        cols = [c for c in sel.index[sel.fillna(False)] if c in today.index and pd.notna(today[c])]
+        if len(cols) >= 5:
+            seg = R_hist[cols].tail(LD_WIN - 1).fillna(0)
+            arr = np.vstack([seg.values, today[cols].values.reshape(1, -1)])
+            cum = np.cumprod(1 + arr / 100, axis=0)
+            dd = (cum[-1] / cum.max(axis=0) - 1) * 100
+            row.update(ld_n=int(len(cols)),
+                       ld_share=float(share40.reindex(cols).sum()),
+                       ld_abs=float(today[cols].abs().mean()),
+                       ld_dd=float(np.nanmean(dd)))
     if len(eligible) >= MIN_UNIV:
         a = eligible.values
         row.update(disp=float(np.std(a, ddof=1)), absmove=float(np.abs(a).mean()),
@@ -317,30 +351,34 @@ def cmd_update():
         print('已是最新,無需更新。'); return
     print(f'嘗試補 {len(days)} 個平日: {days[0]} → {days[-1]}')
 
-    R, caps, meta = load_state()
+    R, T, caps, meta = load_state()
     added = 0
     for d0 in days:
         print(f'[{d0}]')
-        taiex, stocks, closes = fetch_twse(d0)
+        taiex, stocks, closes, turns = fetch_twse(d0)
         if stocks is None and taiex is None:
-            taiex, stocks, closes = fetch_twse_openapi_fallback(d0)
+            taiex, stocks, closes, turns = fetch_twse_openapi_fallback(d0)
         if stocks is None and taiex is None:
             print('  休市或無資料,跳過'); time.sleep(2); continue
-        otc_idx, otc_stocks, otc_closes = fetch_tpex(d0)
+        otc_idx, otc_stocks, otc_closes, otc_turns = fetch_tpex(d0)
         allst = dict(stocks or {})
         if otc_stocks: allst.update(otc_stocks)
         allcl = dict(closes or {})
         if otc_closes: allcl.update(otc_closes)
+        alltv = dict(turns or {})
+        if otc_turns: alltv.update(otc_turns)
         today = pd.Series(allst, dtype=float)
-        print(f'  上市{len(stocks or {})}檔 + 上櫃{len(otc_stocks or {})}檔 | 加權={taiex} 櫃買={otc_idx}')
+        today_turn = pd.Series(alltv, dtype=float)
+        print(f'  上市{len(stocks or {})}檔 + 上櫃{len(otc_stocks or {})}檔 | 加權={taiex} 櫃買={otc_idx} | 成交金額{len(alltv)}檔')
 
         row = {'date': d0.strftime('%Y-%m-%d'),
                'taiex_close': taiex, 'otc_close': otc_idx}
-        row.update(compute_day(R, today, caps, meta))
+        row.update(compute_day(R, today, caps, meta, T, today_turn))
 
         # 更新狀態
         newrow = today.clip(-10, 10)
         R = pd.concat([R, newrow.to_frame(d0.strftime('%Y-%m-%d')).T]).tail(STATE_DAYS + 5)
+        T = pd.concat([T, today_turn.to_frame(d0.strftime('%Y-%m-%d')).T]).tail(STATE_DAYS + 5)
         for c in newrow.index:
             meta[c] = meta.get(c, 0) + 1
             if c in caps.index and pd.notna(caps.get(c)):
@@ -366,13 +404,13 @@ def cmd_update():
     for i in list(holes)[-10:]:
         d0 = datetime.strptime(m.at[i, 'date'], '%Y-%m-%d').date()
         if pd.isna(m.at[i, 'taiex_close']):
-            tv, _, _ = fetch_twse(d0)
+            tv, _, _, _ = fetch_twse(d0)
             if tv is not None:
                 m.at[i, 'taiex_close'] = tv; healed += 1
                 print(f'  [heal] 回補 {d0} 加權指數 = {tv}')
             time.sleep(2)
         if pd.isna(m.at[i, 'otc_close']):
-            ov, _, _ = fetch_tpex(d0)
+            ov, _, _, _ = fetch_tpex(d0)
             if ov is not None:
                 m.at[i, 'otc_close'] = ov; healed += 1
                 print(f'  [heal] 回補 {d0} 櫃買指數 = {ov}')
@@ -383,7 +421,7 @@ def cmd_update():
             if c in m: m[c] = pd.to_numeric(m[c], errors='coerce').round(4)
         m.to_csv(mfile, index=False, encoding='utf-8')
         if added:
-            save_state(R, caps, meta)
+            save_state(R, T, caps, meta)
     print(f'完成:新增 {added} 個交易日,回補 {healed} 個缺值。')
 
 # ------------------------------------------------------------------ 市值校正 ----
@@ -429,9 +467,9 @@ def calibrate_caps(caps, closes):
 def cmd_calibrate():
     """手動校正:抓最新收盤價+股本,重算市值檔"""
     from datetime import date as _date
-    R, caps, meta = load_state()
+    R, T, caps, meta = load_state()
     closes = {}
-    _, _, c1 = fetch_twse_openapi_fallback(datetime.now(TW_TZ).date())
+    _, _, c1, _ = fetch_twse_openapi_fallback(datetime.now(TW_TZ).date())
     closes.update(c1 or {})
     if len(closes) < 500:   # openapi以日期過濾可能落空,放寬:直接取STOCK_DAY_ALL全部
         r = _get('https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL')
@@ -443,14 +481,100 @@ def cmd_calibrate():
                         v = _f(row.get('ClosingPrice'))
                         if v: closes[code] = v
             except Exception: pass
-    _, _, c2 = fetch_tpex(datetime.now(TW_TZ).date())
+    _, _, c2, _ = fetch_tpex(datetime.now(TW_TZ).date())
     closes.update(c2 or {})
     print(f'取得 {len(closes)} 檔收盤價')
     if calibrate_caps(caps, closes):
-        save_state(R, caps, meta)
+        save_state(R, T, caps, meta)
         with open(os.path.join(DATA, 'state_calib.txt'), 'w') as f:
             f.write(datetime.now(TW_TZ).strftime('%Y-%m'))
         print('已寫回 state_caps.csv')
+
+# ------------------------------------------------------------------ 盤勢定位 ----
+
+def compute_regime(close):
+    """四象限:多空(價格vs半年線+距一年高點) × 穩定度(波動分位+升溫+大波動日) + 各象限前瞻統計"""
+    c = close.dropna()
+    lr = np.log(c / c.shift(1)) * 100
+    ret = (c / c.shift(1) - 1) * 100
+    v20 = lr.rolling(20).std(ddof=1) * np.sqrt(252)
+    v20_pct = v20.rank(pct=True) * 100
+    ma120 = c.rolling(120).mean()
+    dd252 = c / c.rolling(252).max() - 1
+    bigd = (ret.abs() >= 1.5).rolling(20).sum()
+    rise = v20 - v20.shift(20)
+    bull = (c > ma120) & (dd252 > -0.10)
+    bear = (c < ma120) & (dd252 < -0.10)
+    unstable = ((v20_pct >= 70) & (rise > 0)) | (v20_pct >= 90)
+    q = pd.Series('T', index=c.index)
+    q[bull & ~unstable] = 'Q1'
+    q[bull & unstable] = 'Q2'
+    q[bear & unstable] = 'Q3'
+    q[bear & ~unstable] = 'Q4'
+    q[ma120.isna() | dd252.isna() | v20_pct.isna()] = None
+
+    fwd60 = c.shift(-60) / c - 1
+    fmin60 = (c.shift(-1).rolling(60).min().shift(-59)) / c - 1
+    fmax60 = (c.shift(-1).rolling(60).max().shift(-59)) / c - 1
+    stats = []
+    for k in ('Q1', 'Q2', 'Q3', 'Q4', 'T'):
+        msk = (q == k) & fwd60.notna()
+        n = int(msk.sum())
+        if n == 0: continue
+        stats.append({'q': k, 'n': n,
+                      'f60': round(float(fwd60[msk].median() * 100), 1),
+                      'win': round(float((fwd60[msk] > 0).mean() * 100)),
+                      'dn10': round(float((fmin60[msk] < -0.10).mean() * 100)),
+                      'up10': round(float((fmax60[msk] > 0.10).mean() * 100))})
+    i = q.last_valid_index()
+    cur = None
+    if i is not None and q[i] is not None:
+        cur = {'q': q[i],
+               'v20pct': round(float(v20_pct[i])), 'rise': round(float(rise[i]), 1),
+               'dd252': round(float(dd252[i] * 100), 1), 'bigd': int(bigd[i]),
+               'above_ma': bool(c[i] > ma120[i])}
+    return {'cur': cur, 'stats': stats}
+
+# ------------------------------------------------------------------ 主流代表股快照 ----
+
+def current_leaders():
+    """由狀態檔算出「現在」的主流代表股清單(選股窗含最後一天,純快照展示)"""
+    try:
+        R, T, caps, meta = load_state()
+        try:
+            names = pd.read_csv(os.path.join(DATA, 'names.csv'), index_col=0)['name']
+            names.index = names.index.astype(str)
+        except Exception:
+            names = pd.Series(dtype=object)
+        t40 = T.tail(LD_WIN)
+        share40 = t40.mean() / t40.sum(axis=1).mean() * 100
+        mom40 = np.log1p(R.tail(LD_WIN) / 100).sum(min_count=30)
+        rk = mom40.rank(pct=True)
+        sel = (rk >= 1 - LD_TOP) & (caps.reindex(mom40.index) >= LD_CAP) \
+              & (share40.reindex(mom40.index) >= LD_SHARE)
+        cols = [c for c in sel.index[sel.fillna(False)]]
+        if len(cols) < 3: return None
+        seg = R[cols].tail(LD_WIN).fillna(0)
+        cum = (1 + seg / 100).cumprod()
+        dd = (cum.iloc[-1] / cum.max() - 1) * 100
+        momp = np.expm1(mom40[cols]) * 100
+        lastchg = R[cols].iloc[-1]
+        rows = []
+        for cd in cols:
+            rows.append({'code': cd, 'name': str(names.get(cd, cd)),
+                         'mom': round(float(momp[cd]), 1),
+                         'cap': int(round(float(caps.get(cd, 0)))),
+                         'share': round(float(share40[cd]), 2),
+                         'dd': round(float(dd[cd]), 1),
+                         'chg': None if pd.isna(lastchg[cd]) else round(float(lastchg[cd]), 2)})
+        rows.sort(key=lambda r: -r['share'])
+        return {'rows': rows[:15],
+                'share': round(float(share40[cols].sum()), 1),
+                'n': int(len(cols)),
+                'asof': str(R.index[-1])}
+    except Exception as e:
+        print(f'  [leaders] 快照失敗: {e}')
+        return None
 
 # ------------------------------------------------------------------ 產頁 ----
 
@@ -481,6 +605,9 @@ def cmd_build():
     mabs20 = roll(m['mkt50_abs'])
     heat = sabs20 / mabs20
     svol20 = m['s_mean'].rolling(20, min_periods=15).std(ddof=1) * np.sqrt(252)
+    ldabs20 = roll(m['ld_abs']) if 'ld_abs' in m else pd.Series(np.nan, index=m.index)
+    for c in ('ld_share', 'ld_dd', 'ld_n'):
+        if c not in m: m[c] = np.nan
 
     r2 = lambda s, nd: [None if pd.isna(v) else round(float(v), nd) for v in s]
     D = {'date': m['date'].tolist(), 'close': r2(m['taiex_close'], 1), 'ret': r2(ret, 2),
@@ -489,7 +616,11 @@ def cmd_build():
          'p5': r2(m['pct5'], 1), 'p520': r2(p520, 1), 'adv': r2(m['adv'], 1),
          'sabs': r2(m['s_abs'], 2), 'sabs20': r2(sabs20, 2), 'mabs20': r2(mabs20, 2),
          'heat': r2(heat, 2), 'svol20': r2(svol20, 1), 'slim': r2(m['s_lim'], 1),
-         'events': EVENTS}
+         'ldabs': r2(m['ld_abs'], 2), 'ldabs20': r2(ldabs20, 2),
+         'ldshare': r2(m['ld_share'], 1), 'lddd': r2(m['ld_dd'], 1), 'ldn': r2(m['ld_n'], 0),
+         'events': EVENTS,
+         'regime': compute_regime(m.set_index('date')['taiex_close']),
+         'leaders': current_leaders()}
 
     vv, hh = v20.dropna(), heat.dropna()
     li = m.index[v20.notna()][-1]
@@ -540,7 +671,7 @@ def cmd_build():
 def cmd_selftest():
     """用狀態檔重算最後一天,對照 metrics.csv(容忍微小捨入差)"""
     m = pd.read_csv(os.path.join(DATA, 'metrics.csv'))
-    R, caps, meta = load_state()
+    R, T, caps, meta = load_state()
     last_date = R.index[-1]
     today = R.iloc[-1].dropna()
     # 還原前一日的caps/meta
@@ -550,11 +681,12 @@ def cmd_selftest():
             caps_prev[c] = caps_prev[c] / (1 + today[c] / 100)
     meta_prev = meta.copy()
     for c in today.index: meta_prev[c] = meta_prev.get(c, 1) - 1
-    row = compute_day(R.iloc[:-1], today, caps_prev, meta_prev)
+    row = compute_day(R.iloc[:-1], today, caps_prev, meta_prev, T.iloc[:-1], T.iloc[-1].dropna())
     ref = m[m['date'] == last_date].iloc[0]
     okall = True
     for k, tol in [('disp', 0.03), ('absmove', 0.03), ('pct5', 0.5), ('adv', 0.5),
-                   ('s_abs', 0.15), ('mkt50_abs', 0.05), ('s_k', 6)]:
+                   ('s_abs', 0.15), ('mkt50_abs', 0.05), ('s_k', 6),
+                   ('ld_abs', 0.3), ('ld_dd', 1.5), ('ld_n', 5)]:
         a, b = row.get(k), ref.get(k)
         if a is None or pd.isna(b):
             print(f'  {k}: 略過(缺值 a={a} b={b})'); continue
