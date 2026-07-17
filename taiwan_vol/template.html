@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>台股波動率監控</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", sans-serif; }
+
+  .viz-root {
+    color-scheme: light;
+    --page:        #f9f9f7;
+    --surface-1:   #fcfcfb;
+    --text-1:      #0b0b0b;
+    --text-2:      #52514e;
+    --muted:       #898781;
+    --grid:        #e1e0d9;
+    --baseline:    #c3c2b7;
+    --border:      rgba(11,11,11,0.10);
+    --s-blue:      #2a78d6;
+    --s-green:     #008300;
+    --up-bad:      #d03b3b;   /* 波動上升(風險升) */
+    --down-good:   #006300;   /* 波動下降 */
+    --warn:        #b97a00;
+    --wash:        rgba(42,120,214,0.10);
+    background: var(--page); color: var(--text-1); min-height: 100vh;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface-1: #1a1a19;
+      --text-1: #ffffff; --text-2: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --baseline: #383835; --border: rgba(255,255,255,0.10);
+      --s-blue: #3987e5; --s-green: #008300;
+      --up-bad: #e66767; --down-good: #0ca30c; --warn: #fab219;
+      --wash: rgba(57,135,229,0.12);
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface-1: #1a1a19;
+    --text-1: #ffffff; --text-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --baseline: #383835; --border: rgba(255,255,255,0.10);
+    --s-blue: #3987e5; --s-green: #008300;
+    --up-bad: #e66767; --down-good: #0ca30c; --warn: #fab219;
+    --wash: rgba(57,135,229,0.12);
+  }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 20px 48px; }
+  header.top { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+  header.top h1 { font-size: 22px; font-weight: 650; letter-spacing: .3px; }
+  .asof { color: var(--text-2); font-size: 13px; }
+  .themebtn { margin-left: auto; border: 1px solid var(--border); background: var(--surface-1);
+    color: var(--text-2); border-radius: 8px; padding: 4px 12px; font-size: 13px; cursor: pointer; }
+  .sub { color: var(--muted); font-size: 12.5px; margin-bottom: 18px; }
+
+  .statusline { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2); }
+  .statusline .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px 12px; }
+  .tile .lab { font-size: 12.5px; color: var(--text-2); margin-bottom: 6px; }
+  .tile .val { font-size: 27px; font-weight: 600; line-height: 1.1; }
+  .tile .val small { font-size: 15px; font-weight: 500; color: var(--text-2); }
+  .tile .delta { font-size: 12.5px; margin-top: 4px; }
+  .tile .delta .chg-up { color: var(--up-bad); font-weight: 600; }
+  .tile .delta .chg-dn { color: var(--down-good); font-weight: 600; }
+  .tile .delta .pctile { color: var(--muted); }
+  .tile svg.spark { display: block; margin-top: 8px; width: 100%; height: 30px; }
+  .spark .ln { fill: none; stroke: var(--baseline); stroke-width: 1.5; }
+  .spark .cur { fill: var(--s-blue); }
+
+  .filters { display: flex; gap: 6px; align-items: center; margin: 4px 0 14px; flex-wrap: wrap; }
+  .filters .flab { font-size: 13px; color: var(--text-2); margin-right: 4px; }
+  .fbtn { border: 1px solid var(--border); background: var(--surface-1); color: var(--text-2);
+    padding: 5px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; }
+  .fbtn[aria-pressed="true"] { color: var(--text-1); font-weight: 650; border-color: var(--baseline);
+    box-shadow: inset 0 0 0 1px var(--baseline); }
+  .fbtn:hover { color: var(--text-1); }
+
+  .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 18px 12px; margin-bottom: 14px; position: relative; }
+  .card h2 { font-size: 15px; font-weight: 650; }
+  .card .desc { font-size: 12.5px; color: var(--muted); margin: 3px 0 4px; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin: 6px 0 2px; }
+  .legend .li { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-2); }
+  .lkey { width: 16px; height: 0; border-top: 3px solid; border-radius: 2px; }
+  .lkey.blue { border-color: var(--s-blue); } .lkey.green { border-color: var(--s-green); }
+  .lkey.gray { border-color: var(--baseline); }
+  .lswatch { width: 10px; height: 10px; border-radius: 3px; background: var(--wash); border: 1px solid var(--s-blue); }
+
+  .chart { width: 100%; display: block; touch-action: pan-y; outline: none; }
+  .chart:focus-visible { box-shadow: 0 0 0 2px var(--s-blue); border-radius: 6px; }
+  .gridln { stroke: var(--grid); stroke-width: 1; }
+  .axisln { stroke: var(--baseline); stroke-width: 1; }
+  .tick { fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .ptitle { fill: var(--text-2); font-size: 11.5px; font-weight: 600; }
+  .ln-blue { fill: none; stroke: var(--s-blue); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .ln-green { fill: none; stroke: var(--s-green); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .ln-gray { fill: none; stroke: var(--baseline); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .ln-thin { stroke-width: 1.2; }
+  .ar-blue { fill: var(--wash); stroke: none; }
+  .xh { stroke: var(--baseline); stroke-width: 1; }
+  .enddot { fill: var(--s-blue); stroke: var(--surface-1); stroke-width: 2; }
+  .endlab { fill: var(--text-1); font-size: 11.5px; font-weight: 650; }
+  .evdot { fill: var(--text-2); stroke: var(--surface-1); stroke-width: 2; }
+
+  .tip { position: absolute; pointer-events: none; background: var(--surface-1); border: 1px solid var(--border);
+    border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,.12); padding: 9px 12px; font-size: 12.5px;
+    min-width: 168px; z-index: 5; display: none; }
+  .tip .td { color: var(--text-2); font-weight: 650; margin-bottom: 5px; }
+  .tip .tr { display: flex; align-items: center; gap: 7px; margin-top: 3px; }
+  .tip .tr .v { font-weight: 650; color: var(--text-1); font-variant-numeric: tabular-nums; margin-left: auto; }
+  .tip .tr .k { color: var(--text-2); }
+  .tip .tev { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); color: var(--text-2); max-width: 230px; }
+
+  table.dt { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  .dt th { text-align: right; color: var(--text-2); font-weight: 600; padding: 6px 8px; border-bottom: 1px solid var(--baseline); white-space: nowrap; }
+  .dt td { text-align: right; padding: 5px 8px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  .dt th:first-child, .dt td:first-child { text-align: left; }
+  .dt td.ev { text-align: left; color: var(--text-2); white-space: normal; }
+  .dt .neg { color: var(--up-bad); } .dt .pos { color: var(--down-good); }
+  details.tblv { margin-top: 8px; }
+  details.tblv summary { cursor: pointer; font-size: 13px; color: var(--text-2); padding: 4px 0; }
+  .tblnote { font-size: 12px; color: var(--muted); margin: 6px 0; }
+  .tscroll { overflow-x: auto; }
+
+  .prose { font-size: 14px; line-height: 1.85; color: var(--text-1); }
+  .prose p { margin: 8px 0; }
+  .prose strong { font-weight: 650; }
+  .prose .hl { font-weight: 650; }
+  .kb { background: var(--page); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-top: 10px; }
+  .kb h3 { font-size: 13px; margin-bottom: 6px; color: var(--text-2); }
+  .kb p, .kb li { font-size: 13px; color: var(--text-2); line-height: 1.75; }
+  .kb ul { padding-left: 18px; }
+  table.rt { border-collapse: collapse; font-size: 12.5px; margin-top: 6px; }
+  .rt td, .rt th { border: 1px solid var(--grid); padding: 4px 10px; text-align: center; color: var(--text-2); }
+  .rt th { background: var(--page); font-weight: 600; }
+
+  footer { color: var(--muted); font-size: 12px; margin-top: 18px; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="viz-root">
+  <div class="wrap">
+    <header class="top">
+      <h1>台股波動率監控</h1>
+      <span class="asof" id="asof"></span>
+      <button class="themebtn" id="themebtn" type="button">◐ 深/淺色</button>
+    </header>
+    <div class="sub" id="statusline"></div>
+
+    <section class="tiles" id="tiles"></section>
+
+    <div class="filters" id="filters" role="group" aria-label="時間範圍">
+      <span class="flab">時間範圍</span>
+      <button class="fbtn" data-win="252">近1年</button>
+      <button class="fbtn" data-win="756" aria-pressed="true">近3年</button>
+      <button class="fbtn" data-win="1260">近5年</button>
+      <button class="fbtn" data-win="0">全部</button>
+    </div>
+
+    <section class="card">
+      <h2>加權指數與滾動年化波動率</h2>
+      <div class="desc">上:加權指數收盤價(灰點為極端日,滑過可看事件) 下:以最近20日/60日「日對數報酬標準差 × √252」年化</div>
+      <div class="legend">
+        <span class="li"><span class="lkey gray"></span>收盤價</span>
+        <span class="li"><span class="lkey blue"></span>20日年化波動率</span>
+        <span class="li"><span class="lkey green"></span>60日年化波動率</span>
+      </div>
+      <div id="c1"></div>
+    </section>
+
+    <section class="card">
+      <h2>加權 vs 櫃買:20日年化波動率</h2>
+      <div class="desc">櫃買(中小型股)的波動幾乎恆常高於加權,兩者背離時代表大小型股風險不同步</div>
+      <div class="legend">
+        <span class="li"><span class="lkey blue"></span>加權指數</span>
+        <span class="li"><span class="lkey green"></span>櫃買指數</span>
+      </div>
+      <div id="c2"></div>
+    </section>
+
+    <section class="card">
+      <h2>全市場橫斷面離散度</h2>
+      <div class="desc">每天全體上市櫃個股漲跌幅的標準差 — 量「個股彼此分歧的程度」,和指數波動是不同的資訊</div>
+      <div class="legend">
+        <span class="li"><span class="lkey gray"></span>每日離散度</span>
+        <span class="li"><span class="lkey blue"></span>20日平均</span>
+      </div>
+      <div id="c3"></div>
+    </section>
+
+    <section class="card">
+      <h2>極端變動個股占比(|漲跌| ≥ 5%)</h2>
+      <div class="desc">當天有多少比例的個股大漲或大跌超過5% — 指數平靜但這裡竄高,代表檯面下正在劇烈輪動</div>
+      <div class="legend">
+        <span class="li"><span class="lswatch"></span>20日平均</span>
+        <span class="li"><span class="lkey gray"></span>每日值</span>
+      </div>
+      <div id="c4"></div>
+    </section>
+
+    <section class="card">
+      <h2>強勢股波動 vs 全市場</h2>
+      <div class="desc">強勢股=前20日累積漲幅前15%(市值≥50億,每日重新篩選、不含當天避免前視偏誤)。熱度比飆高=投機資金集中在領漲股(歷史上2018/6被動元件、2021/7航運都在此現形);跌到1以下=全面性恐慌、強弱勢齊跌</div>
+      <div class="legend">
+        <span class="li"><span class="lkey blue"></span>強勢股平均|漲跌|(20日均)</span>
+        <span class="li"><span class="lkey gray"></span>全市場母體(20日均)</span>
+      </div>
+      <div id="c5"></div>
+    </section>
+
+    <section class="card">
+      <h2>期間內極端日排行(依指數單日漲跌幅)</h2>
+      <div class="tscroll"><table class="dt" id="evtable"></table></div>
+    </section>
+
+    <section class="card">
+      <h2>目前狀態解讀</h2>
+      <div class="prose" id="interp"></div>
+      <div class="kb">
+        <h3>這些指標怎麼算?</h3>
+        <ul>
+          <li><strong>年化波動率</strong>:取最近20(或60)個交易日的指數「日對數報酬」,算標準差,再乘 √252 換算成年率。漲跌先平方再平均,所以正負不會互相抵消。</li>
+          <li><strong>橫斷面離散度</strong>:同一天全體上市櫃普通股漲跌幅的標準差(排除上市前5日、極值截尾於±10%)。它量的是「個股彼此差多大」:指數波動高+離散度低=大家一起漲跌;離散度高=類股激烈輪動、選股差異大。</li>
+          <li><strong>注意跌停日的陷阱</strong>:2025/4/7 全市場98%個股鎖住跌停,大家都-10%、彼此沒有差異,離散度反而掉到歷史最低的1.36%。所以離散度要搭配「|漲跌|≥5%占比」一起看,才不會把「同步崩跌」誤讀成「平靜」。</li>
+          <li><strong>強勢股熱度比</strong>:每天先用「前20個交易日累積漲幅」把市值50億以上的股票排序(刻意不含當天,避免用未來資訊選股),取前15%當強勢股,再比較這群股票當天的平均絕對漲跌是全市場母體的幾倍。動能崩跌(momentum crash)前,贏家組合的波動通常率先放大,這個比值就是在盯這件事。</li>
+        </ul>
+        <h3>20日年化波動率經驗對照(台股)</h3>
+        <table class="rt"><tbody>
+          <tr><th>&lt;12%</th><th>12–18%</th><th>18–25%</th><th>25–35%</th><th>&gt;35%</th></tr>
+          <tr><td>平靜</td><td>正常</td><td>偏高</td><td>高度警戒</td><td>危機等級</td></tr>
+        </tbody></table>
+        <p id="kbstats"></p>
+      </div>
+    </section>
+
+    <section class="card">
+      <details class="tblv" open>
+        <summary>每日數據明細(表格檢視)</summary>
+        <div class="tblnote" id="tblnote"></div>
+        <div class="tscroll"><table class="dt" id="dtable"></table></div>
+      </details>
+    </section>
+
+    <footer>
+      資料來源:2018/1–2026/7 歷史種子為 CMoney 匯出資料;其後由台灣證券交易所、櫃買中心公開資訊每日自動更新(GitHub Actions,平日 17:50 與 21:50 各檢查一次),市值每月以公開股本自動校正。波動率以對數報酬計算、年化係數 √252;表列單日漲跌為簡單報酬,與盤後行情一致。<br>
+      頁面產生於 __GENERATED__ · <a href="../" style="color:inherit">← 回首頁</a>
+    </footer>
+  </div>
+</div>
+
+<script>
+const D = __DATA__;
+const S = D.summary;
+const N = D.date.length;
+const $ = id => document.getElementById(id);
+const fmt1 = v => v == null ? '–' : v.toFixed(1);
+const fmt2 = v => v == null ? '–' : v.toFixed(2);
+const fcomma = v => v == null ? '–' : Math.round(v).toLocaleString('en-US');
+const signed = (v, nd) => (v > 0 ? '+' : '') + v.toFixed(nd);
+
+/* ---------- 主題切換(不使用瀏覽器儲存) ---------- */
+$('themebtn').addEventListener('click', () => {
+  const r = document.documentElement;
+  const dark = r.dataset.theme ? r.dataset.theme === 'dark'
+             : matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark';
+});
+
+/* ---------- 頂部狀態 ---------- */
+function volLevel(v) {
+  if (v < 12)  return ['平靜',   'var(--down-good)'];
+  if (v < 18)  return ['正常',   'var(--down-good)'];
+  if (v < 25)  return ['偏高',   'var(--warn)'];
+  if (v < 35)  return ['高度警戒', 'var(--up-bad)'];
+  return ['危機等級', 'var(--up-bad)'];
+}
+$('asof').textContent = '資料至 ' + S.asof + ' · ' + S.span + ' 共 ' + S.days.toLocaleString() + ' 個交易日';
+{
+  const [lv, color] = volLevel(S.v20);
+  const el = $('statusline');
+  const dot = document.createElement('span');
+  dot.className = 'statusline';
+  dot.innerHTML = '';
+  const d2 = document.createElement('span'); d2.className = 'dot'; d2.style.background = color;
+  const tx = document.createElement('span');
+  tx.textContent = '目前市場波動狀態:' + lv + '(20日年化 ' + fmt1(S.v20) + '%,高於歷史 ' + S.v20_pct + '% 的交易日)';
+  dot.appendChild(d2); dot.appendChild(tx); el.appendChild(dot);
+}
+
+/* ---------- KPI 磚 ---------- */
+function spark(vals) {
+  const w = 200, h = 30, pad = 2;
+  const vs = vals.filter(v => v != null);
+  const mn = Math.min(...vs), mx = Math.max(...vs), sp = (mx - mn) || 1;
+  const x = i => pad + i * (w - 2 * pad) / (vals.length - 1);
+  const y = v => h - pad - (v - mn) / sp * (h - 2 * pad);
+  let dstr = '', pen = false;
+  vals.forEach((v, i) => { if (v == null) { pen = false; return; }
+    dstr += (pen ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(v).toFixed(1); pen = true; });
+  const li = vals.length - 1, lv = vals[li];
+  return '<svg class="spark" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" aria-hidden="true">' +
+    '<path class="ln" d="' + dstr + '"/>' +
+    (lv != null ? '<circle class="cur" cx="' + x(li) + '" cy="' + y(lv) + '" r="3"/>' : '') + '</svg>';
+}
+function weeklyBuckets(arr, buckets = 12, per = 5) {
+  const out = [];
+  for (let b = buckets - 1; b >= 0; b--) {
+    const end = N - b * per, start = end - per;
+    const seg = arr.slice(Math.max(0, start), end).filter(v => v != null);
+    out.push(seg.length ? seg.reduce((a, c) => a + c, 0) / seg.length : null);
+  }
+  return out;
+}
+function tile(label, valHtml, chg, chgNd, pct, sparkVals) {
+  const div = document.createElement('div'); div.className = 'tile';
+  const cls = chg > 0 ? 'chg-up' : 'chg-dn';
+  const arrow = chg > 0 ? '▲' : '▼';
+  div.innerHTML = '<div class="lab"></div><div class="val">' + valHtml + '</div>' +
+    '<div class="delta"><span class="' + cls + '">' + arrow + ' ' + signed(chg, chgNd) + '</span>' +
+    ' <span class="pctile">vs 上月 · 歷史分位 ' + pct + '%</span></div>' + spark(sparkVals);
+  div.querySelector('.lab').textContent = label;
+  return div;
+}
+{
+  const t = $('tiles');
+  t.appendChild(tile('加權指數 20日年化波動率', fmt1(S.v20) + '<small>%</small> ',
+    S.v20_chg, 1, S.v20_pct, weeklyBuckets(D.v20)));
+  t.appendChild(tile('櫃買指數 20日年化波動率', fmt1(S.ov20) + '<small>%</small>',
+    S.ov20_chg, 1, S.ov20_pct, weeklyBuckets(D.ov20)));
+  t.appendChild(tile('全市場離散度(20日均)', fmt2(S.disp20) + '<small>%</small>',
+    S.disp20_chg, 2, S.disp20_pct, weeklyBuckets(D.disp20)));
+  t.appendChild(tile('個股平均絕對漲跌幅(20日均)', fmt2(S.am20) + '<small>%</small>',
+    S.am20_chg, 2, S.am20_pct, weeklyBuckets(D.am20)));
+  if (S.heat != null) t.appendChild(tile('強勢股熱度比(對全市場)', fmt2(S.heat) + '<small>×</small>',
+    S.heat_chg, 2, S.heat_pct, weeklyBuckets(D.heat)));
+}
+
+/* ---------- 圖表引擎(SVG) ---------- */
+const NS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceTicks(max, n = 4) {
+  const raw = max / n, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => max / s <= n) || 10 * mag;
+  const ticks = []; for (let v = 0; v <= max * 1.0001; v += step) ticks.push(v);
+  if (ticks[ticks.length - 1] < max) ticks.push(ticks[ticks.length - 1] + step); // 軸頂必須蓋過資料最大值
+  return ticks;
+}
+function xTickIdx(i0, i1, width) {
+  const n = Math.max(2, Math.min(7, Math.floor(width / 130)));
+  const out = []; for (let k = 0; k <= n; k++) out.push(Math.round(i0 + (i1 - i0) * k / n));
+  return [...new Set(out)];
+}
+function xlab(i, spanDays) {
+  const d = D.date[i];
+  return spanDays > 900 ? d.slice(0, 7).replace('-', '/') : d.slice(2, 10).replace(/-/g, '/');
+}
+function linePath(xs, ys) {
+  let s = '', pen = false;
+  for (let i = 0; i < xs.length; i++) {
+    if (ys[i] == null) { pen = false; continue; }
+    s += (pen ? 'L' : 'M') + xs[i].toFixed(1) + ',' + ys[i].toFixed(1); pen = true;
+  }
+  return s;
+}
+
+/* 多面板圖:cfg = {panels:[{hFrac,series:[{arr,cls,thin}],area,title,yFmt,yFromZero}], events} */
+function drawChart(container, i0, i1, cfg, tipRows) {
+  container.textContent = '';
+  const W = container.clientWidth || 1000;
+  const H = cfg.height || 330;
+  const ML = 46, MR = 74, MT = 8, MB = 26, GAP = 22;
+  const svg = el('svg', { class: 'chart', viewBox: '0 0 ' + W + ' ' + H, width: '100%', height: H, tabindex: 0, role: 'img' }, container);
+  const plotW = W - ML - MR;
+  const nPts = i1 - i0;
+  const X = i => ML + (i - i0) / Math.max(1, nPts) * plotW;
+
+  const innerH = H - MT - MB - GAP * (cfg.panels.length - 1);
+  let top = MT;
+  const panels = [];
+  for (const p of cfg.panels) {
+    const ph = innerH * p.hFrac;
+    let mn = Infinity, mx = -Infinity;
+    for (const s of p.series) for (let i = i0; i <= i1; i++) {
+      const v = s.arr[i]; if (v != null) { if (v < mn) mn = v; if (v > mx) mx = v; }
+    }
+    if (mn === Infinity) { mn = 0; mx = 1; }
+    let ticks;
+    if (p.yFromZero) { mn = 0; ticks = niceTicks(mx * 1.05, 3); mx = ticks[ticks.length - 1]; }
+    else { const pad = (mx - mn) * 0.06 || 1; mn -= pad; mx += pad; ticks = niceTicks(mx, 3).filter(t => t >= mn); }
+    const pTop = top;   // 固定本面板的頂端(top稍後會遞增,閉包要用當下值)
+    const Y = v => pTop + ph - (v - mn) / (mx - mn) * ph;
+    // 格線與Y刻度
+    for (const t of ticks) {
+      el('line', { class: 'gridln', x1: ML, x2: ML + plotW, y1: Y(t), y2: Y(t) }, svg);
+      const tx = el('text', { class: 'tick', x: ML - 7, y: Y(t) + 3.5, 'text-anchor': 'end' }, svg);
+      tx.textContent = p.yFmt ? p.yFmt(t) : t;
+    }
+    if (p.title) { const tt = el('text', { class: 'ptitle', x: ML, y: top - -1 + 1 }, svg); tt.textContent = p.title; tt.setAttribute('y', top + 4); }
+    // 面積
+    if (p.area) {
+      const s0 = p.series[p.area.of];
+      const xs = [], ys = [];
+      for (let i = i0; i <= i1; i++) { xs.push(X(i)); ys.push(s0.arr[i] == null ? null : Y(s0.arr[i])); }
+      let dstr = linePath(xs, ys);
+      if (dstr) dstr += 'L' + X(i1).toFixed(1) + ',' + (top + ph).toFixed(1) + 'L' + X(i0).toFixed(1) + ',' + (top + ph).toFixed(1) + 'Z';
+      el('path', { class: 'ar-blue', d: dstr }, svg);
+    }
+    // 線
+    for (const s of p.series) {
+      const xs = [], ys = [];
+      for (let i = i0; i <= i1; i++) { xs.push(X(i)); ys.push(s.arr[i] == null ? null : Y(s.arr[i])); }
+      el('path', { class: 'ln-' + s.cls + (s.thin ? ' ln-thin' : ''), d: linePath(xs, ys) }, svg);
+    }
+    // 主系列端點+直接標籤
+    const main = p.series.find(s => s.label);
+    if (main) {
+      let li = i1; while (li > i0 && main.arr[li] == null) li--;
+      if (main.arr[li] != null) {
+        el('circle', { class: 'enddot', cx: X(li), cy: Y(main.arr[li]), r: 4 }, svg);
+        const t = el('text', { class: 'endlab', x: X(li) + 8, y: Y(main.arr[li]) + 4 }, svg);
+        t.textContent = (p.yFmt ? p.yFmt(main.arr[li]) : main.arr[li]);
+      }
+    }
+    panels.push({ Y, top, ph, def: p });
+    top += ph + GAP;
+  }
+  // X軸
+  el('line', { class: 'axisln', x1: ML, x2: ML + plotW, y1: H - MB, y2: H - MB }, svg);
+  for (const i of xTickIdx(i0, i1, plotW)) {
+    const t = el('text', { class: 'tick', x: X(i), y: H - MB + 16, 'text-anchor': 'middle' }, svg);
+    t.textContent = xlab(i, nPts);
+  }
+  // 事件點(畫在第一個面板的主系列上)
+  if (cfg.events) {
+    const p0 = panels[0]; const s0 = p0.def.series[p0.def.series.length - 1];
+    for (let i = i0; i <= i1; i++) {
+      const ev = D.events[D.date[i]];
+      const isBig = D.ret[i] != null && Math.abs(D.ret[i]) >= 4.4;
+      if ((ev || isBig) && s0.arr[i] != null) {
+        el('circle', { class: 'evdot', cx: X(i), cy: p0.Y(s0.arr[i]), r: 5 }, svg);
+      }
+    }
+  }
+  // 十字線 + tooltip
+  const xh = el('line', { class: 'xh', x1: -9, x2: -9, y1: MT, y2: H - MB, visibility: 'hidden' }, svg);
+  const tip = document.createElement('div'); tip.className = 'tip';
+  container.appendChild(tip);
+  let curIdx = null;
+  function showAt(i, px) {
+    curIdx = i;
+    xh.setAttribute('x1', X(i)); xh.setAttribute('x2', X(i));
+    xh.setAttribute('visibility', 'visible');
+    tip.textContent = '';
+    const td = document.createElement('div'); td.className = 'td'; td.textContent = D.date[i];
+    tip.appendChild(td);
+    for (const row of tipRows(i)) {
+      if (row.v == null) continue;
+      const tr = document.createElement('div'); tr.className = 'tr';
+      if (row.key) { const k = document.createElement('span'); k.className = 'lkey ' + row.key; tr.appendChild(k); }
+      const kk = document.createElement('span'); kk.className = 'k'; kk.textContent = row.k; tr.appendChild(kk);
+      const vv = document.createElement('span'); vv.className = 'v'; vv.textContent = row.v; tr.appendChild(vv);
+      tip.appendChild(tr);
+    }
+    const ev = D.events[D.date[i]];
+    if (ev && cfg.events) { const e = document.createElement('div'); e.className = 'tev'; e.textContent = '事件:' + ev; tip.appendChild(e); }
+    tip.style.display = 'block';
+    const cw = container.clientWidth, tw = tip.offsetWidth;
+    let lx = px + 16; if (lx + tw > cw - 4) lx = px - tw - 16;
+    tip.style.left = Math.max(4, lx) + 'px';
+    tip.style.top = '30px';
+  }
+  function hide() { xh.setAttribute('visibility', 'hidden'); tip.style.display = 'none'; curIdx = null; }
+  svg.addEventListener('pointermove', e => {
+    const r = svg.getBoundingClientRect();
+    const px = (e.clientX - r.left) * (W / r.width);
+    if (px < ML - 8 || px > ML + plotW + 8) { hide(); return; }
+    const i = Math.max(i0, Math.min(i1, Math.round(i0 + (px - ML) / plotW * nPts)));
+    showAt(i, (e.clientX - r.left));
+  });
+  svg.addEventListener('pointerleave', hide);
+  svg.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { hide(); return; }
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault();
+    let i = curIdx == null ? i1 : curIdx + (e.key === 'ArrowRight' ? 1 : -1);
+    i = Math.max(i0, Math.min(i1, i));
+    const r = svg.getBoundingClientRect();
+    showAt(i, X(i) * (r.width / W));
+  });
+  svg.addEventListener('blur', hide);
+}
+
+/* ---------- 四張圖的設定 ---------- */
+function renderCharts(i0, i1) {
+  drawChart($('c1'), i0, i1, {
+    height: 400,
+    events: true,
+    panels: [
+      { hFrac: 0.32, series: [{ arr: D.close, cls: 'gray' }], yFmt: fcomma, title: '加權指數收盤價' },
+      { hFrac: 0.68, yFromZero: true, yFmt: v => v + '%', title: '年化波動率',
+        series: [{ arr: D.v60, cls: 'green' }, { arr: D.v20, cls: 'blue', label: 1 }] },
+    ],
+  }, i => [
+    { k: '收盤價', v: fcomma(D.close[i]), key: 'gray' },
+    { k: '單日漲跌', v: D.ret[i] == null ? null : signed(D.ret[i], 2) + '%' },
+    { k: '20日波動率', v: D.v20[i] == null ? null : fmt1(D.v20[i]) + '%', key: 'blue' },
+    { k: '60日波動率', v: D.v60[i] == null ? null : fmt1(D.v60[i]) + '%', key: 'green' },
+    { k: '252日波動率', v: D.v252[i] == null ? null : fmt1(D.v252[i]) + '%' },
+  ]);
+
+  drawChart($('c2'), i0, i1, {
+    height: 280,
+    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%',
+      series: [{ arr: D.ov20, cls: 'green' }, { arr: D.v20, cls: 'blue', label: 1 }] }],
+  }, i => [
+    { k: '加權 20日', v: D.v20[i] == null ? null : fmt1(D.v20[i]) + '%', key: 'blue' },
+    { k: '櫃買 20日', v: D.ov20[i] == null ? null : fmt1(D.ov20[i]) + '%', key: 'green' },
+  ]);
+
+  drawChart($('c3'), i0, i1, {
+    height: 280,
+    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%',
+      series: [{ arr: D.disp, cls: 'gray', thin: 1 }, { arr: D.disp20, cls: 'blue', label: 1 }] }],
+  }, i => [
+    { k: '當日離散度', v: D.disp[i] == null ? null : fmt2(D.disp[i]) + '%', key: 'gray' },
+    { k: '20日平均', v: D.disp20[i] == null ? null : fmt2(D.disp20[i]) + '%', key: 'blue' },
+    { k: '平均|漲跌|20日', v: D.am20[i] == null ? null : fmt2(D.am20[i]) + '%' },
+  ]);
+
+  drawChart($('c5'), i0, i1, {
+    height: 280,
+    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%',
+      series: [{ arr: D.mabs20, cls: 'gray' }, { arr: D.sabs20, cls: 'blue', label: 1 }] }],
+  }, i => [
+    { k: '強勢股|漲跌|20日', v: D.sabs20[i] == null ? null : fmt2(D.sabs20[i]) + '%', key: 'blue' },
+    { k: '全市場母體20日', v: D.mabs20[i] == null ? null : fmt2(D.mabs20[i]) + '%', key: 'gray' },
+    { k: '熱度比', v: D.heat[i] == null ? null : fmt2(D.heat[i]) + '×' },
+    { k: '強勢組合20日波動', v: D.svol20[i] == null ? null : fmt1(D.svol20[i]) + '%' },
+    { k: '強勢股漲跌停占比', v: D.slim[i] == null ? null : fmt1(D.slim[i]) + '%' },
+  ]);
+
+  drawChart($('c4'), i0, i1, {
+    height: 280,
+    panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%', area: { of: 1 },
+      series: [{ arr: D.p5, cls: 'gray', thin: 1 }, { arr: D.p520, cls: 'blue', label: 1 }] }],
+  }, i => [
+    { k: '當日 |≥5%| 占比', v: D.p5[i] == null ? null : fmt1(D.p5[i]) + '%', key: 'gray' },
+    { k: '20日平均', v: D.p520[i] == null ? null : fmt1(D.p520[i]) + '%', key: 'blue' },
+    { k: '上漲家數占比', v: D.adv[i] == null ? null : fmt1(D.adv[i]) + '%' },
+  ]);
+}
+
+/* ---------- 極端日排行 ---------- */
+function renderEvents(i0, i1) {
+  const idx = [];
+  for (let i = i0; i <= i1; i++) if (D.ret[i] != null) idx.push(i);
+  idx.sort((a, b) => Math.abs(D.ret[b]) - Math.abs(D.ret[a]));
+  const top = idx.slice(0, 10).sort((a, b) => Math.abs(D.ret[b]) - Math.abs(D.ret[a]));
+  const tb = $('evtable'); tb.textContent = '';
+  const hd = ['日期', '指數漲跌', '離散度', '|≥5%|占比', '漲家數占比', '事件'];
+  const trh = document.createElement('tr');
+  hd.forEach(h => { const th = document.createElement('th'); th.textContent = h; trh.appendChild(th); });
+  tb.appendChild(trh);
+  for (const i of top) {
+    const tr = document.createElement('tr');
+    const cells = [
+      [D.date[i], ''],
+      [signed(D.ret[i], 2) + '%', D.ret[i] < 0 ? 'neg' : 'pos'],
+      [D.disp[i] == null ? '–' : fmt2(D.disp[i]) + '%', ''],
+      [D.p5[i] == null ? '–' : fmt1(D.p5[i]) + '%', ''],
+      [D.adv[i] == null ? '–' : fmt1(D.adv[i]) + '%', ''],
+      [D.events[D.date[i]] || '—', 'ev'],
+    ];
+    cells.forEach(([v, c]) => { const td = document.createElement('td'); if (c) td.className = c; td.textContent = v; tr.appendChild(td); });
+    tb.appendChild(tr);
+  }
+}
+
+/* ---------- 每日明細表 ---------- */
+function renderTable(i0, i1) {
+  const tb = $('dtable'); tb.textContent = '';
+  const hd = ['日期', '收盤', '漲跌%', '20日波動率', '60日波動率', '櫃買20日', '離散度', '離散度20日', '|≥5%|占比', '漲家數%', '強勢|漲跌|20日', '熱度比'];
+  const trh = document.createElement('tr');
+  hd.forEach(h => { const th = document.createElement('th'); th.textContent = h; trh.appendChild(th); });
+  tb.appendChild(trh);
+  const CAP = 250;
+  const start = Math.max(i0, i1 - CAP + 1);
+  $('tblnote').textContent = start > i0
+    ? '顯示最近 ' + CAP + ' 筆(篩選範圍共 ' + (i1 - i0 + 1) + ' 筆;完整數據可由圖表滑鼠讀取)'
+    : '共 ' + (i1 - i0 + 1) + ' 筆';
+  const frag = document.createDocumentFragment();
+  for (let i = i1; i >= start; i--) {
+    const tr = document.createElement('tr');
+    const vals = [
+      [D.date[i], ''],
+      [fcomma(D.close[i]), ''],
+      [D.ret[i] == null ? '–' : signed(D.ret[i], 2), D.ret[i] < 0 ? 'neg' : D.ret[i] > 0 ? 'pos' : ''],
+      [fmt1(D.v20[i]), ''], [fmt1(D.v60[i]), ''], [fmt1(D.ov20[i]), ''],
+      [fmt2(D.disp[i]), ''], [fmt2(D.disp20[i]), ''], [fmt1(D.p5[i]), ''], [fmt1(D.adv[i]), ''],
+      [fmt2(D.sabs20[i]), ''], [fmt2(D.heat[i]), ''],
+    ];
+    vals.forEach(([v, c]) => { const td = document.createElement('td'); if (c) td.className = c; td.textContent = v; tr.appendChild(td); });
+    frag.appendChild(tr);
+  }
+  tb.appendChild(frag);
+}
+
+/* ---------- 解讀 ---------- */
+function renderInterp() {
+  const p = $('interp'); p.textContent = '';
+  const [lv] = volLevel(S.v20);
+  const heat = S.v20 > S.v60 ? '短期(20日)高於中期(60日 ' + fmt1(S.v60) + '%),波動仍在升溫或高檔盤旋'
+                             : '短期(20日)已低於中期(60日 ' + fmt1(S.v60) + '%),波動正在自高點降溫';
+  const paras = [
+    '截至 ' + S.asof + ',加權指數收在 ' + fcomma(S.close) + ' 點,20日年化波動率為 ' + fmt1(S.v20) + '%,高於這 8 年半裡 ' + S.v20_pct + '% 的交易日,屬於「' + lv + '」區間(全樣本中位數 ' + fmt1(S.v20_med) + '%)。' + heat + '。',
+    '櫃買指數 20日年化波動率 ' + fmt1(S.ov20) + '%(歷史分位 ' + S.ov20_pct + '%),' + (S.ov20 > S.v20 ? '中小型股的震盪明顯大於大型權值股。' : '罕見地低於加權指數,大型股反而是波動來源。'),
+    '全市場橫斷面離散度 20日均為 ' + fmt2(S.disp20) + '%(歷史分位 ' + S.disp20_pct + '%),個股平均每天絕對漲跌 ' + fmt2(S.am20) + '%。離散度' + (S.disp20_pct >= 75 ? '偏高:個股走勢分歧、類股輪動劇烈,選股(而非指數方向)是目前報酬與風險的主要來源。' : (S.disp20_pct >= 25 ? '處於正常區間。' : '偏低:個股齊漲齊跌,指數方向主導一切。')),
+    '歷史峰值出現在 ' + S.v20_max_date + '(20日年化 ' + fmt1(S.v20_max) + '%,對應 2025 年 4 月關稅股災)。目前樣本涵蓋 ' + S.n_stocks.toLocaleString() + ' 檔上市櫃普通股。',
+  ];
+  if (S.heat != null) {
+    const hdesc = S.heat_pct >= 85
+      ? '投機熱度明顯集中在領漲股 — 歷史上這種讀值多出現在題材狂潮期(如2018/6被動元件、2021/7航運),通常伴隨強勢股回檔風險上升。'
+      : (S.heat_pct <= 15
+        ? '熱度比異常低 — 強弱勢股齊漲齊跌,多為全面性恐慌或無主流的盤面。'
+        : '投機熱度處於常態區間,強勢股相對大盤的波動溢價沒有極端化。');
+    paras.push('強勢股(前20日漲幅前15%,共 ' + S.s_k + ' 檔)目前平均每天絕對漲跌是全市場的 ' + fmt2(S.heat) + ' 倍(歷史分位 ' + S.heat_pct + '%,中位數 ' + fmt2(S.heat_med) + '×),強勢組合20日年化波動 ' + fmt1(S.svol20) + '%。' + hdesc);
+  }
+  for (const t of paras) { const e = document.createElement('p'); e.textContent = t; p.appendChild(e); }
+  $('kbstats').textContent = '台股 8.5 年統計:20日年化波動率中位數 ' + fmt1(S.v20_med) + '%、最高 ' + fmt1(S.v20_max) + '%(' + S.v20_max_date + ')。';
+}
+
+/* ---------- 篩選與總渲染 ---------- */
+let curWin = 756;
+function renderAll() {
+  const i1 = N - 1;
+  const i0 = curWin > 0 ? Math.max(0, N - curWin) : 0;
+  renderCharts(i0, i1);
+  renderEvents(i0, i1);
+  renderTable(i0, i1);
+}
+$('filters').addEventListener('click', e => {
+  const b = e.target.closest('.fbtn'); if (!b) return;
+  curWin = +b.dataset.win;
+  document.querySelectorAll('.fbtn').forEach(x => x.setAttribute('aria-pressed', x === b));
+  renderAll();
+});
+let rsz;
+addEventListener('resize', () => { clearTimeout(rsz); rsz = setTimeout(renderAll, 150); });
+
+renderInterp();
+renderAll();
+</script>
+</body>
+</html>
