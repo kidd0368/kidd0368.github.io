@@ -570,7 +570,7 @@ def current_leaders():
                          'dd': round(ddv, 1),
                          'chg': None if pd.isna(lastchg[cd]) else round(float(lastchg[cd]), 2)})
         rows.sort(key=lambda r: -r['share'])
-        return {'rows': rows[:15],
+        return {'rows': rows[:20],
                 'share': round(float(share40[cols].sum()), 1),
                 'n': int(len(cols)),
                 'asof': str(R.index[-1])}

@@ -104,7 +104,8 @@
   .em-good { font-weight: 700; color: var(--down-good); }
   .em-warn { font-weight: 700; color: var(--warn); }
   .ref { color: var(--muted); font-size: .82em; white-space: nowrap; }
-  .hero-lead { font-size: 18.5px; font-weight: 700; line-height: 1.95; margin: 6px 0 10px; }
+  .hero-lead { font-size: 18.5px; font-weight: 700; line-height: 1.95; margin: 6px 0 6px; }
+  .hero-why { font-size: 13.5px; color: var(--muted); line-height: 1.8; margin: 0 0 10px; }
   .hero ul { padding-left: 22px; margin: 6px 0; }
   .hero li { font-size: 15.5px; line-height: 1.95; margin: 9px 0; }
   .hero .watch { background: var(--page); border-radius: 10px; padding: 12px 16px; margin-top: 14px;
@@ -115,6 +116,13 @@
   .sname { font-weight: 700; }
   .smean { color: var(--muted); font-size: .88em; }
   .sintro { font-size: 13.5px; color: var(--muted); margin: 2px 0 6px; }
+  .callout { border: 1px solid var(--warn); border-left: 5px solid var(--warn);
+    background: rgba(185,122,0,0.06); border-radius: 10px; padding: 14px 18px; margin-top: 14px; }
+  .callout .ct { font-size: 16.5px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .callout .keyline { font-size: 17px; font-weight: 800; line-height: 1.85; margin-bottom: 8px; }
+  .callout .cbody { font-size: 15px; line-height: 1.9; }
+  .callout .cact { font-size: 15.5px; font-weight: 700; margin-top: 10px; padding-top: 10px;
+    border-top: 1px dashed var(--warn); }
   .an-head { font-size: 16px; font-weight: 700; margin: 16px 0 2px; }
   .an-sub { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
   .analogs { display: grid; grid-template-columns: repeat(auto-fit, minmax(235px, 1fr)); gap: 10px; }
@@ -321,7 +329,7 @@
     </section>
 
     <section class="card">
-      <h2>深入解讀:五個問題看懂現況</h2>
+      <h2>深入解讀:問答式看懂現況</h2>
       <div class="prose" id="interp"></div>
       <div class="kb">
         <h3>這些指標怎麼算?</h3>
@@ -754,7 +762,7 @@ function renderRegime() {
   const t1 = document.createElement('span'); t1.textContent = '現在:' + meta.name;
   s1.appendChild(d1); s1.appendChild(t1); box.appendChild(s1);
   const why = document.createElement('div'); why.className = 'rg-why';
-  why.textContent = '判定依據:指數在半年線' + (cur.above_ma ? '之上' : '之下') + ' · 距一年高點 ' + cur.dd252 + '% · 波動率歷史分位 ' + cur.v20pct + '%' + (cur.rise > 0 ? '(升溫中)' : '(降溫中)') + ' · 近20日單日振幅≥1.5% 有 ' + cur.bigd + ' 天';
+  why.textContent = '判定依據:指數在半年線' + (cur.above_ma ? '之上' : '之下') + ' · 距一年高點 ' + cur.dd252 + '% · 波動率歷史分位 ' + cur.v20pct + '%' + (cur.rise > 0 ? '(較20日前升溫中)' : '(較20日前降溫中)') + ' · 近20日單日振幅≥1.5% 有 ' + cur.bigd + ' 天';
   box.appendChild(why);
   const tx = document.createElement('div'); tx.className = 'rg-text'; tx.textContent = meta.text;
   box.appendChild(tx);
@@ -835,7 +843,7 @@ function renderLeaders() {
     tb.appendChild(tr);
   }
   const noteEl = document.createElement('div'); noteEl.className = 'rg-note';
-  noteEl.textContent = '欄位說明:「較2個月前」=最新收盤 vs 40個交易日前收盤的頭尾累積漲跌 — 途中衝高又跌回會相互抵消,所以暴漲暴跌後這個數字會縮小;「波段最高」=這兩個月內最高點相對兩個月前曾漲到多少;「距40日高」=現價從波段最高點回檔了多少。三欄合讀:例如「較2個月前+35%、波段最高+136%、距高點-39%」=暴漲後重挫、尚未收復。漲跌幅皆以還原(含除權息)價計算。';
+  noteEl.textContent = '欄位說明:「較2個月前」=最新收盤 vs 40個交易日前收盤的頭尾累積漲跌 — 途中衝高又跌回會相互抵消,所以暴漲暴跌後這個數字會縮小;「波段最高」=這兩個月內的最高「收盤價」相對兩個月前曾漲到多少;「距40日高」=最新收盤相對40日內最高「收盤價」的回檔。三欄合讀:例如「較2個月前+35%、波段最高+136%、距高點-39%」=暴漲後重挫、尚未收復。注意:全系統一律以「還原收盤價」計算,不含盤中上下影線——所以「距40日高」會比你對照K線圖用「盤中最高價」算出來的數字淺(例:個股盤中衝過的插針高點不列入)。';
   $('ldtable').parentElement.parentElement.appendChild(noteEl);
 }
 
@@ -933,6 +941,21 @@ function renderHero() {
     dd != null ? (dd <= -15 ? ',尚未止跌。' : dd > -8 ? ',結構仍健康。' : ',修復觀察中。') : '。',
   ]);
   box.appendChild(lead);
+
+  if (cur) {
+    const why = document.createElement('div'); why.className = 'hero-why';
+    const bullQ = cur.q === 'Q1' || cur.q === 'Q2';
+    const bearQ = cur.q === 'Q3' || cur.q === 'Q4';
+    const trendTxt = '指數收在半年線之' + (cur.above_ma ? '上' : '下') + '、距一年高點 ' + cur.dd252 + '%'
+      + (bullQ ? ' → 判為「多頭」(站上半年線、且距高點回檔未逾10%)'
+        : bearQ ? ' → 判為「空頭」(跌破半年線、且距高點回檔逾10%)'
+        : ' → 判為「過渡」(多頭與空頭的條件各只滿足一半)');
+    const unstable = cur.q === 'Q2' || cur.q === 'Q3' || cur.v20pct >= 90 || (cur.v20pct >= 70 && cur.rise > 0);
+    const volTxt = '20日波動率高於歷史 ' + cur.v20pct + '% 的日子' + (cur.rise > 0 ? '、且仍較20個交易日前升溫' : '')
+      + (unstable ? ' → 判為「不穩定」(達90分位,或70分位以上且升溫中)' : ' → 判為「穩定」(未達警戒門檻)');
+    why.textContent = '為什麼這樣判定? ' + trendTxt + ';' + volTxt + '。完整規則與回測見下方「盤勢定位」卡。';
+    box.appendChild(why);
+  }
 
   const ul = document.createElement('ul');
   const li = (parts) => { const e = document.createElement('li'); rich(e, parts); ul.appendChild(e); };
@@ -1039,23 +1062,39 @@ function renderAnalogs(box) {
     const dd = lastVal(D.lddd);
     const cur2 = D.regime && D.regime.cur;
     const st2 = cur2 && (D.regime.stats || []).find(s => s.q === cur2.q);
-    const syn = document.createElement('div'); syn.className = 'watch';
-    const sb = document.createElement('b'); sb.textContent = '綜合研判:把上面的資訊合起來讀';
-    syn.appendChild(sb);
-    const sp = document.createElement('div');
+    const syn = document.createElement('div'); syn.className = 'callout';
     const brokenLeaders = dd != null && dd <= -15;
+    const posMaj = pos >= Math.ceil(outs.length / 2);
+    const ct = document.createElement('div'); ct.className = 'ct';
+    ct.textContent = '⚠ 綜合研判:看完上面的圖,先讀這段再下結論';
+    syn.appendChild(ct);
+    const key = document.createElement('div'); key.className = 'keyline';
+    rich(key, posMaj && brokenLeaders ? [
+      '上面的圖看起來偏樂觀,但', { t: '今天還不是進場確認點', c: 'em-bad' },
+      '——領導股尚未止跌,下跌的路徑還沒走完。',
+    ] : (posMaj ? [
+      '機率與路徑目前一致偏向修復,但進出場仍以下方的訊號燈為準。',
+    ] : [
+      '歷史對照偏弱,', { t: '防守優先', c: 'em-bad' }, '。',
+    ]));
+    syn.appendChild(key);
+    const sp = document.createElement('div'); sp.className = 'cbody';
     rich(sp, [
-      '中期(60個交易日)的機率結構', pos >= Math.ceil(outs.length / 2) ? { t: '偏向修復', c: 'em-good' } : { t: '偏弱', c: 'em-bad' },
+      '對照案例在真正觸底之前,最多還曾再跌 ', { t: fmt1(worstLo) + '%', c: 'em-bad' },
+      brokenLeaders ? ';而目前主流領導股距高點 ' : ';目前領導股',
+      brokenLeaders ? { t: fmt1(dd) + '%', c: 'em-bad' } : { t: '相對穩定', c: 'em-good' },
+      brokenLeaders ? '、仍在失血。' : ',路徑風險較低。',
+      '中期(60個交易日)的機率結構確實', posMaj ? { t: '偏向修復', c: 'em-good' } : { t: '偏弱', c: 'em-bad' },
       ':歷史對照 ', { t: pos + '/' + outs.length, c: 'em' }, ' 個案例最終為正報酬',
       st2 ? ',象限統計中位數 ' : '。',
       st2 ? { t: signed(st2.f60, 1) + '%', c: st2.f60 >= 0 ? 'em-good' : 'em-bad' } : '',
       st2 ? '、上漲機率 ' + st2.win + '%。' : '',
-      '但路徑' + (brokenLeaders ? '尚未確認' : '相對平穩') + ':對照案例在觸底前最多還曾再跌 ',
-      { t: fmt1(worstLo) + '%', c: 'em-bad' },
-      brokenLeaders ? ';目前領導股仍未止跌,今天還不是「確認點」。' : ';目前領導股相對穩定,路徑風險較低。',
-      '兩者並不矛盾——恐慌高潮常「接近」底部,但底部是過程、不是一天。務實含義:不追殺、分批、以下方檢查清單的止跌訊號當進場確認,寧可犧牲最低點,換取不接刀。',
+      '但請記住:那些數字是「60天後的終點」,不是「明天的路徑」——恐慌高潮常「接近」底部,但底部是過程、不是一天。',
     ]);
     syn.appendChild(sp);
+    const act = document.createElement('div'); act.className = 'cact';
+    act.textContent = '務實作法:不追殺、分批、等下方訊號燈轉綠再確認 — 寧可犧牲最低點,換取不接刀。';
+    syn.appendChild(act);
     box.appendChild(syn);
   }
 }
@@ -1075,12 +1114,6 @@ function renderInterp() {
   const dOtc = S.ov20 / SQ;
   const lvTxt = S.v20 < 12 ? '很平靜' : S.v20 < 18 ? '正常' : S.v20 < 25 ? '偏高' : S.v20 < 35 ? '很高(高度警戒)' : '極端(危機等級)';
 
-  const lead = document.createElement('p');
-  lead.className = 'lead';
-  lead.textContent = '一句話:現在台股的震盪程度「' + lvTxt + '」。大盤平均一天上下晃約 ±' + dv.toFixed(1) + '%'
-    + '(以現在的指數位置,大約一天 ±' + pts.toLocaleString() + ' 點),是過去八年半平常水準(±' + dvTyp.toFixed(1) + '%)的 '
-    + ratio.toFixed(1) + ' 倍。';
-  p.appendChild(lead);
 
   const add = (title, txt) => {
     const e = document.createElement('p');
@@ -1112,7 +1145,7 @@ function renderInterp() {
     const sAbs = lastVal(D.sabs20);
     const mania = quantile(D.heat, 0.95);
     add('飆股圈過熱了嗎?',
-      '最近20天漲最多的那批股票(強勢股,共 ' + S.s_k + ' 檔)平均一天晃 ±' + fmt2(sAbs) + '%,是全市場的 ' + fmt2(S.heat) + ' 倍。'
+      '最近20天漲最多的那批股票(「強勢股」,共 ' + S.s_k + ' 檔;這是門檻較寬的族群,和下一題較嚴格的「主流領導股」是兩份名單)平均一天晃 ±' + fmt2(sAbs) + '%,是全市場的 ' + fmt2(S.heat) + ' 倍。'
       + (S.heat_pct >= 85
         ? '這已經進入歷史高檔——2018被動元件、2021航運那種全民瘋飆股的時期,就是這個數字衝破 ' + fmt2(mania) + ' 倍。投機最熱的地方,通常也是回檔時最痛的地方。'
         : (S.heat_pct <= 15
@@ -1129,9 +1162,13 @@ function renderInterp() {
     }
   }
 
+  let recentEv = '';
+  for (let i = N - 1; i >= Math.max(0, N - 60); i--) {
+    if (D.events[D.date[i]]) { recentEv = '(這一波的對應事件:' + D.events[D.date[i]] + ')'; break; }
+  }
   add('所以我該怎麼看?',
-    '波動率是溫度計,不是買賣訊號。它告訴你:現在單日大漲大跌都是「常態」而不是意外,部位大小和心理預期要照這個溫度調整;歷史經驗上,高溫多半出現在大跌中或大跌後(這次是6月全球AI股賣壓的餘波),要等大盤回到平均一天 ±1% 以內,才算真正回穩。參考座標:歷史最高溫在 '
-    + S.v20_max_date + '(2025年4月關稅股災,一天平均晃 ±' + (S.v20_max / SQ).toFixed(1) + '%)。');
+    '波動率是溫度計,不是買賣訊號。它告訴你:現在單日大漲大跌都是「常態」而不是意外,部位大小和心理預期要照這個溫度調整;歷史經驗上,高溫多半出現在大跌中或大跌後' + recentEv + '。降溫的判斷分兩層:大盤平均一天回到 ±1.5% 以內(即上方訊號燈「市場降溫」的門檻)算初步降溫;回到 ±1% 以內,才算回到平常水準。參考座標:歷史最高溫在 '
+    + S.v20_max_date + (S.v20_max_date.slice(0, 7) === '2025-04' ? '(2025年4月關稅股災)' : '') + ',當時一天平均晃 ±' + (S.v20_max / SQ).toFixed(1) + '%。');
 
   $('kbstats').textContent = '台股 8.5 年統計:20日年化波動率中位數 ' + fmt1(S.v20_med) + '%(≈平常一天 ±' + (S.v20_med / SQ).toFixed(1) + '%)、最高 ' + fmt1(S.v20_max) + '%(' + S.v20_max_date + ',≈一天 ±' + (S.v20_max / SQ).toFixed(1) + '%)。年化與單日的換算:年化 ÷ √252 ≈ 單日。';
 }
