@@ -578,6 +578,73 @@ def current_leaders():
         print(f'  [leaders] 快照失敗: {e}')
         return None
 
+# ------------------------------------------------------------------ 歷史相似日 ----
+
+def compute_analogs(close, v20, v60, disp20, heat, lddd, p520, dates, events):
+    """8指標狀態向量,找出歷史上最像「今天」的3段時期(彼此至少隔40個交易日)"""
+    mask = close.notna().values
+    pos = np.where(mask)[0]
+    cmp_ = lambda s: pd.Series(np.asarray(s, dtype=float)[mask]).reset_index(drop=True)
+    c = cmp_(close)
+    v20, v60, disp20 = cmp_(v20), cmp_(v60), cmp_(disp20)
+    heat, lddd, p520 = cmp_(heat), cmp_(lddd), cmp_(p520)
+    ma120 = c.rolling(120).mean()
+    dd252 = c / c.rolling(252).max() - 1
+    pct = lambda s: s.rank(pct=True)
+    F = pd.DataFrame({
+        'a': pct(v20),                                     # 波動分位
+        'b': pct(v20 - v60),                               # 升溫/降溫
+        'c': dd252.clip(-0.4, 0) / 0.4,                    # 距一年高點
+        'd': (c / ma120 - 1).clip(-0.15, 0.15) / 0.15,     # 距半年線
+        'e': pct(disp20),                                  # 分歧度
+        'f': pct(heat),                                    # 投機熱度
+        'g': lddd.clip(-40, 10) / 40,           # 領導股距高點
+        'h': pct(p520),                                    # 大振幅家數
+    }).reset_index(drop=True)
+    W = {'a': 1.5, 'b': 1.0, 'c': 1.5, 'd': 1.0, 'e': 1.0, 'f': 1.0, 'g': 1.5, 'h': 1.0}
+    n = len(F)
+    today = F.iloc[-1]
+    if today[['a', 'c', 'd']].isna().any():
+        return None
+    d2 = pd.Series(0.0, index=F.index)
+    wsum = pd.Series(0.0, index=F.index)
+    for k, w in W.items():
+        diff = F[k] - today[k]
+        ok = diff.notna()
+        d2[ok] += w * diff[ok] ** 2
+        wsum[ok] += w
+    dist = (d2 / wsum.replace(0, np.nan)) ** 0.5
+    core_ok = F[['a', 'c', 'd']].notna().all(axis=1)
+    cand = dist[(F.index <= n - 61) & core_ok & (wsum >= 5.5)].dropna().sort_values()
+    if len(cand) < 10:
+        return None
+    d95 = float(cand.quantile(0.95))
+    picks = []
+    for i, dv in cand.items():
+        if all(abs(i - p) > 40 for p in picks):
+            picks.append(int(i))
+        if len(picks) >= 3:
+            break
+    out = []
+    for i in picks:
+        oi = int(pos[i])
+        base = float(c.iloc[i])
+        seg = c.iloc[i + 1: i + 61]
+        ev = ''
+        for j in range(max(0, oi - 5), min(len(dates), oi + 6)):
+            if dates[j] in events:
+                ev = dates[j][5:].replace('-', '/') + ' ' + events[dates[j]]
+                break
+        out.append({
+            'i': oi, 'date': dates[oi], 'sim': int(np.clip(round(100 * (1 - dist.iloc[i] / d95)), 1, 99)),
+            'ev': ev,
+            'f20': round(float(c.iloc[i + 20] / base - 1) * 100, 1) if i + 20 < n else None,
+            'f60': round(float(c.iloc[i + 60] / base - 1) * 100, 1) if i + 60 < n else None,
+            'hi60': round(float(seg.max() / base - 1) * 100, 1),
+            'lo60': round(float(seg.min() / base - 1) * 100, 1),
+        })
+    return out
+
 # ------------------------------------------------------------------ 產頁 ----
 
 def cmd_build():
@@ -622,7 +689,9 @@ def cmd_build():
          'ldshare': r2(m['ld_share'], 1), 'lddd': r2(m['ld_dd'], 1), 'ldn': r2(m['ld_n'], 0),
          'events': EVENTS,
          'regime': compute_regime(m.set_index('date')['taiex_close']),
-         'leaders': current_leaders()}
+         'leaders': current_leaders(),
+         'analogs': compute_analogs(m['taiex_close'], v20, v60, disp20, heat,
+                                    m['ld_dd'], p520, m['date'].tolist(), EVENTS)}
 
     vv, hh = v20.dropna(), heat.dropna()
     li = m.index[v20.notna()][-1]
