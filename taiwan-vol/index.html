@@ -50,21 +50,21 @@
 
   .wrap { max-width: 1100px; margin: 0 auto; padding: 24px 20px 48px; }
   header.top { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
-  header.top h1 { font-size: 22px; font-weight: 650; letter-spacing: .3px; }
-  .asof { color: var(--text-2); font-size: 13px; }
+  header.top h1 { font-size: 24px; font-weight: 650; letter-spacing: .3px; }
+  .asof { color: var(--text-2); font-size: 14px; }
   .themebtn { margin-left: auto; border: 1px solid var(--border); background: var(--surface-1);
     color: var(--text-2); border-radius: 8px; padding: 4px 12px; font-size: 13px; cursor: pointer; }
-  .sub { color: var(--muted); font-size: 12.5px; margin-bottom: 18px; }
+  .sub { color: var(--muted); font-size: 13.5px; margin-bottom: 18px; }
 
-  .statusline { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-2); }
+  .statusline { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; color: var(--text-2); }
   .statusline .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
 
   .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-bottom: 20px; }
   .tile { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px 12px; }
-  .tile .lab { font-size: 12.5px; color: var(--text-2); margin-bottom: 6px; }
+  .tile .lab { font-size: 13.5px; color: var(--text-2); margin-bottom: 6px; }
   .tile .val { font-size: 27px; font-weight: 600; line-height: 1.1; }
   .tile .val small { font-size: 15px; font-weight: 500; color: var(--text-2); }
-  .tile .delta { font-size: 12.5px; margin-top: 4px; }
+  .tile .delta { font-size: 13.5px; margin-top: 4px; }
   .tile .delta .chg-up { color: var(--up-bad); font-weight: 600; }
   .tile .delta .chg-dn { color: var(--down-good); font-weight: 600; }
   .tile .delta .pctile { color: var(--muted); }
@@ -72,34 +72,45 @@
   .spark .ln { fill: none; stroke: var(--baseline); stroke-width: 1.5; }
   .spark .cur { fill: var(--s-blue); }
 
-  .rg-status { font-size: 17px; font-weight: 650; display: flex; align-items: center; gap: 9px; margin: 2px 0 8px; }
+  .rg-status { font-size: 19px; font-weight: 650; display: flex; align-items: center; gap: 9px; margin: 2px 0 8px; }
   .rg-status .dot { width: 11px; height: 11px; border-radius: 50%; flex: none; }
-  .rg-why { font-size: 12.5px; color: var(--muted); margin-bottom: 10px; }
-  .rg-text { font-size: 14px; line-height: 1.85; margin-bottom: 12px; }
-  .rg-hist { font-size: 13px; color: var(--text-2); background: var(--page); border-radius: 8px;
+  .rg-why { font-size: 13.5px; color: var(--muted); margin-bottom: 10px; }
+  .rg-text { font-size: 15.5px; line-height: 1.9; margin-bottom: 12px; }
+  .rg-hist { font-size: 14.5px; color: var(--text-2); background: var(--page); border-radius: 8px;
     padding: 9px 12px; line-height: 1.75; margin-bottom: 12px; }
   .qmap { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-width: 560px; }
-  .qcell { border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; font-size: 12.5px;
+  .qcell { border: 1px solid var(--border); border-radius: 10px; padding: 9px 13px; font-size: 13.5px;
     color: var(--muted); display: flex; align-items: center; gap: 8px; }
   .qcell .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; opacity: .55; }
   .qcell.cur { border-color: var(--baseline); box-shadow: inset 0 0 0 1px var(--baseline);
     color: var(--text-1); font-weight: 650; }
   .qcell.cur .dot { opacity: 1; }
-  .rg-note { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
+  .rg-note { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
+  .em { font-weight: 700; color: var(--s-blue); }
+  .em-bad { font-weight: 700; color: var(--up-bad); }
+  .em-good { font-weight: 700; color: var(--down-good); }
+  .em-warn { font-weight: 700; color: var(--warn); }
+  .ref { color: var(--muted); font-size: .82em; white-space: nowrap; }
+  .hero-lead { font-size: 18.5px; font-weight: 700; line-height: 1.95; margin: 6px 0 10px; }
+  .hero ul { padding-left: 22px; margin: 6px 0; }
+  .hero li { font-size: 15.5px; line-height: 1.95; margin: 9px 0; }
+  .hero .watch { background: var(--page); border-radius: 10px; padding: 12px 16px; margin-top: 14px;
+    font-size: 15px; line-height: 1.9; }
+  .hero .watch b { display: block; margin-bottom: 4px; font-size: 15.5px; }
   .filters { display: flex; gap: 6px; align-items: center; margin: 4px 0 14px; flex-wrap: wrap; }
   .filters .flab { font-size: 13px; color: var(--text-2); margin-right: 4px; }
   .fbtn { border: 1px solid var(--border); background: var(--surface-1); color: var(--text-2);
-    padding: 5px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; }
+    padding: 6px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; }
   .fbtn[aria-pressed="true"] { color: var(--text-1); font-weight: 650; border-color: var(--baseline);
     box-shadow: inset 0 0 0 1px var(--baseline); }
   .fbtn:hover { color: var(--text-1); }
 
   .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
     padding: 16px 18px 12px; margin-bottom: 14px; position: relative; }
-  .card h2 { font-size: 15px; font-weight: 650; }
-  .card .desc { font-size: 12.5px; color: var(--muted); margin: 3px 0 4px; }
+  .card h2 { font-size: 17px; font-weight: 700; }
+  .card .desc { font-size: 13.5px; color: var(--muted); margin: 3px 0 4px; }
   .legend { display: flex; gap: 16px; flex-wrap: wrap; margin: 6px 0 2px; }
-  .legend .li { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text-2); }
+  .legend .li { display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; color: var(--text-2); }
   .lkey { width: 16px; height: 0; border-top: 3px solid; border-radius: 2px; }
   .lkey.blue { border-color: var(--s-blue); } .lkey.green { border-color: var(--s-green); }
   .lkey.gray { border-color: var(--baseline); }
@@ -109,8 +120,8 @@
   .chart:focus-visible { box-shadow: 0 0 0 2px var(--s-blue); border-radius: 6px; }
   .gridln { stroke: var(--grid); stroke-width: 1; }
   .axisln { stroke: var(--baseline); stroke-width: 1; }
-  .tick { fill: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
-  .ptitle { fill: var(--text-2); font-size: 11.5px; font-weight: 600; }
+  .tick { fill: var(--muted); font-size: 11.5px; font-variant-numeric: tabular-nums; }
+  .ptitle { fill: var(--text-2); font-size: 12.5px; font-weight: 600; }
   .ln-blue { fill: none; stroke: var(--s-blue); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
   .ln-green { fill: none; stroke: var(--s-green); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
   .ln-gray { fill: none; stroke: var(--baseline); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
@@ -122,7 +133,7 @@
   .evdot { fill: var(--text-2); stroke: var(--surface-1); stroke-width: 2; }
 
   .tip { position: absolute; pointer-events: none; background: var(--surface-1); border: 1px solid var(--border);
-    border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,.12); padding: 9px 12px; font-size: 12.5px;
+    border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,.12); padding: 10px 13px; font-size: 13.5px;
     min-width: 168px; z-index: 5; display: none; }
   .tip .td { color: var(--text-2); font-weight: 650; margin-bottom: 5px; }
   .tip .tr { display: flex; align-items: center; gap: 7px; margin-top: 3px; }
@@ -130,32 +141,32 @@
   .tip .tr .k { color: var(--text-2); }
   .tip .tev { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); color: var(--text-2); max-width: 230px; }
 
-  table.dt { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+  table.dt { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
   .dt th { text-align: right; color: var(--text-2); font-weight: 600; padding: 6px 8px; border-bottom: 1px solid var(--baseline); white-space: nowrap; }
   .dt td { text-align: right; padding: 5px 8px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
   .dt th:first-child, .dt td:first-child { text-align: left; }
   .dt td.ev { text-align: left; color: var(--text-2); white-space: normal; }
   .dt .neg { color: var(--up-bad); } .dt .pos { color: var(--down-good); }
   details.tblv { margin-top: 8px; }
-  details.tblv summary { cursor: pointer; font-size: 13px; color: var(--text-2); padding: 4px 0; }
-  .tblnote { font-size: 12px; color: var(--muted); margin: 6px 0; }
+  details.tblv summary { cursor: pointer; font-size: 14.5px; color: var(--text-2); padding: 4px 0; }
+  .tblnote { font-size: 13px; color: var(--muted); margin: 6px 0; }
   .tscroll { overflow-x: auto; }
 
-  .prose { font-size: 14px; line-height: 1.85; color: var(--text-1); }
+  .prose { font-size: 15.5px; line-height: 1.9; color: var(--text-1); }
   .prose p { margin: 8px 0; }
-  .prose p.lead { font-size: 15.5px; font-weight: 650; line-height: 1.9; padding: 10px 14px;
+  .prose p.lead { font-size: 17px; font-weight: 650; line-height: 1.9; padding: 10px 14px;
     background: var(--page); border-left: 3px solid var(--s-blue); border-radius: 6px; }
   .prose strong { font-weight: 650; }
   .prose .hl { font-weight: 650; }
   .kb { background: var(--page); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-top: 10px; }
-  .kb h3 { font-size: 13px; margin-bottom: 6px; color: var(--text-2); }
-  .kb p, .kb li { font-size: 13px; color: var(--text-2); line-height: 1.75; }
+  .kb h3 { font-size: 14.5px; margin-bottom: 6px; color: var(--text-2); }
+  .kb p, .kb li { font-size: 14px; color: var(--text-2); line-height: 1.8; }
   .kb ul { padding-left: 18px; }
-  table.rt { border-collapse: collapse; font-size: 12.5px; margin-top: 6px; }
+  table.rt { border-collapse: collapse; font-size: 13.5px; margin-top: 6px; }
   .rt td, .rt th { border: 1px solid var(--grid); padding: 4px 10px; text-align: center; color: var(--text-2); }
   .rt th { background: var(--page); font-weight: 600; }
 
-  footer { color: var(--muted); font-size: 12px; margin-top: 18px; line-height: 1.7; }
+  footer { color: var(--muted); font-size: 13px; margin-top: 18px; line-height: 1.7; }
 </style>
 </head>
 <body>
@@ -168,7 +179,10 @@
     </header>
     <div class="sub" id="statusline"></div>
 
-    <section class="tiles" id="tiles"></section>
+    <section class="card hero">
+      <h2>今日重點結論</h2>
+      <div id="hero"></div>
+    </section>
 
     <section class="card">
       <h2>盤勢定位:多空 × 穩定度</h2>
@@ -192,6 +206,8 @@
       <div class="rg-note" id="rgnote"></div>
     </section>
 
+    <section class="tiles" id="tiles"></section>
+
     <div class="filters" id="filters" role="group" aria-label="時間範圍">
       <span class="flab">時間範圍</span>
       <button class="fbtn" data-win="252">近1年</button>
@@ -201,7 +217,7 @@
     </div>
 
     <section class="card">
-      <h2>加權指數與滾動年化波動率</h2>
+      <h2>圖1|大盤指數與波動率(市場溫度計)</h2>
       <div class="desc">上:大盤走勢(灰點=出大事的日子,滑鼠移上去看是什麼事)。下:大盤的「晃動程度」——線越高,代表最近指數每天上上下下越劇烈;藍線(近20天)竄高就是市場進入動盪期</div>
       <div class="legend">
         <span class="li"><span class="lkey gray"></span>收盤價</span>
@@ -212,7 +228,7 @@
     </section>
 
     <section class="card">
-      <h2>加權 vs 櫃買:20日年化波動率</h2>
+      <h2>圖2|大型股 vs 中小型股波動</h2>
       <div class="desc">藍=大型股(加權)、綠=中小型股(櫃買)。綠線幾乎永遠在藍線上面——小股票天生比較會晃;兩條線的距離突然拉大,代表中小型股風險特別高的時期</div>
       <div class="legend">
         <span class="li"><span class="lkey blue"></span>加權指數</span>
@@ -222,7 +238,7 @@
     </section>
 
     <section class="card">
-      <h2>全市場橫斷面離散度</h2>
+      <h2>圖3|全市場個股分歧度(離散度)</h2>
       <div class="desc">量「同一天裡,不同股票的表現差多大」。低=大家一起漲一起跌,看大盤就夠;高=有人大漲有人大跌,選對選錯股票差很多——這是大盤指數完全看不出來的資訊</div>
       <div class="legend">
         <span class="li"><span class="lkey gray"></span>每日離散度</span>
@@ -232,7 +248,7 @@
     </section>
 
     <section class="card">
-      <h2>極端變動個股占比(|漲跌| ≥ 5%)</h2>
+      <h2>圖6|大漲大跌股票占比(振幅≥5%)</h2>
       <div class="desc">當天漲或跌超過5%的股票,占全市場的百分比。平常大約一成以下;竄到五成以上就是全市場劇烈震盪的日子。指數沒什麼動、這裡卻升高=檯面下正在激烈換手輪動</div>
       <div class="legend">
         <span class="li"><span class="lswatch"></span>20日平均</span>
@@ -242,22 +258,22 @@
     </section>
 
     <section class="card">
-      <h2>強勢股波動 vs 全市場</h2>
+      <h2>圖4|強勢股波動熱度</h2>
       <div class="desc"><b>縱軸是「每天平均漲跌幅度」(振幅/波動),不是股價</b> — 所以股票大跌時線反而往上衝,因為每天的跳動變大。把「較20個交易日前累積漲最多(頭尾相比)的前15%股票」(強勢股)挑出來,看它們每天晃得比全市場兇多少。藍線遠離灰線=投機資金集中衝飆股——2018被動元件、2021航運狂潮都是這樣現形的;兩線貼近甚至交叉=全面性恐慌,強弱勢一起跌</div>
       <div class="legend">
-        <span class="li"><span class="lkey blue"></span>強勢股平均|漲跌|(20日均)</span>
-        <span class="li"><span class="lkey gray"></span>全市場母體(20日均)</span>
+        <span class="li"><span class="lkey blue"></span>強勢股每日振幅(20日均)</span>
+        <span class="li"><span class="lkey gray"></span>全市場平均振幅(20日均)</span>
       </div>
       <div id="c5"></div>
     </section>
 
     <section class="card">
-      <h2>主流代表股:資金聚焦的領導群</h2>
+      <h2>圖5|主流代表股:資金聚焦的領導群</h2>
       <div class="desc">定義:「較兩個月前(40個交易日)的頭尾累積漲幅」排名前15% × 市值≥200億 × 近40日成交金額占全市場比重≥0.3% — 讓資金自己投票選出主流,不需要產業分類。<b>下方圖的縱軸同樣是「每天平均振幅」不是股價</b>;領導股的波動能不能收斂、能不能止跌,是大盤要回穩前的先決觀察</div>
       <div class="rg-hist" id="ldstatus" style="margin:6px 0 10px"></div>
       <div class="legend">
-        <span class="li"><span class="lkey blue"></span>主流股平均|漲跌|(20日均)</span>
-        <span class="li"><span class="lkey gray"></span>全市場母體(20日均)</span>
+        <span class="li"><span class="lkey blue"></span>主流股每日振幅(20日均)</span>
+        <span class="li"><span class="lkey gray"></span>全市場平均振幅(20日均)</span>
       </div>
       <div id="c6"></div>
       <div class="tblnote" id="ldnote"></div>
@@ -270,7 +286,7 @@
     </section>
 
     <section class="card">
-      <h2>白話解盤:現在市場什麼狀態?</h2>
+      <h2>深入解讀:五個問題看懂現況</h2>
       <div class="prose" id="interp"></div>
       <div class="kb">
         <h3>這些指標怎麼算?</h3>
@@ -299,7 +315,7 @@
 
     <footer>
       資料來源:2018/1–2026/7 歷史種子為 CMoney 匯出資料;其後由台灣證券交易所、櫃買中心公開資訊每日自動更新(GitHub Actions,平日 17:50 與 21:50 各檢查一次),市值每月以公開股本自動校正。波動率以對數報酬計算、年化係數 √252;表列單日漲跌為簡單報酬,與盤後行情一致。<br>
-      頁面產生於 2026-07-18 02:43 (台北時間) · <a href="../" style="color:inherit">← 回首頁</a>
+      頁面產生於 2026-07-18 12:14 (台北時間) · <a href="../" style="color:inherit">← 回首頁</a>
     </footer>
   </div>
 </div>
@@ -385,7 +401,7 @@ function tile(label, valHtml, chg, chgNd, pct, sparkVals) {
     S.ov20_chg, 1, S.ov20_pct, weeklyBuckets(D.ov20)));
   t.appendChild(tile('全市場離散度(20日均)', fmt2(S.disp20) + '<small>%</small>',
     S.disp20_chg, 2, S.disp20_pct, weeklyBuckets(D.disp20)));
-  t.appendChild(tile('個股平均絕對漲跌幅(20日均)', fmt2(S.am20) + '<small>%</small>',
+  t.appendChild(tile('個股每日平均振幅(20日均)', fmt2(S.am20) + '<small>%</small>',
     S.am20_chg, 2, S.am20_pct, weeklyBuckets(D.am20)));
   if (S.heat != null) t.appendChild(tile('強勢股熱度比(對全市場)', fmt2(S.heat) + '<small>×</small>',
     S.heat_chg, 2, S.heat_pct, weeklyBuckets(D.heat)));
@@ -585,7 +601,7 @@ function renderCharts(i0, i1) {
   }, i => [
     { k: '當日離散度', v: D.disp[i] == null ? null : fmt2(D.disp[i]) + '%', key: 'gray' },
     { k: '20日平均', v: D.disp20[i] == null ? null : fmt2(D.disp20[i]) + '%', key: 'blue' },
-    { k: '平均|漲跌|20日', v: D.am20[i] == null ? null : fmt2(D.am20[i]) + '%' },
+    { k: '個股平均振幅20日', v: D.am20[i] == null ? null : fmt2(D.am20[i]) + '%' },
   ]);
 
   drawChart($('c5'), i0, i1, {
@@ -593,8 +609,8 @@ function renderCharts(i0, i1) {
     panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%', title: '縱軸=每天平均漲跌幅度〔振幅/波動〕,不是股價',
       series: [{ arr: D.mabs20, cls: 'gray' }, { arr: D.sabs20, cls: 'blue', label: 1 }] }],
   }, i => [
-    { k: '強勢股|漲跌|20日', v: D.sabs20[i] == null ? null : fmt2(D.sabs20[i]) + '%', key: 'blue' },
-    { k: '全市場母體20日', v: D.mabs20[i] == null ? null : fmt2(D.mabs20[i]) + '%', key: 'gray' },
+    { k: '強勢股振幅(20日均)', v: D.sabs20[i] == null ? null : fmt2(D.sabs20[i]) + '%', key: 'blue' },
+    { k: '全市場振幅20日均', v: D.mabs20[i] == null ? null : fmt2(D.mabs20[i]) + '%', key: 'gray' },
     { k: '熱度比', v: D.heat[i] == null ? null : fmt2(D.heat[i]) + '×' },
     { k: '強勢組合20日波動', v: D.svol20[i] == null ? null : fmt1(D.svol20[i]) + '%' },
     { k: '強勢股漲跌停占比', v: D.slim[i] == null ? null : fmt1(D.slim[i]) + '%' },
@@ -605,8 +621,8 @@ function renderCharts(i0, i1) {
     panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%', title: '縱軸=每天平均漲跌幅度〔振幅/波動〕,不是股價',
       series: [{ arr: D.mabs20, cls: 'gray' }, { arr: D.ldabs20, cls: 'blue', label: 1 }] }],
   }, i => [
-    { k: '主流股|漲跌|20日', v: D.ldabs20[i] == null ? null : fmt2(D.ldabs20[i]) + '%', key: 'blue' },
-    { k: '全市場母體20日', v: D.mabs20[i] == null ? null : fmt2(D.mabs20[i]) + '%', key: 'gray' },
+    { k: '主流股振幅(20日均)', v: D.ldabs20[i] == null ? null : fmt2(D.ldabs20[i]) + '%', key: 'blue' },
+    { k: '全市場振幅20日均', v: D.mabs20[i] == null ? null : fmt2(D.mabs20[i]) + '%', key: 'gray' },
     { k: '合計成交比重', v: D.ldshare[i] == null ? null : fmt1(D.ldshare[i]) + '%' },
     { k: '平均距40日高', v: D.lddd[i] == null ? null : fmt1(D.lddd[i]) + '%' },
     { k: '主流股檔數', v: D.ldn[i] == null ? null : D.ldn[i] + ' 檔' },
@@ -617,7 +633,7 @@ function renderCharts(i0, i1) {
     panels: [{ hFrac: 1, yFromZero: true, yFmt: v => v + '%', area: { of: 1 }, title: '縱軸=當日大漲大跌股票的占比,不是股價',
       series: [{ arr: D.p5, cls: 'gray', thin: 1 }, { arr: D.p520, cls: 'blue', label: 1 }] }],
   }, i => [
-    { k: '當日 |≥5%| 占比', v: D.p5[i] == null ? null : fmt1(D.p5[i]) + '%', key: 'gray' },
+    { k: '當日振幅≥5%家數占比', v: D.p5[i] == null ? null : fmt1(D.p5[i]) + '%', key: 'gray' },
     { k: '20日平均', v: D.p520[i] == null ? null : fmt1(D.p520[i]) + '%', key: 'blue' },
     { k: '上漲家數占比', v: D.adv[i] == null ? null : fmt1(D.adv[i]) + '%' },
   ]);
@@ -652,14 +668,14 @@ function renderEvents(i0, i1) {
 /* ---------- 每日明細表 ---------- */
 function renderTable(i0, i1) {
   const tb = $('dtable'); tb.textContent = '';
-  const hd = ['日期', '收盤', '漲跌%', '20日波動率', '60日波動率', '櫃買20日', '離散度', '離散度20日', '|≥5%|占比', '漲家數%', '強勢|漲跌|20日', '熱度比'];
+  const hd = ['日期', '收盤', '漲跌%', '20日波動率', '60日波動率', '櫃買20日', '離散度', '離散度20日', '≥5%家數占比', '漲家數%', '強勢股振幅20日', '熱度比'];
   const trh = document.createElement('tr');
   hd.forEach(h => { const th = document.createElement('th'); th.textContent = h; trh.appendChild(th); });
   tb.appendChild(trh);
-  const CAP = 250;
+  const CAP = 10;
   const start = Math.max(i0, i1 - CAP + 1);
   $('tblnote').textContent = start > i0
-    ? '顯示最近 ' + CAP + ' 筆(篩選範圍共 ' + (i1 - i0 + 1) + ' 筆;完整數據可由圖表滑鼠讀取)'
+    ? '顯示最近 ' + CAP + ' 筆(完整數據可將滑鼠移到圖上逐日讀取)'
     : '共 ' + (i1 - i0 + 1) + ' 筆';
   const frag = document.createDocumentFragment();
   for (let i = i1; i >= start; i--) {
@@ -703,7 +719,7 @@ function renderRegime() {
   const t1 = document.createElement('span'); t1.textContent = '現在:' + meta.name;
   s1.appendChild(d1); s1.appendChild(t1); box.appendChild(s1);
   const why = document.createElement('div'); why.className = 'rg-why';
-  why.textContent = '判定依據:指數在半年線' + (cur.above_ma ? '之上' : '之下') + ' · 距一年高點 ' + cur.dd252 + '% · 波動率歷史分位 ' + cur.v20pct + '%' + (cur.rise > 0 ? '(升溫中)' : '(降溫中)') + ' · 近20日單日|漲跌|≥1.5% 有 ' + cur.bigd + ' 天';
+  why.textContent = '判定依據:指數在半年線' + (cur.above_ma ? '之上' : '之下') + ' · 距一年高點 ' + cur.dd252 + '% · 波動率歷史分位 ' + cur.v20pct + '%' + (cur.rise > 0 ? '(升溫中)' : '(降溫中)') + ' · 近20日單日振幅≥1.5% 有 ' + cur.bigd + ' 天';
   box.appendChild(why);
   const tx = document.createElement('div'); tx.className = 'rg-text'; tx.textContent = meta.text;
   box.appendChild(tx);
@@ -786,6 +802,96 @@ function renderLeaders() {
   const noteEl = document.createElement('div'); noteEl.className = 'rg-note';
   noteEl.textContent = '欄位說明:「較2個月前」=最新收盤 vs 40個交易日前收盤的頭尾累積漲跌 — 途中衝高又跌回會相互抵消,所以暴漲暴跌後這個數字會縮小;「波段最高」=這兩個月內最高點相對兩個月前曾漲到多少;「距40日高」=現價從波段最高點回檔了多少。三欄合讀:例如「較2個月前+35%、波段最高+136%、距高點-39%」=暴漲後重挫、尚未收復。漲跌幅皆以還原(含除權息)價計算。';
   $('ldtable').parentElement.parentElement.appendChild(noteEl);
+}
+
+/* ---------- 今日重點結論(hero) ---------- */
+function rich(parent, parts) {
+  for (const p of parts) {
+    if (p == null || p === '') continue;
+    if (typeof p === 'string') { parent.appendChild(document.createTextNode(p)); continue; }
+    const s = document.createElement('span'); s.className = p.c; s.textContent = p.t;
+    parent.appendChild(s);
+  }
+}
+function ref(txt) { return { t: '(→' + txt + ')', c: 'ref' }; }
+function watchList(q) {
+  if (q === 'Q3' || q === 'Q4') return [
+    '主流領導股止跌:距40日高的跌幅不再擴大、單日振幅明顯縮小 — 這是大盤回穩的先決條件(圖5)',
+    '市場降溫:大盤平均一天的晃動回到±1.5%以內、波動分位跌破70%(圖1)',
+    '結構回穩:振幅≥5%的家數占比回落到一成以下、指數重新站回半年線(圖6、盤勢定位)'];
+  if (q === 'Q2') return [
+    '主流領導股是否出現首次重挫(距40日高跌破-15%)——多頭最重要的預警訊號(圖5)',
+    '波動是否持續黏在90分位以上不退——高檔換手激烈、分歧擴大的證據(圖1)',
+    '若指數跌破半年線且距一年高點回檔超過10%,象限將翻成空頭,操作劇本要跟著換(盤勢定位)'];
+  return [
+    '波動分位與強勢股熱度比是否異常升溫(圖1、圖4)',
+    '主流領導股健康度有無變化(圖5)',
+    '盤勢定位象限是否切換(盤勢定位卡)'];
+}
+function renderHero() {
+  const box = $('hero'); if (!box) return;
+  box.textContent = '';
+  const SQ = Math.sqrt(252);
+  const dv = S.v20 / SQ, pts = Math.round(S.close * dv / 100 / 10) * 10;
+  const ratio = S.v20 / S.v20_med;
+  const cur = D.regime && D.regime.cur;
+  const meta = cur && QMETA[cur.q];
+  const st = cur && (D.regime.stats || []).find(s => s.q === cur.q);
+  const lv = ldVerdict();
+  const dd = lastVal(D.lddd), share = lastVal(D.ldshare), ldn = lastVal(D.ldn);
+  const p5now = lastVal(D.p5);
+  const qcls = cur ? ({ Q1: 'em-good', Q2: 'em-warn', Q3: 'em', Q4: 'em-bad', T: 'em' })[cur.q] : 'em';
+  const vcls = S.v20 >= 25 ? 'em-bad' : S.v20 >= 18 ? 'em-warn' : 'em-good';
+
+  const lead = document.createElement('p'); lead.className = 'hero-lead';
+  rich(lead, [
+    '現在的台股:', meta ? { t: meta.name, c: qcls } : { t: '定位資料不足', c: 'em' }, '。',
+    '大盤平均一天上下晃 ', { t: '±' + dv.toFixed(1) + '%(約±' + pts.toLocaleString() + '點)', c: vcls },
+    ',是過去八年半平常水準的 ', { t: ratio.toFixed(1) + ' 倍', c: ratio >= 1.5 ? 'em-bad' : 'em' },
+    dd != null ? ';資金最集中的主流領導股距波段高點 ' : '',
+    dd != null ? { t: fmt1(dd) + '%', c: dd <= -15 ? 'em-bad' : dd > -8 ? 'em-good' : 'em-warn' } : '',
+    dd != null ? (dd <= -15 ? ',尚未止跌。' : dd > -8 ? ',結構仍健康。' : ',修復觀察中。') : '。',
+  ]);
+  box.appendChild(lead);
+
+  const ul = document.createElement('ul');
+  const li = (parts) => { const e = document.createElement('li'); rich(e, parts); ul.appendChild(e); };
+
+  if (meta && st) li([
+    { t: '定位:', c: 'em' }, meta.name + ' — ' + meta.text.split('。')[0] + '。歷史上這個象限之後60個交易日,出現>10%大回檔的機率 ',
+    { t: st.dn10 + '%', c: st.dn10 >= 25 ? 'em-bad' : 'em' }, '、出現>10%大反彈的機率 ',
+    { t: st.up10 + '%', c: st.up10 >= 50 ? 'em-good' : 'em' }, '。 ', ref('盤勢定位卡'),
+  ]);
+  li([
+    { t: '市場溫度:', c: 'em' }, '20日年化波動率 ', { t: fmt1(S.v20) + '%', c: vcls },
+    ',高於歷史 ' + S.v20_pct + '% 的日子;櫃買(中小型股)' + fmt1(S.ov20) + '%,' +
+    (S.ov20 > S.v20 * 1.3 ? '中小型股晃得更兇。' : '與大盤大致同步。'), ' ', ref('圖1、圖2'),
+  ]);
+  li([
+    { t: '內部結構:', c: 'em' }, '個股分歧度在歷史 ' + S.disp20_pct + '% 分位' +
+    (S.disp20_pct >= 75 ? '(高檔:同一天有人大漲有人大跌,選股影響大於大盤方向)' : '(正常範圍)') +
+    ';最近一個交易日振幅≥5%的股票占 ', { t: fmt1(p5now) + '%', c: p5now >= 30 ? 'em-bad' : p5now >= 12 ? 'em-warn' : 'em-good' },
+    '。 ', ref('圖3、圖6'),
+  ]);
+  if (S.heat != null) li([
+    { t: '投機熱度:', c: 'em' }, '強勢股每天的振幅是全市場的 ', { t: fmt2(S.heat) + ' 倍', c: S.heat_pct >= 85 ? 'em-bad' : 'em' },
+    '(歷史分位 ' + S.heat_pct + '%),' + (S.heat_pct >= 85 ? '已達狂潮等級,投機資金高度集中。' : S.heat_pct <= 15 ? '異常偏低,全面性恐慌的特徵。' : '尚在正常範圍。'), ' ', ref('圖4'),
+  ]);
+  if (dd != null && lv) li([
+    { t: '領導股健康:', c: 'em' }, '主流代表股 ' + ldn + ' 檔(吃掉全市場 ' + fmt1(share) + '% 成交金額)平均距波段高點 ',
+    { t: fmt1(dd) + '%', c: dd <= -15 ? 'em-bad' : dd > -8 ? 'em-good' : 'em-warn' }, '。' + lv[0] + ' ', ref('圖5'),
+  ]);
+  box.appendChild(ul);
+
+  const watch = document.createElement('div'); watch.className = 'watch';
+  const b = document.createElement('b'); b.textContent = '接下來盯什麼(訊號檢查清單)';
+  watch.appendChild(b);
+  const wul = document.createElement('ul');
+  for (const w of watchList(cur ? cur.q : 'T')) {
+    const e = document.createElement('li'); e.textContent = w; wul.appendChild(e);
+  }
+  watch.appendChild(wul);
+  box.appendChild(watch);
 }
 
 /* ---------- 白話解讀 ---------- */
@@ -882,6 +988,7 @@ $('filters').addEventListener('click', e => {
 let rsz;
 addEventListener('resize', () => { clearTimeout(rsz); rsz = setTimeout(renderAll, 150); });
 
+renderHero();
 renderRegime();
 renderLeaders();
 renderInterp();
