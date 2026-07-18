@@ -821,13 +821,15 @@ function renderLeaders() {
     const dot = document.createElement('span');
     dot.style.cssText = 'display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;background:' + v[1];
     st.appendChild(dot);
-    st.appendChild(document.createTextNode('目前主流股 ' + n + ' 檔,合計吃掉全市場 ' + fmt1(share) + '% 的成交金額;平均距40日波段高點 ' + fmt1(dd) + '%。' + v[0]));
+    const Ls = D.leaders;
+    const dN = Ls && Ls.n ? Ls.n : n, dSh = Ls && Ls.share != null ? Ls.share : share, dDd = Ls && Ls.avgdd != null ? Ls.avgdd : dd;
+    st.appendChild(document.createTextNode('目前主流股 ' + dN + ' 檔,合計吃掉全市場 ' + fmt1(dSh) + '% 的成交金額;平均距40日波段高點 ' + fmt1(dDd) + '%(下表全體名單的平均)。' + v[0]));
   } else {
     st.textContent = '主流股資料不足。';
   }
   const tb = $('ldtable'); tb.textContent = '';
   if (!L || !L.rows) { $('ldnote').textContent = ''; return; }
-  $('ldnote').textContent = '目前名單(依成交比重,顯示前 ' + L.rows.length + ' 檔/共 ' + L.n + ' 檔,基準日 ' + L.asof + ')';
+  $('ldnote').textContent = '目前名單(依成交比重,顯示前 ' + L.rows.length + ' 檔/共 ' + L.n + ' 檔,基準日 ' + L.asof + ')。上方「平均距波段高點」為全部 ' + L.n + ' 檔的平均(含表中未顯示者,尾端通常跌更深);本名單為含最新一日的即時選股,圖5曲線與統計則以「前一日選股」計算(避免前視偏誤),兩者檔數可能相差1-2檔。';
   const hd = ['代號', '名稱', '較2個月前', '波段最高', '市值(億)', '成交比重', '距40日高', '當日漲跌'];
   const trh = document.createElement('tr');
   hd.forEach(h => { const th = document.createElement('th'); th.textContent = h; trh.appendChild(th); });
@@ -980,10 +982,16 @@ function renderHero() {
     { t: '投機熱度:', c: 'em' }, '強勢股每天的振幅是全市場的 ', { t: fmt2(S.heat) + ' 倍', c: S.heat_pct >= 85 ? 'em-bad' : 'em' },
     '(歷史分位 ' + S.heat_pct + '%),' + (S.heat_pct >= 85 ? '已達狂潮等級,投機資金高度集中。' : S.heat_pct <= 15 ? '異常偏低,全面性恐慌的特徵。' : '尚在正常範圍。'), ' ', ref('圖4'),
   ]);
-  if (dd != null && lv) li([
-    { t: '領導股健康:', c: 'em' }, '主流代表股 ' + ldn + ' 檔(吃掉全市場 ' + fmt1(share) + '% 成交金額)平均距波段高點 ',
-    { t: fmt1(dd) + '%', c: dd <= -15 ? 'em-bad' : dd > -8 ? 'em-good' : 'em-warn' }, '。' + lv[0] + ' ', ref('圖5'),
-  ]);
+  if (dd != null && lv) {
+    const L0 = D.leaders;
+    const sN = L0 && L0.n ? L0.n : ldn;
+    const sShare = L0 && L0.share != null ? L0.share : share;
+    const sDd = L0 && L0.avgdd != null ? L0.avgdd : dd;
+    li([
+      { t: '領導股健康:', c: 'em' }, '主流代表股 ' + sN + ' 檔(吃掉全市場 ' + fmt1(sShare) + '% 成交金額)平均距波段高點 ',
+      { t: fmt1(sDd) + '%', c: sDd <= -15 ? 'em-bad' : sDd > -8 ? 'em-good' : 'em-warn' }, '(與圖5表格同一份名單的全體平均)。' + lv[0] + ' ', ref('圖5'),
+    ]);
+  }
   box.appendChild(ul);
 
   renderAnalogs(box);

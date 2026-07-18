@@ -572,6 +572,7 @@ def current_leaders():
         rows.sort(key=lambda r: -r['share'])
         return {'rows': rows[:20],
                 'share': round(float(share40[cols].sum()), 1),
+                'avgdd': round(float(dd.mean()), 1),
                 'n': int(len(cols)),
                 'asof': str(R.index[-1])}
     except Exception as e:
