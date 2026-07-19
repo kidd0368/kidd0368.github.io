@@ -1,0 +1,66 @@
+{
+  "as_of": "2026-07-19",
+  "note": "人工整理的基準事件，用來固定推演脈絡；每日新聞佇列則由自動流程更新。",
+  "events": [
+    {
+      "date": "2026-06-17",
+      "title": "美伊簽署14點諒解備忘錄",
+      "summary": "協議把停止敵對行動與霍爾木茲海峽安全通行放在同一框架內，但執行與解釋仍存在空間。",
+      "category": "外交與停火",
+      "confidence": "文件與多方報導",
+      "sources": [
+        {"name": "Axios — 協議全文", "url": "https://www.axios.com/2026/06/17/read-full-us-iran-deal-memorandum-understanding"}
+      ]
+    },
+    {
+      "date": "2026-06-27",
+      "title": "停戰後商船安全問題再度浮現",
+      "summary": "停戰協議簽署後不久，商船事件與雙方對協議義務的不同理解，使『誰能代表並約束伊朗行動』成為核心問題。",
+      "category": "海峽與商船",
+      "confidence": "多方報導",
+      "sources": [
+        {"name": "ABC News — 停戰破局時間線", "url": "https://abcnews.com/amp/Politics/us-iran-ceasefire-mou-broke-timeline/story?id=134622392"}
+      ]
+    },
+    {
+      "date": "2026-07-07",
+      "title": "三艘商船遇襲，海峽安全危機延續",
+      "summary": "商船遭攻擊顯示，單靠協議文字尚不足以恢復可驗證的安全通行。",
+      "category": "海峽與商船",
+      "confidence": "大型媒體",
+      "sources": [
+        {"name": "AP", "url": "https://apnews.com/article/3f5033e82933afe6d70d8bb3cbf9fd1d"}
+      ]
+    },
+    {
+      "date": "2026-07-12",
+      "title": "伊朗再對船隻採取行動並重申海峽控制權",
+      "summary": "海上施壓仍是伊朗保留的談判槓桿，也使美方更難在通航未恢復前停止軍事壓力。",
+      "category": "海峽與商船",
+      "confidence": "大型媒體",
+      "sources": [
+        {"name": "Axios", "url": "https://www.axios.com/2026/07/13/trump-iran-blockade-strait-hormuz"}
+      ]
+    },
+    {
+      "date": "2026-07-17",
+      "title": "打擊向內陸與軍民兩用基礎設施擴大",
+      "summary": "美方打擊與伊朗對區域基礎設施的報復，使戰事從削弱發射與海上監視能力，進一步轉向成本更高的縱深對抗。",
+      "category": "基礎設施",
+      "confidence": "多方報導",
+      "sources": [
+        {"name": "AP", "url": "https://apnews.com/article/2ad0cfe592eb258cb15a9eb04411d58a"}
+      ]
+    },
+    {
+      "date": "2026-07-19",
+      "title": "戰事進入『以擴大換取實力揭露』階段",
+      "summary": "公開資訊同時需要回答兩個問題：伊朗是否還能持續造成有意義的損害，以及美方擴大打擊是否真的換來通航、核風險或談判執行力的改善。",
+      "category": "軍事行動",
+      "confidence": "分析框架",
+      "sources": [
+        {"name": "AP — 最新戰況整理", "url": "https://apnews.com/article/63996576847424ab5f22887f38037ce8"}
+      ]
+    }
+  ]
+}
