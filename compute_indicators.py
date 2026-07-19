@@ -30,7 +30,8 @@ CONFIG = {
     },
     "etf_weight": 15.0,
     "signal2_manual": {"status": "watch", "note": "大型雲服務商財報將至，關注AI資本開支指引"},
-    "signal3_manual": {"status": "watch", "note": "7/16 韓政府四大經濟部門協調會議研究單股槓桿ETF對策；關注提高准入門檻、強化適當性審核、限制新發"},
+    "signal3_manual": {"status": "yellow", "note": "7/16已落地：暫停單股槓桿ETF新發、開戶門檻1,000萬→3,000萬韓元（8/5起僅認現金）、最小交易單位1→20股。僅限新增、未觸16檔存量與每日再平衡機制——治標；後續看限再平衡、壓槓桿倍數、提資本要求"},
+    "macro_note": "7/16 韓央行加息25bp（2023年1月以來首次）開啟緊縮週期，流動性環境轉緊",
 }
 
 def parse_bulk(path):
@@ -257,10 +258,31 @@ def compute(bulk, etf=None, hist=None):
            ("mid", "45-70 中後期：去化進行中") if score >= 45 else \
            ("late", "25-45 尾聲：接近出清") if score >= 25 else ("done", "<25 大致出清")
 
+    # 正常水位基期＝當年1月融資均值（衡量「整個槓桿時代的退潮」，與4/30本輪基期並列）
+    jan_pref = dates[-1][:4] + "01"
+    jan_vals = [S["margin_total"][i] for i, d in enumerate(dates)
+                if d.startswith(jan_pref) and S["margin_total"][i] is not None]
+    normal_base = round(sum(jan_vals) / len(jan_vals), 2) if len(jan_vals) >= 10 else None
+    excess_vs_normal = round(cur - normal_base, 2) if normal_base else None
+
     # 三階段判定（去槓桿標準劇本：①快跌觸發追繳 ②強平主導 ③企穩回歸基本面）
     bp_now = last_pctl("bandae_amt")
     rv_now = last_pctl("rv20")
-    if (d5 is not None and d5 > -0.01) and (bp_now is None or bp_now < 50) and (rv_now is None or rv_now < 70):
+
+    # 去槓桿模式：主動（融資降、斷頭平靜＝底部訊號）vs 被動（融資降、斷頭飆＝爆倉循環）
+    valid_ma = [v for v in bandae_amt_ma if v is not None]
+    bandae_rising = len(valid_ma) > 10 and valid_ma[-1] is not None and valid_ma[-11] and valid_ma[-1] > 1.5 * valid_ma[-11]
+    margin_falling = d5 is not None and d5 < -0.005
+    if margin_falling and (bp_now is not None and bp_now >= 70 or bandae_rising):
+        mode, mode_label = "passive", "被動去槓桿：融資下降伴隨斷頭高壓——爆倉循環未斷"
+    elif margin_falling and bp_now is not None and bp_now < 50 and not bandae_rising:
+        mode, mode_label = "active", "主動去槓桿：融資續降但斷頭平靜——「底部訊號」正在成形"
+    elif d5 is not None and d5 > 0.005:
+        mode, mode_label = "relever", "重新加槓桿：融資回升"
+    else:
+        mode, mode_label = "mixed", "混合／過渡狀態"
+
+    if ((d5 is not None and d5 > -0.01) or mode == "active") and (bp_now is None or bp_now < 50) and (rv_now is None or rv_now < 70):
         stage, stage_label = 3, "第三階段：融資企穩、新增平倉回落，市場重新回歸基本面定價"
     elif U < 0.25 and (d5 is None or d5 < -0.015):
         stage, stage_label = 1, "第一階段：價格快跌，融資帳戶集中觸發追加保證金"
@@ -271,10 +293,13 @@ def compute(bulk, etf=None, hist=None):
     cur_month = dates[-1][:6]
     bandae_mtd = round(sum(v for i, v in enumerate(S["bandae_amt"]) if v is not None and dates[i][:6] == cur_month), 0)
 
-    s1_ok_bandae = (last_pctl("bandae_amt") or 50) < 50
-    s1_ok_margin = d5 is not None and d5 > -0.01
     s1_ok_etf = (etf is None) or (etf.get("aum_d5") is None) or etf["aum_d5"] > -0.02
-    s1 = "green" if (s1_ok_bandae and s1_ok_margin and s1_ok_etf) else ("yellow" if (s1_ok_bandae or s1_ok_margin) else "red")
+    if bp_now is not None and bp_now < 50 and not bandae_rising and s1_ok_etf:
+        s1 = "green"      # 斷頭平靜（即使融資仍在下降＝主動去槓桿，也算賣壓衰竭）
+    elif bp_now is not None and bp_now < 70 and not bandae_rising:
+        s1 = "yellow"
+    else:
+        s1 = "red"
 
     # 顯示降採樣
     keep, dfrom = [], CONFIG["display_daily_from"]
@@ -334,11 +359,14 @@ def compute(bulk, etf=None, hist=None):
         "unwind": {"peak": round(peak_v, 2), "peak_date": dates[peak_i],
                    "baseline": round(base_v, 2), "baseline_date": dates[bi],
                    "current": round(cur, 2), "U": round(U, 3),
-                   "excess_peak": round(peak_v - base_v, 2), "excess_now": round(cur - base_v, 2)},
+                   "excess_peak": round(peak_v - base_v, 2), "excess_now": round(cur - base_v, 2),
+                   "normal_base": normal_base, "excess_vs_normal": excess_vs_normal},
         "composite": {"score": score, "zone": zone[0], "zone_label": zone[1],
                       "parts": {k: round(v, 2) for k, v in parts.items()}},
         "stage": {"n": stage, "label": stage_label,
                   "bandae_mtd": bandae_mtd, "bandae_pctl": bp_now, "rv_pctl": rv_now},
+        "mode": {"key": mode, "label": mode_label},
+        "macro_note": CONFIG.get("macro_note"),
         "signals": {
             "s1": {"status": s1, "label": "技術性賣壓衰竭",
                    "detail": ("斷頭金額5日均百分位 " + (str(last_pctl('bandae_amt')) if (not partial or sketch is not None) else "待完整歷史")

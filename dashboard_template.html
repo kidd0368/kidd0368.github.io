@@ -353,6 +353,7 @@ function genComment(){
   const added=U.peak-U.baseline, gave=U.peak-U.current;
   const s1='去槓桿壓力指數 '+fmtN(C.score,1)+'，處於'+zoneShort+'。出清進度這樣算：本輪行情中融資餘額從 '+fmtD(U.baseline_date)+' 基期的 '+fmtN(U.baseline,1)+' 兆韓元加到 '+fmtD(U.peak_date)+' 峰值 '+fmtN(U.peak,1)+' 兆，共多加 '+fmtN(added,1)+' 兆槓桿；目前 '+fmtN(U.current,1)+' 兆，已回吐 '+fmtN(gave,1)+' 兆、尚餘 '+fmtN(U.excess_now,1)+' 兆未退出——出清進度 '+fmtN(gave,1)+'÷'+fmtN(added,1)+' ≈ '+(U.U*100).toFixed(0)+'%（100%＝本輪新增槓桿全數退出，非指總融資減半）。';
   const ev=[]; const d5=E.margin_d5_pct;
+  if(IND.mode&&IND.mode.label) ev.push('模式判定——'+IND.mode.label);
   if(d5!=null) ev.push('融資餘額近 5 日 '+(d5>0?'+':'')+fmtN(d5,1)+'%'+(d5<-1?'，降槓桿仍在進行':(d5>1?'，槓桿仍在累積、出清尚未真正開始':'，初現企穩跡象')));
   if(P.bandae_amt!=null) ev.push('斷頭（強制平倉）金額處 5 年第 '+Math.round(P.bandae_amt)+' 百分位'+(P.bandae_amt>=70?'，被動賣壓仍強':(P.bandae_amt<=40?'，斷頭潮已明顯退坡':'，賣壓自高點回落中')));
   if(P.margin_dep!=null) ev.push('融資/預託金比處第 '+Math.round(P.margin_dep)+' 百分位'+(P.margin_dep<=40?'，散戶現金緩衝相對充裕':(P.margin_dep>=70?'，槓桿相對子彈偏緊':'')));
@@ -365,7 +366,8 @@ function genComment(){
   if(IND.signals.s2.status!=='green') miss.push('②外部催化劑落地（大型雲廠商財報）');
   if(IND.signals.s3.status!=='green') miss.push('③監管干預明朗');
   const s3=miss.length?('市場重新回歸基本面驅動之前，仍待：'+miss.join('、')+'。'):'三項關鍵訊號均已亮綠，基本面重新接手的條件漸備。';
-  const s4=(IND.etf&&IND.etf.enabled)?null:'註：槓桿 ETF 分項尚未接入，上述出清進度僅計信用融資口徑。';
+  let s4=(IND.etf&&IND.etf.enabled)?'':'槓桿 ETF 分項尚未接入，上述出清進度僅計信用融資口徑。';
+  if(IND.macro_note) s4+=(s4?'　':'')+IND.macro_note+'。'; s4=s4||null;
   return [['定位',s1],['證據',s2],['條件',s3]].concat(s4?[['註',s4]]:[]);
 }
 function genVerdict(){
@@ -385,7 +387,7 @@ function genVerdict(){
       +(retreat&&stable?'最兇的強制拋售大概率已經過去':'強制賣壓尚未衰竭')
       +((P.margin_total||0)>=90?'，但槓桿存量仍堆在歷史頂部':'')
       +((P.rv20||0)>=80?'、市場波動仍極端':'')
-      +'——出清沒有完成，現階段的反彈屬技術性反彈，不是底部確認。';
+      +'——出清沒有完成，現階段的反彈屬技術性反彈，不是底部確認。'+(U.U>=0.99&&U.excess_vs_normal>1?'（出清100%僅指本輪新增槓桿；距1月正常水位仍有 '+fmtN(U.excess_vs_normal,1)+' 兆餘量）':'');
   }
   let watch='之後每天只需盯兩條線：<b>斷頭金額</b>與<b>融資餘額</b>——兩條都走平之日，就是出清接近完成之時。';
   if(E.deposit_peak&&E.deposit_peak[0]&&IND.latest.deposit!=null){
@@ -416,16 +418,16 @@ const CARDS=[
  {id:'m', t:'信用融資餘額（신용거래융자）', d:'散戶槓桿主體。單位：兆韓元。參考線＝近期峰值與 4/30 行情基期。',
   how:'這是散戶向券商借錢買股的餘額，本輪去槓桿的「本體」。看三點：<b>水位</b>——距峰值與 4/30 基期兩條參考線的位置；<b>進度條</b>——本輪行情新增的槓桿已退出幾成（100%＝這輪借的錢全數吐回）；<b>斜率</b>——曲線急跌代表強制去槓桿正在發生，走平代表賣壓衰竭、進入尾聲。KOSDAQ 融資盤通常更投機，去化也更劇烈，兩市分列可看出清的「質」。',
   series:[{name:'全市場',key:'margin_total',color:'--s1',type:'line'},{name:'KOSPI',key:'margin_kospi',color:'--s2',type:'line'},{name:'KOSDAQ',key:'margin_kosdaq',color:'--s3',type:'line'}],
-  yFmt:v=>fmtN(v,0), refs:()=>[{v:IND.unwind.peak,label:'峰值 '+fmtN(IND.unwind.peak,1)},{v:IND.unwind.baseline,label:'4月底基期'}],
+  yFmt:v=>fmtN(v,0), refs:()=>[{v:IND.unwind.peak,label:'峰值 '+fmtN(IND.unwind.peak,1)},{v:IND.unwind.baseline,label:'4月底基期'}].concat(IND.unwind.normal_base?[{v:IND.unwind.normal_base,label:'1月正常水位 '+fmtN(IND.unwind.normal_base,1)}]:[]),
   extra:'unwind',
   fn:()=>{const U=IND.unwind,added=U.peak-U.baseline,gave=U.peak-U.current;
-   return '本輪加槓桿：基期 '+fmtN(U.baseline,1)+' 兆（'+fmtD(U.baseline_date)+'）→ 峰值 '+fmtN(U.peak,1)+' 兆（'+fmtD(U.peak_date)+'），共 +'+fmtN(added,1)+' 兆；現 '+fmtN(U.current,1)+' 兆＝已回吐 '+fmtN(gave,1)+' 兆、尚餘 '+fmtN(U.excess_now,1)+' 兆 → 出清 <b>'+fmtN(U.U*100,0)+'%</b>（'+fmtN(gave,1)+'÷'+fmtN(added,1)+'）';}},
+   let t='本輪加槓桿：基期 '+fmtN(U.baseline,1)+' 兆（'+fmtD(U.baseline_date)+'）→ 峰值 '+fmtN(U.peak,1)+' 兆（'+fmtD(U.peak_date)+'），共 +'+fmtN(added,1)+' 兆；現 '+fmtN(U.current,1)+' 兆＝已回吐 '+fmtN(gave,1)+' 兆、尚餘 '+fmtN(U.excess_now,1)+' 兆 → 出清 <b>'+fmtN(U.U*100,0)+'%</b>（'+fmtN(gave,1)+'÷'+fmtN(added,1)+'）'; if(U.normal_base!=null){t+='。<b>另一把尺</b>：距今年1月正常水位 '+fmtN(U.normal_base,1)+' 兆仍高 '+fmtN(U.excess_vs_normal,1)+' 兆——前者量本輪新增槓桿的往返，後者量整個槓桿水位的退潮';} return t;}},
  {id:'md',t:'融資／預託金比（槓桿 vs 現金緩衝）', d:'借的錢 ÷ 帳上現金。比率下降＝散戶現金緩衝相對充裕，槓桿張力比表面溫和。',
   how:'預託金＝散戶放在券商帳戶、還沒買進股票的現金（子彈）。<b>比率下行</b>＝子彈比槓桿長得快，即使融資額創新高、實際張力也沒表面緊——判斷「槓桿是否被高估」的關鍵反向證據；<b>比率上行且預託金同時下滑</b>＝沒子彈還在加槓桿，最脆弱的組合。下方預託金面積圖單獨看：暴跌後預託金反而跳增，常代表「跌出來的錢在場邊等」。',
   series:[{name:'融資/預託金 %',key:'margin_dep',color:'--s1',type:'line'}], yFmt:v=>fmtN(v,0)+'%',
   panel2:{t:'投資者預託金（兆₩）',series:[{name:'預託金',key:'deposit',color:'--s2',type:'area'}],yFmt:v=>fmtN(v,0)}},
  {id:'fb',t:'斷頭賣壓（強制平倉）', d:'散戶繳不出保證金時，券商直接砍倉賣出的金額。斷頭單不看價格、不問基本面——「被動賣盤」最純粹的證據。',
-  how:'下跌自我強化的引擎就在這裡：股價跌 → 保證金不足 → 券商<b>強制砍倉（斷頭）</b> → 賣壓再壓低股價 → 更多人被斷頭。上圖長條飆高＝斷頭潮正在發生；<b>連續數日回落</b>＝最兇的拋壓大概率已過，正是訊號①「技術性賣壓衰竭」等的畫面。下圖比率回答「欠款的人裡有多大比例被砍」——金額會隨市場規模水漲船高，比率更適合跨期比較。<b>注意時滯</b>：斷頭多於次日開盤執行、統計再約 +1 日——暴跌日的斷頭高峰通常出現在其後 1-2 個交易日的數據中，別看暴跌當天數字小就以為沒事。（韓文原詞 반대매매，台股俗稱「斷頭」）',
+  how:'下跌自我強化的引擎就在這裡：股價跌 → 保證金不足 → 券商<b>強制砍倉（斷頭）</b> → 賣壓再壓低股價 → 更多人被斷頭。上圖長條飆高＝斷頭潮正在發生；<b>連續數日回落</b>＝最兇的拋壓大概率已過，正是訊號①「技術性賣壓衰竭」等的畫面。下圖比率回答「欠款的人裡有多大比例被砍」——金額會隨市場規模水漲船高，比率更適合跨期比較。<b>注意時滯</b>：斷頭多於次日開盤執行、統計再約 +1 日——暴跌日的斷頭高峰通常出現在其後 1-2 個交易日的數據中，別看暴跌當天數字小就以為沒事。規模感：截至7/13，全市場約120萬個槓桿帳戶觸及追繳線、其中32-36萬戶遭券商全額強平、本金清零。（韓文原詞 반대매매，台股俗稱「斷頭」）',
   fn:()=>IND.stage&&IND.stage.bandae_mtd!=null?('本月累計斷頭金額 '+fmtN(IND.stage.bandae_mtd,0)+' 億₩（KOFIA 未繳款口徑；券商信用戶強制清算為另一口徑，媒體數字可能略異）'):'',
   series:[{name:'斷頭金額(億₩)',key:'bandae_amt',color:'--s1',type:'bar'}], yFmt:v=>fmtN(v,0), zero:true,
   panel2:{t:'斷頭比率＝斷頭金額 ÷ 散戶未繳款（%，5日均）',series:[{name:'斷頭比率5日均',key:'bandae_ratio_ma',color:'--s6',type:'line'}],yFmt:v=>fmtN(v,1)+'%'}},
