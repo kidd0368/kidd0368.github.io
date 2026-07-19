@@ -1,0 +1,47 @@
+name: 每日更新美伊戰爭終局追蹤
+
+on:
+  schedule:
+    - cron: "15 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-iran-war-terminal
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: 下載網站內容
+        uses: actions/checkout@v4
+
+      - name: 設定 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 蒐集公開證據與市場資料
+        run: python iran-war/scripts/fetch_sources.py
+
+      - name: 產生儀表板
+        run: python iran-war/scripts/build_dashboard.py
+
+      - name: 驗證資料與頁面
+        run: python iran-war/scripts/validate.py
+
+      - name: 儲存每日更新
+        run: |
+          git config user.name "iran-terminal-bot"
+          git config user.email "iran-terminal-bot@users.noreply.github.com"
+          git add iran-war/data/snapshot.json iran-war/index.html
+          if git diff --cached --quiet; then
+            echo "沒有需要提交的變更"
+          else
+            git commit -m "chore: update Iran war terminal"
+            git push
+          fi
