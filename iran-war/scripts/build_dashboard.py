@@ -96,6 +96,17 @@ HTML = r'''<!doctype html>
     .hero-foot { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; margin-top: 32px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
     .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--amber); margin-right: 7px; }
     .grid { display: grid; gap: 16px; }
+    .analysis-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .analysis-card { padding: 24px; position: relative; overflow: hidden; }
+    .analysis-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--accent); }
+    .analysis-kicker { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .06em; }
+    .analysis-kicker span:last-child { color: var(--muted); font-weight: 600; letter-spacing: 0; }
+    .analysis-card h3 { margin: 12px 0 9px; font-size: 20px; }
+    .analysis-card p { margin: 0; color: var(--muted); font-size: 15px; }
+    .watch-card { margin-top: 16px; padding: 22px 24px; display: grid; grid-template-columns: 220px 1fr; gap: 20px; }
+    .watch-card h3 { margin: 0 0 5px; }
+    .watch-card p { margin: 0; color: var(--muted); font-size: 12px; }
+    .watch-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 18px; margin: 0; padding-left: 20px; color: var(--muted); font-size: 13px; }
     .kpi-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 18px 0; }
     .card { border: 1px solid var(--line); background: var(--panel); border-radius: 20px; box-shadow: var(--shadow); }
     .kpi { min-height: 142px; padding: 19px; display: flex; flex-direction: column; justify-content: space-between; }
@@ -111,6 +122,7 @@ HTML = r'''<!doctype html>
     .scenario::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: var(--accent); }
     .scenario h3 { margin: 4px 0 10px; font-size: 21px; }
     .scenario p { color: var(--muted); font-size: 14px; min-height: 66px; }
+    .scenario-update { display: inline-flex; margin-bottom: 6px; border-radius: 999px; padding: 4px 9px; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); font-size: 11px; font-weight: 800; }
     .signal { display: flex; justify-content: space-between; align-items: end; background: var(--panel-2); padding: 13px; border-radius: 13px; margin: 14px 0 18px; }
     .signal strong { font-size: 30px; line-height: 1; color: var(--accent); }
     .signal span { color: var(--muted); font-size: 11px; text-align: right; }
@@ -174,6 +186,7 @@ HTML = r'''<!doctype html>
       .kpi-grid { grid-template-columns: repeat(3, 1fr); }
       .market-grid { grid-template-columns: repeat(3, 1fr); }
       .scenario-grid, .method-grid { grid-template-columns: 1fr; }
+      .analysis-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 760px) {
       .shell { width: min(100% - 20px, 1440px); padding-top: 15px; }
@@ -183,6 +196,8 @@ HTML = r'''<!doctype html>
       .kpi-grid { grid-template-columns: repeat(2, 1fr); }
       .market-grid, .two-col { grid-template-columns: 1fr; }
       .timeline-item { grid-template-columns: 1fr; gap: 5px; }
+      .watch-card { grid-template-columns: 1fr; }
+      .watch-list { grid-template-columns: 1fr; }
       .section-head { align-items: flex-start; flex-direction: column; }
     }
     @media (max-width: 430px) {
@@ -200,7 +215,7 @@ HTML = r'''<!doctype html>
     </header>
 
     <section class="hero">
-      <p class="eyebrow">每日決策摘要</p>
+      <p class="eyebrow">今日分析結論</p>
       <h1 id="headline"></h1>
       <p class="hero-summary" id="assessmentSummary"></p>
       <div class="hero-foot">
@@ -210,7 +225,13 @@ HTML = r'''<!doctype html>
       </div>
     </section>
 
-    <section class="grid kpi-grid" id="kpiGrid" aria-label="最近72小時公開證據指標"></section>
+    <section class="section">
+      <div class="section-head"><div><h2>今天這些數據是什麼意思？</h2><p>先比較最近24小時與前24小時，再把軍事、海峽、外交與市場訊號放進同一個終局框架。</p></div></div>
+      <div class="grid analysis-grid" id="analysisGrid"></div>
+      <article class="card watch-card"><div><h3>下一步看什麼</h3><p>只有這些條件跨日收斂，結論才應該改變。</p></div><ul class="watch-list" id="watchList"></ul></article>
+    </section>
+
+    <section class="grid kpi-grid" id="kpiGrid" aria-label="最近24小時公開證據指標"></section>
 
     <section class="section">
       <div class="section-head"><div><h2>三條終局路徑</h2><p>訊號數是新聞證據佇列的自動標記，只用於安排閱讀優先順序，不是情境機率或戰力統計。</p></div></div>
@@ -270,6 +291,7 @@ HTML = r'''<!doctype html>
     const assessment = JSON.parse(document.getElementById('assessmentData').textContent);
     const events = JSON.parse(document.getElementById('eventsData').textContent);
     const metrics = snapshot.metrics || {};
+    const analysis = snapshot.analysis || {};
     const categories = ['海峽與商船','軍事行動','基礎設施','外交與停火','核問題'];
     const categoryColors = {'海峽與商船':'#43d19e','軍事行動':'#ff6b6b','基礎設施':'#ffc857','外交與停火':'#65a6ff','核問題':'#b28dff'};
     const fmtNumber = value => Number(value).toLocaleString('zh-TW', {maximumFractionDigits: 2});
@@ -277,21 +299,32 @@ HTML = r'''<!doctype html>
     const escAttr = value => String(value || '').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;');
     const elt = (tag, cls, text) => { const node=document.createElement(tag); if(cls) node.className=cls; if(text!==undefined) node.textContent=text; return node; };
 
-    document.getElementById('headline').textContent = assessment.headline;
-    document.getElementById('assessmentSummary').textContent = assessment.summary;
-    document.getElementById('posture').textContent = metrics.posture || '資料不足';
-    document.getElementById('postureNote').textContent = metrics.posture_note || '';
+    document.getElementById('headline').textContent = analysis.headline || assessment.headline;
+    document.getElementById('assessmentSummary').textContent = analysis.bottom_line || assessment.summary;
+    document.getElementById('posture').textContent = `較支持：${analysis.leading_scenario || metrics.posture || '資料不足'}`;
+    document.getElementById('postureNote').textContent = `判讀信心：${analysis.confidence || '偏低'}｜${analysis.confidence_note || metrics.posture_note || ''}`;
     document.getElementById('decisionQuestion').textContent = assessment.decision_question;
     document.getElementById('refreshPill').textContent = `台北 ${fmtTime(snapshot.generated_at)} 更新`;
     document.getElementById('generatedFooter').textContent = `資料時間 ${fmtTime(snapshot.generated_at)}`;
     document.getElementById('staleNote').textContent = snapshot.stale ? '本次抓取失敗，顯示上次成功資料' : '自動來源已完成本次更新';
 
+    const analysisColors = ['#65a6ff','#ff6b6b','#43d19e','#ffc857'];
+    const analysisKeys = ['activity','battlefield','diplomacy','market'];
+    const analysisLabels = ['24H 對比','軍事判讀','退出條件','市場確認'];
+    const analysisGrid = document.getElementById('analysisGrid');
+    analysisKeys.forEach((key,index) => {
+      const item=analysis[key] || {}; const card=elt('article','card analysis-card'); card.style.setProperty('--accent',analysisColors[index]);
+      const kicker=elt('div','analysis-kicker'); kicker.append(elt('span','',analysisLabels[index]),elt('span','',key==='market'?(item.stance||''):(key==='activity'?'公開證據變化':'')));
+      card.append(kicker,elt('h3','',item.title||'資料不足'),elt('p','',item.assessment||'目前沒有足夠資料形成判讀。')); analysisGrid.append(card);
+    });
+    (analysis.watch_next||[]).forEach(x=>document.getElementById('watchList').append(elt('li','',x)));
+
     const kpis = [
-      ['公開證據項目', metrics.evidence_items_72h || 0, '最近72小時去重後'],
-      ['較高可信度', (metrics.multi_source_72h||0)+(metrics.official_72h||0), '官方或多方報導'],
-      ['報導有實際後果', metrics.reported_consequence_72h || 0, '傷亡、損壞、停運等標題訊號'],
-      ['海峽壓力', metrics.maritime_pressure_72h || 0, '商船、港口、通航相關'],
-      ['外交訊號', metrics.diplomacy_72h || 0, '停火、談判與協議相關']
+      ['公開證據項目', metrics.evidence_items_24h || 0, `前24小時 ${metrics.evidence_items_prev_24h||0} 組`],
+      ['較高可信度', (metrics.multi_source_24h||0)+(metrics.official_24h||0), '官方或多方報導'],
+      ['報導有實際後果', metrics.reported_consequence_24h || 0, `前24小時 ${metrics.reported_consequence_prev_24h||0} 組`],
+      ['海峽壓力', metrics.maritime_pressure_24h || 0, `前24小時 ${metrics.maritime_pressure_prev_24h||0} 組`],
+      ['外交訊號', metrics.diplomacy_24h || 0, `前24小時 ${metrics.diplomacy_prev_24h||0} 組`]
     ];
     const kpiGrid = document.getElementById('kpiGrid');
     kpis.forEach(([label,value,note]) => {
@@ -301,16 +334,16 @@ HTML = r'''<!doctype html>
     });
 
     const scenarioSignals = {
-      iran_weaker: metrics.weakness_signal_72h || 0,
-      iran_resilient: metrics.resilience_signal_72h || 0,
-      middle_stalemate: metrics.stalemate_signal_72h || 0
+      iran_weaker: metrics.weakness_signal_24h || 0,
+      iran_resilient: metrics.resilience_signal_24h || 0,
+      middle_stalemate: metrics.stalemate_signal_24h || 0
     };
     const scenarioColors = {iran_weaker:'#43d19e',iran_resilient:'#ff6b6b',middle_stalemate:'#ffc857'};
     const scenarioGrid = document.getElementById('scenarioGrid');
     assessment.scenarios.forEach(s => {
       const card=elt('article','card scenario'); card.style.setProperty('--accent',scenarioColors[s.id]);
-      card.append(elt('h3','',s.name),elt('p','',s.interpretation));
-      const signal=elt('div','signal'); signal.append(elt('strong','',String(scenarioSignals[s.id]||0)),elt('span','', '72小時媒體訊號\n不是機率'));
+      card.append(elt('span','scenario-update',(analysis.scenario_updates||{})[s.id]||'持續觀察'),elt('h3','',s.name),elt('p','',s.interpretation));
+      const signal=elt('div','signal'); signal.append(elt('strong','',String(scenarioSignals[s.id]||0)),elt('span','', '24小時媒體訊號\n不是機率'));
       card.append(signal);
       [['確認條件',s.confirmers],['推翻條件',s.falsifiers]].forEach(([title,list]) => {
         const d=elt('details'); const summary=elt('summary','',title); const ul=elt('ul'); list.forEach(x=>ul.append(elt('li','',x))); d.append(summary,ul); card.append(d);
