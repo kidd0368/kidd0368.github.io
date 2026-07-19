@@ -23,10 +23,12 @@ def main() -> None:
 
     require(snapshot.get("schema_version") == 1, "unexpected snapshot schema")
     require(snapshot.get("generated_at"), "missing generated timestamp")
+    require(snapshot.get("analysis", {}).get("model_version") == 2, "terminal thesis model is not v2")
     require(all(key in snapshot.get("analysis", {}) for key in (
-        "headline", "bottom_line", "leading_scenario", "confidence",
-        "activity", "battlefield", "diplomacy", "israel", "red_sea",
-        "asymmetric", "market", "watch_next",
+        "headline", "bottom_line", "test_phase", "thesis_state", "leading_scenario", "confidence",
+        "revelation", "durability", "us_learning", "endpoint", "negotiability", "escalation",
+        "activity", "israel", "red_sea", "asymmetric", "market", "route_updates",
+        "watch_next", "evidence_guardrail",
     )), "daily analysis layer is incomplete")
     require(isinstance(snapshot.get("items"), list), "evidence items must be a list")
     require(len(snapshot.get("fetch_status", [])) >= 6, "source health ledger is incomplete")
@@ -34,17 +36,21 @@ def main() -> None:
         "evidence_items_72h", "maritime_pressure_72h", "diplomacy_72h",
         "weakness_signal_72h", "resilience_signal_72h", "stalemate_signal_72h", "daily_counts_7d",
         "evidence_items_24h", "evidence_items_prev_24h", "reported_consequence_24h",
+        "weakness_signal_prev_24h", "resilience_signal_prev_24h", "stalemate_signal_prev_24h",
+        "quality_resilience_signal_24h", "quality_resilience_signal_prev_24h",
         "israel_posture_24h", "israel_active_entry_24h", "second_chokepoint_24h",
         "houthi_operational_24h", "asymmetric_adaptation_24h",
     )), "required metrics are missing")
     require(len(assessment.get("scenarios", [])) == 3, "exactly three scenarios are required")
+    require(len(assessment.get("thesis", {}).get("steps", [])) == 4, "terminal thesis chain is incomplete")
     require(len(events.get("events", [])) >= 5, "curated timeline is too short")
     require("<title>美伊戰爭終局追蹤</title>" in html, "HTML title missing")
     require(html.rstrip().endswith("</html>"), "HTML is truncated")
     require("__SNAPSHOT__" not in html and "__ASSESSMENT__" not in html, "unresolved template placeholder")
     require("攻擊次數" in html and "不是情境機率" in html, "interpretation guardrails missing")
-    require("今天這些數據是什麼意思" in html and "下一步看什麼" in html, "daily interpretation UI missing")
-    require("以色列介入" in html and "紅海—蘇伊士" in html and "非對稱戰術" in html, "regional expansion factors missing")
+    require("核心推演：擴大如何可能通往終局" in html and "今日終局推演" in html, "terminal thesis UI missing")
+    require("什麼證據會推翻今天的結論" in html and "今天較接近哪條終局路徑" in html, "falsification layer missing")
+    require("以色列觸發器" in html and "紅海第二咽喉" in html and "分散與非對稱能力" in html, "regional expansion factors missing")
     require("<script src=" not in html, "dashboard must not depend on external JavaScript")
     require(len(html.encode("utf-8")) > 30_000, "generated dashboard unexpectedly small")
     print(f"validation passed: {len(snapshot.get('items', []))} evidence clusters, {len(html):,} HTML characters")

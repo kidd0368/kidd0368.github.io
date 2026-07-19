@@ -91,11 +91,20 @@ HTML = r'''<!doctype html>
     }
     .hero::after { content: ""; position: absolute; width: 280px; height: 280px; border: 1px solid rgba(67,209,158,.18); border-radius: 50%; right: -90px; top: -105px; box-shadow: 0 0 0 48px rgba(67,209,158,.025), 0 0 0 96px rgba(67,209,158,.018); }
     .eyebrow { margin: 0 0 13px; color: var(--green); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
-    h1 { max-width: 980px; font-size: clamp(34px, 5.6vw, 74px); line-height: 1.02; letter-spacing: -.045em; margin: 0 0 22px; }
+    h1 { max-width: 1120px; font-size: clamp(34px, 4.8vw, 64px); line-height: 1.05; letter-spacing: -.04em; margin: 0 0 22px; }
     .hero-summary { max-width: 980px; color: var(--muted); font-size: clamp(16px, 2vw, 20px); margin: 0; }
     .hero-foot { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; margin-top: 32px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
     .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--amber); margin-right: 7px; }
     .grid { display: grid; gap: 16px; }
+    .thesis-card { padding: 26px; }
+    .thesis-card > h3 { margin: 0 0 18px; max-width: 1040px; font-size: clamp(20px, 2.7vw, 30px); line-height: 1.25; }
+    .thesis-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; counter-reset: thesis; }
+    .thesis-step { position: relative; min-height: 150px; padding: 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel-2); }
+    .thesis-step::before { counter-increment: thesis; content: counter(thesis); display: grid; place-items: center; width: 27px; height: 27px; margin-bottom: 14px; border-radius: 50%; background: var(--chip); color: var(--green); font-weight: 800; font-size: 12px; }
+    .thesis-step:not(:last-child)::after { content: "→"; position: absolute; right: -18px; top: 58px; z-index: 2; color: var(--green); font-weight: 900; }
+    .thesis-step strong { display: block; margin-bottom: 7px; font-size: 16px; }
+    .thesis-step p { margin: 0; color: var(--muted); font-size: 13px; }
+    .thesis-note { margin: 17px 2px 0; color: var(--muted); font-size: 13px; }
     .analysis-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .analysis-card { padding: 24px; position: relative; overflow: hidden; }
     .analysis-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--accent); }
@@ -107,6 +116,8 @@ HTML = r'''<!doctype html>
     .watch-card h3 { margin: 0 0 5px; }
     .watch-card p { margin: 0; color: var(--muted); font-size: 12px; }
     .watch-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 18px; margin: 0; padding-left: 20px; color: var(--muted); font-size: 13px; }
+    .guardrail { margin-top: 16px; padding: 18px 22px; border-left: 3px solid var(--amber); color: var(--muted); font-size: 13px; }
+    .regional-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .kpi-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 18px 0; }
     .card { border: 1px solid var(--line); background: var(--panel); border-radius: 20px; box-shadow: var(--shadow); }
     .kpi { min-height: 142px; padding: 19px; display: flex; flex-direction: column; justify-content: space-between; }
@@ -123,9 +134,12 @@ HTML = r'''<!doctype html>
     .scenario h3 { margin: 4px 0 10px; font-size: 21px; }
     .scenario p { color: var(--muted); font-size: 14px; min-height: 66px; }
     .scenario-update { display: inline-flex; margin-bottom: 6px; border-radius: 999px; padding: 4px 9px; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); font-size: 11px; font-weight: 800; }
-    .signal { display: flex; justify-content: space-between; align-items: end; background: var(--panel-2); padding: 13px; border-radius: 13px; margin: 14px 0 18px; }
-    .signal strong { font-size: 30px; line-height: 1; color: var(--accent); }
-    .signal span { color: var(--muted); font-size: 11px; text-align: right; }
+    .route-read { display: grid; gap: 10px; background: var(--panel-2); padding: 14px; border-radius: 13px; margin: 14px 0 18px; }
+    .route-read div { color: var(--muted); font-size: 12px; }
+    .route-read strong { display: block; margin-bottom: 3px; color: var(--text); font-size: 12px; }
+    .market-interpretation { padding: 20px 22px; margin-bottom: 16px; }
+    .market-interpretation h3 { margin: 0 0 7px; font-size: 18px; }
+    .market-interpretation p { margin: 0; color: var(--muted); font-size: 14px; }
     details { border-top: 1px solid var(--line); padding: 11px 0 0; margin-top: 8px; }
     summary { cursor: pointer; font-size: 13px; font-weight: 700; }
     details ul { margin: 10px 0 4px; padding-left: 20px; color: var(--muted); font-size: 13px; }
@@ -185,8 +199,10 @@ HTML = r'''<!doctype html>
     @media (max-width: 1080px) {
       .kpi-grid { grid-template-columns: repeat(3, 1fr); }
       .market-grid { grid-template-columns: repeat(3, 1fr); }
-      .scenario-grid, .method-grid { grid-template-columns: 1fr; }
+      .scenario-grid, .method-grid, .regional-grid { grid-template-columns: 1fr; }
       .analysis-grid { grid-template-columns: 1fr; }
+      .thesis-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .thesis-step:nth-child(2)::after { display: none; }
     }
     @media (max-width: 760px) {
       .shell { width: min(100% - 20px, 1440px); padding-top: 15px; }
@@ -199,6 +215,9 @@ HTML = r'''<!doctype html>
       .watch-card { grid-template-columns: 1fr; }
       .watch-list { grid-template-columns: 1fr; }
       .section-head { align-items: flex-start; flex-direction: column; }
+      .thesis-flow { grid-template-columns: 1fr; }
+      .thesis-step { min-height: 0; }
+      .thesis-step::after { display: none; }
     }
     @media (max-width: 430px) {
       .kpi-grid { grid-template-columns: 1fr; }
@@ -226,12 +245,20 @@ HTML = r'''<!doctype html>
     </section>
 
     <section class="section">
-      <div class="section-head"><div><h2>今天這些數據是什麼意思？</h2><p>先比較最近24小時與前24小時，再把軍事、海峽、外交與市場訊號放進同一個終局框架。</p></div></div>
-      <div class="grid analysis-grid" id="analysisGrid"></div>
-      <article class="card watch-card"><div><h3>下一步看什麼</h3><p>只有這些條件跨日收斂，結論才應該改變。</p></div><ul class="watch-list" id="watchList"></ul></article>
+      <div class="section-head"><div><h2>核心推演：擴大如何可能通往終局</h2><p>戰事擴大不是終局本身；它的作用是迫使雙方用真實成本揭露底牌並修正誤判。</p></div></div>
+      <article class="card thesis-card">
+        <h3 id="thesisTitle"></h3>
+        <div class="thesis-flow" id="thesisFlow"></div>
+        <p class="thesis-note">兩種清楚答案都可能打開終局：伊朗底牌有限，或美國確認軍事手段有極限。最危險的是答案長期模糊，讓雙方都相信再打一點會更有利。</p>
+      </article>
     </section>
 
-    <section class="grid kpi-grid" id="kpiGrid" aria-label="最近24小時公開證據指標"></section>
+    <section class="section">
+      <div class="section-head"><div><h2>今日終局推演</h2><p>固定回答六個問題：揭露了什麼、還不知道什麼、美方可能學到什麼、靠近哪條路、協議能否執行，以及擴大的雙面作用。</p></div></div>
+      <div class="grid analysis-grid" id="analysisGrid"></div>
+      <article class="card guardrail" id="evidenceGuardrail"></article>
+      <article class="card watch-card"><div><h3>什麼證據會推翻今天的結論</h3><p>不是列一般觀察項目，而是列出足以讓終局路徑改變的條件。</p></div><ul class="watch-list" id="watchList"></ul></article>
+    </section>
 
     <section class="section">
       <div class="section-head"><div><h2>三條終局路徑</h2><p>訊號數是新聞證據佇列的自動標記，只用於安排閱讀優先順序，不是情境機率或戰力統計。</p></div></div>
@@ -239,7 +266,18 @@ HTML = r'''<!doctype html>
     </section>
 
     <section class="section">
+      <div class="section-head"><div><h2>區域擴散如何改變實力測試</h2><p>以色列、紅海第二咽喉與非對稱戰術既可能加速底牌揭露，也可能把可收斂戰爭變成多戰線僵局。</p></div></div>
+      <div class="grid regional-grid" id="regionalGrid"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><h2>公開證據儀表</h2><p>這些數字放在推演之後，只用來佐證與安排人工閱讀，不再直接產生戰力或終局結論。</p></div></div>
+      <div class="grid kpi-grid" id="kpiGrid" aria-label="最近24小時公開證據指標"></div>
+    </section>
+
+    <section class="section">
       <div class="section-head"><div><h2>市場壓力表</h2><p>市場只反映風險定價，不直接證明軍事成敗；方向與事件應交叉閱讀。</p></div></div>
+      <article class="card market-interpretation"><h3 id="marketAnalysisTitle"></h3><p id="marketAnalysisText"></p></article>
       <div class="grid market-grid" id="marketGrid"></div>
     </section>
 
@@ -301,30 +339,45 @@ HTML = r'''<!doctype html>
 
     document.getElementById('headline').textContent = analysis.headline || assessment.headline;
     document.getElementById('assessmentSummary').textContent = analysis.bottom_line || assessment.summary;
-    document.getElementById('posture').textContent = `較支持：${analysis.leading_scenario || metrics.posture || '資料不足'}`;
-    document.getElementById('postureNote').textContent = `判讀信心：${analysis.confidence || '偏低'}｜${analysis.confidence_note || metrics.posture_note || ''}`;
+    document.getElementById('posture').textContent = analysis.test_phase || metrics.posture || '資料不足';
+    document.getElementById('postureNote').textContent = `${analysis.thesis_state || ''}｜判讀信心：${analysis.confidence || '偏低'}｜${analysis.confidence_note || metrics.posture_note || ''}`;
     document.getElementById('decisionQuestion').textContent = assessment.decision_question;
     document.getElementById('refreshPill').textContent = `台北 ${fmtTime(snapshot.generated_at)} 更新`;
     document.getElementById('generatedFooter').textContent = `資料時間 ${fmtTime(snapshot.generated_at)}`;
     document.getElementById('staleNote').textContent = snapshot.stale ? '本次抓取失敗，顯示上次成功資料' : '自動來源已完成本次更新';
 
-    const analysisColors = ['#65a6ff','#ff6b6b','#43d19e','#f78fb3','#34ace0','#ff9f43','#ffc857'];
-    const analysisKeys = ['activity','battlefield','diplomacy','israel','red_sea','asymmetric','market'];
-    const analysisLabels = ['24H 對比','軍事判讀','退出條件','以色列介入','紅海—蘇伊士','非對稱戰術','市場確認'];
+    const thesis = assessment.thesis || {};
+    document.getElementById('thesisTitle').textContent = thesis.title || '擴大戰事的作用，是揭露實力並迫使雙方修正誤判';
+    (thesis.steps || []).forEach(step => {
+      const card=elt('article','thesis-step'); card.append(elt('strong','',step.label),elt('p','',step.detail)); document.getElementById('thesisFlow').append(card);
+    });
+
+    const analysisColors = ['#43d19e','#65a6ff','#ff9f43','#ffc857','#b28dff','#ff6b6b'];
+    const analysisKeys = ['revelation','durability','us_learning','endpoint','negotiability','escalation'];
+    const analysisLabels = ['能力揭露','持續性邊界','認知修正','終局位置','可信承諾','擴大的雙面作用'];
     const analysisGrid = document.getElementById('analysisGrid');
     analysisKeys.forEach((key,index) => {
       const item=analysis[key] || {}; const card=elt('article','card analysis-card'); card.style.setProperty('--accent',analysisColors[index]);
-      const kicker=elt('div','analysis-kicker'); kicker.append(elt('span','',analysisLabels[index]),elt('span','',key==='market'?(item.stance||''):(key==='activity'?'公開證據變化':'')));
+      const kicker=elt('div','analysis-kicker'); kicker.append(elt('span','',analysisLabels[index]),elt('span','',index<2?'已知與未知分開':''));
       card.append(kicker,elt('h3','',item.title||'資料不足'),elt('p','',item.assessment||'目前沒有足夠資料形成判讀。')); analysisGrid.append(card);
     });
+    document.getElementById('evidenceGuardrail').textContent = analysis.evidence_guardrail || '新聞項目只用於安排人工驗證，不是戰力統計。';
     (analysis.watch_next||[]).forEach(x=>document.getElementById('watchList').append(elt('li','',x)));
 
+    const regionalKeys = ['israel','red_sea','asymmetric'];
+    const regionalLabels = ['以色列觸發器','紅海第二咽喉','分散與非對稱能力'];
+    regionalKeys.forEach((key,index) => {
+      const item=analysis[key] || {}; const card=elt('article','card analysis-card'); card.style.setProperty('--accent',['#f78fb3','#34ace0','#ff9f43'][index]);
+      const kicker=elt('div','analysis-kicker'); kicker.append(elt('span','',regionalLabels[index]));
+      card.append(kicker,elt('h3','',item.title||'資料不足'),elt('p','',item.assessment||'目前沒有足夠資料形成判讀。')); document.getElementById('regionalGrid').append(card);
+    });
+
     const kpis = [
-      ['公開證據項目', metrics.evidence_items_24h || 0, `前24小時 ${metrics.evidence_items_prev_24h||0} 組`],
-      ['較高可信度', (metrics.multi_source_24h||0)+(metrics.official_24h||0), '官方或多方報導'],
-      ['報導有實際後果', metrics.reported_consequence_24h || 0, `前24小時 ${metrics.reported_consequence_prev_24h||0} 組`],
-      ['海峽壓力', metrics.maritime_pressure_24h || 0, `前24小時 ${metrics.maritime_pressure_prev_24h||0} 組`],
-      ['外交訊號', metrics.diplomacy_24h || 0, `前24小時 ${metrics.diplomacy_prev_24h||0} 組`]
+      ['資訊活動', metrics.evidence_items_24h || 0, `前期 ${metrics.evidence_items_prev_24h||0} 組｜不是攻擊數`],
+      ['較高可信度', (metrics.multi_source_24h||0)+(metrics.official_24h||0), '官方或多方報導｜不代表已驗證戰果'],
+      ['提及實際後果', metrics.reported_consequence_24h || 0, `前期 ${metrics.reported_consequence_prev_24h||0} 組｜需人工核對`],
+      ['海上壓力線索', metrics.maritime_pressure_24h || 0, `前期 ${metrics.maritime_pressure_prev_24h||0} 組｜看跨日方向`],
+      ['外交活動線索', metrics.diplomacy_24h || 0, `前期 ${metrics.diplomacy_prev_24h||0} 組｜不等於可執行協議`]
     ];
     const kpiGrid = document.getElementById('kpiGrid');
     kpis.forEach(([label,value,note]) => {
@@ -333,23 +386,21 @@ HTML = r'''<!doctype html>
       kpiGrid.append(card);
     });
 
-    const scenarioSignals = {
-      iran_weaker: metrics.weakness_signal_24h || 0,
-      iran_resilient: metrics.resilience_signal_24h || 0,
-      middle_stalemate: metrics.stalemate_signal_24h || 0
-    };
     const scenarioColors = {iran_weaker:'#43d19e',iran_resilient:'#ff6b6b',middle_stalemate:'#ffc857'};
     const scenarioGrid = document.getElementById('scenarioGrid');
     assessment.scenarios.forEach(s => {
       const card=elt('article','card scenario'); card.style.setProperty('--accent',scenarioColors[s.id]);
-      card.append(elt('span','scenario-update',(analysis.scenario_updates||{})[s.id]||'持續觀察'),elt('h3','',s.name),elt('p','',s.interpretation));
-      const signal=elt('div','signal'); signal.append(elt('strong','',String(scenarioSignals[s.id]||0)),elt('span','', '24小時媒體訊號\n不是機率'));
-      card.append(signal);
+      const update=(analysis.route_updates||{})[s.id]||{};
+      card.append(elt('span','scenario-update',update.status||(analysis.scenario_updates||{})[s.id]||'持續觀察'),elt('h3','',s.name),elt('p','',s.interpretation));
+      const route=elt('div','route-read'); const evidence=elt('div'); evidence.append(elt('strong','','今日證據'),document.createTextNode(update.evidence||'資料不足')); const missing=elt('div'); missing.append(elt('strong','','還缺什麼'),document.createTextNode(update.missing||'需要更多跨日證據')); route.append(evidence,missing); card.append(route);
       [['確認條件',s.confirmers],['推翻條件',s.falsifiers]].forEach(([title,list]) => {
         const d=elt('details'); const summary=elt('summary','',title); const ul=elt('ul'); list.forEach(x=>ul.append(elt('li','',x))); d.append(summary,ul); card.append(d);
       });
       scenarioGrid.append(card);
     });
+
+    document.getElementById('marketAnalysisTitle').textContent = analysis.market?.title || '市場只提供交叉驗證';
+    document.getElementById('marketAnalysisText').textContent = analysis.market?.assessment || '市場資料不足以形成終局判讀。';
 
     function sparkline(history) {
       if (!history || history.length < 2) return '<div class="empty">資料不足</div>';
