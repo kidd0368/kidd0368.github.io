@@ -1,23 +1,51 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-19T15:01:32Z",
+  "generated_at": "2026-07-19T15:39:21Z",
   "data_window": "最近7日新聞（核心指標取72小時）、最近1個月市場資料",
   "metrics": {
-    "evidence_items_72h": 176,
-    "multi_source_72h": 5,
+    "evidence_items_24h": 42,
+    "evidence_items_prev_24h": 58,
+    "evidence_change_24h_pct": -27.6,
+    "official_24h": 1,
+    "multi_source_24h": 3,
+    "reported_consequence_24h": 24,
+    "reported_consequence_prev_24h": 13,
+    "maritime_pressure_24h": 6,
+    "maritime_pressure_prev_24h": 12,
+    "diplomacy_24h": 3,
+    "diplomacy_prev_24h": 8,
+    "weakness_signal_24h": 0,
+    "resilience_signal_24h": 23,
+    "stalemate_signal_24h": 1,
+    "category_counts_24h": {
+      "軍事行動": 15,
+      "基礎設施": 5,
+      "外交與停火": 2,
+      "核問題": 11,
+      "海峽與商船": 9
+    },
+    "category_counts_prev_24h": {
+      "外交與停火": 12,
+      "核問題": 6,
+      "基礎設施": 22,
+      "海峽與商船": 14,
+      "軍事行動": 4
+    },
+    "evidence_items_72h": 171,
+    "multi_source_72h": 6,
     "official_72h": 4,
     "reported_consequence_72h": 55,
-    "maritime_pressure_72h": 43,
+    "maritime_pressure_72h": 39,
     "diplomacy_72h": 28,
     "weakness_signal_72h": 1,
     "resilience_signal_72h": 45,
-    "stalemate_signal_72h": 17,
+    "stalemate_signal_72h": 16,
     "category_counts_72h": {
-      "軍事行動": 26,
+      "軍事行動": 27,
       "基礎設施": 43,
+      "外交與停火": 29,
       "核問題": 27,
-      "海峽與商船": 49,
-      "外交與停火": 31
+      "海峽與商船": 45
     },
     "daily_counts_7d": [
       {
@@ -32,9 +60,9 @@
       {
         "date": "2026-07-14",
         "categories": {
-          "海峽與商船": 17,
+          "海峽與商船": 18,
           "核問題": 15,
-          "外交與停火": 4,
+          "外交與停火": 5,
           "軍事行動": 4
         }
       },
@@ -54,7 +82,7 @@
           "基礎設施": 6,
           "海峽與商船": 15,
           "核問題": 8,
-          "外交與停火": 10,
+          "外交與停火": 11,
           "軍事行動": 1
         }
       },
@@ -62,37 +90,170 @@
         "date": "2026-07-17",
         "categories": {
           "海峽與商船": 22,
-          "核問題": 7,
-          "基礎設施": 21,
-          "外交與停火": 17,
-          "軍事行動": 9
+          "基礎設施": 22,
+          "外交與停火": 16,
+          "軍事行動": 9,
+          "核問題": 6
         }
       },
       {
         "date": "2026-07-18",
         "categories": {
-          "海峽與商船": 14,
+          "海峽與商船": 12,
           "軍事行動": 6,
           "基礎設施": 14,
-          "外交與停火": 9,
+          "外交與停火": 8,
           "核問題": 5
         }
       },
       {
         "date": "2026-07-19",
         "categories": {
-          "軍事行動": 11,
-          "基礎設施": 5,
-          "核問題": 10,
-          "海峽與商船": 6,
-          "外交與停火": 1
+          "軍事行動": 12,
+          "基礎設施": 4,
+          "外交與停火": 2,
+          "核問題": 11,
+          "海峽與商船": 5
         }
       }
     ],
     "posture": "持續反擊的公開訊號較強",
     "posture_note": "有後果的反擊報導仍多；這只能證明壓制尚未完成，不能推算庫存。"
   },
+  "analysis": {
+    "headline": "今日判讀：擴大打擊仍未壓低有效反擊，快速終局訊號不足",
+    "bottom_line": "近24小時仍有多組造成後果的反擊報導，而能力明顯衰退的公開訊號偏少。這不代表伊朗能取勝，但表示美方尚未證明只靠擴大打擊就能快速換來停火與安全通航。",
+    "leading_scenario_id": "iran_resilient",
+    "leading_scenario": "伊朗韌性高於預期",
+    "confidence": "偏低",
+    "confidence_note": "近24小時官方或多方報導4組；未成功來源：GDELT DOC 2.0。結論是方向性判讀，不是戰力或機率估算。",
+    "activity": {
+      "title": "今天發生什麼變化",
+      "assessment": "近24小時有42組去重公開證據，前24小時為58組，變化-27.6%；最多的是軍事行動（15組）。",
+      "delta": -16
+    },
+    "battlefield": {
+      "title": "對戰場的意義",
+      "assessment": "有後果的反擊線索23組，能力衰退線索0組。目前較合理的解讀是壓制尚未完成，而不是伊朗已經沒有還擊能力。"
+    },
+    "diplomacy": {
+      "title": "對和談與海峽的意義",
+      "assessment": "海峽壓力線索6組、外交線索3組。談判活動雖存在，但通航風險仍高，表示協議的執行力尚未通過驗證。"
+    },
+    "market": {
+      "title": "對投資市場的意義",
+      "assessment": "截至2026-07-17，Brent單日+4.6%、VIX +12.2%、S&P 500 -1.0%、台股-6.5%。市場正在提高能源與風險溢價，短線仍把戰事擴大視為負面，而不是接近和平的利多。",
+      "stance": "風險重新定價升高"
+    },
+    "scenario_updates": {
+      "iran_weaker": "今日未獲主要支持",
+      "iran_resilient": "今日較受支持",
+      "middle_stalemate": "持續觀察"
+    },
+    "watch_next": [
+      "有後果的反擊是否連續兩至三日下降，而非只停一天",
+      "商船遇襲與海峽干擾是否出現可驗證改善",
+      "外交安排是否能約束主要武裝單位並實際執行",
+      "Brent、VIX與區域股市是否共同回落，確認風險溢價下降"
+    ]
+  },
   "items": [
+    {
+      "title": "Trump on 2 troops killed in Iran attack: ‘A very sad thing’ - NewsNation",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNMXVSUjF3Qzh0STJuMTd5OC1XRFFuRlV6Q0lpeVdYcXBpWjFBUVNGNkZLZ3h2OHIxQjBsa0lZa1NGQ3Z4U0g1cWdPZll3N2dzR3ZxUUpsSzRHSHhQZm9RcTRMVVVXekc0WFMxR1AweHN0NFRUODBvUDJjRXp4dEZBYXhBRjVES2FiNUM0a2dLS05KcTc4X045U3Z5Z9IBoAFBVV95cUxOb0E0OEJiNUx0RlFOU19MY1k3bFJtcGtvWlphYWxqNXQ4QUdxSWcxNkhwcmFJS2ktSFhBb0hxMUxLQ25Vc0R0MlNmZ1FWVHVqbjRwWXREbExsT0I0YmFINHVpcVYyaHVoUW9qZnFUWm1Ya0dWNWg0ZThrUDFqbTBCSmowanpWSXpCX2dQcUdSdjVsZTQtVVZNX1lXeUU3WnNj?oc=5",
+      "source": "NewsNation",
+      "published_at": "2026-07-19T15:18:24Z",
+      "category": "軍事行動",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": true,
+        "maritime_pressure": false,
+        "diplomacy": false,
+        "weakness_signal": false,
+        "resilience_signal": true
+      },
+      "sources": [
+        {
+          "name": "NewsNation",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNMXVSUjF3Qzh0STJuMTd5OC1XRFFuRlV6Q0lpeVdYcXBpWjFBUVNGNkZLZ3h2OHIxQjBsa0lZa1NGQ3Z4U0g1cWdPZll3N2dzR3ZxUUpsSzRHSHhQZm9RcTRMVVVXekc0WFMxR1AweHN0NFRUODBvUDJjRXp4dEZBYXhBRjVES2FiNUM0a2dLS05KcTc4X045U3Z5Z9IBoAFBVV95cUxOb0E0OEJiNUx0RlFOU19MY1k3bFJtcGtvWlphYWxqNXQ4QUdxSWcxNkhwcmFJS2ktSFhBb0hxMUxLQ25Vc0R0MlNmZ1FWVHVqbjRwWXREbExsT0I0YmFINHVpcVYyaHVoUW9qZnFUWm1Ya0dWNWg0ZThrUDFqbTBCSmowanpWSXpCX2dQcUdSdjVsZTQtVVZNX1lXeUU3WnNj?oc=5",
+          "grade": "單一來源"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
+    {
+      "title": "U.S. Launches Strikes After Iranian Attack Kills 2 American Soldiers - The New York Times",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOVTFHUXljM3RIal94ckFqUE55T21GbWZDcExRWWlWQUU4cDlFLXh2LW5HTE9IZ0VTWC1Wb2ZubXlKU0pXd29wQ1VsZjgwNUVhcGJkVnlibzhJbzNHOHE0LUNTaXlyd2ZSY2tTN3duZHhOdnJMNjRWcjB1WW1uNHdNdQ?oc=5",
+      "source": "The New York Times",
+      "published_at": "2026-07-19T15:10:00Z",
+      "category": "基礎設施",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": false,
+        "maritime_pressure": false,
+        "diplomacy": false,
+        "weakness_signal": false,
+        "resilience_signal": true
+      },
+      "sources": [
+        {
+          "name": "The New York Times",
+          "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOVTFHUXljM3RIal94ckFqUE55T21GbWZDcExRWWlWQUU4cDlFLXh2LW5HTE9IZ0VTWC1Wb2ZubXlKU0pXd29wQ1VsZjgwNUVhcGJkVnlibzhJbzNHOHE0LUNTaXlyd2ZSY2tTN3duZHhOdnJMNjRWcjB1WW1uNHdNdQ?oc=5",
+          "grade": "大型媒體"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
+    {
+      "title": "From fragile truce to fresh strikes: How the US-Iran ceasefire unravelled - The Indian Express",
+      "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOcE1nXzk4N2g0WDQ3RFhWT0FsYnFpc3VyX0V3QVlfc3B0akVxMTlmd3FTSTM3elM0RjdraG5xQjdOR1lpVG9aTnhwY21WM0N1MXhERE1mT0hZTTVVMnNQZnFJa21MaWFhR09EUEZ6QVdCbVZQTmNMMTRfVVp5N2dLX0NTWkQxRzVJb1FQOFRpV1hGLTlxZ0J3NlVSWEUwRmVxaWU5cGJFcDjSAa8BQVVfeXFMTUJsaV9KSkY3V3RFXy1RM2FMaEdrMDRWdlBOY1VKRlJDdlhGYmRXMlE3WFlWRm0xRHNUcjRHdC1GRks0ZzV5Vnk0UEtxdEQtbXB6UWo5WnRTZ2dkRlR0bDB6OG9aRkFLd3RkeEROYXFYMkYxLW9WaHdrYjRhc1kxSEpjek94bllEOFVCUXd5S19JcEVpdHY5UTVlVUJIWDRqalFkMVFLTWR1V2V6RVhsdw?oc=5",
+      "source": "The Indian Express",
+      "published_at": "2026-07-19T15:02:03Z",
+      "category": "外交與停火",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": true,
+        "maritime_pressure": false,
+        "diplomacy": true,
+        "weakness_signal": false,
+        "resilience_signal": false
+      },
+      "sources": [
+        {
+          "name": "The Indian Express",
+          "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOcE1nXzk4N2g0WDQ3RFhWT0FsYnFpc3VyX0V3QVlfc3B0akVxMTlmd3FTSTM3elM0RjdraG5xQjdOR1lpVG9aTnhwY21WM0N1MXhERE1mT0hZTTVVMnNQZnFJa21MaWFhR09EUEZ6QVdCbVZQTmNMMTRfVVp5N2dLX0NTWkQxRzVJb1FQOFRpV1hGLTlxZ0J3NlVSWEUwRmVxaWU5cGJFcDjSAa8BQVVfeXFMTUJsaV9KSkY3V3RFXy1RM2FMaEdrMDRWdlBOY1VKRlJDdlhGYmRXMlE3WFlWRm0xRHNUcjRHdC1GRks0ZzV5Vnk0UEtxdEQtbXB6UWo5WnRTZ2dkRlR0bDB6OG9aRkFLd3RkeEROYXFYMkYxLW9WaHdrYjRhc1kxSEpjek94bllEOFVCUXd5S19JcEVpdHY5UTVlVUJIWDRqalFkMVFLTWR1V2V6RVhsdw?oc=5",
+          "grade": "單一來源"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
+    {
+      "title": "IAEA confirms Iran's Darquwin facility is under construction with no nuclear materials present - Crypto Briefing",
+      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNbWwyc1hVRXNXTXo0M29HQmpRaU1yV1REbzcyMjRRRFBjRC1DTVMyR3pVbVJtalEtaTdSVFN6UVdYcEI2ZnlHRDQ4b0VmVTZxZkYzRGd3RWFyOGpUS3pXOVV6RWxqM2RhSGwxSjItSzNXSnA5MHJwbC00U3phcThyOWJ2d28yM1BUV21WV3B1b3Y2UDQ?oc=5",
+      "source": "Crypto Briefing",
+      "published_at": "2026-07-19T14:43:30Z",
+      "category": "核問題",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": false,
+        "maritime_pressure": false,
+        "diplomacy": false,
+        "weakness_signal": false,
+        "resilience_signal": false
+      },
+      "sources": [
+        {
+          "name": "Crypto Briefing",
+          "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxNbWwyc1hVRXNXTXo0M29HQmpRaU1yV1REbzcyMjRRRFBjRC1DTVMyR3pVbVJtalEtaTdSVFN6UVdYcEI2ZnlHRDQ4b0VmVTZxZkYzRGd3RWFyOGpUS3pXOVV6RWxqM2RhSGwxSjItSzNXSnA5MHJwbC00U3phcThyOWJ2d28yM1BUV21WV3B1b3Y2UDQ?oc=5",
+          "grade": "單一來源"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
     {
       "title": "U.S. and Iran trade strikes after two U.S. service members killed in Jordan - NBC News",
       "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNYVZJNzRoQ2hxRHpadVl0X21Na205RFRoZ1dfcnFPUnV2LXVLQUkxNl9NTzZhMFlKSUd3cF8zTHd0OXpMS1htRU85QTF6QXFRU3ZnQ3lxZzRrVWg5MWdKNWRZdGlnLW5Wd1JsMG5mYzFTS1UyWWZIUDhDYlptVFBmbkw5WG5EN2EwM0RGUHhQNTljcTRTZ3VNLUM0ZUE3VmJUMy1sRm1CQmlwVHBkd3NFU2x1MWQxcjFT?oc=5",
@@ -238,35 +399,6 @@
       "source_count": 1
     },
     {
-      "title": "Iran hits US allies as Israel warns missiles headed for Jordan could land on its territory - Scripps News",
-      "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPUllqcnB3bl85MnJsd3Qycjd4cC1oNDJFRW9jTG9CVGRXVlNCR083aWxCNENRSjFndThNOWJqTGhtZlNVdGJybV9MSnpEdzhLWDlZY2J6d3A2MFNTSjdPXzRhaVZnYkxQNlEtOUh5UEgwcGtzLV9FQWRhU3EzZm9nNlhKVHp0X3YxUE1jTWxucFRwbnUzSnppYWFFVkVQU1BWNlJES1k0M2ZaX0ZCVmd1Z1pUYmNhaGVxLVFtX2xYam0za3BBWHNzeWhmamlsbk82?oc=5",
-      "source": "Scripps News",
-      "published_at": "2026-07-19T13:51:07Z",
-      "category": "基礎設施",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": true,
-        "maritime_pressure": false,
-        "diplomacy": false,
-        "weakness_signal": false,
-        "resilience_signal": true
-      },
-      "sources": [
-        {
-          "name": "Scripps News",
-          "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxPUllqcnB3bl85MnJsd3Qycjd4cC1oNDJFRW9jTG9CVGRXVlNCR083aWxCNENRSjFndThNOWJqTGhtZlNVdGJybV9MSnpEdzhLWDlZY2J6d3A2MFNTSjdPXzRhaVZnYkxQNlEtOUh5UEgwcGtzLV9FQWRhU3EzZm9nNlhKVHp0X3YxUE1jTWxucFRwbnUzSnppYWFFVkVQU1BWNlJES1k0M2ZaX0ZCVmd1Z1pUYmNhaGVxLVFtX2xYam0za3BBWHNzeWhmamlsbk82?oc=5",
-          "grade": "單一來源"
-        },
-        {
-          "name": "ABC News - Breaking News, Latest News and Videos",
-          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQLTFXdWpEeUNSaklBencySE1odklSZlFkc2FEMWpOVWczWENsY1Q5ZFJyeWV0X19MT2RvN3kwR204dmhEU3Y0LWpWYTdWSnBtby1nTjNoM0pZcERrX21oYXltRW96TG1NMDRsMloyR2pYVjc2NnJoU09kMnVrUDIxZjNtSzNreVJsMGtEbFJCQXR2SV9MOXdpbTNDMy02YjFCTXfSAacBQVVfeXFMT241cnV4b0xDcDQ3cDZReXcxTjB5dVRzSWRLcGNWWmVxNDNtbkJFdEtaaWZON1NxZ085RU1nN3duVGttNzJPb2hMUXgyY1pJMl9OT2txdGp2am5iWU5tOUwzam8xbDE4cTc2MkxIOFV3QkRWNHgzOU91MWRjRmFxNm9HUWxPaER0TEZmTFJtbXpETDA4cHB0MmVSTDZZNVNQVmFWMmhDUUU?oc=5",
-          "grade": "單一來源"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 2
-    },
-    {
       "title": "After two US troops killed, Energy Secretary Wright says 'mission' in Iran will continue - ABC News - Breaking News, Latest News and Videos",
       "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOamtlVzltRFNPY2FtQUhrOExlell4Wm1RRlJYNlhTVEs1SFUtTm1CWVhuSllTX3VMS0cyV3Fadi1uZEhlVHZIc2d2Xy1jbk5rR0U2N1lmR2VWNlQtUW4yR0psRDcwTFQ3a0d2OGFyWGQ0bU5rR1l5eTIxMjN0aG43bVl6VF8wQzlSQ0M5bmFSX3J4OFpaTGRUbFdQV3lFdjFCNklER9IBqgFBVV95cUxOa1ZfdUw5X0N3SDJYbVRaWmtqWTRWT3lwUVZlbEpzYjFhUGdiWFVNSTlTLVppbUktbUZwaTNiamtuQ094UUd1MVViQTBnWWdQR2FNRHRFNm15ZmllZDM1TXNiX3FaSDhTNWgzbmJTMHgxeXBGSDVNTC12MHd5RUhDX3QwWjEwVURVZFFLTHNNTUdvNlVXbUNwYzRGZDdFODJpMHdSNGN4MUJSUQ?oc=5",
       "source": "ABC News - Breaking News, Latest News and Videos",
@@ -354,54 +486,6 @@
       "source_count": 1
     },
     {
-      "title": "Iran says planned nuclear plant attacked by US, Hormuz vessels stopped - news.cgtn.com",
-      "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQQk5UektQX1NiR0RuQmZ0eFd3NnBtcEVHcEM0SndaWE80MGxJYTRxaWZsbUdOR0NhVXZ6QXpOeGEta3FMUDFFMEdZQ19MMTVJOHA1YzlacWVsTnY5ejZfVTAxZkVEek54Q3BrOGlTdVlSWjVyNGtFbXZUcE8yWHZDaDJlRkk5d0ZKTTV6aWxyYTRvVnpqTnVPMFg4eERpUmVOVVFKYUR0VEh6SjNOc0R4R3hpMlhSaHQ2ZjlDRG5KT1VFcG1X?oc=5",
-      "source": "news.cgtn.com",
-      "published_at": "2026-07-19T13:07:30Z",
-      "category": "海峽與商船",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": false,
-        "maritime_pressure": true,
-        "diplomacy": false,
-        "weakness_signal": false,
-        "resilience_signal": true
-      },
-      "sources": [
-        {
-          "name": "news.cgtn.com",
-          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQQk5UektQX1NiR0RuQmZ0eFd3NnBtcEVHcEM0SndaWE80MGxJYTRxaWZsbUdOR0NhVXZ6QXpOeGEta3FMUDFFMEdZQ19MMTVJOHA1YzlacWVsTnY5ejZfVTAxZkVEek54Q3BrOGlTdVlSWjVyNGtFbXZUcE8yWHZDaDJlRkk5d0ZKTTV6aWxyYTRvVnpqTnVPMFg4eERpUmVOVVFKYUR0VEh6SjNOc0R4R3hpMlhSaHQ2ZjlDRG5KT1VFcG1X?oc=5",
-          "grade": "單一來源"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 1
-    },
-    {
-      "title": "Trump on 2 troops killed in Iran attack: ‘A very sad thing’ - NewsNation",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNMXVSUjF3Qzh0STJuMTd5OC1XRFFuRlV6Q0lpeVdYcXBpWjFBUVNGNkZLZ3h2OHIxQjBsa0lZa1NGQ3Z4U0g1cWdPZll3N2dzR3ZxUUpsSzRHSHhQZm9RcTRMVVVXekc0WFMxR1AweHN0NFRUODBvUDJjRXp4dEZBYXhBRjVES2FiNUM0a2dLS05KcTc4X045U3Z5Z9IBoAFBVV95cUxOb0E0OEJiNUx0RlFOU19MY1k3bFJtcGtvWlphYWxqNXQ4QUdxSWcxNkhwcmFJS2ktSFhBb0hxMUxLQ25Vc0R0MlNmZ1FWVHVqbjRwWXREbExsT0I0YmFINHVpcVYyaHVoUW9qZnFUWm1Ya0dWNWg0ZThrUDFqbTBCSmowanpWSXpCX2dQcUdSdjVsZTQtVVZNX1lXeUU3WnNj?oc=5",
-      "source": "NewsNation",
-      "published_at": "2026-07-19T13:06:08Z",
-      "category": "軍事行動",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": true,
-        "maritime_pressure": false,
-        "diplomacy": false,
-        "weakness_signal": false,
-        "resilience_signal": true
-      },
-      "sources": [
-        {
-          "name": "NewsNation",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNMXVSUjF3Qzh0STJuMTd5OC1XRFFuRlV6Q0lpeVdYcXBpWjFBUVNGNkZLZ3h2OHIxQjBsa0lZa1NGQ3Z4U0g1cWdPZll3N2dzR3ZxUUpsSzRHSHhQZm9RcTRMVVVXekc0WFMxR1AweHN0NFRUODBvUDJjRXp4dEZBYXhBRjVES2FiNUM0a2dLS05KcTc4X045U3Z5Z9IBoAFBVV95cUxOb0E0OEJiNUx0RlFOU19MY1k3bFJtcGtvWlphYWxqNXQ4QUdxSWcxNkhwcmFJS2ktSFhBb0hxMUxLQ25Vc0R0MlNmZ1FWVHVqbjRwWXREbExsT0I0YmFINHVpcVYyaHVoUW9qZnFUWm1Ya0dWNWg0ZThrUDFqbTBCSmowanpWSXpCX2dQcUdSdjVsZTQtVVZNX1lXeUU3WnNj?oc=5",
-          "grade": "單一來源"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 1
-    },
-    {
       "title": "\"Hate to see it happen\": Trump uses troop deaths to defend nuclear Iran narrative - Salon.com",
       "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOSjFhejZ4ME5NQ0lCcnlwQjhzYWtJUnRzUTFYMTYwczFPNkhfUmREOC0tbkdmOWg1SWtYZGVpWFE3T3ktQ1BtWU9NUXU5YnZTQlF2X1dyR1VLMnJ0V0IyMUJ0TzhucXJPcC02SkpxRTRiYmdPT2xtTFluM1pWSGtySjF1RnFBZXNueFdBVEFsZzZ1d09ublhsN0tKVFozQW5SQ1YydjRhd3Q1ZnJYM2hudi13?oc=5",
       "source": "Salon.com",
@@ -448,6 +532,11 @@
         {
           "name": "Anadolu Ajansı",
           "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQd3l1M29UTXFrdU0yM1cxaWVaWVVVMlcxYVBjTTBDRUVMQkFCQnFXbTEtRjdMdU52d3p5d3R6Y0lNR2tzclhzYjI1LWNDWWFLY1ZxODYyM0hkSDRUX1dzSFc5dVd6dXh6Q3hPODBWRFgxTlJHbGZadGh5WS1VQ3FNV2lDY05NaTFWYTNwVTNBLU5iNmNtR2huNWFOZm9NLVI2R3RWZkFmeFhJOGpBREdRcnhhX285ak80ZkhV?oc=5",
+          "grade": "單一來源"
+        },
+        {
+          "name": "Anadolu Ajansı",
+          "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNZl8tR0pfbTNqRDY4NTR4YXZnWHlLTmVjVVEwNUhZWGhtUG5oMEJqUjlPWm1JWFo3Vm5XTEtsVUdkM3dZUjl6TkE1OXJ4bnhOaGd0cGdtRWpiZ0lrQS1yV0lka2pqSVVid1NrY05CWWZ5Nll0SWsxZFN0dHB0SlZ5OXR0OEo5T29ZdFgtV29rNkEzQlN6MFhUU3AwLTk2RjZvVnFJQ2dxUTgzWDg?oc=5",
           "grade": "單一來源"
         }
       ],
@@ -646,15 +735,10 @@
           "name": "CBS News",
           "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE14TjVrN1ZtOW1JOUExS0dfN2xxaHZneW1lN3g0dGp4Ql9MRUx3dVBzTlVkbVNvOVFnb19GR1hXNTFDSG5PbHBZdmJFdnd5NHpKTHpnV0JyUXBWeHVlOWNSel85LW9GdWt0eXFHM2doT2FfXzQ?oc=5",
           "grade": "單一來源"
-        },
-        {
-          "name": "Fox News",
-          "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNTEg2SFp0WlFJN1h1Y0t3aGNnUlF4SFlGTTNicm1wVkUxc3hsdTRIdkhpZmUwTmxBUW90aE8yaW93bEhnMEtmRnA0Zy1mckgya1ZWcF9FSldlNmY3TzhXVU8zejVwSWJqM05zYVhDVmpQY2ZidURzT1hqc1JISmVmb3hhZzlCZm43cHZ3QmRiYnJKV3VxVTZDeE9idVNqVWPSAaQBQVVfeXFMTUNWMEpUbkt3ejJ4aG5YeVRZZnJwckFHNjFsNU1Nb3hqZDZ4akhvbVA4RlozeGxtM3hJUUFzczY1eUVGZUpfbU52b05xYzhUTkpMYXJ0M3BBOF9vbXliWC1zeDFncDhCWDVOTE54azA3TGduTUZnZXBJbUZlcFM2cVJmS0xJc21JNWJvcVhpbnhNVmJGM3BCdURXdkJHbnhZSmNCUWk?oc=5",
-          "grade": "單一來源"
         }
       ],
       "confidence": "多方報導",
-      "source_count": 3
+      "source_count": 2
     },
     {
       "title": "US military launches new airstrikes to 'swiftly punish' Iran for deaths of US troops - WPBF",
@@ -674,11 +758,6 @@
         {
           "name": "WPBF",
           "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPZ1BvYS1nd0dpQ2tSUHpUS2wyT1FwS0JlTnJPUW1wZ00zTkRrdjhaSGN6cHhnSHZmMWRZMWFBaElhNll0WjV0NGE3Um1KcnktSFpabkdnMGRDYlUwSXA3dVlXTU1ndnVHY2JYNWhYWklEclhpWUZiVnA3WUo1Nm1PY0s5R2E4WnpMVmNCOHIzdTI?oc=5",
-          "grade": "單一來源"
-        },
-        {
-          "name": "KCRA",
-          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPVExYQ3dmenhsMFJseDVpS3JNMUtWdGo3QUVhZkx5RHhuWm9aV2lFWW1XTWlRdWF3emMzeVhUZEhCQkpQV1JZQV9wanZBVjJhYUJBS1hjWlZnLVl5VjVyYWdRbmxqU0xCRF8tYnVhMElzWlA5R0NYYVZCazVZRVoxalhqODhoSjZ6MU9RUkNiRGU?oc=5",
           "grade": "單一來源"
         },
         {
@@ -708,7 +787,7 @@
         }
       ],
       "confidence": "多方報導",
-      "source_count": 7
+      "source_count": 6
     },
     {
       "title": "U.S. says it targeted Iranian forces after attacks that killed two American service members - CNBC",
@@ -783,30 +862,6 @@
       "source_count": 1
     },
     {
-      "title": "U.S. Launches Strikes After Iranian Attack Kills 2 American Soldiers - The New York Times",
-      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOVTFHUXljM3RIal94ckFqUE55T21GbWZDcExRWWlWQUU4cDlFLXh2LW5HTE9IZ0VTWC1Wb2ZubXlKU0pXd29wQ1VsZjgwNUVhcGJkVnlibzhJbzNHOHE0LUNTaXlyd2ZSY2tTN3duZHhOdnJMNjRWcjB1WW1uNHdNdQ?oc=5",
-      "source": "The New York Times",
-      "published_at": "2026-07-19T08:30:43Z",
-      "category": "基礎設施",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": false,
-        "maritime_pressure": false,
-        "diplomacy": false,
-        "weakness_signal": false,
-        "resilience_signal": true
-      },
-      "sources": [
-        {
-          "name": "The New York Times",
-          "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOVTFHUXljM3RIal94ckFqUE55T21GbWZDcExRWWlWQUU4cDlFLXh2LW5HTE9IZ0VTWC1Wb2ZubXlKU0pXd29wQ1VsZjgwNUVhcGJkVnlibzhJbzNHOHE0LUNTaXlyd2ZSY2tTN3duZHhOdnJMNjRWcjB1WW1uNHdNdQ?oc=5",
-          "grade": "大型媒體"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 1
-    },
-    {
       "title": "US hits Iran for 8th consecutive night; Tehran returns fire on Gulf bases - Al Jazeera",
       "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQZ09yckNWOXBKdUdHbkN3aWtnVnNaU21melI0c0VWeWpGZHpKNnlwR2g2N0Y0bHQtYWRia0hWUkVFVEd3N3I1T1NZQjJ5LW9UaW9CNS1CT2xDSkluc25uS0pqSjdlS1MxSEsyX0puUnZIVnF0VUlMVXBHNTNmbGIzWEpJN3pla0czTkpvcldMX2JRVWU0SksxSjkxWXHSAaIBQVVfeXFMT3dMM18yU2kwVkRlTklZY00tQW02LTRiYUFycDZqcDFsaUZPR1N3Wmc4R21yS2NibDU3WXBhOU1sNUp1MkVpTGFuZThCZ1lvYUYzYkF5VjhHVk1kYUNtbVVHOTlfeWRJNk9QMlpWRXZCNzNOeFp5VkNCekdmeFB5MDVwcGJ0MDV3d1F6OHVOd2ZmRGhNNGhyVkxTeGZZS0JzVW9R?oc=5",
       "source": "Al Jazeera",
@@ -873,6 +928,30 @@
           "name": "The Washington Post",
           "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNUDhIaFk3Yi1tNnR6Y3Y3QlhhUjVKSEp2bWJrLVJGQ3kyZ00yUUVrZ3AtV2JRS0ZmN1dCU25CUGFwNFVYLTd6QVRRV3dzNlpHN3lPX0xSaWxpX2laSkNxWmdKQnhNU25BRmJFNXFHM1lHZFJIckZnVllzenNRS081NWhpR2xVQ0ZfT0NDXzV2M2FTdHlPUXpPTWdRdXBKR0xJOUdqWUwyYTN2Rlly?oc=5",
           "grade": "大型媒體"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
+    {
+      "title": "Iran hits US allies as Israel warns missiles headed for Jordan could land on its territory - ABC News - Breaking News, Latest News and Videos",
+      "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQLTFXdWpEeUNSaklBencySE1odklSZlFkc2FEMWpOVWczWENsY1Q5ZFJyeWV0X19MT2RvN3kwR204dmhEU3Y0LWpWYTdWSnBtby1nTjNoM0pZcERrX21oYXltRW96TG1NMDRsMloyR2pYVjc2NnJoU09kMnVrUDIxZjNtSzNreVJsMGtEbFJCQXR2SV9MOXdpbTNDMy02YjFCTXfSAacBQVVfeXFMT241cnV4b0xDcDQ3cDZReXcxTjB5dVRzSWRLcGNWWmVxNDNtbkJFdEtaaWZON1NxZ085RU1nN3duVGttNzJPb2hMUXgyY1pJMl9OT2txdGp2am5iWU5tOUwzam8xbDE4cTc2MkxIOFV3QkRWNHgzOU91MWRjRmFxNm9HUWxPaER0TEZmTFJtbXpETDA4cHB0MmVSTDZZNVNQVmFWMmhDUUU?oc=5",
+      "source": "ABC News - Breaking News, Latest News and Videos",
+      "published_at": "2026-07-19T04:58:33Z",
+      "category": "軍事行動",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": true,
+        "maritime_pressure": false,
+        "diplomacy": false,
+        "weakness_signal": false,
+        "resilience_signal": true
+      },
+      "sources": [
+        {
+          "name": "ABC News - Breaking News, Latest News and Videos",
+          "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxQLTFXdWpEeUNSaklBencySE1odklSZlFkc2FEMWpOVWczWENsY1Q5ZFJyeWV0X19MT2RvN3kwR204dmhEU3Y0LWpWYTdWSnBtby1nTjNoM0pZcERrX21oYXltRW96TG1NMDRsMloyR2pYVjc2NnJoU09kMnVrUDIxZjNtSzNreVJsMGtEbFJCQXR2SV9MOXdpbTNDMy02YjFCTXfSAacBQVVfeXFMT241cnV4b0xDcDQ3cDZReXcxTjB5dVRzSWRLcGNWWmVxNDNtbkJFdEtaaWZON1NxZ085RU1nN3duVGttNzJPb2hMUXgyY1pJMl9OT2txdGp2am5iWU5tOUwzam8xbDE4cTc2MkxIOFV3QkRWNHgzOU91MWRjRmFxNm9HUWxPaER0TEZmTFJtbXpETDA4cHB0MmVSTDZZNVNQVmFWMmhDUUU?oc=5",
+          "grade": "單一來源"
         }
       ],
       "confidence": "單一來源",
@@ -968,30 +1047,6 @@
         {
           "name": "Institute for the Study of War",
           "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxQMjk0Tm1fVGFJX2Jmak11R3Y4QVFzTm9KQng4NElpLWljaUwtX0xRZ244ZXAtUzJoRE1odDNkMGx2c2pBRXpVN0VUdWtRRDJxNHR5Y3FvSGl0WmI4MlJXTFR4TG1yNTd2amlGeUdWRFdmSnBnSzR2SEJUU3pjQUgxYlJzcGl1ak5ZZmpud21ETF9Dbk9t?oc=5",
-          "grade": "單一來源"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 1
-    },
-    {
-      "title": "IAEA reports \"significant progress\" in Iran's uranium enrichment programme - AsiaNews",
-      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQb3FzVnMyVFU4eklmRVVCOVpUS0RJd190anVxdVdaVm1WU0hNNVZ5Z0o2aUJKZHpaNnZWcm9Vbl94R1ZkWVVFMWlFMm9NR0hmdkJ2a253U29LSUNGWkstemx4ZUlqY2JVS0VjSm9pT3N4UW1hSUM5bGVZTUtKN2lXZG5PbDd3dVhIcEpPeUVMajkzYW5xMkpkdnR3MjlCQm5idzJOOW1uOGY1dnRPRE9RLUdSNGJvZHM?oc=5",
-      "source": "AsiaNews",
-      "published_at": "2026-07-18T23:39:18Z",
-      "category": "海峽與商船",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": false,
-        "maritime_pressure": true,
-        "diplomacy": false,
-        "weakness_signal": false,
-        "resilience_signal": false
-      },
-      "sources": [
-        {
-          "name": "AsiaNews",
-          "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQb3FzVnMyVFU4eklmRVVCOVpUS0RJd190anVxdVdaVm1WU0hNNVZ5Z0o2aUJKZHpaNnZWcm9Vbl94R1ZkWVVFMWlFMm9NR0hmdkJ2a253U29LSUNGWkstemx4ZUlqY2JVS0VjSm9pT3N4UW1hSUM5bGVZTUtKN2lXZG5PbDd3dVhIcEpPeUVMajkzYW5xMkpkdnR3MjlCQm5idzJOOW1uOGY1dnRPRE9RLUdSNGJvZHM?oc=5",
           "grade": "單一來源"
         }
       ],
@@ -1619,78 +1674,6 @@
       "source_count": 1
     },
     {
-      "title": "US-Iran talks to end war on the line amid renewed strikes - Modern Ghana",
-      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBtbHYzTmU5clFoUU44Q2JCSlpVdkpRU3p2LVBZOUw0V3U0cDRDSTdvcHNPMGlDYUIzTDhQRVpUMEhUWU83YXB2azZ0WEFRRVlmb3k5MlgzcFJlOUlvZ0h2Qlg0U2dJQdIBXEFVX3lxTE1Xdnh2cUJrdGZWTHNSeFZTSnZSUVlvTkdLbW0xc29VMnJfYlprbkJiLWpnYXFZSGc1bE5qcWRyT1BrRWpTTFloVDJ5dHkxU0dZbVlMSjFGVGI3eGVS?oc=5",
-      "source": "Modern Ghana",
-      "published_at": "2026-07-18T09:18:19Z",
-      "category": "外交與停火",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": false,
-        "maritime_pressure": false,
-        "diplomacy": true,
-        "weakness_signal": false,
-        "resilience_signal": false
-      },
-      "sources": [
-        {
-          "name": "Modern Ghana",
-          "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTFBtbHYzTmU5clFoUU44Q2JCSlpVdkpRU3p2LVBZOUw0V3U0cDRDSTdvcHNPMGlDYUIzTDhQRVpUMEhUWU83YXB2azZ0WEFRRVlmb3k5MlgzcFJlOUlvZ0h2Qlg0U2dJQdIBXEFVX3lxTE1Xdnh2cUJrdGZWTHNSeFZTSnZSUVlvTkdLbW0xc29VMnJfYlprbkJiLWpnYXFZSGc1bE5qcWRyT1BrRWpTTFloVDJ5dHkxU0dZbVlMSjFGVGI3eGVS?oc=5",
-          "grade": "單一來源"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 1
-    },
-    {
-      "title": "Why is Trump risking midterm disaster by resuming the unpopular Iran war? - The Guardian",
-      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQdFJMQmVwMHBzV3hXbjJiRWMySzBzU3B1MTJBS0FDeTJhdm0wcVd6aEU2QXVMd01EV2pjOVF6MHN5VnR2NGRhQnZ4Z2lKRFZyWkk5SWUyMGM5NzA0bEZyYWxwZHFxSVdoSkc4QXZjWUtidGdtNDExOURGRG1pcmExN1AyeVg3bTh1d1Rz?oc=5",
-      "source": "The Guardian",
-      "published_at": "2026-07-18T09:00:00Z",
-      "category": "核問題",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": false,
-        "maritime_pressure": false,
-        "diplomacy": false,
-        "weakness_signal": false,
-        "resilience_signal": false
-      },
-      "sources": [
-        {
-          "name": "The Guardian",
-          "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQdFJMQmVwMHBzV3hXbjJiRWMySzBzU3B1MTJBS0FDeTJhdm0wcVd6aEU2QXVMd01EV2pjOVF6MHN5VnR2NGRhQnZ4Z2lKRFZyWkk5SWUyMGM5NzA0bEZyYWxwZHFxSVdoSkc4QXZjWUtidGdtNDExOURGRG1pcmExN1AyeVg3bTh1d1Rz?oc=5",
-          "grade": "單一來源"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 1
-    },
-    {
-      "title": "Trump may have to choose between an endless quagmire and ceding the Strait of Hormuz to Iran - Fortune",
-      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOY0xOejBoWEpnYkFsOVNFdmFLWWl3cVlnOFQ3bldfejgyRXNrODBPRGZEM0ZHY29GMTdReHZ0dlBjbEZBVG5kU3dubDV1cGljNE1KNGNUT0dRdWVUdVJTcmJCcWdESVJ5dlVrLV9zQW1lczJUSVBYYlRqaU5vYndyZDVxal9oRkQwVXQxR2Z4Y28?oc=5",
-      "source": "Fortune",
-      "published_at": "2026-07-18T08:07:00Z",
-      "category": "海峽與商船",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": false,
-        "maritime_pressure": true,
-        "diplomacy": false,
-        "weakness_signal": false,
-        "resilience_signal": false
-      },
-      "sources": [
-        {
-          "name": "Fortune",
-          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOY0xOejBoWEpnYkFsOVNFdmFLWWl3cVlnOFQ3bldfejgyRXNrODBPRGZEM0ZHY29GMTdReHZ0dlBjbEZBVG5kU3dubDV1cGljNE1KNGNUT0dRdWVUdVJTcmJCcWdESVJ5dlVrLV9zQW1lczJUSVBYYlRqaU5vYndyZDVxal9oRkQwVXQxR2Z4Y28?oc=5",
-          "grade": "單一來源"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 1
-    },
-    {
       "title": "US strike on water desalination plant left about 10,000 without water: Iranian official - Anadolu Ajansı",
       "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxNVkNhTHcwVzdYdXFWazJYRjFaOEVKYUc0Z1NlLUFJQlgwVG9IS1I0cTlwVXJiLUFtUmZVeXdVSG9WU2NDUnJaVVJ4UVRDNDdQeHVjQXFNZVhQZTJocjZwS2ctUW1ZbS1adDRmejJrQnIyaEJUOG5CMENnRzcyc09sUlV6UXZTTzRUTDdxU1dPS2ZWUjh4RlJUVkZleVRwY2xKNDVGREN1V1pFUVJDa2prLW9zYUxPNGhBRWVHV3R4V0NWek1YdllIb0VuMjRRMXNmMS13RQ?oc=5",
       "source": "Anadolu Ajansı",
@@ -1781,6 +1764,35 @@
           "name": "iHeart",
           "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOUjdUOU9RaHhlLXZLeHBDLVdMbWlkV3ZBMEhVY3JKZ1RxcVdid3kxUE16LXJKUWxEa2FHZ2hXamtuMmQ1bFJuQXpVdTVBRTl2WmthNHplRlZEV0g3b0lTUFFNVVRfdW5LaVdERmk5bThwTnl0N04ybHBIWGlqT0hXV19LZVkxZjVJMTU3QldLX01DUVI4aDVEaXhiYUxQUUhXMXJ1VjdIZGZ6eUNfOU9ydzhFVXFNdw?oc=5",
           "grade": "單一來源"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
+    {
+      "title": "US military says it completed latest strikes on Iran, marking 7th consecutive night of attacks - Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNd1Zpc0tXYzd1NVhsVFJ2VHRXTkl5ZTA0Y0I0Yk9TeFNKbFZoRWpEWTM0Y0NBdmlKUFJIMHlFRGdYWTNDZEF2THo1azkyV3JabU9GOUxGQ3hwY2pxOUJXVUVlaUxHeFpiNVFxYVA2NTZmMTNLOHY1b3JjTVJfT0piMnFoZ2ZicnVXUkdMWG5jY21MUUxLZnpKeDB0V2NqaEdyWHZBTzRXV18zQzhJek9tREx3MW8wcGVaa25MbExTV0tXZWZyd2x3X21ueGNUUQ?oc=5",
+      "source": "Reuters",
+      "published_at": "2026-07-18T04:59:24Z",
+      "category": "軍事行動",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": false,
+        "maritime_pressure": false,
+        "diplomacy": false,
+        "weakness_signal": false,
+        "resilience_signal": true
+      },
+      "sources": [
+        {
+          "name": "Reuters",
+          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNd1Zpc0tXYzd1NVhsVFJ2VHRXTkl5ZTA0Y0I0Yk9TeFNKbFZoRWpEWTM0Y0NBdmlKUFJIMHlFRGdYWTNDZEF2THo1azkyV3JabU9GOUxGQ3hwY2pxOUJXVUVlaUxHeFpiNVFxYVA2NTZmMTNLOHY1b3JjTVJfT0piMnFoZ2ZicnVXUkdMWG5jY21MUUxLZnpKeDB0V2NqaEdyWHZBTzRXV18zQzhJek9tREx3MW8wcGVaa25MbExTV0tXZWZyd2x3X21ueGNUUQ?oc=5",
+          "grade": "大型媒體"
+        },
+        {
+          "name": "Reuters",
+          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNcU5Ec2J3b2lDc21BVGR3cWYxV185VjZLdk9tTzlndk5Tc3hPblNOQXVZY3hrYjU3bW9Mek9yZXVFV2tUV2d1NThXTnZ5SkhucHh4X3VPTlkxdk9SX2FlTndvTWRRUnB4ak01QmFWVzQ2RzVaYk1pWU1VMElXRW5jaFM5czAzR2VWeF9neExJZlgwaDhvV2pJbWh4LWV1bWJ5bnRRZmVyckRhNFNwNkVjdEJGdlFYbHc4d2FBTEx0U0ZsRFVaT1RIUmNNWHlrdw?oc=5",
+          "grade": "大型媒體"
         }
       ],
       "confidence": "單一來源",
@@ -1912,10 +1924,10 @@
       "source_count": 2
     },
     {
-      "title": "US, Iran trade attacks for seventh straight night as strikes spread across Middle East - Arab News",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5TUnRtNGU4MmNNRGpwSm5KSXVtY0ZFWDZFdC1saDI3RC05SlJZR2NvaVZnazVndWpJRmdSLU5EVW02SlZLcVN5a3I0bThpSTRfbXRB?oc=5",
-      "source": "Arab News",
-      "published_at": "2026-07-18T03:14:15Z",
+      "title": "US, Iran trade attacks for seventh straight night as strikes spread across Middle East - arabnews.jp",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1PWklrT19WSXNYbGltQWptaUhWUUZzeTV2Y3Y4bHl1UGtibVpQX1VOTF9QWEFyRFFXM21OV2FmTUxxT0NqTDlIbkpaUHhRdFJmWE80MFlYcnVPdkdjSHdaU0ZkQTU?oc=5",
+      "source": "arabnews.jp",
+      "published_at": "2026-07-18T03:35:31Z",
       "category": "外交與停火",
       "collector": "Google News RSS",
       "flags": {
@@ -1927,8 +1939,8 @@
       },
       "sources": [
         {
-          "name": "Arab News",
-          "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5TUnRtNGU4MmNNRGpwSm5KSXVtY0ZFWDZFdC1saDI3RC05SlJZR2NvaVZnazVndWpJRmdSLU5EVW02SlZLcVN5a3I0bThpSTRfbXRB?oc=5",
+          "name": "arabnews.jp",
+          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1PWklrT19WSXNYbGltQWptaUhWUUZzeTV2Y3Y4bHl1UGtibVpQX1VOTF9QWEFyRFFXM21OV2FmTUxxT0NqTDlIbkpaUHhRdFJmWE80MFlYcnVPdkdjSHdaU0ZkQTU?oc=5",
           "grade": "單一來源"
         }
       ],
@@ -2032,29 +2044,24 @@
       "source_count": 1
     },
     {
-      "title": "US military says it completed latest strikes on Iran, marking 7th consecutive night of attacks - Reuters",
-      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNd1Zpc0tXYzd1NVhsVFJ2VHRXTkl5ZTA0Y0I0Yk9TeFNKbFZoRWpEWTM0Y0NBdmlKUFJIMHlFRGdYWTNDZEF2THo1azkyV3JabU9GOUxGQ3hwY2pxOUJXVUVlaUxHeFpiNVFxYVA2NTZmMTNLOHY1b3JjTVJfT0piMnFoZ2ZicnVXUkdMWG5jY21MUUxLZnpKeDB0V2NqaEdyWHZBTzRXV18zQzhJek9tREx3MW8wcGVaa25MbExTV0tXZWZyd2x3X21ueGNUUQ?oc=5",
-      "source": "Reuters",
-      "published_at": "2026-07-18T02:40:00Z",
-      "category": "軍事行動",
+      "title": "US positions refueling aircraft for potential strikes on Iran nuclear sites - Crypto Briefing",
+      "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPTFYxMWNsWHplbjB4bzh1UUtpT3BHMlNjSnFPN3JoV05jRnJWM1RhcjRGRXFhSkNHdmpYYm5lQXQ4Q3Y4dVY3STRhZUl6NjBBMkpTX1RNQWhXbkdhZXp4Y2JlNWtiMDFOMkl1ZWcwc3JjalROdF9peWw0QUJyVVZ5WEtpYmllTVJGT2p3SVFSTjAwY0EwNWdXbVQ4R09GSEl2dEJOaVFB?oc=5",
+      "source": "Crypto Briefing",
+      "published_at": "2026-07-18T02:07:35Z",
+      "category": "核問題",
       "collector": "Google News RSS",
       "flags": {
         "reported_consequence": false,
         "maritime_pressure": false,
         "diplomacy": false,
         "weakness_signal": false,
-        "resilience_signal": true
+        "resilience_signal": false
       },
       "sources": [
         {
-          "name": "Reuters",
-          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNd1Zpc0tXYzd1NVhsVFJ2VHRXTkl5ZTA0Y0I0Yk9TeFNKbFZoRWpEWTM0Y0NBdmlKUFJIMHlFRGdYWTNDZEF2THo1azkyV3JabU9GOUxGQ3hwY2pxOUJXVUVlaUxHeFpiNVFxYVA2NTZmMTNLOHY1b3JjTVJfT0piMnFoZ2ZicnVXUkdMWG5jY21MUUxLZnpKeDB0V2NqaEdyWHZBTzRXV18zQzhJek9tREx3MW8wcGVaa25MbExTV0tXZWZyd2x3X21ueGNUUQ?oc=5",
-          "grade": "大型媒體"
-        },
-        {
-          "name": "Reuters",
-          "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxNcU5Ec2J3b2lDc21BVGR3cWYxV185VjZLdk9tTzlndk5Tc3hPblNOQXVZY3hrYjU3bW9Mek9yZXVFV2tUV2d1NThXTnZ5SkhucHh4X3VPTlkxdk9SX2FlTndvTWRRUnB4ak01QmFWVzQ2RzVaYk1pWU1VMElXRW5jaFM5czAzR2VWeF9neExJZlgwaDhvV2pJbWh4LWV1bWJ5bnRRZmVyckRhNFNwNkVjdEJGdlFYbHc4d2FBTEx0U0ZsRFVaT1RIUmNNWHlrdw?oc=5",
-          "grade": "大型媒體"
+          "name": "Crypto Briefing",
+          "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPTFYxMWNsWHplbjB4bzh1UUtpT3BHMlNjSnFPN3JoV05jRnJWM1RhcjRGRXFhSkNHdmpYYm5lQXQ4Q3Y4dVY3STRhZUl6NjBBMkpTX1RNQWhXbkdhZXp4Y2JlNWtiMDFOMkl1ZWcwc3JjalROdF9peWw0QUJyVVZ5WEtpYmllTVJGT2p3SVFSTjAwY0EwNWdXbVQ4R09GSEl2dEJOaVFB?oc=5",
+          "grade": "單一來源"
         }
       ],
       "confidence": "單一來源",
@@ -2157,30 +2164,6 @@
       "source_count": 1
     },
     {
-      "title": "Five explosions in Yazd amid US-Israel strikes on Iran’s nuclear sites - Crypto Briefing",
-      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOeGx1WUVaRWh5VTZKUnV0bjAxV0xCTFFwS2I5U2NwSWRQb3A5aGI2UkpEay1jeWxCTWxWUzloaTBYOFV2YUJrQWg4WjUtYnlNMVluMXFOaFd4UHBrSEM5WjBWc1NLR2Q5cDg5OUVONGQxUmVRWm9ZckNfUUE0ZlZENF9qMmMxcGdlRVVJckk5Uk95MlZ5dDhaSG9iZGRPZw?oc=5",
-      "source": "Crypto Briefing",
-      "published_at": "2026-07-17T22:41:02Z",
-      "category": "核問題",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": false,
-        "maritime_pressure": false,
-        "diplomacy": false,
-        "weakness_signal": false,
-        "resilience_signal": false
-      },
-      "sources": [
-        {
-          "name": "Crypto Briefing",
-          "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxOeGx1WUVaRWh5VTZKUnV0bjAxV0xCTFFwS2I5U2NwSWRQb3A5aGI2UkpEay1jeWxCTWxWUzloaTBYOFV2YUJrQWg4WjUtYnlNMVluMXFOaFd4UHBrSEM5WjBWc1NLR2Q5cDg5OUVONGQxUmVRWm9ZckNfUUE0ZlZENF9qMmMxcGdlRVVJckk5Uk95MlZ5dDhaSG9iZGRPZw?oc=5",
-          "grade": "單一來源"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 1
-    },
-    {
       "title": "US, Iran attack infrastructure in re-escalation - The Express Tribune",
       "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNLVdUeENKcDNZU3BjOXN5R3g5c01EdUV0a1huLVhKLXlTWVB0MGotWS1wZllwRW1WZzhJYjhPY3llQ3dTTmpUZTJQWVlkSEdka3dTa3hnWVdyNUZQRUl5U0JjQmQ1bUZxQVVsejRqMmItcV9jMFFKTUEyMWVOQUZHRUpLNGVpOUFEcjJZ0gGTAUFVX3lxTE1Bb2F1NWtmZFRtOGZmekpLUkZjVnp2OWtxVFFhUUFhaUFCVktWTGxieC1fell1RXR4ZmlESmNDZUl6SFJDMzAwY1VtWERpcjU4N25SdUtEeTl5d3R1ZzctMjhUdC1CTVJ0Q1hVVmk1SjMxeW9YWkVpVzZfX1Y3cnhWTGZaTjFxbVA0UU14OUFtRHp3QQ?oc=5",
       "source": "The Express Tribune",
@@ -2263,6 +2246,30 @@
       "source_count": 1
     },
     {
+      "title": "The U.S. and Iran Signed a Memorandum of Misunderstanding - Foreign Policy",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE8zRjlINmVFYTFSdXhOVmpTNmN1OHVNNk5ubThaUjk4YndRUGRKZTQ2blphT29lbGFaOG1qM1k2ZXY4QkNSampaY09aLWtRdWhoWXFmYjMzRDF3V3dadXNfOC1sdE1sajc3Mmg4ci1sU3ZMMFhlMzg4?oc=5",
+      "source": "Foreign Policy",
+      "published_at": "2026-07-17T19:55:51Z",
+      "category": "外交與停火",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": false,
+        "maritime_pressure": false,
+        "diplomacy": false,
+        "weakness_signal": false,
+        "resilience_signal": false
+      },
+      "sources": [
+        {
+          "name": "Foreign Policy",
+          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE8zRjlINmVFYTFSdXhOVmpTNmN1OHVNNk5ubThaUjk4YndRUGRKZTQ2blphT29lbGFaOG1qM1k2ZXY4QkNSampaY09aLWtRdWhoWXFmYjMzRDF3V3dadXNfOC1sdE1sajc3Mmg4ci1sU3ZMMFhlMzg4?oc=5",
+          "grade": "單一來源"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
+    {
       "title": "As U.S. strikes bridges in Iran, it targets a water desalination plant in Kuwait - PBS",
       "url": "https://news.google.com/rss/articles/CBMiswFBVV95cUxPd2l1dFg1bm9oN0N4TkxfYmdvNVg5Z01PaWJYdDBxbjU2ejZ6dEc1dnNBOEh2bkRrdExpRTg4WHNJNUNjRW1CTzg0QWFrcnJoZmxvQjdWeFNKQVBzanZIOXlVYXB4VDIwNmg1aHl1R1JlRUJUaGtITFpUeFgwUFU4bENGUDNLWkRNRFgyM0FHVzQ4elVxR0lCVnFPSXFEUEZLUTVUcEoyTVhnNkZqM3ZhcE1sY9IBuAFBVV95cUxPYmQzcDNDNDNiclNFcDZ4ZEtCZl9HYllzcWpSVXVFUWlUdVB5X1h4bGhreFdBQ29TMFBxZndmRlhfY01WSkhmVGcwcGs1Z3pOcFZHYkJyem5rTHZWQ3o5Rl9qbU5wczhsLUhyTGdHV1lpT0VfSUEyekVLNm9HQXlmM0ZURF9OTkY1V2s1VTRyTlR6ZVpqOWpsZW9rSmlUWEJIZHdNZ1hEbzVXTzY5V3NnVnlJaWl5UDRW?oc=5",
       "source": "PBS",
@@ -2329,10 +2336,15 @@
           "name": "AP News",
           "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQRGVJbndDX0t6eVRMcXVhUEtKLVlUYmJZeG5yYWNja0VPdU9nYTRuN25NeVRYcGNhaU5YT1poZW5LN2ZxUHRXaFhOZnp5Y2V6YnpUdWxaWUEyZlMzc2M0c1lIaUxIMmVpMkwza1NUSXAtbkhZNmYyekcxaFJTNmdTckhQamhyNHEyM2JickFyUFNMOVVLM1F5WVFkUlFmdHJIMVd3LWFJTmw?oc=5",
           "grade": "大型媒體"
+        },
+        {
+          "name": "Audacy",
+          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxNQm9ZVzMtWDRVdDVPMlRROEhzdkhIUmRvV3ZpaXhlalNlWjB4bkJzOVZrMDdDZ29qRXNSTWVaZDBwUVpDRVVoRkNwQzRLR0ZKSEY2eWUtcE4tUmdZTkZiQ2U4M185eGlHZW1VUDNMYWF6QWgtUXFTMF90RWp0eVIxVjhNbnI4eFdfTy1UOHQwQkJ4VEJ5Y1hPUEUxampJUnpWd3FtNHZOak95RlpCMDB5a0tZTk9vOGpp?oc=5",
+          "grade": "單一來源"
         }
       ],
-      "confidence": "單一來源",
-      "source_count": 1
+      "confidence": "多方報導",
+      "source_count": 2
     },
     {
       "title": "Sixth Day of US, Iran Counterattacks Puts Ceasefire Out of Reach - Military.com",
@@ -2496,30 +2508,6 @@
         {
           "name": "CNBC",
           "url": "https://news.google.com/rss/articles/CBMilwFBVV95cUxPc2ZkclBjdExUQmlrZURuWWltMFBvUmFEN3VVSkZDT0Y0ckZUZXRCU2pFV2NKeWUtek5IQ3Z5dUVkQzFOSHczUFVDT19fc0FBTUZWNGVRZUJVY216Rk05RkwyVklqTXlxTzZVczIyYjZINlRTZVpmVmFyRkVzcHpfallaeDRWR2tNeVVvdDZBYkttRjFUNHI00gGcAUFVX3lxTFBtUFFBeloxLXJKUXdIWkJTSHBoWERCNkV3WlN4OWFuaWIxQWJlWnBjcVYyUng0VDdkc21rMk90czUzdnd2ekJEOVUwbWFTLU9ja25LTDRteEJpaXhXVnVHTWFFZXlLNWlvODRIRUxlYW0zcWFwSzBxSWJSSUFYQnFQSFRKMy1kN1JTZ09GcE1WRnZlczV5ZVlxd2FweQ?oc=5",
-          "grade": "單一來源"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 1
-    },
-    {
-      "title": "Future of U.S.-Iran peace will depend on new peace negotiations, despite previous ceasefire: expert - CTV News",
-      "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPXzBzcGxGU0dtSm1VbjBIWmJidjVNZVZicmU4OWFILVU0OGVueTk0LTF2ZVBzU2xtbk5fSEZTZWYwLUozb1ZNV19qZV82OEs1RXpHNDREdWw4aENWM3pLSnRGYjBKOUtuZjY1czhEVEZjbUloOG5pQm41UzljNE95Wmd0RU9EZWVoUWN1OG9sRS1GT0UyQjBKS1hjazBDVTF6X05va3g4dXRKRzBzZi04RnhuNURtNGdPR1BpNDlvT2FGbHdLVGRfbjBnZHUwcGhjREE?oc=5",
-      "source": "CTV News",
-      "published_at": "2026-07-17T18:15:35Z",
-      "category": "外交與停火",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": true,
-        "maritime_pressure": false,
-        "diplomacy": true,
-        "weakness_signal": false,
-        "resilience_signal": false
-      },
-      "sources": [
-        {
-          "name": "CTV News",
-          "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPXzBzcGxGU0dtSm1VbjBIWmJidjVNZVZicmU4OWFILVU0OGVueTk0LTF2ZVBzU2xtbk5fSEZTZWYwLUozb1ZNV19qZV82OEs1RXpHNDREdWw4aENWM3pLSnRGYjBKOUtuZjY1czhEVEZjbUloOG5pQm41UzljNE95Wmd0RU9EZWVoUWN1OG9sRS1GT0UyQjBKS1hjazBDVTF6X05va3g4dXRKRzBzZi04RnhuNURtNGdPR1BpNDlvT2FGbHdLVGRfbjBnZHUwcGhjREE?oc=5",
           "grade": "單一來源"
         }
       ],
@@ -2789,30 +2777,6 @@
         {
           "name": "The Jerusalem Post",
           "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9NR0lDZmxsR3huMW5kTTA1aWRXbVV1bjBtazFpdC1kR0N4bTQ1WmkxREFkUW5DX1R0dXhBb0c1TG43NTROdUt2bzNNS195ZDZtalFWOTlyZDU1dlZYdXVMSE9FN2Z2UTlKWWc?oc=5",
-          "grade": "單一來源"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 1
-    },
-    {
-      "title": "Pakistan worried about being drawn into US-Iran conflict after Houthis attack Saudi Arabia - Middle East Monitor",
-      "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOUW52U2FudlJzd25WQXA5bE9oX2xGSHpDam92STBIekd4UGNONDd3ZEF3aE1HUkFCQmJ6cGE2dFNpMDdQMDJiQ2V4bGVTWjVkbnV1RmhVU1VDdjkzNDRoNDdGb3BhNGJSblhJUVhDOWRMMHYzeHFXTjd3NXpKYVVHNFE1NmZQT1BJcWxLTEtJdmxkeVJVNGFzeDN4QnF3MkN2SmxxeXR1UlB3QkM0ZXhRbFhaZ1BZN0FCQkpCV0c2S3pma2JqMnEzSlE2MnlrSWPSAdQBQVVfeXFMTy1ENTY1WlRTLTFrX003cC1hN2k5bmhTX052elQtYkFHZ0lJemdqN3Jlakk0d2FUTE9yR3ZTd0Vja1hrNDIzdEs4QkJtZUJVT0tFdVBuTGpid2QwS1BQanYyMzYwdFd0WHpKWFA5SXlMMlo4OTcxZ1pFbGdLb1JHQnlkSmZLM1FTUkF4WExpRkstZmdoUXlpQUEzOWllc19GZTBZRFVGejB6aVZRQ3QtNGlMTXlqVGZrZUt2U1ZSNE1PSl9vcHhvZTFMaVZIWm93MXE2WUU?oc=5",
-      "source": "Middle East Monitor",
-      "published_at": "2026-07-17T14:51:00Z",
-      "category": "外交與停火",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": false,
-        "maritime_pressure": false,
-        "diplomacy": false,
-        "weakness_signal": false,
-        "resilience_signal": true
-      },
-      "sources": [
-        {
-          "name": "Middle East Monitor",
-          "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxOUW52U2FudlJzd25WQXA5bE9oX2xGSHpDam92STBIekd4UGNONDd3ZEF3aE1HUkFCQmJ6cGE2dFNpMDdQMDJiQ2V4bGVTWjVkbnV1RmhVU1VDdjkzNDRoNDdGb3BhNGJSblhJUVhDOWRMMHYzeHFXTjd3NXpKYVVHNFE1NmZQT1BJcWxLTEtJdmxkeVJVNGFzeDN4QnF3MkN2SmxxeXR1UlB3QkM0ZXhRbFhaZ1BZN0FCQkpCV0c2S3pma2JqMnEzSlE2MnlrSWPSAdQBQVVfeXFMTy1ENTY1WlRTLTFrX003cC1hN2k5bmhTX052elQtYkFHZ0lJemdqN3Jlakk0d2FUTE9yR3ZTd0Vja1hrNDIzdEs4QkJtZUJVT0tFdVBuTGpid2QwS1BQanYyMzYwdFd0WHpKWFA5SXlMMlo4OTcxZ1pFbGdLb1JHQnlkSmZLM1FTUkF4WExpRkstZmdoUXlpQUEzOWllc19GZTBZRFVGejB6aVZRQ3QtNGlMTXlqVGZrZUt2U1ZSNE1PSl9vcHhvZTFMaVZIWm93MXE2WUU?oc=5",
           "grade": "單一來源"
         }
       ],
@@ -3149,6 +3113,30 @@
         {
           "name": "NBC News",
           "url": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPVEI2eGZFYnBWb2RZWU4yZERtYmVSMVdLeVk0UzJWOVp2bFRiVHFRQlpMaGwzQy15b1JsZlpfbU1ZRC0wNUZudldSdlRocWtueC1xekxieTZQQXdBMFY4Z1B1ZHlwWGFPaHdkM2FxaFhQekxrWVQ0WHJFdnhQZE4tTEkwdHFoSHhzVzV0TEtIZWFwRXNBMXFfLTlMLTFzMDY1Smc?oc=5",
+          "grade": "單一來源"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
+    {
+      "title": "US-Iran talks to end war on the line amid renewed strikes - Modern Ghana",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE53MUhSVXJVQkc1eWlSQ015UXVZOGlBZzNUN1dWXzFpdTlDYVAwSHkyVENCUWNaRTVKbDZ6TmJvNmlLbkt1NEprTm4tR1ZIRy12dzVuUzcwTGVfNHlDV3F2Wms0UlJSd9IBXEFVX3lxTE1Xdnh2cUJrdGZWTHNSeFZTSnZSUVlvTkdLbW0xc29VMnJfYlprbkJiLWpnYXFZSGc1bE5qcWRyT1BrRWpTTFloVDJ5dHkxU0dZbVlMSjFGVGI3eGVS?oc=5",
+      "source": "Modern Ghana",
+      "published_at": "2026-07-17T09:23:13Z",
+      "category": "外交與停火",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": false,
+        "maritime_pressure": false,
+        "diplomacy": true,
+        "weakness_signal": false,
+        "resilience_signal": false
+      },
+      "sources": [
+        {
+          "name": "Modern Ghana",
+          "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE53MUhSVXJVQkc1eWlSQ015UXVZOGlBZzNUN1dWXzFpdTlDYVAwSHkyVENCUWNaRTVKbDZ6TmJvNmlLbkt1NEprTm4tR1ZIRy12dzVuUzcwTGVfNHlDV3F2Wms0UlJSd9IBXEFVX3lxTE1Xdnh2cUJrdGZWTHNSeFZTSnZSUVlvTkdLbW0xc29VMnJfYlprbkJiLWpnYXFZSGc1bE5qcWRyT1BrRWpTTFloVDJ5dHkxU0dZbVlMSjFGVGI3eGVS?oc=5",
           "grade": "單一來源"
         }
       ],
@@ -3776,6 +3764,30 @@
       "source_count": 1
     },
     {
+      "title": "US Attacks Bridge Connecting Iran's Bandar Abbas And Shiraz | LIVE BLOG - i24NEWS",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPLXBOanZicUhNMnlDWU5ENlFaQ1RTZzUzQjZ0Tl90ZThhcHU5X2I5ajEtdjY3bjBjcmpBaERjRE1NbWw1WlV0cUJQTEkxZnVrZmF5SEZoTlZONHZTZE05QWExSlowblpxZGwydVMteDlIOGNUYjVNUGtIQktLSE9TUTEyY3FTWC0wY216Ym83U1hhaEdrME9acS12Y1NaSndIWEl3VF9yT3RXMGUyTlR6ak5JcDg4MkN0?oc=5",
+      "source": "i24NEWS",
+      "published_at": "2026-07-17T02:13:00Z",
+      "category": "基礎設施",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": false,
+        "maritime_pressure": false,
+        "diplomacy": false,
+        "weakness_signal": false,
+        "resilience_signal": true
+      },
+      "sources": [
+        {
+          "name": "i24NEWS",
+          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxPLXBOanZicUhNMnlDWU5ENlFaQ1RTZzUzQjZ0Tl90ZThhcHU5X2I5ajEtdjY3bjBjcmpBaERjRE1NbWw1WlV0cUJQTEkxZnVrZmF5SEZoTlZONHZTZE05QWExSlowblpxZGwydVMteDlIOGNUYjVNUGtIQktLSE9TUTEyY3FTWC0wY216Ym83U1hhaEdrME9acS12Y1NaSndIWEl3VF9yT3RXMGUyTlR6ak5JcDg4MkN0?oc=5",
+          "grade": "單一來源"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
+    {
       "title": "Oil prices rise after Kuwait says Iran attacked water desalination and power plant - CNBC",
       "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBQMXN4ZXNiODlXYWFTakk0MmFJZC1COWRISlM5azVsYVZXWHNqV242eVFPdFNVcUtxODlVSndoTHdrdFlld29hS3JlMzVqR0tFSFNGanE1dXhNakxoTmwtZnRTRmFoNVhsVzhSNnVGTdIBdEFVX3lxTE1SMFRwN01INEh6b1BrbVU3MkI0amVfT1ltdldYd205SGtsSVFyVGh3NDNYQU0tcEdxeGZkb0lLNUJ2czJ4QXpXZXkwOUZWSWotamU4dmFoanM3cC1zcy1iVEFONUQtYzNzWnFLMzc5cDAwSHRz?oc=5",
       "source": "CNBC",
@@ -3889,30 +3901,6 @@
         {
           "name": "DW.com",
           "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQMFdLT1VkT0pJVG5RNVFqelpHdFM1UWFaVEdZTGdXNGNhNTEzR2xQY3JSZzhkaTZtdDZhb2p1Y1UxaUIxX25yTVRQb2hldzdaS2ZmQkppNDUxbm4zZ2FHc0lab0xraUdMRUJLWHdxMmw0QjFLRVdweTIxWkZWQkN2QV9pVVcwVmt5V2FXSENoUTEzNENyWENRYw?oc=5",
-          "grade": "單一來源"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 1
-    },
-    {
-      "title": "Tehran billboard suggests Trump as next target amid US-Iran tensions - Crypto Briefing",
-      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPODRfLW94VzVuWmR0Z0s1andyOHM1UGs5eHZ2aFpqaU0tX2M0M1RHVHI5cnFub1plSG1TYnJnb3FBaXBqdHkxRU5FZ1BkcUdhYkJRRng0bnVvdjM1bUt4dmFHbzF0Z29CYWxjUk9BYmpuSENXZUJBTF9Bc0RtVHpZNDl5ZXpNZ2R6UFVFdXkwNDFIcXRnQ0VVSHdPY1g?oc=5",
-      "source": "Crypto Briefing",
-      "published_at": "2026-07-17T01:13:30Z",
-      "category": "外交與停火",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": false,
-        "maritime_pressure": false,
-        "diplomacy": false,
-        "weakness_signal": false,
-        "resilience_signal": false
-      },
-      "sources": [
-        {
-          "name": "Crypto Briefing",
-          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPODRfLW94VzVuWmR0Z0s1andyOHM1UGs5eHZ2aFpqaU0tX2M0M1RHVHI5cnFub1plSG1TYnJnb3FBaXBqdHkxRU5FZ1BkcUdhYkJRRng0bnVvdjM1bUt4dmFHbzF0Z29CYWxjUk9BYmpuSENXZUJBTF9Bc0RtVHpZNDl5ZXpNZ2R6UFVFdXkwNDFIcXRnQ0VVSHdPY1g?oc=5",
           "grade": "單一來源"
         }
       ],
@@ -4458,6 +4446,30 @@
       "source_count": 1
     },
     {
+      "title": "Pakistan worries about being drawn into US-Iran conflict after Houthis attack Saudi Arabia - Reuters",
+      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQSFhQU183WFFqVnZ6Z2VtXzc2LUk0eW9kSzZ4d3Y2Mk9fMkFmQTYteGFkeGZKMW1LYzFOclEzWWRQdDFZVFUxcDYzd1hGanh3WWJoZ0tDc2ljNmZ4aVN2cURsMFVtbXh1YnhaeG9pU0hscWFYclR3QWVDRUtobUhGQ2Q4ZkVfV1Y1STVsdk5QYnhHUy16UjFpMmhFRWV1V1FQRXhuTXdNOXdIVXB6b0tGV2dyMkNTVUJZVDNSeWR5VGdidFYwWGQ0cm5Eb1I?oc=5",
+      "source": "Reuters",
+      "published_at": "2026-07-16T14:25:14Z",
+      "category": "外交與停火",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": false,
+        "maritime_pressure": false,
+        "diplomacy": false,
+        "weakness_signal": false,
+        "resilience_signal": true
+      },
+      "sources": [
+        {
+          "name": "Reuters",
+          "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQSFhQU183WFFqVnZ6Z2VtXzc2LUk0eW9kSzZ4d3Y2Mk9fMkFmQTYteGFkeGZKMW1LYzFOclEzWWRQdDFZVFUxcDYzd1hGanh3WWJoZ0tDc2ljNmZ4aVN2cURsMFVtbXh1YnhaeG9pU0hscWFYclR3QWVDRUtobUhGQ2Q4ZkVfV1Y1STVsdk5QYnhHUy16UjFpMmhFRWV1V1FQRXhuTXdNOXdIVXB6b0tGV2dyMkNTVUJZVDNSeWR5VGdidFYwWGQ0cm5Eb1I?oc=5",
+          "grade": "大型媒體"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
+    {
       "title": "Iran vows to 'crush' regional infrastructure if US strikes escalate - Euronews",
       "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQeU9oSlRwTWRiaVJfcDRGOUVETk84VWtwRWRYR1hDcW1qSHZvalFoa1RSSXR4ek44OVdFWG82OHZSQ1RQd0tuN0hjOEdLWURFOXNBeTkzNGo1SjRTZFV5cGMwTEdQSVd6Q09VZzRsaXBGRF9IVlJSVWxYMFAteXF5aGx4cmpURUo4bHJjbG9OYWdIbFNYTkFBM1NGeW9tVTdJSm1QVlBFd0k?oc=5",
       "source": "Euronews",
@@ -4800,9 +4812,9 @@
     },
     {
       "title": "Mediator Pakistan says encouraging US, Iran to resume talks - news.cgtn.com",
-      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1EQnl1elFlWlo4TWtOYWNKLXoxOGJ3eTVSa01QcmRkSFQxZmJvOUcxQ1R6QURtYmRqaWVOX1NuRjhfNTJ0SjU1cXBiN2ZCZWJsZW84NWFyOHhHaVd4N3F4Ry1mUnFLSWRWUWJKckRB?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE40RmVXU05fZXBDSnNSVWZVY01Oby1nVDdKYVRlbVN6ZElXRUZHTFBwSFA3WXVrdTRmRGdjZzd3NnBiYU11UFFUODBRR3lWcjZDOG5hazJPUUlqWllWc3VObnZaUWdNSGlvZmZ4VUVB?oc=5",
       "source": "news.cgtn.com",
-      "published_at": "2026-07-16T06:50:13Z",
+      "published_at": "2026-07-16T06:49:59Z",
       "category": "外交與停火",
       "collector": "Google News RSS",
       "flags": {
@@ -4813,11 +4825,6 @@
         "resilience_signal": false
       },
       "sources": [
-        {
-          "name": "news.cgtn.com",
-          "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE1EQnl1elFlWlo4TWtOYWNKLXoxOGJ3eTVSa01QcmRkSFQxZmJvOUcxQ1R6QURtYmRqaWVOX1NuRjhfNTJ0SjU1cXBiN2ZCZWJsZW84NWFyOHhHaVd4N3F4Ry1mUnFLSWRWUWJKckRB?oc=5",
-          "grade": "單一來源"
-        },
         {
           "name": "news.cgtn.com",
           "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE40RmVXU05fZXBDSnNSVWZVY01Oby1nVDdKYVRlbVN6ZElXRUZHTFBwSFA3WXVrdTRmRGdjZzd3NnBiYU11UFFUODBRR3lWcjZDOG5hazJPUUlqWllWc3VObnZaUWdNSGlvZmZ4VUVB?oc=5",
@@ -5073,30 +5080,6 @@
       "source_count": 1
     },
     {
-      "title": "U.S. reimposes blockade and steps up strikes as Iran threatens to halt Mideast energy exports - NBC News",
-      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNVm9oV1QxNTc2dDVpV0FRZkZvdUhFNjB4ME1fSmxfSmZkdmRfYjRYcndtUUdMT2R1MVdTSjRRMEtJVkNzMU1WUFBVYWdxQ3N0ZDB6MHNpeTVQNVVOR0Q1NlZ2cjZiN0htZWhtMDVSMzlxbGpHeUdjdzJGaFNETm9QNnhxRUJsN0NycjV1OEUtWFN1VXFpUDJlOXUwamVKWW1IbHVST09pdUswLWxIMVZZ?oc=5",
-      "source": "NBC News",
-      "published_at": "2026-07-15T20:09:00Z",
-      "category": "海峽與商船",
-      "collector": "Google News RSS",
-      "flags": {
-        "reported_consequence": false,
-        "maritime_pressure": true,
-        "diplomacy": false,
-        "weakness_signal": false,
-        "resilience_signal": true
-      },
-      "sources": [
-        {
-          "name": "NBC News",
-          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNVm9oV1QxNTc2dDVpV0FRZkZvdUhFNjB4ME1fSmxfSmZkdmRfYjRYcndtUUdMT2R1MVdTSjRRMEtJVkNzMU1WUFBVYWdxQ3N0ZDB6MHNpeTVQNVVOR0Q1NlZ2cjZiN0htZWhtMDVSMzlxbGpHeUdjdzJGaFNETm9QNnhxRUJsN0NycjV1OEUtWFN1VXFpUDJlOXUwamVKWW1IbHVST09pdUswLWxIMVZZ?oc=5",
-          "grade": "單一來源"
-        }
-      ],
-      "confidence": "單一來源",
-      "source_count": 1
-    },
-    {
       "title": "U.S. attacks Iran as Strait of Hormuz tensions rise - FOX5 Vegas",
       "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxNTjVZU2ExTE9TdHctemNLbHlPaFFDTjUwcXlvM01jbWNwQXJVeFFmYVgwQWFuRklVeGtBVEdRQV9ZdGhEZ194SElCV2NST245QWs5cVRrSGRPaUlQVkVaUGhsZzJPVnhLR2VPUWMtNzJhcHNXbnBVdmhTeVRxYVctOEJMZlpHcldPMjhUQW1Hemo?oc=5",
       "source": "FOX5 Vegas",
@@ -5130,10 +5113,15 @@
           "name": "KCBD",
           "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxQRU5WS2NKUnJOdTI4RktsWkY3WkVBc3UtUEVRa0t0VFRLVW9OWHRRVlBvX1EzQmdjbm9aekRwR0NXTjQ4eUhDa3NvcEp5YmtmdHRvZ2pQaDNMeUpSVVdvU1QyNFBFODhfelp4NGhrOFk4ZE9XamZxYXNfZG1vVlNXR0FVUWpLLWtTSlE?oc=5",
           "grade": "單一來源"
+        },
+        {
+          "name": "WLBT",
+          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxPLWZiZTBIS3Y4RUhERDNwWmp0S2Z0TDFoeElUcVh4STJMTF9GdlNRa184U21QRlFxZDBreXotWU8wOWVtUWpwNHBXQUNrcHBQUEE3Q3Y1LUF5SlJWXzBkaDg3TEljMzZuMVF2UDYxZ29xbmduWjl0UENva1F3cXJacXdWY2hvNXVNaVE?oc=5",
+          "grade": "單一來源"
         }
       ],
       "confidence": "單一來源",
-      "source_count": 4
+      "source_count": 5
     },
     {
       "title": "The Strait of Hormuz: A U.S.-Iran Maritime Flash Point - Council on Foreign Relations",
@@ -5369,6 +5357,30 @@
         {
           "name": "Al Jazeera",
           "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxNMlZTaHktNXZnUHFpU1JTZFNPanpEamdkcmY0cy1FQ3B0NDJORVNGcXRaanNkUC1BeFU0OHhFWnNGQ1ZXYjZuTy1VMkJwN2hnWTI3TE9kRDdUd2s0ZG1uZG5DTkE3ZUZlODJQS2U5WkM2d2tYSDFtTFJ0bm5iODdsTWsyS3BzTG42Yml5SnJrOF9KNnZHczZCUXU3Yi1UdWRxSEQ0V3RFUmZjeXVO0gGyAUFVX3lxTFA2eWZ2Mm1VRjhuLUd3R3ZyWExJU1c1dmxZRERic0hrNWxSTlJWeG02dmNCNThfbUFkZmdCS2tVbm5EbE9FOGZhT0NqNnBwRXVsZW9adGF0dDQ4WjFtNmo0Rkhwbnhha0FBV2REY3l3eVVkbVdqUlBrb21yREV1dmQ1bzdlLW9ua2swTU5QNHZmdHl5Mk45cG9TaHgycEZpdnNGUGdCS1hmR2o5c0NuOFFKOEE?oc=5",
+          "grade": "單一來源"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
+    {
+      "title": "US reimposes blockade and steps up strikes as Iran threatens to halt Mideast energy exports - ABC7 Los Angeles",
+      "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNS2JDMnpTOU5nckNXTDhnTS1tZFplOHJQR1QzdUZpQ3JvRXQtTklPeXcxSTBFM1ZoTXoyS2FPSW81WGNVVmJ3LUdDdGpMSnhSUnNPYk5YRHp0c1JzZGtUUmV3cnlkejRNSWMwak05dWQzM3ZhSS1pelJSZTcxVjZnTmptZ3lMSmVYM3I2bDlkSkFTVTZPS0xHZHZOQXVCTkhrVFVCX0J0UGlOZ21xMkhvdHRwOERxQ1XSAbwBQVVfeXFMUG1fcC1yNC0yZXdTZHhUNUNNb05Ma3RhZkZrNlh1UjZnU3lVUXNPQXp5NUF1V1FLdVJOR1N5VlhBclNVd1RqRHVLaERVbjRSazRMd21yVVJHZ29acDBvdHVrV3haUzRESER6SzFfeHpnLXpuX0l5MkhoQ004MENxZ0R1T2tOS2xnYVJ0UXA2VWY5RUYyN0V6OFJJWldFb2NERHlFeEk2enB1Q1lLcGpoY29mYXZjZFNJM1AwSWI?oc=5",
+      "source": "ABC7 Los Angeles",
+      "published_at": "2026-07-15T13:19:17Z",
+      "category": "海峽與商船",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": false,
+        "maritime_pressure": true,
+        "diplomacy": false,
+        "weakness_signal": false,
+        "resilience_signal": true
+      },
+      "sources": [
+        {
+          "name": "ABC7 Los Angeles",
+          "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNS2JDMnpTOU5nckNXTDhnTS1tZFplOHJQR1QzdUZpQ3JvRXQtTklPeXcxSTBFM1ZoTXoyS2FPSW81WGNVVmJ3LUdDdGpMSnhSUnNPYk5YRHp0c1JzZGtUUmV3cnlkejRNSWMwak05dWQzM3ZhSS1pelJSZTcxVjZnTmptZ3lMSmVYM3I2bDlkSkFTVTZPS0xHZHZOQXVCTkhrVFVCX0J0UGlOZ21xMkhvdHRwOERxQ1XSAbwBQVVfeXFMUG1fcC1yNC0yZXdTZHhUNUNNb05Ma3RhZkZrNlh1UjZnU3lVUXNPQXp5NUF1V1FLdVJOR1N5VlhBclNVd1RqRHVLaERVbjRSazRMd21yVVJHZ29acDBvdHVrV3haUzRESER6SzFfeHpnLXpuX0l5MkhoQ004MENxZ0R1T2tOS2xnYVJ0UXA2VWY5RUYyN0V6OFJJWldFb2NERHlFeEk2enB1Q1lLcGpoY29mYXZjZFNJM1AwSWI?oc=5",
           "grade": "單一來源"
         }
       ],
@@ -5928,10 +5940,10 @@
       "source_count": 1
     },
     {
-      "title": "Former US Ambassador to Denmark talks US-Iran stand off as Trump shifts strategy - KOMO",
-      "url": "https://news.google.com/rss/articles/CBMiiAJBVV95cUxQS3FINy1DNUJhMVI3TjlIcW1RNU5qWmtROXE0Z183S09HNFc0R0ZuQjRzdmZtT0lKbkQwMDRORUhGTW1LdHhHTC1XOTFtLWJSVXNRSnd2WmVoY1lqRkNKSmZic1UtVVNiMW41YWZ5Qngxd0pJN0x3ZUtnY3lSS3NIVEN5LWZDalVhZ2wxWWZzRjV0ZmNBOVpxODFPSjRscWprZlh5aGdFVS1SY1doeHVTbHZNd19rQ3Y3V3Z3a05ZaXZJZUJ1Slp3VEF1VDNDVXRWWUdidDZRMUYwRTFhdUNqZm9SUllJYVBHRTM4cnJjZTdfOWF2T2VkTWRiZ2JRQUY3cDJIanJiaXg?oc=5",
-      "source": "KOMO",
-      "published_at": "2026-07-14T22:15:03Z",
+      "title": "Former US Ambassador to Denmark talks US-Iran stand off as Trump shifts strategy - KRCR",
+      "url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxNbkFYaEl3bnFBWnl4ZDQzQWtsblRuanJxRkFXdXcwT2NGbFE4T05DSFZIRUEzeEltMFJmM1Z2Ylczc1pBZzlDLWhYTHVEM1RlY2Z5VlJWQnhFYUtFSVJFZER3WEQtUjVaVUs3VUdZMDdwWFZzdUdUaDVDby13SHI1WUVjR2hQbVQ0RzRJYllhUUxsT19GTmxTV0htRy1LZEdfakl2cXRlNi1oQjZxcFZKLTV2MDk1cENQY0ZpeDF3a1JhbjhTd1BRRThDVmFma2ptZ2pzd0hMV1EzMWNlYzIwSC1NWmc3NXVvNjlFQVJfajV0Q1lyMUhjQXFLUkUxa004YnhsZHl3?oc=5",
+      "source": "KRCR",
+      "published_at": "2026-07-14T22:13:51Z",
       "category": "外交與停火",
       "collector": "Google News RSS",
       "flags": {
@@ -5943,8 +5955,8 @@
       },
       "sources": [
         {
-          "name": "KOMO",
-          "url": "https://news.google.com/rss/articles/CBMiiAJBVV95cUxQS3FINy1DNUJhMVI3TjlIcW1RNU5qWmtROXE0Z183S09HNFc0R0ZuQjRzdmZtT0lKbkQwMDRORUhGTW1LdHhHTC1XOTFtLWJSVXNRSnd2WmVoY1lqRkNKSmZic1UtVVNiMW41YWZ5Qngxd0pJN0x3ZUtnY3lSS3NIVEN5LWZDalVhZ2wxWWZzRjV0ZmNBOVpxODFPSjRscWprZlh5aGdFVS1SY1doeHVTbHZNd19rQ3Y3V3Z3a05ZaXZJZUJ1Slp3VEF1VDNDVXRWWUdidDZRMUYwRTFhdUNqZm9SUllJYVBHRTM4cnJjZTdfOWF2T2VkTWRiZ2JRQUY3cDJIanJiaXg?oc=5",
+          "name": "KRCR",
+          "url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxNbkFYaEl3bnFBWnl4ZDQzQWtsblRuanJxRkFXdXcwT2NGbFE4T05DSFZIRUEzeEltMFJmM1Z2Ylczc1pBZzlDLWhYTHVEM1RlY2Z5VlJWQnhFYUtFSVJFZER3WEQtUjVaVUs3VUdZMDdwWFZzdUdUaDVDby13SHI1WUVjR2hQbVQ0RzRJYllhUUxsT19GTmxTV0htRy1LZEdfakl2cXRlNi1oQjZxcFZKLTV2MDk1cENQY0ZpeDF3a1JhbjhTd1BRRThDVmFma2ptZ2pzd0hMV1EzMWNlYzIwSC1NWmc3NXVvNjlFQVJfajV0Q1lyMUhjQXFLUkUxa004YnhsZHl3?oc=5",
           "grade": "單一來源"
         }
       ],
@@ -6197,6 +6209,30 @@
       "source_count": 1
     },
     {
+      "title": "UAE says Iranian missiles struck oil tankers in Strait of Hormuz, one sailor killed - Reuters",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQdF9iNjRwdm9pODdabFB6TGd0b0llZjQxY3NDQWktelE1c2NnUERlYUs2TnNPc0JBaFZvWlZhM3VfRUVwTV9MZUFteVh3VlV0QVhfZi1NUGpQdEp3elpuYnFrVE9Yb1BzNmtGLWdiYlJ2THBOT3NrRmppdG5mNWFVRDcyWmFSRHJzWXJyVVpQYy16cVZKb1I1UEh4eFdYN1VURkFtQmNVanhnM2I4Y3JSLXhHTmhOMXBmSTRMZE4xam5CSlN1eGFR?oc=5",
+      "source": "Reuters",
+      "published_at": "2026-07-14T15:19:44Z",
+      "category": "海峽與商船",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": true,
+        "maritime_pressure": true,
+        "diplomacy": false,
+        "weakness_signal": false,
+        "resilience_signal": true
+      },
+      "sources": [
+        {
+          "name": "Reuters",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQdF9iNjRwdm9pODdabFB6TGd0b0llZjQxY3NDQWktelE1c2NnUERlYUs2TnNPc0JBaFZvWlZhM3VfRUVwTV9MZUFteVh3VlV0QVhfZi1NUGpQdEp3elpuYnFrVE9Yb1BzNmtGLWdiYlJ2THBOT3NrRmppdG5mNWFVRDcyWmFSRHJzWXJyVVpQYy16cVZKb1I1UEh4eFdYN1VURkFtQmNVanhnM2I4Y3JSLXhHTmhOMXBmSTRMZE4xam5CSlN1eGFR?oc=5",
+          "grade": "大型媒體"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
+    {
       "title": "Why Iran shut the Strait of Hormuz after decades of holding back - The Conversation",
       "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOa1R4SUpjZmNzcE1wZVIxVzJ2NmM5NUJsQzRHQ1NYQTBmVWktdnl5cXV6U1ZTR0hMM0tHMzhfamtlSGxGcExVdVhtcEt1cV9RSjdNQklhTkphLWpmaXdDUmI4eWhCSm54TDAxRmJpVmRwTURlWmxkaG0xZUFha3UzTmNGaVVCUUZodHNmTzUxRTJobEdGS2NpTEtpWnZGRXVJ?oc=5",
       "source": "The Conversation",
@@ -6383,6 +6419,30 @@
           "name": "The Straits Times",
           "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxQOTJNdm42Q29FNVlfWG1ld003UkIwUFhlUjB1WjlKSXRXQmQyemZSVlVJTnhWWTNfQU56TEVjdGhDV0JUcXBjemhwTXBxenRCNng2ZWpYSXBCUEg1UUVCTTBLT29STWloYmdTdTB3RHlwSzNza184dnhibnFtOUY5VWRscnZWeDRsMXFZREpvMlpxT2ZuMktlQ0VOYldDQ1hRTEdoQk93NXNQa1dNRnA3Q0hLN1VVLXo2NGRTSFpLOGhFN2dOclVCZ1dZZWlfTmcxMlNpRUtEU194WG93Q2xv?oc=5",
           "grade": "單一來源"
+        }
+      ],
+      "confidence": "單一來源",
+      "source_count": 1
+    },
+    {
+      "title": "US-Iran hostilities escalate as ceasefire effectively collapses - CNN",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOOGp6OU4xRzQ5TkVuQV8xcHQzdmF6elhlWTBsdTg3eGI3b1hERGp6d09tWHNyT2tkX1VXSFNmal9RbFVUVl9aZmhIMC1IT2oxd2Q5d1pjNWtQT2tqd1RGM0w5LW1VdWZHMDBENnVValdRMVVqcjlaYV9adGxTZlN2a2xYTnhCa2dZYnBIX0RzQXQzc2tKNGJlMklGRWFJWXY3RVN0NVg2RFlrQQ?oc=5",
+      "source": "CNN",
+      "published_at": "2026-07-14T10:59:00Z",
+      "category": "外交與停火",
+      "collector": "Google News RSS",
+      "flags": {
+        "reported_consequence": true,
+        "maritime_pressure": false,
+        "diplomacy": true,
+        "weakness_signal": false,
+        "resilience_signal": false
+      },
+      "sources": [
+        {
+          "name": "CNN",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOOGp6OU4xRzQ5TkVuQV8xcHQzdmF6elhlWTBsdTg3eGI3b1hERGp6d09tWHNyT2tkX1VXSFNmal9RbFVUVl9aZmhIMC1IT2oxd2Q5d1pjNWtQT2tqd1RGM0w5LW1VdWZHMDBENnVValdRMVVqcjlaYV9adGxTZlN2a2xYTnhCa2dZYnBIX0RzQXQzc2tKNGJlMklGRWFJWXY3RVN0NVg2RFlrQQ?oc=5",
+          "grade": "大型媒體"
         }
       ],
       "confidence": "單一來源",
@@ -7142,15 +7202,10 @@
           "name": "AP News",
           "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPZWNIZWpPMUROMXlXU0EwT1pjWWUycXFoTjBobEJLM0JpWGhjTWZwN0Q2RkxaY3N6cU9fNXZOT194MWFHYllDYUh4RWdEdmF3NVpGQ2tlOTl4dWI5VzVMWlgycVBYcmtSRDR6UV9lQmtoWkZMUWRvLUYwZXhIQzlGcVVpTGlMZElhRkxkT0pkMXlEZDJmSll0c2JsYkY?oc=5",
           "grade": "大型媒體"
-        },
-        {
-          "name": "PBS",
-          "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPWE9uOFhabENXcEF5bElwY0JZU3dXUktScUt4NDFxTzJMQ3dTWVVXSXowdHVhY09ua3ltOFlfY2pFdlI3Zzhjd2xQeF9Eb2dZTU1ZZVhrX2hYMEFwUTZVc2lMVlJndGY5cjRpQjZkZHFzVXVFNkVqbV9zeUdDUWlEczRvS3ltZnhhaHVOUGItQU43MXRPTi1TQy0tbXlidTU2cE40OW4yQUwyaGI5ZlV6eHhEWmRyMnQ3Y3lV0gHAAUFVX3lxTFBYRXJKRnRrLUpvTGlsWWxwdmg3VGktTUhZYUNXWkZ3N3IxUm50Z1FoakR5RkNrMVgwbjF6NVdDbEc2MmtIYTVXeHhobXhUYnQ2YVp1MWIwaE9Sdi03bVVzVGhKV3B5dWRKM0JnMGZ2QjJnenhBajZWUTF0RENxQVVaSWZwVXc4ZlkwUEhkejNVdzJPczFveDNQbDZPSnZoQkFwR1lFLWdsVDhWcGdxVDNJamQ5V2dudy1Ib3RrS0cyLQ?oc=5",
-          "grade": "單一來源"
         }
       ],
       "confidence": "多方報導",
-      "source_count": 4
+      "source_count": 3
     },
     {
       "title": "US forces strike Iranian submarine, ship maintenance facility - Reuters",

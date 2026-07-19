@@ -317,42 +317,68 @@ def fetch_market(key: str, config: dict[str, str]) -> dict[str, Any]:
     }
 
 
+def window_stats(items: list[dict[str, Any]], start: datetime, end: datetime) -> dict[str, Any]:
+    selected = [
+        item for item in items
+        if start <= parse_date(item["published_at"].replace("Z", "+0000")) < end
+    ]
+    categories = Counter(item["category"] for item in selected)
+    confidence = Counter(item["confidence"] for item in selected)
+    flags: Counter[str] = Counter()
+    for item in selected:
+        for flag, value in item["flags"].items():
+            if value:
+                flags[flag] += 1
+        if item["flags"]["resilience_signal"] and item["flags"]["reported_consequence"]:
+            flags["consequential_resilience_signal"] += 1
+        if item["flags"]["resilience_signal"] and (
+            item["flags"]["maritime_pressure"] or item["flags"]["diplomacy"]
+        ):
+            flags["stalemate_signal"] += 1
+    return {
+        "items": len(selected),
+        "categories": dict(categories),
+        "official": confidence["官方發布"],
+        "multi_source": confidence["多方報導"],
+        "reported_consequence": flags["reported_consequence"],
+        "maritime_pressure": flags["maritime_pressure"],
+        "diplomacy": flags["diplomacy"],
+        "weakness_signal": flags["weakness_signal"],
+        "resilience_signal": flags["consequential_resilience_signal"],
+        "stalemate_signal": flags["stalemate_signal"],
+    }
+
+
+def percent_change(current: int, previous: int) -> float | None:
+    if previous == 0:
+        return None
+    return round((current / previous - 1) * 100, 1)
+
+
 def build_metrics(items: list[dict[str, Any]]) -> dict[str, Any]:
-    cutoff_72h = NOW - timedelta(hours=72)
-    recent = [item for item in items if parse_date(item["published_at"].replace("Z", "+0000")) >= cutoff_72h]
-    categories = Counter(item["category"] for item in recent)
-    confidence = Counter(item["confidence"] for item in recent)
-    flags = Counter()
+    current_24h = window_stats(items, NOW - timedelta(hours=24), NOW + timedelta(seconds=1))
+    previous_24h = window_stats(items, NOW - timedelta(hours=48), NOW - timedelta(hours=24))
+    recent_72h = window_stats(items, NOW - timedelta(hours=72), NOW + timedelta(seconds=1))
     daily: dict[str, Counter[str]] = defaultdict(Counter)
     for item in items:
         dt = parse_date(item["published_at"].replace("Z", "+0000"))
         if dt >= NOW - timedelta(days=7):
             daily[dt.date().isoformat()][item["category"]] += 1
-        if dt >= cutoff_72h:
-            for flag, value in item["flags"].items():
-                if value:
-                    flags[flag] += 1
-            if item["flags"]["resilience_signal"] and item["flags"]["reported_consequence"]:
-                flags["consequential_resilience_signal"] += 1
-            if item["flags"]["resilience_signal"] and (
-                item["flags"]["maritime_pressure"] or item["flags"]["diplomacy"]
-            ):
-                flags["stalemate_signal"] += 1
 
-    weakness = flags["weakness_signal"]
-    resilience = flags["consequential_resilience_signal"]
-    maritime = flags["maritime_pressure"]
-    diplomacy = flags["diplomacy"]
-    if recent and weakness >= 3 and resilience >= 3 and maritime >= 3:
+    weakness = recent_72h["weakness_signal"]
+    resilience = recent_72h["resilience_signal"]
+    maritime = recent_72h["maritime_pressure"]
+    diplomacy = recent_72h["diplomacy"]
+    if recent_72h["items"] and weakness >= 3 and resilience >= 3 and maritime >= 3:
         posture = "中間僵局訊號最需要警戒"
         posture_note = "公開資訊同時出現能力受損與持續反擊，尚未形成單向結論。"
-    elif recent and resilience >= 5 and weakness < 3:
+    elif recent_72h["items"] and resilience >= 5 and weakness < 3:
         posture = "持續反擊的公開訊號較強"
         posture_note = "有後果的反擊報導仍多；這只能證明壓制尚未完成，不能推算庫存。"
-    elif recent and weakness >= 3 and resilience < 3:
+    elif recent_72h["items"] and weakness >= 3 and resilience < 3:
         posture = "能力衰退訊號暫時較多"
         posture_note = "媒體標題中的受損與降級訊號較多，仍需用實際損害與航運改善驗證。"
-    elif recent:
+    elif recent_72h["items"]:
         posture = "實力揭露測試進行中"
         posture_note = "目前公開證據尚未跨過方向性門檻。"
     else:
@@ -364,19 +390,210 @@ def build_metrics(items: list[dict[str, Any]]) -> dict[str, Any]:
         day = (NOW - timedelta(days=offset)).date().isoformat()
         days.append({"date": day, "categories": dict(daily.get(day, {}))})
     return {
-        "evidence_items_72h": len(recent),
-        "multi_source_72h": confidence["多方報導"],
-        "official_72h": confidence["官方發布"],
-        "reported_consequence_72h": flags["reported_consequence"],
+        "evidence_items_24h": current_24h["items"],
+        "evidence_items_prev_24h": previous_24h["items"],
+        "evidence_change_24h_pct": percent_change(current_24h["items"], previous_24h["items"]),
+        "official_24h": current_24h["official"],
+        "multi_source_24h": current_24h["multi_source"],
+        "reported_consequence_24h": current_24h["reported_consequence"],
+        "reported_consequence_prev_24h": previous_24h["reported_consequence"],
+        "maritime_pressure_24h": current_24h["maritime_pressure"],
+        "maritime_pressure_prev_24h": previous_24h["maritime_pressure"],
+        "diplomacy_24h": current_24h["diplomacy"],
+        "diplomacy_prev_24h": previous_24h["diplomacy"],
+        "weakness_signal_24h": current_24h["weakness_signal"],
+        "resilience_signal_24h": current_24h["resilience_signal"],
+        "stalemate_signal_24h": current_24h["stalemate_signal"],
+        "category_counts_24h": current_24h["categories"],
+        "category_counts_prev_24h": previous_24h["categories"],
+        "evidence_items_72h": recent_72h["items"],
+        "multi_source_72h": recent_72h["multi_source"],
+        "official_72h": recent_72h["official"],
+        "reported_consequence_72h": recent_72h["reported_consequence"],
         "maritime_pressure_72h": maritime,
         "diplomacy_72h": diplomacy,
         "weakness_signal_72h": weakness,
         "resilience_signal_72h": resilience,
-        "stalemate_signal_72h": flags["stalemate_signal"],
-        "category_counts_72h": dict(categories),
+        "stalemate_signal_72h": recent_72h["stalemate_signal"],
+        "category_counts_72h": recent_72h["categories"],
         "daily_counts_7d": days,
         "posture": posture,
         "posture_note": posture_note,
+    }
+
+
+def signed_pct(value: float | None) -> str:
+    if value is None:
+        return "無法比較"
+    return f"{value:+.1f}%"
+
+
+def market_value(markets: dict[str, Any], key: str, field: str = "day_change_pct") -> float | None:
+    value = markets.get(key, {}).get(field)
+    return float(value) if isinstance(value, (int, float)) else None
+
+
+def build_daily_analysis(
+    metrics: dict[str, Any], markets: dict[str, Any], fetch_status: list[dict[str, Any]]
+) -> dict[str, Any]:
+    current = metrics["evidence_items_24h"]
+    previous = metrics["evidence_items_prev_24h"]
+    consequences = metrics["reported_consequence_24h"]
+    resilience = metrics["resilience_signal_24h"]
+    weakness = metrics["weakness_signal_24h"]
+    maritime = metrics["maritime_pressure_24h"]
+    diplomacy = metrics["diplomacy_24h"]
+    stalemate = metrics["stalemate_signal_24h"]
+    higher_confidence = metrics["official_24h"] + metrics["multi_source_24h"]
+    top_category = max(
+        metrics["category_counts_24h"].items(), key=lambda pair: pair[1], default=("無", 0)
+    )
+
+    if weakness >= 3 and resilience >= 3:
+        leading_id = "middle_stalemate"
+        leading_name = "中間僵局"
+        headline = "今日判讀：雙方都還能施加成本，戰爭終點沒有因此變近"
+        bottom_line = (
+            "公開證據同時出現能力受損與有後果的反擊，表示擴大戰事正在揭露實力，"
+            "但尚未把結果推向任何一方可以收手的條件。拖長與反覆升級是目前最需要防範的路徑。"
+        )
+    elif resilience >= 5 and weakness < 3:
+        leading_id = "iran_resilient"
+        leading_name = "伊朗韌性高於預期"
+        headline = "今日判讀：擴大打擊仍未壓低有效反擊，快速終局訊號不足"
+        bottom_line = (
+            "近24小時仍有多組造成後果的反擊報導，而能力明顯衰退的公開訊號偏少。"
+            "這不代表伊朗能取勝，但表示美方尚未證明只靠擴大打擊就能快速換來停火與安全通航。"
+        )
+    elif weakness >= 3 and resilience < 3:
+        leading_id = "iran_weaker"
+        leading_name = "伊朗實力低於預期"
+        headline = "今日判讀：反擊與實際損害轉弱，戰事開始出現收斂可能"
+        bottom_line = (
+            "能力衰退訊號多於有後果的反擊。如果這個差距能跨日延續，並伴隨商船風險下降，"
+            "才可能表示擴大打擊正在逼近可談判的終局。"
+        )
+    elif maritime >= 5 and diplomacy >= 3:
+        leading_id = "middle_stalemate"
+        leading_name = "中間僵局"
+        headline = "今日判讀：談判消息增加，但海峽壓力尚未解除"
+        bottom_line = (
+            "外交活動與海上壓力同時存在，代表雙方仍在談判與軍事槓桿之間來回。"
+            "在商船安全沒有可驗證改善前，談判訊號還不能視為終局。"
+        )
+    else:
+        leading_id = "undetermined"
+        leading_name = "尚無明顯領先情境"
+        headline = "今日判讀：實力測試仍在進行，公開證據尚未形成方向"
+        bottom_line = (
+            "目前訊號不足以證明伊朗能力迅速耗盡，也不足以證明其能長期承受擴大打擊。"
+            "需要等待跨日反擊、實際損害與海峽通航是否同步改變。"
+        )
+
+    activity_delta = current - previous
+    if previous:
+        activity_text = (
+            f"近24小時有{current}組去重公開證據，前24小時為{previous}組，"
+            f"變化{signed_pct(metrics['evidence_change_24h_pct'])}；最多的是{top_category[0]}（{top_category[1]}組）。"
+        )
+    else:
+        activity_text = f"近24小時有{current}組去重公開證據；最多的是{top_category[0]}（{top_category[1]}組）。"
+
+    if resilience >= 5 and weakness < 3:
+        battlefield_text = (
+            f"有後果的反擊線索{resilience}組，能力衰退線索{weakness}組。"
+            "目前較合理的解讀是壓制尚未完成，而不是伊朗已經沒有還擊能力。"
+        )
+    elif weakness >= 3 and resilience < 3:
+        battlefield_text = (
+            f"能力衰退線索{weakness}組，高於有後果的反擊線索{resilience}組。"
+            "若連續數日維持，才足以支持伊朗實力低於預期。"
+        )
+    elif weakness >= 3 and resilience >= 3:
+        battlefield_text = (
+            f"能力衰退線索{weakness}組、有後果的反擊線索{resilience}組同時存在。"
+            "這是典型僵局：打擊有效，但還不足以阻止對手繼續造成成本。"
+        )
+    else:
+        battlefield_text = (
+            f"有後果的反擊線索{resilience}組、能力衰退線索{weakness}組；"
+            "數量仍不足以支持方向性戰力判斷。"
+        )
+
+    if maritime >= 5 and diplomacy >= 3:
+        diplomacy_text = (
+            f"海峽壓力線索{maritime}組、外交線索{diplomacy}組。談判活動雖存在，"
+            "但通航風險仍高，表示協議的執行力尚未通過驗證。"
+        )
+    elif maritime >= 5:
+        diplomacy_text = (
+            f"海峽壓力線索{maritime}組，外交線索只有{diplomacy}組。"
+            "只要商船安全沒有改善，美方就缺乏低成本收手條件。"
+        )
+    elif diplomacy >= 3:
+        diplomacy_text = (
+            f"外交線索{diplomacy}組，海峽壓力線索{maritime}組。"
+            "退出窗口正在形成，但仍需連續通航與可約束武裝單位的安排確認。"
+        )
+    else:
+        diplomacy_text = "外交與海峽訊號都不足，今天不能判定談判是否更接近可執行結果。"
+
+    brent = market_value(markets, "brent")
+    vix = market_value(markets, "vix")
+    taiex = market_value(markets, "taiex")
+    sp500 = market_value(markets, "sp500")
+    market_date = markets.get("brent", {}).get("as_of") or markets.get("sp500", {}).get("as_of") or "最近交易日"
+    if brent is not None and vix is not None and (brent >= 2 or vix >= 7):
+        market_text = (
+            f"截至{market_date}，Brent單日{signed_pct(brent)}、VIX {signed_pct(vix)}、"
+            f"S&P 500 {signed_pct(sp500)}、台股{signed_pct(taiex)}。"
+            "市場正在提高能源與風險溢價，短線仍把戰事擴大視為負面，而不是接近和平的利多。"
+        )
+        market_stance = "風險重新定價升高"
+    elif brent is not None and vix is not None and brent <= -1 and vix <= 0:
+        market_text = (
+            f"截至{market_date}，Brent單日{signed_pct(brent)}、VIX {signed_pct(vix)}。"
+            "市場未確認進一步升級；仍需觀察這是短暫降溫，還是通航風險真正改善。"
+        )
+        market_stance = "市場未確認升級"
+    else:
+        market_text = (
+            f"截至{market_date}，Brent單日{signed_pct(brent)}、VIX {signed_pct(vix)}、"
+            f"S&P 500 {signed_pct(sp500)}。市場訊號混合，尚不能單靠價格判定戰事方向。"
+        )
+        market_stance = "市場訊號混合"
+
+    failures = [row["source"] for row in fetch_status if not row.get("ok")]
+    confidence = "中等" if higher_confidence >= 5 and len(failures) <= 1 else "偏低"
+    confidence_note = (
+        f"近24小時官方或多方報導{higher_confidence}組；"
+        + (f"未成功來源：{'、'.join(failures)}。" if failures else "主要自動來源均成功。")
+        + "結論是方向性判讀，不是戰力或機率估算。"
+    )
+
+    scenario_updates = {
+        "iran_weaker": "今日較受支持" if leading_id == "iran_weaker" else "今日未獲主要支持",
+        "iran_resilient": "今日較受支持" if leading_id == "iran_resilient" else "持續觀察",
+        "middle_stalemate": "今日較受支持" if leading_id == "middle_stalemate" else ("風險仍高" if stalemate >= 3 else "持續觀察"),
+    }
+    return {
+        "headline": headline,
+        "bottom_line": bottom_line,
+        "leading_scenario_id": leading_id,
+        "leading_scenario": leading_name,
+        "confidence": confidence,
+        "confidence_note": confidence_note,
+        "activity": {"title": "今天發生什麼變化", "assessment": activity_text, "delta": activity_delta},
+        "battlefield": {"title": "對戰場的意義", "assessment": battlefield_text},
+        "diplomacy": {"title": "對和談與海峽的意義", "assessment": diplomacy_text},
+        "market": {"title": "對投資市場的意義", "assessment": market_text, "stance": market_stance},
+        "scenario_updates": scenario_updates,
+        "watch_next": [
+            "有後果的反擊是否連續兩至三日下降，而非只停一天",
+            "商船遇襲與海峽干擾是否出現可驗證改善",
+            "外交安排是否能約束主要武裝單位並實際執行",
+            "Brent、VIX與區域股市是否共同回落，確認風險溢價下降",
+        ],
     }
 
 
@@ -410,11 +627,13 @@ def main() -> None:
             markets[key] = {"key": key, "label": config["label"], "ticker": config["ticker"], "error": str(exc)[:180]}
             fetch_status.append({"source": f"市場資料 / {config['label']}", "ok": False, "error": str(exc)[:180]})
 
+    metrics = build_metrics(clusters)
     snapshot = {
         "schema_version": 1,
         "generated_at": utc_iso(),
         "data_window": "最近7日新聞（核心指標取72小時）、最近1個月市場資料",
-        "metrics": build_metrics(clusters),
+        "metrics": metrics,
+        "analysis": build_daily_analysis(metrics, markets, fetch_status),
         "items": clusters,
         "markets": markets,
         "fetch_status": fetch_status,
