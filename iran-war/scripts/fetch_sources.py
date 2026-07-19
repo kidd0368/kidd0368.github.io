@@ -35,6 +35,9 @@ QUERIES = {
     "基礎設施": 'Iran ("power plant" OR desalination OR bridge OR infrastructure)',
     "外交與停火": '("US Iran" OR "U.S. Iran") (talks OR ceasefire OR agreement OR negotiation)',
     "核問題": 'Iran (nuclear OR uranium OR IAEA)',
+    "以色列動向": '(Israel OR Israeli OR IDF) (Iran OR Iranian) (retaliate OR strike OR attack OR readiness OR Netanyahu OR Katz)',
+    "紅海與蘇伊士": '(Iran OR Iranian OR Houthi OR Houthis) ("Bab el-Mandeb" OR "Red Sea" OR Suez OR shipping)',
+    "非對稱戰術": '(Iran OR Iranian OR IRGC OR Houthi) ("Ukraine tactics" OR "asymmetric warfare" OR "mobile launcher" OR "dispersed forces" OR "drone swarm" OR "unmanned boat")',
 }
 
 OFFICIAL_DOMAINS = {
@@ -51,7 +54,7 @@ CONSEQUENCE_TERMS = {
 }
 MARITIME_PRESSURE_TERMS = {
     "tanker", "ship", "shipping", "vessel", "hormuz", "strait", "port",
-    "blockade", "transit", "navigation",
+    "blockade", "transit", "navigation", "red sea", "suez", "bab el-mandeb",
 }
 DIPLOMACY_TERMS = {
     "talks", "ceasefire", "agreement", "negotiation", "deal", "mediator",
@@ -65,7 +68,32 @@ RESILIENCE_TERMS = {
     "retaliat", "attack", "struck", "hit", "killed", "damaged", "closed",
     "disrupt", "outage", "seized", "threaten",
 }
-RELEVANCE_TERMS = ("iran", "iranian", "tehran", "irgc", "hormuz", "persian gulf")
+ISRAEL_TERMS = ("israel", "israeli", "idf", "netanyahu", "israel katz")
+IRAN_TERMS = ("iran", "iranian", "tehran", "irgc")
+ISRAEL_CONDITIONAL_TERMS = (
+    "if iran", "if tehran", "if attacked", "if it attacks", "retaliat", "respond",
+    "response", "warns", "warning", "hit back", "will act",
+)
+ISRAEL_ACTIVE_TERMS = (
+    "israel strikes iran", "israel attacks iran", "israeli strike on iran",
+    "israeli strikes on iran", "attacks iran", "bombed iran", "preemptive strike",
+    "launched strikes on iran", "launches strikes on iran", "launching strikes on iran",
+    "israel struck iran", "israeli attack on iran",
+)
+SECOND_CHOKEPOINT_GEO_TERMS = ("red sea", "suez", "bab el-mandeb", "bab al-mandab")
+HOUTHI_TERMS = ("houthi", "houthis")
+HOUTHI_OPERATIONAL_TERMS = (
+    "attack", "strike", "launch", "deploy", "close", "blockade", "seized",
+    "damaged", "hit ship", "targeted ship", "drone boat", "unmanned boat",
+)
+ASYMMETRIC_TERMS = (
+    "ukraine", "asymmetric", "mobile launcher", "mobile tactics", "dispersed",
+    "swarm", "unmanned boat", "drone boat", "innovation", "hit-and-run",
+)
+RELEVANCE_TERMS = (
+    "iran", "iranian", "tehran", "irgc", "hormuz", "persian gulf", "israel",
+    "israeli", "idf", "houthi", "houthis", "red sea", "suez", "bab el-mandeb",
+)
 
 MARKETS = {
     "brent": {"ticker": "BZ=F", "label": "Brent原油", "unit": "美元/桶"},
@@ -153,17 +181,37 @@ def source_grade(source: str, url: str) -> str:
 
 def flags_for_title(title: str) -> dict[str, bool]:
     text = title.lower()
+    israel_posture = any(term in text for term in ISRAEL_TERMS) and any(term in text for term in IRAN_TERMS)
+    second_chokepoint = any(term in text for term in SECOND_CHOKEPOINT_GEO_TERMS) or (
+        any(term in text for term in HOUTHI_TERMS)
+        and any(term in text for term in MARITIME_PRESSURE_TERMS)
+    )
     return {
         "reported_consequence": any(term in text for term in CONSEQUENCE_TERMS),
         "maritime_pressure": any(term in text for term in MARITIME_PRESSURE_TERMS),
         "diplomacy": any(term in text for term in DIPLOMACY_TERMS),
         "weakness_signal": any(term in text for term in WEAKNESS_TERMS),
         "resilience_signal": any(term in text for term in RESILIENCE_TERMS),
+        "israel_posture": israel_posture,
+        "israel_conditional_response": israel_posture and any(term in text for term in ISRAEL_CONDITIONAL_TERMS),
+        "israel_active_entry": israel_posture and any(term in text for term in ISRAEL_ACTIVE_TERMS),
+        "second_chokepoint": second_chokepoint,
+        "houthi_operational": second_chokepoint and any(term in text for term in HOUTHI_OPERATIONAL_TERMS),
+        "asymmetric_adaptation": any(term in text for term in ASYMMETRIC_TERMS),
     }
 
 
 def classify_category(title: str, fallback: str = "軍事行動") -> str:
     text = title.lower()
+    if any(x in text for x in SECOND_CHOKEPOINT_GEO_TERMS) or (
+        any(x in text for x in HOUTHI_TERMS)
+        and any(x in text for x in MARITIME_PRESSURE_TERMS)
+    ):
+        return "紅海與蘇伊士"
+    if any(x in text for x in ISRAEL_TERMS) and any(x in text for x in IRAN_TERMS):
+        return "以色列動向"
+    if any(x in text for x in ASYMMETRIC_TERMS):
+        return "非對稱戰術"
     if any(x in text for x in ("hormuz", "tanker", "ship", "shipping", "vessel", "strait", "port", "navigation")):
         return "海峽與商船"
     if any(x in text for x in ("nuclear", "uranium", "iaea", "enrichment")):
@@ -206,7 +254,7 @@ def google_news_items(category: str, query: str) -> list[dict[str, Any]]:
 
 
 def gdelt_items() -> list[dict[str, Any]]:
-    query = '(Iran OR Iranian) (Hormuz OR missile OR drone OR ceasefire OR nuclear)'
+    query = '(Iran OR Iranian OR Houthi OR Israel) (Hormuz OR missile OR drone OR ceasefire OR nuclear OR "Red Sea" OR Suez)'
     params = urllib.parse.urlencode({
         "query": query,
         "mode": "artlist",
@@ -346,6 +394,12 @@ def window_stats(items: list[dict[str, Any]], start: datetime, end: datetime) ->
         "weakness_signal": flags["weakness_signal"],
         "resilience_signal": flags["consequential_resilience_signal"],
         "stalemate_signal": flags["stalemate_signal"],
+        "israel_posture": flags["israel_posture"],
+        "israel_conditional_response": flags["israel_conditional_response"],
+        "israel_active_entry": flags["israel_active_entry"],
+        "second_chokepoint": flags["second_chokepoint"],
+        "houthi_operational": flags["houthi_operational"],
+        "asymmetric_adaptation": flags["asymmetric_adaptation"],
     }
 
 
@@ -404,6 +458,12 @@ def build_metrics(items: list[dict[str, Any]]) -> dict[str, Any]:
         "weakness_signal_24h": current_24h["weakness_signal"],
         "resilience_signal_24h": current_24h["resilience_signal"],
         "stalemate_signal_24h": current_24h["stalemate_signal"],
+        "israel_posture_24h": current_24h["israel_posture"],
+        "israel_conditional_response_24h": current_24h["israel_conditional_response"],
+        "israel_active_entry_24h": current_24h["israel_active_entry"],
+        "second_chokepoint_24h": current_24h["second_chokepoint"],
+        "houthi_operational_24h": current_24h["houthi_operational"],
+        "asymmetric_adaptation_24h": current_24h["asymmetric_adaptation"],
         "category_counts_24h": current_24h["categories"],
         "category_counts_prev_24h": previous_24h["categories"],
         "evidence_items_72h": recent_72h["items"],
@@ -415,6 +475,12 @@ def build_metrics(items: list[dict[str, Any]]) -> dict[str, Any]:
         "weakness_signal_72h": weakness,
         "resilience_signal_72h": resilience,
         "stalemate_signal_72h": recent_72h["stalemate_signal"],
+        "israel_posture_72h": recent_72h["israel_posture"],
+        "israel_conditional_response_72h": recent_72h["israel_conditional_response"],
+        "israel_active_entry_72h": recent_72h["israel_active_entry"],
+        "second_chokepoint_72h": recent_72h["second_chokepoint"],
+        "houthi_operational_72h": recent_72h["houthi_operational"],
+        "asymmetric_adaptation_72h": recent_72h["asymmetric_adaptation"],
         "category_counts_72h": recent_72h["categories"],
         "daily_counts_7d": days,
         "posture": posture,
@@ -444,6 +510,12 @@ def build_daily_analysis(
     maritime = metrics["maritime_pressure_24h"]
     diplomacy = metrics["diplomacy_24h"]
     stalemate = metrics["stalemate_signal_24h"]
+    israel_posture = metrics["israel_posture_24h"]
+    israel_conditional = metrics["israel_conditional_response_24h"]
+    israel_active = metrics["israel_active_entry_24h"]
+    second_chokepoint = metrics["second_chokepoint_24h"]
+    houthi_operational = metrics["houthi_operational_24h"]
+    asymmetric = metrics["asymmetric_adaptation_24h"]
     higher_confidence = metrics["official_24h"] + metrics["multi_source_24h"]
     top_category = max(
         metrics["category_counts_24h"].items(), key=lambda pair: pair[1], default=("無", 0)
@@ -489,6 +561,15 @@ def build_daily_analysis(
             "目前訊號不足以證明伊朗能力迅速耗盡，也不足以證明其能長期承受擴大打擊。"
             "需要等待跨日反擊、實際損害與海峽通航是否同步改變。"
         )
+
+    if israel_active or houthi_operational:
+        leading_id = "middle_stalemate"
+        leading_name = "區域擴散下的中間僵局"
+        headline = "今日判讀：第二戰線風險升高，戰事更可能先擴散再尋找終點"
+        bottom_line += (
+            " 以色列實際介入或胡塞 operational 線索，會把單一戰場變成區域多點施壓；"
+            "這可能加速實力揭露，也同時提高誤判、拖長與再升級的成本。"
+        ).replace("operational", "行動")
 
     activity_delta = current - previous
     if previous:
@@ -538,6 +619,56 @@ def build_daily_analysis(
     else:
         diplomacy_text = "外交與海峽訊號都不足，今天不能判定談判是否更接近可執行結果。"
 
+    if israel_active:
+        israel_text = (
+            f"近24小時出現{israel_active}組以色列實際或主動介入線索。"
+            "這已跨過口頭嚇阻門檻，會擴大打擊目標與伊朗報復面，區域升級風險明顯上升。"
+        )
+        israel_title = "以色列已出現介入線索"
+    elif israel_conditional:
+        israel_text = (
+            f"近24小時有{israel_conditional}組條件式報復訊號。這代表『若伊朗攻擊就反擊』的預先承諾，"
+            "不是以色列已主動參戰；但單次伊朗攻擊可能因此成為區域擴大的觸發器。"
+        )
+        israel_title = "目前仍是條件式嚇阻"
+    elif israel_posture:
+        israel_text = (
+            f"近24小時有{israel_posture}組以色列—伊朗動向線索，但未辨識出明確主動介入或條件式報復。"
+            "需等待戰備調整、兵力部署或實際打擊等更強證據。"
+        )
+        israel_title = "以色列動向需繼續確認"
+    else:
+        israel_text = "近24小時自動來源未抓到明確以色列介入訊號；這只代表公開標題證據不足，不代表以色列沒有準備。"
+        israel_title = "尚無足夠以色列介入證據"
+
+    if houthi_operational:
+        red_sea_text = (
+            f"近24小時有{houthi_operational}組胡塞行動線索，第二航運咽喉風險已從口頭訊號走向操作層。"
+            "真正要驗證的是曼德海峽／紅海遇襲、船舶繞航、保費與蘇伊士通行量，而非把警告直接等同於封鎖。"
+        )
+        red_sea_title = "第二航運咽喉風險升高"
+    elif second_chokepoint:
+        red_sea_text = (
+            f"近24小時有{second_chokepoint}組紅海—蘇伊士風險訊號，目前仍以警告與施壓訊號為主。"
+            "實際咽喉是曼德海峽與紅海入口；在那裡干擾航運，才會壓縮進出蘇伊士的流量。"
+        )
+        red_sea_title = "第二航運咽喉仍在訊號階段"
+    else:
+        red_sea_text = "近24小時沒有足夠的胡塞／紅海行動證據，暫不能判定伊朗已成功開啟第二航運戰線。"
+        red_sea_title = "第二航運戰線尚未確認"
+
+    if asymmetric:
+        asymmetric_text = (
+            f"近24小時有{asymmetric}組分散式、機動或無人系統適應線索。"
+            "空襲可以摧毀固定設施，但若機動發射器、無人機艇與代理人仍能分散行動，壓低還擊成本會比預期更慢。"
+        )
+        asymmetric_title = "非對稱適應提高壓制難度"
+    else:
+        asymmetric_text = (
+            "近24小時未抓到足夠的非對稱戰術適應線索；仍需追蹤機動發射、無人機／無人艇、分散部署與代理人協同。"
+        )
+        asymmetric_title = "非對稱適應尚待更多證據"
+
     brent = market_value(markets, "brent")
     vix = market_value(markets, "vix")
     taiex = market_value(markets, "taiex")
@@ -574,7 +705,7 @@ def build_daily_analysis(
     scenario_updates = {
         "iran_weaker": "今日較受支持" if leading_id == "iran_weaker" else "今日未獲主要支持",
         "iran_resilient": "今日較受支持" if leading_id == "iran_resilient" else "持續觀察",
-        "middle_stalemate": "今日較受支持" if leading_id == "middle_stalemate" else ("風險仍高" if stalemate >= 3 else "持續觀察"),
+        "middle_stalemate": "區域擴散風險上升" if israel_active or houthi_operational else ("今日較受支持" if leading_id == "middle_stalemate" else ("風險仍高" if stalemate >= 3 else "持續觀察")),
     }
     return {
         "headline": headline,
@@ -586,12 +717,18 @@ def build_daily_analysis(
         "activity": {"title": "今天發生什麼變化", "assessment": activity_text, "delta": activity_delta},
         "battlefield": {"title": "對戰場的意義", "assessment": battlefield_text},
         "diplomacy": {"title": "對和談與海峽的意義", "assessment": diplomacy_text},
+        "israel": {"title": israel_title, "assessment": israel_text},
+        "red_sea": {"title": red_sea_title, "assessment": red_sea_text},
+        "asymmetric": {"title": asymmetric_title, "assessment": asymmetric_text},
         "market": {"title": "對投資市場的意義", "assessment": market_text, "stance": market_stance},
         "scenario_updates": scenario_updates,
         "watch_next": [
             "有後果的反擊是否連續兩至三日下降，而非只停一天",
             "商船遇襲與海峽干擾是否出現可驗證改善",
             "外交安排是否能約束主要武裝單位並實際執行",
+            "以色列是否從條件式報復轉為戰備部署、實際還擊或主動打擊",
+            "胡塞是否部署或攻擊船舶，以及紅海繞航、保費與蘇伊士通行量是否惡化",
+            "伊朗及代理人的機動發射、無人機／無人艇與分散部署是否持續造成後果",
             "Brent、VIX與區域股市是否共同回落，確認風險溢價下降",
         ],
     }
@@ -642,6 +779,8 @@ def main() -> None:
             "CENTCOM與UKMTO官網可能阻擋自動請求；流程透過新聞索引保留其公告連結。",
             "新聞標題分類只用於整理證據佇列，不等同於事實裁決或情境機率。",
             "新聞索引有每次查詢與頁數上限，7日活動圖是可比較的資訊活動指標，不是完整新聞母體。",
+            "以色列的條件式報復言論不等同主動參戰；分析員警告也不等同紅海或蘇伊士已被封鎖。",
+            "第二航運咽喉以曼德海峽與紅海入口為操作位置；對該處的干擾才會壓縮蘇伊士航運。",
             "Yahoo Finance為公開市場資料端點；失敗時保留上次成功值或顯示資料缺口。",
         ],
     }

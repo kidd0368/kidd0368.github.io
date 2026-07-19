@@ -292,8 +292,8 @@ HTML = r'''<!doctype html>
     const events = JSON.parse(document.getElementById('eventsData').textContent);
     const metrics = snapshot.metrics || {};
     const analysis = snapshot.analysis || {};
-    const categories = ['海峽與商船','軍事行動','基礎設施','外交與停火','核問題'];
-    const categoryColors = {'海峽與商船':'#43d19e','軍事行動':'#ff6b6b','基礎設施':'#ffc857','外交與停火':'#65a6ff','核問題':'#b28dff'};
+    const categories = ['海峽與商船','軍事行動','基礎設施','外交與停火','核問題','以色列動向','紅海與蘇伊士','非對稱戰術'];
+    const categoryColors = {'海峽與商船':'#43d19e','軍事行動':'#ff6b6b','基礎設施':'#ffc857','外交與停火':'#65a6ff','核問題':'#b28dff','以色列動向':'#f78fb3','紅海與蘇伊士':'#34ace0','非對稱戰術':'#ff9f43'};
     const fmtNumber = value => Number(value).toLocaleString('zh-TW', {maximumFractionDigits: 2});
     const fmtTime = value => new Intl.DateTimeFormat('zh-TW',{timeZone:'Asia/Taipei',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(value));
     const escAttr = value => String(value || '').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;').replaceAll('>','&gt;');
@@ -308,9 +308,9 @@ HTML = r'''<!doctype html>
     document.getElementById('generatedFooter').textContent = `資料時間 ${fmtTime(snapshot.generated_at)}`;
     document.getElementById('staleNote').textContent = snapshot.stale ? '本次抓取失敗，顯示上次成功資料' : '自動來源已完成本次更新';
 
-    const analysisColors = ['#65a6ff','#ff6b6b','#43d19e','#ffc857'];
-    const analysisKeys = ['activity','battlefield','diplomacy','market'];
-    const analysisLabels = ['24H 對比','軍事判讀','退出條件','市場確認'];
+    const analysisColors = ['#65a6ff','#ff6b6b','#43d19e','#f78fb3','#34ace0','#ff9f43','#ffc857'];
+    const analysisKeys = ['activity','battlefield','diplomacy','israel','red_sea','asymmetric','market'];
+    const analysisLabels = ['24H 對比','軍事判讀','退出條件','以色列介入','紅海—蘇伊士','非對稱戰術','市場確認'];
     const analysisGrid = document.getElementById('analysisGrid');
     analysisKeys.forEach((key,index) => {
       const item=analysis[key] || {}; const card=elt('article','card analysis-card'); card.style.setProperty('--accent',analysisColors[index]);
