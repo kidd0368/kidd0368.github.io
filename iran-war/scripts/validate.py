@@ -25,11 +25,15 @@ def main() -> None:
     require(snapshot.get("generated_at"), "missing generated timestamp")
     require(snapshot.get("analysis", {}).get("model_version") == 2, "terminal thesis model is not v2")
     require(all(key in snapshot.get("analysis", {}) for key in (
-        "headline", "bottom_line", "test_phase", "thesis_state", "leading_scenario", "confidence",
+        "headline", "plain_summary", "bottom_line", "hero_explanation", "test_phase", "thesis_state", "leading_scenario", "confidence",
         "revelation", "durability", "us_learning", "endpoint", "negotiability", "escalation",
         "activity", "israel", "red_sea", "asymmetric", "market", "route_updates",
         "watch_next", "evidence_guardrail",
     )), "daily analysis layer is incomplete")
+    hero_explanation = snapshot.get("analysis", {}).get("hero_explanation", [])
+    require(len(hero_explanation) == 5, "hero conclusion must contain exactly five reasoning layers")
+    require(all(item.get("label") and item.get("title") and item.get("assessment") for item in hero_explanation),
+            "hero conclusion reasoning layer is incomplete")
     require(isinstance(snapshot.get("items"), list), "evidence items must be a list")
     require(len(snapshot.get("fetch_status", [])) >= 6, "source health ledger is incomplete")
     require(all(key in snapshot.get("metrics", {}) for key in (
@@ -49,6 +53,9 @@ def main() -> None:
     require("__SNAPSHOT__" not in html and "__ASSESSMENT__" not in html, "unresolved template placeholder")
     require("攻擊次數" in html and "不是情境機率" in html, "interpretation guardrails missing")
     require("核心推演：擴大如何可能通往終局" in html and "今日終局推演" in html, "terminal thesis UI missing")
+    require(all(label in html for label in (
+        "今天確認了什麼", "這代表什麼", "不能因此推論什麼", "目前較接近哪一種結局", "什麼情況會讓結論改變",
+    )), "plain-language hero explanation is missing")
     require("什麼證據會推翻今天的結論" in html and "今天較接近哪條終局路徑" in html, "falsification layer missing")
     require("以色列觸發器" in html and "紅海第二咽喉" in html and "分散與非對稱能力" in html, "regional expansion factors missing")
     require("<script src=" not in html, "dashboard must not depend on external JavaScript")
