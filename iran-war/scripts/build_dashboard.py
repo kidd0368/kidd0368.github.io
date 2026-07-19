@@ -91,10 +91,18 @@ HTML = r'''<!doctype html>
     }
     .hero::after { content: ""; position: absolute; width: 280px; height: 280px; border: 1px solid rgba(67,209,158,.18); border-radius: 50%; right: -90px; top: -105px; box-shadow: 0 0 0 48px rgba(67,209,158,.025), 0 0 0 96px rgba(67,209,158,.018); }
     .eyebrow { margin: 0 0 13px; color: var(--green); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
-    h1 { max-width: 1120px; font-size: clamp(34px, 4.8vw, 64px); line-height: 1.05; letter-spacing: -.04em; margin: 0 0 22px; }
-    .hero-summary { max-width: 980px; color: var(--muted); font-size: clamp(16px, 2vw, 20px); margin: 0; }
-    .hero-foot { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; margin-top: 32px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
-    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--amber); margin-right: 7px; }
+    h1 { max-width: 1180px; font-size: clamp(34px, 4.5vw, 58px); line-height: 1.08; letter-spacing: -.04em; margin: 0 0 22px; }
+    .hero-summary { max-width: 1080px; color: var(--text); font-size: clamp(17px, 2vw, 21px); line-height: 1.75; margin: 0; }
+    .hero-explanation { position: relative; z-index: 1; display: grid; margin-top: 30px; border-top: 1px solid var(--line); }
+    .hero-point { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+    .hero-point-label { align-self: start; width: fit-content; border: 1px solid var(--line); border-radius: 999px; padding: 5px 10px; color: var(--green); background: var(--chip); font-size: 12px; font-weight: 800; letter-spacing: .08em; }
+    .hero-point h2 { margin: 0 0 6px; font-size: 18px; line-height: 1.35; }
+    .hero-point p { max-width: 1120px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.78; }
+    .hero-meta { position: relative; z-index: 1; display: grid; grid-template-columns: .8fr 1.4fr 1.2fr; gap: 12px; margin-top: 22px; }
+    .hero-meta-item { border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; background: rgba(255,255,255,.015); }
+    .hero-meta-item small { display: block; margin-bottom: 5px; color: var(--green); font-size: 11px; font-weight: 800; letter-spacing: .08em; }
+    .hero-meta-item strong, .hero-meta-item span { display: block; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .hero-meta-item strong { color: var(--text); }
     .grid { display: grid; gap: 16px; }
     .thesis-card { padding: 26px; }
     .thesis-card > h3 { margin: 0 0 18px; max-width: 1040px; font-size: clamp(20px, 2.7vw, 30px); line-height: 1.25; }
@@ -218,10 +226,12 @@ HTML = r'''<!doctype html>
       .thesis-flow { grid-template-columns: 1fr; }
       .thesis-step { min-height: 0; }
       .thesis-step::after { display: none; }
+      .hero-meta { grid-template-columns: 1fr; }
     }
     @media (max-width: 430px) {
       .kpi-grid { grid-template-columns: 1fr; }
-      h1 { font-size: 39px; }
+      h1 { font-size: 36px; }
+      .hero-point { grid-template-columns: 1fr; gap: 10px; padding: 18px 0; }
       .kpi { min-height: 118px; }
     }
   </style>
@@ -237,10 +247,11 @@ HTML = r'''<!doctype html>
       <p class="eyebrow">今日分析結論</p>
       <h1 id="headline"></h1>
       <p class="hero-summary" id="assessmentSummary"></p>
-      <div class="hero-foot">
-        <span><span class="status-dot"></span><strong id="posture"></strong></span>
-        <span id="postureNote"></span>
-        <span>問題：<strong id="decisionQuestion"></strong></span>
+      <div class="hero-explanation" id="heroExplanation" aria-label="今日結論的完整推理"></div>
+      <div class="hero-meta">
+        <div class="hero-meta-item"><small>目前階段</small><strong id="phaseValue"></strong></div>
+        <div class="hero-meta-item"><small>判讀限制</small><span id="limitValue"></span></div>
+        <div class="hero-meta-item"><small>核心問題</small><span id="questionValue"></span></div>
       </div>
     </section>
 
@@ -338,10 +349,18 @@ HTML = r'''<!doctype html>
     const elt = (tag, cls, text) => { const node=document.createElement(tag); if(cls) node.className=cls; if(text!==undefined) node.textContent=text; return node; };
 
     document.getElementById('headline').textContent = analysis.headline || assessment.headline;
-    document.getElementById('assessmentSummary').textContent = analysis.bottom_line || assessment.summary;
-    document.getElementById('posture').textContent = analysis.test_phase || metrics.posture || '資料不足';
-    document.getElementById('postureNote').textContent = `${analysis.thesis_state || ''}｜判讀信心：${analysis.confidence || '偏低'}｜${analysis.confidence_note || metrics.posture_note || ''}`;
-    document.getElementById('decisionQuestion').textContent = assessment.decision_question;
+    document.getElementById('assessmentSummary').textContent = analysis.plain_summary || analysis.bottom_line || assessment.summary;
+    const heroExplanation = document.getElementById('heroExplanation');
+    (analysis.hero_explanation || []).forEach(item => {
+      const row=elt('article','hero-point');
+      const body=elt('div','hero-point-body');
+      body.append(elt('h2','',item.title || ''),elt('p','',item.assessment || ''));
+      row.append(elt('span','hero-point-label',item.label || ''),body);
+      heroExplanation.append(row);
+    });
+    document.getElementById('phaseValue').textContent = analysis.test_phase || metrics.posture || '資料不足';
+    document.getElementById('limitValue').textContent = `${analysis.thesis_state || ''}。判讀信心：${analysis.confidence || '偏低'}。${analysis.confidence_note || metrics.posture_note || ''}`;
+    document.getElementById('questionValue').textContent = assessment.decision_question;
     document.getElementById('refreshPill').textContent = `台北 ${fmtTime(snapshot.generated_at)} 更新`;
     document.getElementById('generatedFooter').textContent = `資料時間 ${fmtTime(snapshot.generated_at)}`;
     document.getElementById('staleNote').textContent = snapshot.stale ? '本次抓取失敗，顯示上次成功資料' : '自動來源已完成本次更新';

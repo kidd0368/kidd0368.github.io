@@ -813,30 +813,30 @@ def build_daily_analysis(
     if regional_active:
         leading_id = "middle_stalemate"
         leading_name = "區域化的中間僵局"
-        test_phase = "實力揭露測試｜區域化階段"
+        test_phase = "多條戰線開始互相影響"
         thesis_state = "揭露速度加快，但終局成本同步上升"
-        headline = "第二戰線正在打開：實力揭露加速，終局代價也同步上升"
-        bottom_line = (
+        headline = "戰爭正在擴成多條戰線：這會更快測出伊朗底牌，也更容易失控"
+        plain_summary = (
             "已知的是戰事不再只測試伊朗本土能力：以色列實際介入或胡塞行動會把代理人、航運與盟友承受力一起帶入測試。"
             "這可能更快暴露伊朗底牌，也可能讓任何單一方都無法控制升級。今天較接近的不是快速終局，而是多戰線中間僵局。"
         )
     elif weakness_dominant and retaliation_fading and maritime_improving:
         leading_id = "iran_weaker"
         leading_name = "A路徑：伊朗底牌有限"
-        test_phase = "實力揭露測試｜衰退確認階段"
+        test_phase = "反擊轉弱，正在驗證能否持續改善"
         thesis_state = "A路徑正在形成，但仍要驗證可執行停火"
-        headline = "能力揭露開始指向衰退；通航改善將決定是否真的接近終局"
-        bottom_line = (
+        headline = "伊朗的反擊正在轉弱，但是否已被迫走向談判，還要看通航與指揮鏈"
+        plain_summary = (
             "有後果的反擊線索跨窗下降，能力衰退線索開始占上風，海上壓力也同步改善。"
             "這是我們推演中的A路徑：擴大打擊可能正在證明伊朗底牌有限。但只有形成能約束主要武裝單位的安排，軍事衰退才會轉化為終局。"
         )
     elif retaliation_persistent:
         leading_id = "iran_resilient" if exit_window else "middle_stalemate"
         leading_name = "B路徑前半段成立" if exit_window else "C路徑風險最高"
-        test_phase = "實力揭露測試｜第二階段"
+        test_phase = "已出現跨日反擊，正在觀察美方是否改變目標"
         thesis_state = "伊朗仍能造成成本；能否迫使美方修正目標尚未揭曉"
-        headline = "擴大戰事得到初步答案：伊朗仍能造成損害；真正關鍵是能否持續"
-        bottom_line = (
+        headline = "伊朗已連續造成損害，但美國會不會因此改變目標，還沒有答案"
+        plain_summary = (
             "連續兩個24小時觀察窗都有造成後果的反擊線索，因此目前公開證據不支持『擴大打擊已使伊朗迅速失去還手能力』。"
             "但這仍只完成B路徑的前半段，尚未證明伊朗能長期維持多戰線壓力，也未證明美國已接受軍事手段的限制。"
             + (
@@ -848,33 +848,38 @@ def build_daily_analysis(
     elif retaliation_reappeared:
         leading_id = "undetermined"
         leading_name = "實力仍在揭露"
-        test_phase = "實力揭露測試｜第一階段"
+        test_phase = "已確認仍能反擊，尚待驗證能否持續"
         thesis_state = "已證明仍能反擊，尚未證明具備持續性"
-        headline = "實力測試仍在第一階段：伊朗再次造成損害，但持續作戰能力尚未揭曉"
-        bottom_line = (
-            "今天的證據顯示伊朗仍能造成成本，因此不能宣告其還擊能力已被清除。"
-            "但單一觀察窗無法區分剩餘庫存、偶發突破與可長期維持的作戰體系；戰事擴大仍在產生答案，還沒有產生終局。"
+        headline = "伊朗仍能反擊，但能不能長期撐下去，現在還不知道"
+        plain_summary = (
+            "今天只確認了一件事：伊朗仍有能力發動造成實際損害的反擊，所以不能說美軍已經完全壓制伊朗。"
+            "但我們還不知道這種能力能維持幾天、能否擴大到更多戰線，也不知道它是否足以迫使美國改變目標。"
+            "因此，戰爭目前還沒有走向明確終局。"
         )
     elif damage_and_degradation:
         leading_id = "middle_stalemate"
         leading_name = "C路徑：中間僵局"
-        test_phase = "實力揭露測試｜相互消耗階段"
+        test_phase = "打擊有效，但還沒有形成決定性壓制"
         thesis_state = "打擊有效，但不足以阻止對手繼續施加成本"
-        headline = "戰事擴大正在揭露雙方極限，但目前指向最危險的中間僵局"
-        bottom_line = (
+        headline = "雙方都還能造成損害，戰爭正走向最危險的中間僵局"
+        plain_summary = (
             "能力受損與有後果的反擊同時存在，表示美方打擊有效、卻尚未取得決定性壓制。"
             "這會延長雙方繼續測試底牌的誘因；除非反擊、通航或政治目標出現跨日收斂，擴大本身不會自動帶來和平。"
         )
     else:
         leading_id = "undetermined"
         leading_name = "尚無路徑完成關鍵驗證"
-        test_phase = "實力揭露測試｜答案不足"
+        test_phase = "關鍵證據不足，暫時無法選出終局路徑"
         thesis_state = "新聞活動存在，但關鍵終局變數尚未收斂"
-        headline = "今天沒有新的終局答案：戰事仍在測試底牌，三條路徑都未完成驗證"
-        bottom_line = (
+        headline = "今天沒有足夠證據判斷戰爭更接近哪一種結局"
+        plain_summary = (
             "目前公開資訊不足以證明伊朗能力迅速耗盡，也不足以證明其能長期迫使美方讓步。"
             "這不是『沒有事情發生』，而是目前發生的事情還不能回答誰會先修正預期、以及協議能否被執行。"
         )
+
+    # Keep the legacy field for downstream readers, while the hero uses the
+    # deliberately plainer and more complete summary above.
+    bottom_line = plain_summary
 
     if retaliation_persistent:
         revelation_text = (
@@ -1041,10 +1046,91 @@ def build_daily_analysis(
         "以色列或胡塞是否把條件式威脅轉為實際行動，使實力測試區域化",
     ]
 
+    fact_text = (
+        f"近24小時辨識到{resilience}組提及伊朗反擊造成後果的去重新聞線索，"
+        f"其中{quality_resilience}組來自官方或大型媒體。若把所有追蹤主題都算入，共有{consequences}組新聞標題提及可觀察後果；"
+        "這個數字與前述反擊線索可能重疊，不能相加。"
+        "這些資料足以確認伊朗仍能發動至少部分有效反擊，但新聞線索數不是獨立攻擊次數，也不能當成飛彈發射量。"
+    )
+
+    if regional_active:
+        meaning_text = (
+            "這表示實力測試已不只發生在伊朗本土。以色列或胡塞一旦實際介入，美國要承受的成本、伊朗可動用的施壓方式，"
+            "以及航運與盟友的風險都會同時增加；戰爭可能更快揭露底牌，也更容易脫離任何一方控制。"
+        )
+        judgment_text = (
+            "目前較接近C路徑，而且是區域化版本：雙方仍相信繼續施壓可能改善自己的談判位置。"
+            "A路徑尚未證明伊朗反擊持續衰退；B路徑也尚未證明美國已因成本上升而縮小目標。"
+        )
+    elif weakness_dominant and retaliation_fading and maritime_improving:
+        meaning_text = (
+            "反擊下降、能力衰退線索增加與海上壓力改善同時出現，表示擴大打擊可能正在削弱伊朗維持威脅的能力。"
+            "這是A路徑第一次具備較完整的軍事條件，但還不能把軍事優勢直接等同於停戰。"
+        )
+        judgment_text = (
+            "A路徑目前領先：伊朗底牌可能比原先宣稱的有限。可是終局仍差政治條件——必須有人能代表伊朗承諾，"
+            "並能實際約束革命衛隊、海軍與代理人，否則攻擊減弱也可能只是暫停。"
+        )
+    elif retaliation_persistent:
+        meaning_text = (
+            "連續兩個觀察窗都出現有後果的反擊，表示美軍擴大打擊尚未迅速清除伊朗的還擊能力。"
+            "這提高B路徑的可能性，但只有當美方開始承認繼續打的邊際收益下降時，軍事韌性才真正轉化為終局力量。"
+        )
+        judgment_text = (
+            ("B路徑的軍事前提已獲支持，且退出窗口開始出現；下一步要看美方是否縮小目標，以及協議能否約束真正執行攻擊的單位。"
+             if exit_window else
+             "B路徑只完成前半段，A路徑也沒有成立。近期最現實的風險仍是C：美國認為再打可能壓垮伊朗，伊朗則用持續反擊證明自己尚未被壓垮。")
+        )
+    elif retaliation_reappeared:
+        meaning_text = (
+            "這表示美軍擴大打擊尚未完全消除伊朗的還擊能力，因此A路徑所需要的『有效反擊迅速衰退』今天沒有成立。"
+            "但單一觀察窗重新出現反擊線索，只能證明伊朗仍有手段，不能證明它有能力長期作戰。"
+        )
+        judgment_text = (
+            "目前A與B都未完成驗證。更現實的近期風險仍是C：美國認為繼續打可能壓垮伊朗，伊朗則用仍能反擊證明自己尚未被壓垮，"
+            "因此雙方都缺少立即收手的理由。"
+        )
+    elif damage_and_degradation:
+        meaning_text = (
+            "美方打擊正在造成能力損失，但伊朗仍能把部分軍事能力轉化為實際成本。"
+            "這說明空襲有效卻尚未形成決定性壓制，也是雙方最容易高估『再打一點就能改變局面』的狀態。"
+        )
+        judgment_text = (
+            "目前最接近C路徑。A路徑缺少反擊持續衰退與通航改善，B路徑缺少美方修正目標的證據；"
+            "只要這兩種關鍵轉折都未出現，相互消耗就會延續。"
+        )
+    else:
+        meaning_text = (
+            "今天的公開資料沒有把『伊朗正在失去能力』或『伊朗能長期迫使美國付出代價』其中任何一個命題推到足以確認的程度。"
+            "因此最合理的做法是保留三種終局假說，而不是用新聞數量填補未知。"
+        )
+        judgment_text = (
+            "A、B、C三條路徑都缺少關鍵驗證。今天沒有方向，不代表戰況穩定；它代表雙方仍可能因為看不清對手底牌而繼續升級。"
+        )
+
+    boundary_text = (
+        "這些報導不能告訴我們伊朗剩餘多少飛彈、還有多少可用發射器、補給速度多快，或其分散的軍事單位能否接受同一套停火命令。"
+        "因此不能直接宣布伊朗具備長期韌性，也不能僅憑一天安靜或一次成功反擊宣告A或B路徑成立。"
+    )
+    validation_text = (
+        "如果有後果的反擊連續兩至三個觀察窗下降，而且商船與海峽安全同步改善，A路徑上升；"
+        "如果伊朗能跨日、跨區持續造成戰略成本，同時美方開始縮小目標或重啟可執行談判，B路徑上升；"
+        "如果兩者都不發生、區域戰線反而增加，C路徑就會延續甚至惡化。"
+    )
+    hero_explanation = [
+        {"label": "事實", "title": "今天確認了什麼", "assessment": fact_text},
+        {"label": "意義", "title": "這代表什麼", "assessment": meaning_text},
+        {"label": "邊界", "title": "不能因此推論什麼", "assessment": boundary_text},
+        {"label": "判斷", "title": "目前較接近哪一種結局", "assessment": judgment_text},
+        {"label": "驗證", "title": "什麼情況會讓結論改變", "assessment": validation_text},
+    ]
+
     return {
         "model_version": 2,
         "headline": headline,
+        "plain_summary": plain_summary,
         "bottom_line": bottom_line,
+        "hero_explanation": hero_explanation,
         "test_phase": test_phase,
         "thesis_state": thesis_state,
         "leading_scenario_id": leading_id,
