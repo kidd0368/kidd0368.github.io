@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 2.2 seconds
-Output:
 #!/usr/bin/env python3
 """Build the self-contained Iran war terminal dashboard."""
 
@@ -428,4 +425,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

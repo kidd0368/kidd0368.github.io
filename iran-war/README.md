@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.7 seconds
-Output:
 # 美伊戰爭終局追蹤
 
 這是一個每天更新的公開證據儀表板，核心問題不是猜飛彈庫存，而是觀察戰事擴大是否正在產生可驗證的終局條件。
@@ -43,4 +40,3 @@ python iran-war/scripts/fetch_sources.py
 python iran-war/scripts/build_dashboard.py
 python iran-war/scripts/validate.py
 ```
-

@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 2.3 seconds
-Output:
 #!/usr/bin/env python3
 """Fail the update job if the generated dashboard is incomplete or misleading."""
 
@@ -55,4 +52,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

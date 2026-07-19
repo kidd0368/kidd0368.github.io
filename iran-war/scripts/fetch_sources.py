@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 2.5 seconds
-Output:
 #!/usr/bin/env python3
 """Fetch public evidence and market proxies for the Iran war terminal tracker.
 
@@ -800,4 +797,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
