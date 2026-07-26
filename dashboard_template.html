@@ -89,6 +89,8 @@ table.tv thead th { position:sticky; top:0; background:var(--surface-1); color:v
 .parts .bf { position:absolute; inset:0 auto 0 0; background:var(--s1); border-radius:6px; }
 .parts .pv { width:70px; text-align:right; font-size:12px; font-variant-numeric:tabular-nums; color:var(--ink-2); flex:none; }
 .pending { border:1px dashed var(--axis); border-radius:10px; padding:12px 14px; color:var(--ink-2); font-size:12.5px; background:var(--wash); }
+.callout { border:1px solid var(--ring); border-radius:10px; padding:11px 13px; color:var(--ink-2); font-size:12.5px; line-height:1.75; background:var(--wash); }
+.callout b { color:var(--ink-1); font-weight:600; }
 .method { font-size:12.5px; color:var(--ink-2); }
 .method h4 { margin:14px 0 4px; font-size:13px; color:var(--ink-1); }
 .method code { background:var(--wash); border-radius:4px; padding:1px 5px; font-size:11.5px; }
@@ -494,7 +496,13 @@ function renderCard(c){
 }
 
 /* ---------- 槓桿ETF 分項 ---------- */
-const ETF_HOW='槓桿 ETF 每日再平衡是機械式的「越漲越買、越跌越賣」，規模夠大時足以主導三星電子／SK海力士的定價（極端交易日曾占個股總成交約六成）。判讀的關鍵是<b>把價格效果剝掉</b>：規模＝份額×淨值，淨值腰斬會讓規模自動縮水，看起來像在出清，其實只是被算小；只要<b>份額</b>沒退出，反彈時規模就會自動長回來，賣壓一點都沒少。所以主圖看兩條線——<b>規模</b>下滑但<b>份額對應資產</b>（總份額×發行價，等於把每一份都用上市原價計價）不跌甚至還升，代表持有人在「越跌越加碼」、槓桿倉位根本沒退場；兩條線同步走低，才是真的在出清。上方兩張圖看價格：<b>平均價格對發行價</b>與<b>跌破發行價家數</b>——破發家數見頂回落、平均價差止穩，通常領先份額開始鬆動。份額對應資產停止創高、並連續數日回落，是訊號①「技術性賣壓衰竭」成立的必要條件之一。';
+const ETF_HOW=
+ '槓桿 ETF 每日再平衡是機械式的「越漲越買、越跌越賣」，規模夠大時足以主導三星電子／SK海力士的定價（極端交易日曾占個股總成交約六成）。所以要判斷這股力量退場了沒，得先知道該數什麼。'
++'<br><br><b>這張圖數的是「份額」，不是錢。</b>份額就是這些基金總共發行了幾份在外面流通，一份當初賣 20,000₩。錢（規模）會被價格牽著走——股價腰斬，規模就自動少一半，看起來像有人跑掉，其實一份都沒少，反彈時規模又會自己長回來，賣壓一點都沒減。份額不會。份額少一份，就是真的有一份被結清、永遠回不來了。'
++'<br><br><b>份額為什麼會減少？</b>投資人在交易所互相買賣，份額完全不變，只是換人拿著。份額只有在「拿去跟基金公司換」的時候才會變。當賣的人一直多過買的人，市價會被壓到比基金裡實際資產還便宜（折價）。這時候有資格的券商（韓國叫指定參與券商，AP）就會在市場上把便宜的單位一路收起來，湊滿一整籃（一籃通常幾萬到幾十萬份，叫 CU、設定單位），拿去跟基金公司換回裡面的資產，賺中間的價差。換掉的那些單位當場註銷，從此不存在。一般投資人做不到這件事——要有 AP 資格，還要湊得出一整籃。'
++'<br><br><b>基金公司不是在「花錢買回」，</b>所以沒有買不買得起的問題，也不能拒絕。它做的是把手上原本就持有的資產按比例還一塊出去，然後自己變小——像寄物櫃把你寄放的東西還你，櫃子少一格而已。'
++'<br><br><b>那為什麼份額減少代表真的有賣壓？</b>因為這是 2 倍槓桿，基金裡裝的是期貨和交換合約。每註銷一籃，基金就得真的到市場上把對應的三星電子／SK海力士部位平掉。份額掉多少，市場上就真的被倒出多少籌碼——這跟兩個投資人之間互相轉手，是完全不同的事。台灣的槓桿型 ETF 也是同一套機制，流通在外的受益權單位數每天都在變動。'
++'<br><br><b>所以主圖看兩條線。</b><b>規模</b>下滑但<b>份額對應資產</b>（總份額×發行價，等於把每一份都用上市原價計價）不跌甚至還升，代表只是被價格算小、人根本沒走，槓桿倉位沒退場；兩條線同步走低，才是真的在出清。上方兩張圖看價格：<b>平均價格對發行價</b>與<b>跌破發行價家數</b>——破發家數見頂回落、平均價差止穩，通常領先份額開始鬆動。份額對應資產停止創高、並連續數日回落，是訊號①「技術性賣壓衰竭」成立的必要條件之一。';
 
 function etfCard(){
   const d=el('div','card'); d.id='card-etf';
@@ -507,6 +515,7 @@ function etfCard(){
   tb.onclick=()=>{ ETF_TBL=!ETF_TBL; tb.textContent=ETF_TBL?'圖表':'逐檔'; renderEtf(); };
   hd.append(tb); d.append(hd);
   const tl=el('div','tiles'); tl.id='etfTiles'; tl.style.margin='14px 0 16px'; d.append(tl);
+  const nt=el('div','callout'); nt.id='etfNote'; nt.style.margin='0 0 16px'; nt.style.display='none'; d.append(nt);
   const body=el('div','body'); body.id='etfBody'; d.append(body);
   const lg=el('div','legend'); lg.id='etfLegend'; d.append(lg);
   const fn=el('div','fn'); fn.id='etfFn'; d.append(fn);
@@ -515,8 +524,9 @@ function etfCard(){
 let ETF_TBL=false;
 function renderEtf(){
   const tl=$('#etfTiles'); if(!tl) return;
-  const body=$('#etfBody'), lg=$('#etfLegend'), fn=$('#etfFn');
+  const body=$('#etfBody'), lg=$('#etfLegend'), fn=$('#etfFn'), nt=$('#etfNote');
   tl.innerHTML=''; body.innerHTML=''; lg.innerHTML=''; fn.innerHTML='';
+  if(nt){ nt.innerHTML=''; nt.style.display='none'; }
   const E=IND.etf||{};
   const btn=$('#etfTblBtn'); if(btn) btn.style.display=E.enabled?'':'none';
   if(!E.enabled){
@@ -524,10 +534,16 @@ function renderEtf(){
     return;
   }
   const P=(v,dp)=>v==null?'–':(v>0?'+':'')+fmtN(v*100,dp==null?1:dp)+'%';
+  /* 份額拆解：高點份額由「高點份額對應資產 ÷ 發行價」反推，不硬編任何數字 */
+  const peakEok=(E.unit_peak_tril!=null&&E.par)?E.unit_peak_tril*1e4/E.par:null;
+  const goneEok=(peakEok!=null&&E.units_eok!=null)?peakEok-E.units_eok:null;
+  const leftPct=(peakEok&&E.units_eok!=null)?E.units_eok/peakEok*100:null;
   /* tiles */
   const T=[
     {l:'份額對應資產（剝除價格效果）', v:fmtN(E.unit_value_tril,1)+' 兆₩',
-     d:'距高點 '+(E.unit_peak_tril?P(E.unit_value_tril/E.unit_peak_tril-1):'–')+' · 總份額 '+fmtN(E.units_eok,0)+' 億份'},
+     d:'距高點 '+(E.unit_peak_tril?P(E.unit_value_tril/E.unit_peak_tril-1):'–')
+       +' · 份額 '+fmtN(E.units_eok,2)+' 億份'
+       +(peakEok!=null?'（高點 '+fmtN(peakEok,2)+' 億份，剩 '+fmtN(leftPct,0)+'%）':'')},
     {l:'總規模（市值口徑）', v:fmtN(E.aum_tril,1)+' 兆₩',
      d:'距高點 '+P(E.aum_vs_peak)+(E.aum_d5!=null?' · 5日 '+P(E.aum_d5):'')},
     {l:'跌破發行價', v:(E.below_par==null?'–':E.below_par)+' / '+(E.n_lev||'–')+' 檔',
@@ -540,6 +556,19 @@ function renderEtf(){
      d:E.exposure_pct!=null?'風險敞口（規模×2）佔標的市值 '+fmtN(E.exposure_pct,2)+'%':'正向槓桿 '+E.n_lev+' 檔合計'});
   T.forEach(x=>{ const c=el('div','tile');
     c.append(el('div','lbl',x.l), el('div','val',x.v), el('div','delta',x.d)); tl.append(c); });
+
+  /* 白話拆解：把「距高點 −45%」翻成看得懂的份數 */
+  if(nt&&leftPct!=null){
+    nt.innerHTML='<b>這個 −'+fmtN(100-leftPct,1)+'% 是什麼意思：</b>'
+      +'高點時，這 '+(E.n_lev||'')+' 檔基金合計有 <b>'+fmtN(peakEok,2)+' 億份</b>在外面流通；現在剩 <b>'+fmtN(E.units_eok,2)+' 億份</b>。'
+      +'中間 <b>'+fmtN(goneEok,2)+' 億份</b>已經被結清註銷、不會再回來，佔高點的 '+fmtN(100-leftPct,1)+'%；'
+      +'還有 '+fmtN(leftPct,1)+'% 的部位<b>留在場上沒走</b>。'
+      +'份額不是在交易所被賣掉就會消失——投資人互相買賣，份額一份都不會少。'
+      +'它是被券商整籃（CU）拿去跟基金公司換回資產、當場註銷才減少的；'
+      +'而每註銷一籃，基金就得真的到市場上把對應的三星電子／SK海力士部位平掉。'
+      +'所以這個數字掉多少，就代表真的有多少籌碼被倒回市場。機制細節見上方「怎麼看這張圖」。';
+    nt.style.display='';
+  }
 
   if(ETF_TBL){
     const it=(E.items||[]);
