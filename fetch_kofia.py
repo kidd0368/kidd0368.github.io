@@ -89,5 +89,13 @@ def main():
         json.dump(bulk, f)
     print("bulk saved.")
 
+    # 槓桿ETF分項（獨立公開來源，見 fetch_etf.py）。
+    # 刻意包在 try 內：ETF 來源任何異常都不得中斷主管線，當日僅沿用前次時序。
+    try:
+        import fetch_etf
+        fetch_etf.main()
+    except Exception as e:
+        print("ETF module skipped:", e, file=sys.stderr)
+
 if __name__ == "__main__":
     main()

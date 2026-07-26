@@ -1,8 +1,12 @@
-# 韓股槓桿數據抓取規格（逆向驗證於 2026-07-09/10）
+# 韓股槓桿數據抓取規格（逆向驗證於 2026-07-09/10，ETF 分項補於 2026-07-26）
 
 ## 傳輸架構
-雲端容器對外網路為白名單制（KOFIA/KRX/Naver/Yahoo 皆不可直連）。
-數據經使用者 Chrome（Claude in Chrome 擴充功能）抓取：
+**生產環境＝GitHub Actions runner，對外網路無限制**，所有來源直連即可（見 `.github/workflows/update.yml`）。
+以下所有端點皆為免登入公開端點，這是刻意的設計約束：本系統不得持有任何帳密或金鑰。
+
+開發容器的對外網路為白名單制（KOFIA/KRX/Naver/Yahoo 皆不可直連），故**端點無法在容器內實測**，
+只能靠 Actions 首跑後回讀 `raw.githubusercontent.com/kidd0368/kidd0368.github.io/main/index.html`
+內嵌的 `IND.etf.probe` 診斷物件驗證。歷史上曾用過的瀏覽器代抓路徑（已不再需要，僅留備查）：
 1. 在 freesis.kofia.or.kr 任一頁面以 `javascript_tool` 執行同源 fetch
 2. 大批量數據打包成 JSON Blob 觸發下載到使用者「下載」資料夾
 3. 使用者已連接該資料夾 → `device_stage_files` 進容器；或使用者手動把檔案拖進對話
@@ -32,17 +36,65 @@
 - 2026-07-08：融資全體 37,199,867；KOSPI融資 29,239,165；KOSDAQ 7,960,702；예탁금 110,874,403；미수금 1,391,052；반대매매 28,846（비중 2.5%）；KOSPI 7,246.79（-5.34%）成交額 42,465,431 市值 5,931,056,231；KOSDAQ 785.0
 - 2026-06-01：융자 37,681,169；2008-01-02：융자 4,439,407
 
-## KRX Data Marketplace（需登入 ⚠️，用戶已授權網域）
+## KRX Data Marketplace（❌ 此路不通，已放棄）
 - 2026 改版後 `getJsonData.cmd` 未登入回 `400 LOGOUT`
-- 登入後（同源）：`POST https://data.krx.co.kr/comm/bldAttendant/getJsonData.cmd`
-  Content-Type: `application/x-www-form-urlencoded`
-- 待驗證的 bld（登入後逐一確認欄位）：
-  - `dbms/MDC/STAT/standard/MDCSTAT04601` ETF全種目基本情報（找14檔三星/海力士單股2倍ETF代碼：名稱含 삼성전자/하이닉스 + 레버리지/2X）
-  - `dbms/MDC/STAT/standard/MDCSTAT04501` 個別ETF時序（收盤、NAV、順資產總額=AUM、成交額）→ 每檔一請求
-  - `dbms/MDC/STAT/standard/MDCSTAT00301` 指數時序（indIdx=1,indIdx2=001=KOSPI）
-  - 變動性指數（VKOSPI）bld 待查；未解鎖前以 20 日已實現波動率替代
-- ETF指標：AUM合計、距峰值%、距4/30基期未出清比例、跌破發行價(2萬₩)家數、再平衡衝擊=Σ(AUM×2×|日漲跌|)/個股成交額
-- 文章錨點：SK海力士槓桿ETF AUM 峰值 167億美元→78億；14檔中13檔破發行價（7/8）
+- **open API 金鑰不對境外申請人開放**（使用者 2026-07-26 確認：「我不能申請KRX 它沒有對外國人開放」）
+- 結論：KRX 路徑永久關閉，不要再回頭嘗試。槓桿ETF 分項改由下節的 Naver 公開端點取得。
+- 僅存的影響：VKOSPI 官方變動性指數取不到，故以 20 日已實現波動率年化替代（儀表板文案已如實標示）。
+
+## 槓桿ETF 分項（`fetch_etf.py`，2026-07-26 上線，全部免登入 ✅）
+標的＝2026-05-27 上市的三星電子／SK海力士單股 2 倍 ETF，發行價一律 **20,000₩**（14 檔正向＋2 檔反向2X）。
+
+**A. Naver 全 ETF 清單（分項主來源）**
+`GET https://finance.naver.com/api/sise/etfItemList.nhn?etfType=0&targetColumn=market_sum&sortOrder=desc`
+回 `{"result":{"etfItemList":[{itemcode,itemname,nowVal,nav,marketSum,changeRate,amonut,...}]}}`
+- 單位：`marketSum`＝억원、`amonut`＝백만원（**來源端拼字即為 amonut，非 amount**，程式兩者皆試）、`nowVal`/`nav`＝₩
+- 篩選採**名稱為準**：需同時命中標的（삼성전자／하이닉스）與 레버리지/2X；`인버스` 歸反向。
+  `KNOWN` 代碼清單**不作為納入依據**（來源非一手，誤納會污染總量），僅在 probe 回報 `known_missed` 供校正。
+
+**B. Naver 個股日線（跌破發行價家數的時序）**
+`GET https://api.finance.naver.com/siseJson.naver?symbol=<code>&requestType=1&startTime=&endTime=&timeframe=day`
+- 回**單引號偽 JSON**，需 `text.replace("'", '"')` 後再 parse；第 0 列為表頭
+- 備援：`https://fchart.stock.naver.com/sise.nhn?symbol=<code>&timeframe=day&count=400&requestType=0`（XML，`data="YYYYMMDD|o|h|l|c|v"`）
+
+**C. 全體 ETF 規模（「佔全體 ETF 比重」的分母）**：見文末 KOFIA 基金統計節。
+**D. 標的市值（風險敞口分母，選配）**：`GET https://m.stock.naver.com/api/stock/<code>/integration`，取 `totalInfos` 中 `시가총액`（억원）。三星＝005930、SK海力士＝000660。
+
+### 核心口徑：看份額不看規模
+規模（市值口徑）會被淨值暴跌灌水成「已出清」的假象。真實槓桿倉位要剝除價格效果：
+```
+units_eok       = marketSum / price          # 億좌
+unit_value_tril = units_eok × 20000 / 1e4    # 兆₩ ← 份額對應資產
+aum_tril        = marketSum / 1e4            # 兆₩ ← 總規模
+```
+手驗：30,000억원 ÷ 10,000₩ = 3억좌；3e8 좌 × 20,000₩ = 6e12₩ = 6 兆₩ ✅
+兩線背離＝規模縮水全來自淨值回落、份額並未退場（＝槓桿還在）。
+
+### 狀態延續（無公開歷史檔）
+規模與份額**沒有公開歷史**，只能自首次執行起逐日累積，且 workflow 的提交步驟只 `git add index.html`
+（`data/` 不進版控）。故狀態載體＝**上一版 `index.html` 內嵌的 `IND.etf.series`**：
+`load_prev()` 找 `const IND = ` 後用 `json.JSONDecoder().raw_decode()` 取回，合併今日點再重新內嵌。
+此設計不需改動 workflow。價格歷史則每次重抓（Naver 有完整日線），無累積問題。
+**不以估算值回填**——觀測點不足時卡片明說「目前 N 個觀測點」。
+
+### 時間預算（重要）
+本模組掛在 `fetch_kofia.py` 尾端，與主抓取**共用同一個 workflow step**（`timeout-minutes: 15`）。
+來源若無回應，重試累加可達數十分鐘，會讓「計算指標／組裝／提交」三步永不執行＝整份儀表板停更。
+故設 `BUDGET_S = 240` 硬上限，逐檔歷史迴圈預留 90 秒、KOFIA 預留 45 秒、市值預留 20 秒，
+超時即帶著已取得的部分結果收工。且整段包在 `try` 內，ETF 任何異常都不得中斷主管線。
+
+### 健全性檢查（寧可留空也不輸出錯數字）
+- 全體 ETF 規模須落在 50 兆–2,000 兆₩，否則視為抓錯欄位 → `probe.kofia_reject`
+- 個股市值須落在 50 兆–1,000 兆₩，否則視為單位解析錯誤 → `probe.mcap_reject`
+- 找不到任何正向槓桿 ETF → 直接 raise（命名規則已變更），當日沿用前次時序
+
+### 首跑驗證方式
+容器連不上 Naver/KOFIA，故首次 Actions 跑完後回讀
+`https://raw.githubusercontent.com/kidd0368/kidd0368.github.io/main/index.html`，
+檢查內嵌 `IND.etf.probe`：`list.n`（清單筆數）、`known_missed`（應為空）、`lev_names`（命名規則是否改版）、
+`elapsed_s`（時間預算是否夠用）、`hist_truncated`／`kofia_reject`／`mcap_reject`／`fatal`。
+
+- 文章錨點（核對用）：SK海力士槓桿ETF AUM 峰值 167億美元→78億；14檔中13檔破發行價（7/8）
 
 ## 更新流程
 - 每日增量：抓「最後已存日期+1 → 今日」（幾列而已，可直接經 1KB 通道回傳，無需下載檔案）
@@ -51,8 +103,21 @@
 
 ## 管線
 ```
-data/kofia_kr_leverage_bulk.json  ← 瀏覽器打包（格式見 make_sample_data.py 的 out 結構）
+python3 fetch_kofia.py            → data/kofia_kr_leverage_bulk.json
+                                    （尾端 try 內呼叫 fetch_etf.main() → data/krx_etf_indicators.json）
 python3 compute_indicators.py data/kofia_kr_leverage_bulk.json [data/krx_etf_indicators.json]
-python3 build_dashboard.py        → out/korea_deleverage_dashboard.html（含內嵌原始碼）
+                                  → out/indicators.json（ETF 檔預設路徑即上者，存在才讀）
+python3 build_dashboard.py        → out/korea_deleverage_dashboard.html
+cp out/korea_deleverage_dashboard.html index.html   ← 唯一進版控的產物（＝ETF 時序的狀態載體）
 ```
-Cowork artifact id：`korea-deleverage-dashboard`（用 update_artifact 更新）
+- ETF 分項接進綜合指數：`etf["remaining"]` 啟用 15 分的分項，其餘權重乘 0.85 重新歸一；
+  `etf["aum_d5"]` 供訊號① 判定（規模 5 日萎縮達 2%，需時序滿 6 日才有值）。
+- 檔名 `krx_etf_indicators.json` 沿用歷史命名，內容已與 KRX 無關。
+- Cowork artifact id：`korea-deleverage-dashboard`（用 update_artifact 更新）
+
+## KOFIA 基金統計（2026-07-20 探勘）
+- 특정유형펀드현황（特定類型基金現況，含 ETF 整體規模）：
+  `POST /meta/getMetaDataList.do`，body `{"dmSearch":{"tmpV40":"100000000","tmpV41":"1","tmpV34":"<YYYYMMDD單日>","tmpV11":"","tmpV7":"1","OBJ_NM":"STATFND0100100140BO"}}`
+  回傳各特定類型列（含 ETF：檔數與規模，單位=tmpV40 억원）。單日快照制，歷史需逐日迴圈。
+  用途：槓桿ETF/整體ETF 比率的「分母」。假日/未公布日回空陣列，故程式自 asof 往前找最多 6 天。
+  分子（槓桿ETF 單獨規模）已由 Naver 清單解決，不再需要 KRX。

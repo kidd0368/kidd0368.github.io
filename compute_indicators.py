@@ -2,7 +2,8 @@
 """
 韓國股市去槓桿壓力分析 — 指標計算引擎
 輸入: kofia_kr_leverage_bulk.json (KOFIA FreeSIS 原始數據, 單位: 百萬韓元)
-     krx_etf_indicators.json (選配, KRX 槓桿ETF數據)
+     krx_etf_indicators.json (選配, 槓桿ETF數據, 由 fetch_etf.py 產出;
+                              檔名沿用歷史命名, 來源已非 KRX 而是 Naver+KOFIA 公開端點)
 輸出: indicators.json (儀表板數據) + CSV 匯出
 
 對齊方式: 以行情(KOSPI∩KOSDAQ)日期為主軸的「聯集對齊」——
@@ -31,7 +32,7 @@ CONFIG = {
     "etf_weight": 15.0,
     "signal2_manual": {"status": "watch", "note": "大型雲服務商財報將至，關注AI資本開支指引"},
     "signal3_manual": {"status": "yellow", "note": "7/16已落地：暫停單股槓桿ETF新發、開戶門檻1,000萬→3,000萬韓元（8/5起僅認現金）、最小交易單位1→20股。僅限新增、未觸16檔存量與每日再平衡機制——治標；後續看限再平衡、壓槓桿倍數、提資本要求"},
-    "macro_note": "7/16 韓央行加息25bp（2023年1月以來首次）開啟緊縮週期，流動性環境轉緊",
+    "macro_note": "7/16 韓央行升息25bp至2.75%（2023年1月以來首次）開啟緊縮週期，流動性環境轉緊",
 }
 
 def parse_bulk(path):
@@ -333,6 +334,7 @@ def compute(bulk, etf=None, hist=None):
         "asof_funds": asof_funds,
         "n_days_total": n,
         "config": {"baseline_date": bdate, "pctl_window_days": W, "weights": Wt,
+                   "etf_weight": CONFIG["etf_weight"],
                    "etf_enabled": etf_part is not None},
         "dates": pick(dates),
         "daily_from": dfrom,
@@ -376,7 +378,8 @@ def compute(bulk, etf=None, hist=None):
             "s3": {"status": CONFIG["signal3_manual"]["status"], "label": "監管干預力度",
                    "detail": CONFIG["signal3_manual"]["note"] + "（人工旗標）"},
         },
-        "etf": etf or {"enabled": False, "note": "待 KRX 登入後補齊：三星/SK海力士單股2倍ETF規模與價格"},
+        "etf": etf or {"enabled": False,
+                       "note": "本次執行未產出 ETF 數據檔（fetch_etf.py 未執行，或行情來源暫時無回應）"},
     }
     return out
 
