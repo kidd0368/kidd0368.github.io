@@ -176,21 +176,77 @@ def kofia_all_etf(sess, day):
 
 
 # ------------------------------------------------- D. 標的個股市值（選配）
+MCAP_URLS = ("https://m.stock.naver.com/api/stock/%s/integration",
+             "https://api.stock.naver.com/stock/%s/integration",
+             "https://m.stock.naver.com/api/stock/%s/basic")
+
+
+def won_to_eok(s):
+    """Naver 顯示字串 → 억원。支援「340조 3,443억원」「3,403,443억원」「340조원」與純數字。"""
+    s = str(s).replace(",", "").strip()
+    if not s:
+        return None
+    tot, hit = 0.0, False
+    m = re.search(r"([\d.]+)\s*조", s)
+    if m:
+        tot += float(m.group(1)) * 10000.0      # 1조 = 10,000억
+        hit = True
+        s = s[m.end():]
+    m = re.search(r"([\d.]+)\s*억", s)
+    if m:
+        tot += float(m.group(1))
+        hit = True
+    elif not hit:
+        m = re.search(r"[\d.]+", s)             # 已是억원 的純數字
+        if m:
+            tot, hit = float(m.group(0)), True
+    return tot if hit else None
+
+
+def scan_mcap(node, out, depth=0):
+    """在任意深度的 JSON 裡找標著「시가총액」的欄位。
+    端點改版時欄位路徑常變、標籤文字不變，故以標籤比對取代硬編路徑。"""
+    if depth > 6 or len(out) > 8:
+        return
+    if isinstance(node, dict):
+        blob = " ".join(str(x) for x in list(node.keys()) + list(node.values())
+                        if not isinstance(x, (dict, list)))
+        if "시가총액" in blob or "marketValue" in blob:
+            for f in ("value", "amount", "marketValue", "desc", "text"):
+                v = won_to_eok(node.get(f, ""))
+                if v:
+                    out.append(v)
+                    break
+        for v in node.values():
+            scan_mcap(v, out, depth + 1)
+    elif isinstance(node, list):
+        for it in node:
+            scan_mcap(it, out, depth + 1)
+
+
 def naver_mcap(sess, code):
-    try:
-        url = "https://m.stock.naver.com/api/stock/%s/integration" % code
-        js = get(sess, url, headers={"User-Agent": UA,
-                                     "Referer": "https://m.stock.naver.com/"}).json()
-        for grp in (js.get("totalInfos") or []):
-            if "시가총액" in str(grp.get("key", "")) or "시가총액" in str(grp.get("code", "")):
-                v = str(grp.get("value", "")).replace(",", "").replace("억원", "").strip()
-                v = float(re.sub(r"[^\d.]", "", v))          # 억원
-                # 三星／海力士市值量級為 50 兆–1,000 兆₩；超出即視為單位解析錯誤
-                if 500000 <= v <= 10000000:
-                    return v
-                PROBE.setdefault("mcap_reject", []).append("%s:%s" % (code, v))
-    except Exception as e:
-        PROBE.setdefault("mcap_err", []).append("%s:%s" % (code, str(e)[:50]))
+    for tpl in MCAP_URLS:
+        if budget_left() < 15:
+            PROBE["mcap_skipped"] = "budget"
+            return None
+        try:
+            js = get(sess, tpl % code, tries=2,
+                     headers={"User-Agent": UA,
+                              "Referer": "https://m.stock.naver.com/"}).json()
+        except Exception as e:
+            PROBE.setdefault("mcap_err", []).append("%s:%s" % (code, str(e)[:50]))
+            continue
+        cand = []
+        scan_mcap(js, cand)
+        for v in cand:
+            # 三星／海力士市值量級為 50 兆–1,000 兆₩；超出即視為單位解析錯誤
+            if 500000 <= v <= 10000000:
+                return v
+        # 沒中就把這個端點的形狀記進 probe，下次執行即可直接看出欄位改到哪
+        PROBE.setdefault("mcap_shape", {})[code] = {
+            "url": tpl.split("/api/")[-1] if "/api/" in tpl else tpl,
+            "keys": sorted(js.keys())[:15] if isinstance(js, dict) else type(js).__name__,
+            "cand": cand[:5]}
     return None
 
 
