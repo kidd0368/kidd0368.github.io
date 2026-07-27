@@ -77,9 +77,9 @@ def fetch_twse(date):
     """證交所 MI_INDEX(全部不含權證):回 (taiex_close, {code: pct}, {code: close}) 或 (None,None,{})=休市/失敗"""
     ds = date.strftime('%Y%m%d')
     r = _get(f'https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX?date={ds}&type=ALLBUT0999&response=json')
-    if r is None: return None, None, {}
+    if r is None: return None, None, {}, {}
     try: j = r.json()
-    except Exception: return None, None, {}
+    except Exception: return None, None, {}, {}
     if j.get('stat') != 'OK' or not j.get('tables'): return None, None, {}, {}
     taiex, stocks, closes, turns = None, {}, {}, {}
     for t in j['tables']:
