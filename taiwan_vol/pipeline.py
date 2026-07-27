@@ -150,7 +150,7 @@ def fetch_tpex(date):
 
     # --- 個股候選端點 ---
     cands = [
-        ('https://www.tpex.org.tw/www/zh-tw/afterTrading/otc', {'date': iso, 'response': 'json'}),
+        ('https://www.tpex.org.tw/www/zh-tw/afterTrading/otc', {'date': iso, 'type': 'EW', 'response': 'json'}),
         ('https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php',
          {'l': 'zh-tw', 'd': roc, 'se': 'EW', 'o': 'json'}),
         ('https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes', None),
@@ -168,10 +168,8 @@ def fetch_tpex(date):
 
     # --- 櫃買指數候選端點 ---
     icands = [
-        ('https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyIndex', {'date': iso, 'response': 'json'}),
-        ('https://www.tpex.org.tw/web/stock/iNdex_info/inxh/Inxh_result.php',
-         {'l': 'zh-tw', 'd': f'{date.year - 1911}/{date.strftime("%m")}', 'o': 'json'}),
-        ('https://www.tpex.org.tw/openapi/v1/tpex_mainboard_highlight', None),
+        ('https://www.tpex.org.tw/www/zh-tw/indexInfo/inx', {'date': f'{date.year - 1911}/{date.strftime("%m")}', 'response': 'json'}),
+        ('https://www.tpex.org.tw/www/zh-tw/afterTrading/indexSummary', {'date': iso, 'response': 'json'}),
     ]
     for url, params in icands:
         r = _get(url, params=params) if params else _get(url)
@@ -255,7 +253,7 @@ def _parse_tpex_index(j, date):
     # 月表(Inxh):rows [日期,開,高,低,收] → 找當日
     for fields, data in _iter_row_dicts(j):
         for row in data:
-            if isinstance(row, list) and len(row) >= 5 and _roc_match(row[0], date):
+            if isinstance(row, list) and len(row) >= 5 and (_roc_match(row[0], date) or str(row[0]).strip() == '櫃買指數'):
                 v = _f(row[4]) or _f(row[1])
                 if v and 50 < v < 5000: return v
             if isinstance(row, dict):
