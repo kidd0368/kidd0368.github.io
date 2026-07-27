@@ -345,9 +345,8 @@ def cmd_update():
     while d <= end and len(days) < MAX_CATCHUP:
         if d.weekday() < 5: days.append(d)
         d += timedelta(days=1)
-    if not days:
-        print('已是最新,無需更新。'); return
-    print(f'嘗試補 {len(days)} 個平日: {days[0]} → {days[-1]}')
+    if not days: print('已是最新,無需新增交易日(仍會嘗試回補缺值)。')
+    else: print(f'嘗試補 {len(days)} 個平日: {days[0]} → {days[-1]}')
 
     R, T, caps, meta = load_state()
     added = 0
