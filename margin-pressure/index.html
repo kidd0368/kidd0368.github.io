@@ -54,7 +54,9 @@
     .hero-copy,.hero-status{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:var(--shadow)}
     .hero h1{font-size:clamp(30px,4vw,54px);line-height:1.08;letter-spacing:-.045em;margin:9px 0 16px}
     .hero h1 span{color:var(--red)}
-    .hero-copy p{color:var(--muted);font-size:16px;line-height:1.75;margin:0;max-width:780px}
+    .hero-copy p{color:var(--muted);font-size:16px;line-height:1.75;margin:0;max-width:820px}
+    .hero-copy .hero-thesis{color:var(--ink);font-size:17px;font-weight:750}
+    .hero-today{margin-top:16px!important;padding:13px 15px;border-left:4px solid var(--red);border-radius:10px;background:var(--red2);color:var(--ink)!important;font-size:14px!important}
     .status-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
     .status-pill{padding:6px 11px;border-radius:999px;background:var(--red2);color:var(--red);font-weight:900;font-size:13px}
     .status-date{font-size:12px;color:var(--muted)}
@@ -69,6 +71,19 @@
     .metric .value{font-size:clamp(23px,2.3vw,36px);font-weight:950;letter-spacing:-.035em;margin:11px 0 5px;white-space:nowrap}
     .metric .hint{font-size:12px;color:var(--muted);line-height:1.5}
     .metric.red{border-top:4px solid var(--red)}.metric.amber{border-top:4px solid var(--amber)}.metric.blue{border-top:4px solid var(--blue)}.metric.teal{border-top:4px solid var(--teal)}
+    .core-guide{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;margin:0 0 26px;box-shadow:0 8px 24px rgba(18,56,82,.04)}
+    .core-guide h2{font-size:23px;letter-spacing:-.025em;margin:5px 0 9px}
+    .core-guide>p{color:var(--muted);line-height:1.75;margin:0;max-width:1050px;font-size:14px}
+    .logic-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+    .logic-step{position:relative;background:var(--surface2);border-radius:14px;padding:15px 15px 14px;min-height:142px}
+    .logic-step:not(:last-child):after{content:"→";position:absolute;right:-10px;top:52px;z-index:2;width:20px;height:20px;display:grid;place-items:center;border-radius:50%;background:var(--surface);color:var(--blue);font-weight:900}
+    .logic-no{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:var(--navy);color:var(--surface);font-size:11px;font-weight:900}
+    [data-theme="dark"] .logic-no{color:#10202a}
+    .logic-step b{display:block;margin:10px 0 5px;font-size:14px}
+    .logic-step p{margin:0;color:var(--muted);font-size:12px;line-height:1.65}
+    .definition-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+    .definition{border:1px solid var(--line);border-radius:13px;padding:13px 14px;font-size:12px;line-height:1.65;color:var(--muted)}
+    .definition b{display:block;color:var(--ink);font-size:13px;margin-bottom:3px}
     .section{margin-top:26px}
     .section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin:0 2px 12px}
     .section-head h2{font-size:24px;letter-spacing:-.025em;margin:0}.section-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
@@ -79,14 +94,17 @@
     .legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px;font-size:12px;color:var(--muted)}
     .legend span:before{content:"";display:inline-block;width:20px;height:3px;border-radius:3px;background:var(--c);vertical-align:middle;margin-right:6px}
     .candidate-list{display:grid;gap:12px;margin-top:16px}
-    .candidate{display:grid;grid-template-columns:85px 1fr auto;gap:10px;align-items:center}
+    .candidate{display:grid;grid-template-columns:minmax(150px,1.15fr) minmax(80px,.85fr) auto;gap:10px;align-items:center}
     .candidate-name{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .candidate-meta{font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.4}
     .candidate-bar{height:9px;border-radius:9px;background:var(--surface2);overflow:hidden}
     .candidate-bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--amber),var(--red))}
     .candidate-value{font-variant-numeric:tabular-nums;font-size:12px;font-weight:800}
     .insights{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
     .insight{background:var(--surface2);border-radius:14px;padding:15px;line-height:1.65;font-size:13px}
     .insight b{display:block;color:var(--blue);margin-bottom:4px}
+    .chart-callout{display:flex;align-items:flex-start;gap:10px;margin-top:13px;padding:12px 14px;border-radius:12px;background:var(--amber2);font-size:12px;line-height:1.65}
+    .chart-callout strong{color:var(--amber);white-space:nowrap}
     .search-card{padding:22px}
     .search-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .search-row input{flex:1;min-width:220px;border:1px solid var(--line);border-radius:12px;background:var(--page);color:var(--ink);padding:12px 14px;outline:none}
@@ -124,13 +142,13 @@
     footer{margin-top:32px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     .toast{position:fixed;right:18px;bottom:18px;background:var(--navy);color:var(--surface);border-radius:11px;padding:11px 14px;font-size:12px;font-weight:800;box-shadow:var(--shadow);z-index:50}
     [data-theme="dark"] .toast{color:#10202a}
-    @media(max-width:1100px){.metric-grid{grid-template-columns:repeat(3,1fr)}.two-col{grid-template-columns:1fr}.stock-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:1100px){.metric-grid{grid-template-columns:repeat(3,1fr)}.two-col{grid-template-columns:1fr}.stock-grid{grid-template-columns:repeat(2,1fr)}.logic-flow{grid-template-columns:repeat(2,1fr)}.logic-step:nth-child(2):after{display:none}}
     @media(max-width:740px){
       .header-inner,.wrap{padding-left:14px;padding-right:14px}.brand-sub{display:none}.hero{grid-template-columns:1fr}.hero-copy,.hero-status{padding:20px}
-      .metric-grid{grid-template-columns:repeat(2,1fr)}.metric{min-height:112px}.metric .value{font-size:25px}.insights,.bands{grid-template-columns:1fr}.stock-grid{grid-template-columns:1fr 1fr}
+      .metric-grid{grid-template-columns:repeat(2,1fr)}.metric{min-height:112px}.metric .value{font-size:25px}.insights,.bands,.definition-grid{grid-template-columns:1fr}.stock-grid{grid-template-columns:1fr 1fr}
       .section-head{align-items:flex-start;flex-direction:column}.controls{width:100%}.controls input{width:100%}.chart-wrap{height:260px}.method-grid{grid-template-columns:1fr}
     }
-    @media(max-width:460px){.metric-grid,.stock-grid{grid-template-columns:1fr}.header-actions .link-text{display:none}.stock-head{flex-direction:column}.candidate{grid-template-columns:76px 1fr auto}}
+    @media(max-width:460px){.metric-grid,.stock-grid,.logic-flow{grid-template-columns:1fr}.logic-step:after{display:none!important}.header-actions .link-text{display:none}.stock-head{flex-direction:column}.candidate{grid-template-columns:minmax(130px,1fr) 80px auto}}
   </style>
 </head>
 <body>
@@ -170,7 +188,8 @@
         <div class="hero-copy">
           <div class="eyebrow">Taiwan margin pressure · <span id="dataDateA"></span></div>
           <h1>明天可能面對多少<span>融資賣壓？</span></h1>
-          <p id="heroNarrative"></p>
+          <p class="hero-thesis">這個網站不是預測「明天一定斷頭多少張」，而是用最近60個交易日的融資買進成本，估算有多少近期融資已進入追繳或處分風險，再換算成明日可能形成的賣壓範圍。</p>
+          <p id="heroNarrative" class="hero-today"></p>
         </div>
         <div class="hero-status">
           <div class="status-top"><span id="pressureLabel" class="status-pill"></span><span id="dataDateB" class="status-date"></span></div>
@@ -180,37 +199,55 @@
       </section>
 
       <section class="metric-grid" aria-label="市場關鍵指標">
-        <article class="metric amber"><div class="label">近60日加權維持率</div><div id="marketMaintenance" class="value"></div><div class="hint">公開資料估算，不是券商整戶維持率</div></article>
-        <article class="metric red"><div class="label">明日可處分候選上限</div><div id="marketCandidate" class="value"></div><div class="hint">兩個交易日前新跌破130%且尚未回升</div></article>
-        <article class="metric blue"><div class="label">推估明日賣壓｜基準</div><div id="marketBaseSell" class="value"></div><div class="hint">候選上限 × 25%，可在模型假設調整</div></article>
-        <article class="metric teal"><div class="label">再跌5%新增低於130%</div><div id="marketShock5" class="value"></div><div id="marketShock5Hint" class="hint"></div></article>
+        <article class="metric amber"><div class="label">近60日加權維持率</div><div id="marketMaintenance" class="value"></div><div class="hint">越接近130%，代表近期融資整體越靠近風險線；這是市場估算，不是券商整戶數字。</div></article>
+        <article class="metric red"><div class="label">明日可處分候選｜上限</div><div id="marketCandidate" class="value"></div><div class="hint">兩個交易日前新跌破130%且尚未回升；是候選上限，不代表一定全部賣出。</div></article>
+        <article class="metric blue"><div class="label">推估明日賣壓｜基準</div><div id="marketBaseSell" class="value"></div><div class="hint">假設候選部位有25%未補繳或被處分；低／高情境為10%／40%。</div></article>
+        <article class="metric teal"><div class="label">若再跌5%｜新增風險部位</div><div id="marketShock5" class="value"></div><div id="marketShock5Hint" class="hint"></div></article>
         <article class="metric"><div class="label">可估成本覆蓋率</div><div id="marketCoverage" class="value"></div><div id="marketCoverageHint" class="hint"></div></article>
       </section>
 
+      <section class="core-guide">
+        <div class="eyebrow">先看懂模型的核心</div>
+        <h2>從近期融資成本，推到「明天可能形成多少賣壓」</h2>
+        <p>CMoney只提供每天全市場與個股的融資買進、賣出、現償及餘額，無法看到每位投資人的整戶擔保品。因此本模型不冒充券商斷頭名單，而是把公開資料整理成一條可追蹤的風險鏈。</p>
+        <div class="logic-flow">
+          <div class="logic-step"><span class="logic-no">1</span><b>估算近60日融資成本</b><p>用每日成交金額÷成交量，近似當天融資買進成本，避免多年舊融資稀釋近期訊號。</p></div>
+          <div class="logic-step"><span class="logic-no">2</span><b>找出跌破130%的部位</b><p>依模型融資成數推估維持率；低於130%代表已進入追繳或處分風險區。</p></div>
+          <div class="logic-step"><span class="logic-no">3</span><b>鎖定明日可處分候選</b><p>只計算兩個交易日前新跌破130%，而且截至今天仍未回升的近期融資。</p></div>
+          <div class="logic-step"><span class="logic-no">4</span><b>換算可能賣壓範圍</b><p>候選上限再乘10%／25%／40%，形成低、基準與高三種規劃情境。</p></div>
+        </div>
+        <div class="definition-grid">
+          <div class="definition"><b>為什麼主看60日？</b>20日太短、容易被單日行情放大；120日適合確認中期，但可能混入較舊成本。60日兼顧近期賣壓與樣本穩定度。</div>
+          <div class="definition"><b>130%代表什麼？</b>它是追繳維持率的風險邊界。跌破不等於當天立刻賣出，投資人仍可能補繳、賣股或提供其他擔保品。</div>
+          <div class="definition"><b>候選上限與實際賣壓不同</b><span id="definitionCandidate"></span>張是可處分候選上限；<span id="definitionBase"></span>張才是<span id="definitionBaseRate"></span>基準情境。兩者不能混為一談。</div>
+        </div>
+      </section>
+
       <section class="section">
-        <div class="section-head"><div><h2>市場壓力情境</h2><p>回答「如果再跌，會有多少近期融資進一步掉進130%以下」。</p></div></div>
+        <div class="section-head"><div><h2>如果市場繼續跌，風險會擴大多少？</h2><p>左圖看全市場風險如何隨跌幅擴張；右圖找出明日可處分候選張數最大的個股。</p></div></div>
         <div class="two-col">
           <article class="card">
-            <div class="card-title">再跌幅度與低於130%融資部位</div>
-            <div class="card-sub">橘線是新增部位，紅線是包含目前已低於130%的累計部位；單位為張。</div>
+            <div class="card-title">再跌多少，會新增多少低於130%的近期融資？</div>
+            <div class="card-sub">橘線是「從現在開始再跌」所新增的風險部位；紅線是「目前已低於130%＋新增部位」的累計總量。0%時紅線的起點就是目前已在風險區的部位。</div>
             <div class="chart-wrap"><canvas id="stressChart" role="img" aria-label="價格下跌情境與低於130%融資部位折線圖"></canvas></div>
             <div class="legend"><span style="--c:var(--amber)">新增低於130%</span><span style="--c:var(--red)">累計低於130%</span></div>
+            <div class="chart-callout"><strong>怎麼解讀－5%</strong><span id="chartCallout"></span></div>
           </article>
           <article class="card">
-            <div class="card-title">明日候選張數最大個股</div>
-            <div class="card-sub">是可處分候選上限，並非已知券商斷頭名單。</div>
+            <div class="card-title">明日可處分候選｜張數最大個股</div>
+            <div class="card-sub">除了候選張數，也要一起看它占該股20日均量多少；張數大不一定代表市場衝擊最大。</div>
             <div id="candidateList" class="candidate-list"></div>
           </article>
         </div>
         <div class="insights">
-          <div class="insight"><b>看市場溫度</b><span id="insightTemperature"></span></div>
-          <div class="insight"><b>看明日候選</b><span id="insightCandidate"></span></div>
-          <div class="insight"><b>看尾端風險</b><span id="insightShock"></span></div>
+          <div class="insight"><b>第一步｜今天是否已經偏危險？</b><span id="insightTemperature"></span></div>
+          <div class="insight"><b>第二步｜明天可能賣多少？</b><span id="insightCandidate"></span></div>
+          <div class="insight"><b>第三步｜若續跌會不會惡化？</b><span id="insightShock"></span></div>
         </div>
       </section>
 
       <section id="stockSection" class="section">
-        <div class="section-head"><div><h2>查詢特定股票</h2><p>輸入股票代號或名稱；網址會同步成可分享的個股深連結。</p></div></div>
+        <div class="section-head"><div><h2>特定股票會跌多少才碰到130%？</h2><p>先看60日維持率與130%觸發價，再看明日候選占該股20日均量多少；輸入代號後網址會同步成可分享連結。</p></div></div>
         <article class="card search-card">
           <form id="stockForm" class="search-row">
             <input id="stockInput" list="stockOptions" placeholder="例如 2330、台積電" aria-label="股票代號或名稱">
@@ -360,13 +397,17 @@
       $("marketCandidate").textContent=`${fmt0(m.eligible_tomorrow_60)} 張`;
       $("marketBaseSell").textContent=`${fmt0(m.estimated_sell_base)} 張`;
       $("marketShock5").textContent=`${fmt0(m.shock5_added_60)} 張`;
-      $("marketShock5Hint").textContent=`約占市場20日均量 ${pct1(m.shock5_to_adv)}`;
+      $("marketShock5Hint").textContent=`這是未來新增風險，不是明日立即賣壓；約占市場20日均量 ${pct1(m.shock5_to_adv)}`;
       $("marketCoverage").textContent=pct1(m.known_coverage);
       $("marketCoverageHint").textContent=`融資流量勾稽差異率 ${pct1(q.reconciliation_mismatch_rate)}`;
-      $("heroNarrative").textContent=`截至${shortDate(DATA.asOf)}，近60日融資壓力溫度為${Math.round(m.temperature)}（${m.pressure_label}）。明日可處分候選上限約${fmt0(m.eligible_tomorrow_60)}張；基準情境估計其中約${fmt0(m.estimated_sell_base)}張形成賣壓。`;
-      $("insightTemperature").textContent=`溫度${Math.round(m.temperature)}代表近期融資集中度、低維持率部位與跌價敏感度同時升高。`;
-      $("insightCandidate").textContent=`候選上限${fmt0(m.eligible_tomorrow_60)}張，規劃區間${fmt0(m.estimated_sell_low)}–${fmt0(m.estimated_sell_high)}張。`;
-      $("insightShock").textContent=`若整體價格再跌5%，模型估計新增${fmt0(m.shock5_added_60)}張落入130%以下。`;
+      $("definitionCandidate").textContent=fmt0(m.eligible_tomorrow_60);
+      $("definitionBase").textContent=fmt0(m.estimated_sell_base);
+      $("definitionBaseRate").textContent=pct1(DATA.assumptions.non_cure_base);
+      $("heroNarrative").textContent=`今天的結論：壓力溫度${Math.round(m.temperature)}（${m.pressure_label}）；明日候選上限${fmt0(m.eligible_tomorrow_60)}張，但基準賣壓約${fmt0(m.estimated_sell_base)}張。若市場再跌5%，另有${fmt0(m.shock5_added_60)}張近期融資可能新進入130%以下。`;
+      $("chartCallout").textContent=`市場若由今天價格再跌5%，模型估計新增${fmt0(m.shock5_added_60)}張落入130%以下；加上目前已在風險區的部位，累計約${fmt0(DATA.scenarios.find(s=>s.decline===-0.05)?.cumulative_under130)}張。新增部分約占全市場20日均量${pct1(m.shock5_to_adv)}，代表續跌時賣壓可能明顯加速。`;
+      $("insightTemperature").textContent=`溫度${Math.round(m.temperature)}為高壓，代表近期融資集中度、低維持率部位與跌價敏感度同時升高；它是全市場預警，不是單一買賣訊號。`;
+      $("insightCandidate").textContent=`候選上限${fmt0(m.eligible_tomorrow_60)}張不會全部賣出。用未補繳／被處分比例估算，低、基準、高情境為${fmt0(m.estimated_sell_low)}／${fmt0(m.estimated_sell_base)}／${fmt0(m.estimated_sell_high)}張。`;
+      $("insightShock").textContent=`若整體價格再跌5%，模型估計新增${fmt0(m.shock5_added_60)}張進入130%以下；這是下一波可能形成的風險庫存，不等於明日當天賣壓。`;
       $("methodSource").textContent=`CMoney ${shortDate(DATA.dateStart)}–${shortDate(DATA.asOf)}，共${DATA.dateCount}個交易日；主指標使用近60日。`;
       renderCandidateList();drawStressChart();populateOptions();
       const requested=new URLSearchParams(location.search).get("stock");
@@ -377,7 +418,7 @@
     function renderCandidateList(){
       const rows=[...STOCKS].sort((a,b)=>b.eligible_tomorrow_60-a.eligible_tomorrow_60).slice(0,10);
       const max=rows[0]?.eligible_tomorrow_60||1;
-      $("candidateList").innerHTML=rows.map(s=>`<div class="candidate" data-code="${s.code}"><div class="candidate-name">${s.code} ${s.name}</div><div class="candidate-bar"><i style="width:${clamp(s.eligible_tomorrow_60/max*100,1,100)}%"></i></div><div class="candidate-value">${fmt0(s.eligible_tomorrow_60)}</div></div>`).join("");
+      $("candidateList").innerHTML=rows.map(s=>`<div class="candidate" data-code="${s.code}"><div><div class="candidate-name">${s.code} ${s.name}</div><div class="candidate-meta">占20日均量 ${pct1(s.candidateAdv)} · 基準賣壓 ${fmt0(s.baseSell)}張</div></div><div class="candidate-bar"><i style="width:${clamp(s.eligible_tomorrow_60/max*100,1,100)}%"></i></div><div class="candidate-value">上限 ${fmt0(s.eligible_tomorrow_60)}</div></div>`).join("");
       $("candidateList").querySelectorAll(".candidate").forEach(el=>el.addEventListener("click",()=>{selectStock(STOCKS.find(s=>s.code===el.dataset.code));$("stockSection").scrollIntoView();}));
     }
     function drawStressChart(){
