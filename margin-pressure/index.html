@@ -62,8 +62,8 @@
     .note{color:var(--muted);font-size:12px;line-height:1.65;margin:12px 0 0}.risk-note{padding:14px 16px;background:var(--amber2);border-radius:12px;line-height:1.65;font-size:13px}
     .search-panel{padding:20px}.search-row{display:flex;gap:9px}.search-row input{flex:1;min-width:0;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--page);color:var(--ink)}
     .stock-card{margin-top:14px;padding:22px}.stock-title-row{display:flex;justify-content:space-between;gap:12px;align-items:start}.stock-title{font-size:31px;font-weight:950;letter-spacing:-.03em}.stock-code{font-size:15px;color:var(--muted);margin-left:7px}
-    .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}.chip{padding:5px 10px;background:var(--surface2);font-size:12px}.chip.risk{background:var(--red2);color:var(--red)}
-    .stock-summary{margin:16px 0 0;padding:17px;border-left:4px solid var(--teal);background:color-mix(in srgb,var(--teal) 8%,var(--surface));border-radius:10px;line-height:1.65}.stock-summary-title{display:block;color:var(--teal);font-size:12px;font-weight:950;margin-bottom:5px}.stock-summary-head{font-size:17px;font-weight:900}.stock-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:13px}.stock-summary-item{padding:12px;background:color-mix(in srgb,var(--surface) 82%,transparent);border:1px solid color-mix(in srgb,var(--teal) 18%,var(--line));border-radius:10px}.stock-summary-item b{display:block;font-size:12px;margin-bottom:3px}.stock-summary-item span{font-size:13px;color:var(--muted)}.stock-summary-foot{margin:12px 0 0;font-size:13px;color:var(--muted)}
+    .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}.chip{padding:5px 10px;background:var(--surface2);font-size:12px}.chip.risk{background:var(--red2);color:var(--red)}.chip.watch{background:var(--amber2);color:var(--amber)}.chip.safe{background:color-mix(in srgb,var(--green) 14%,var(--surface));color:var(--green)}
+    .stock-summary{margin:16px 0 0;padding:17px;border-left:4px solid var(--teal);background:color-mix(in srgb,var(--teal) 8%,var(--surface));border-radius:10px;line-height:1.65}.stock-summary.alert{border-left-color:var(--red);background:color-mix(in srgb,var(--red) 7%,var(--surface))}.stock-summary.alert .stock-summary-title{color:var(--red)}.stock-summary-title{display:block;color:var(--teal);font-size:12px;font-weight:950;margin-bottom:5px}.stock-summary-head{font-size:17px;font-weight:900}.stock-summary-grid{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:9px;margin-top:13px}.stock-summary-item{padding:12px;background:color-mix(in srgb,var(--surface) 82%,transparent);border:1px solid color-mix(in srgb,var(--teal) 18%,var(--line));border-radius:10px}.stock-summary-item>b{display:block;font-size:12px;margin-bottom:6px}.stock-summary-item span{font-size:13px;color:var(--muted)}.period-line{display:grid;grid-template-columns:45px 1fr;gap:7px;padding:4px 0;border-bottom:1px solid color-mix(in srgb,var(--line) 65%,transparent)}.period-line:last-child{border-bottom:0}.period-line b{font-size:12px}.stock-summary-foot{margin:12px 0 0;font-size:13px;color:var(--muted)}
     .stock-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}.stock-stat{padding:15px;background:var(--surface2);border-radius:13px}.stock-stat .k{color:var(--muted);font-size:12px;font-weight:850}.stock-stat .v{font-size:25px;font-weight:950;margin:8px 0 4px}.stock-stat .s{font-size:12px;color:var(--muted);line-height:1.45}
     .layer-state{font-size:12px;font-weight:850}.good{color:var(--green)}.warn{color:var(--amber)}.danger{color:var(--red)}.muted{color:var(--muted)}
     .warning{margin-top:12px;padding:13px 15px;border:1px solid color-mix(in srgb,var(--amber) 50%,var(--line));background:var(--amber2);border-radius:12px;color:var(--ink);font-size:12px;line-height:1.65}
@@ -155,18 +155,19 @@
             <div class="stock-stat"><div class="k">明日可能處分候選（上限）</div><div id="sCandidate" class="v"></div><div id="sBaseSell" class="s"></div></div>
           </div>
           <h3>先看60日，再用120／160日確認</h3>
-          <div class="table-wrap"><table><thead><tr><th>觀察期間</th><th>期初日期／融資餘額</th><th>目前比期初增減</th><th>可追蹤的新增融資</th><th>新增占目前融資</th><th>新增占流通在外股*</th><th>估計買進成本</th><th>新增部位維持率</th><th>跌到130%的股價</th><th>其他部位維持率（推估）</th></tr></thead><tbody id="stockWindowBody"></tbody></table></div>
+          <div class="table-wrap"><table><thead><tr><th>觀察期間</th><th>期初日期／融資餘額</th><th>目前比期初增減</th><th>可追蹤的新增融資</th><th>新增占目前融資</th><th>新增占流通在外股*</th><th>估計買進成本</th><th>新增部位維持率</th><th>其中已低於130%</th><th>跌到130%的股價</th><th>其他部位維持率（推估）</th></tr></thead><tbody id="stockWindowBody"></tbody></table></div>
           <h3 style="margin-top:20px">股價再跌時，近60日新增部位的風險</h3>
+          <p id="stockScenarioNote" class="note"></p>
           <div class="table-wrap"><table><thead><tr><th>股價情境</th><th>目前已低於130%</th><th>本情境新增跌破</th><th>合計低於130%</th><th>合計／20日均量</th></tr></thead><tbody id="stockScenarioBody"></tbody></table></div>
           <div id="stockWarning" class="warning"></div>
         </article>
       </section>
 
       <section class="section">
-        <div class="section-head"><div><h2>找出哪些股票最需要先看</h2><p>壓力分數越高，代表近期新增融資、跌破警戒線部位及相對成交量的潛在賣壓越集中。可點欄名排序，點資料列查看個股。</p></div><button id="downloadCsv" class="ghost">下載目前篩選結果</button></div>
-        <div class="filters"><input id="tableSearch" placeholder="輸入代號或名稱"><select id="riskFilter"><option value="all">全部壓力</option><option value="high">高壓 75–100</option><option value="mid">升溫 50–74</option><option value="low">留意 25–49</option><option value="cool">低壓 0–24</option></select><select id="marketFilter"><option value="all">全部市場</option><option value="上市">上市</option><option value="上櫃">上櫃</option></select></div>
+        <div class="section-head"><div><h2>找出哪些股票最需要先看</h2><p>預設先排CMoney整體維持率已低於130%的股票，再比較60日新增融資壓力。兩種風險分開顯示，避免把「近期沒有新增」誤判成「整體沒有風險」。</p></div><button id="downloadCsv" class="ghost">下載目前篩選結果</button></div>
+        <div class="filters"><input id="tableSearch" placeholder="輸入代號或名稱"><select id="overallFilter"><option value="all">全部整體維持率</option><option value="high">低於130%：高風險訊號</option><option value="warn">130–140%：警戒</option><option value="buffer">140%以上</option></select><select id="riskFilter"><option value="all">全部60日新增壓力</option><option value="high">高壓 75–100</option><option value="mid">升溫 50–74</option><option value="low">留意 25–49</option><option value="cool">低壓 0–24</option></select><select id="marketFilter"><option value="all">全部市場</option><option value="上市">上市</option><option value="上櫃">上櫃</option></select></div>
         <div class="table-wrap" style="margin-top:11px"><table class="rank"><thead><tr>
-          <th data-sort="code">代號</th><th data-sort="name">名稱</th><th data-sort="current_price">收盤</th><th data-sort="score">壓力分數</th><th data-sort="cmoney_maintenance">全部融資維持率</th>
+          <th data-sort="code">代號</th><th data-sort="name">名稱</th><th data-sort="current_price">收盤</th><th data-sort="overallPriority">整體風險訊號</th><th data-sort="cmoney_maintenance">CMoney維持率</th><th data-sort="score">60日新增壓力</th>
           <th data-sort="net_change_60">60日融資增減</th><th data-sort="net_added_qty_60">可追蹤新增融資</th><th data-sort="net_added_share_current_60">新增占目前融資</th><th data-sort="net_added_to_issued_60">新增占流通在外股*</th>
           <th data-sort="net_added_maintenance_60">新增部位維持率</th><th data-sort="base_maintenance_60">其他部位維持率（推估）</th><th data-sort="current_financing_to_issued">總融資占流通在外股*</th>
           <th data-sort="eligible_tomorrow_60">明日候選上限</th><th data-sort="baseSell">假設25%形成賣壓</th><th data-sort="candidateAdv">候選占20日均量</th><th data-sort="scenario_add_5">再跌5%新增跌破</th><th data-sort="confidence">資料信心</th>
@@ -212,7 +213,7 @@
   (() => {
     const $=id=>document.getElementById(id);
     const dec=new TextDecoder();
-    let DATA=null,STOCKS=[],selected=null,filtered=[],page=1,sortKey="score",sortDir=-1;
+    let DATA=null,STOCKS=[],selected=null,filtered=[],page=1,sortKey="overallPriority",sortDir=-1;
     const pageSize=50;
     const nf0=new Intl.NumberFormat("zh-TW",{maximumFractionDigits:0});
     const nf1=new Intl.NumberFormat("zh-TW",{minimumFractionDigits:1,maximumFractionDigits:1});
@@ -228,6 +229,11 @@
     const maintClass=v=>v==null?"muted":v<1.3?"danger":v<1.4?"warn":"good";
     const maintMeaning=v=>v==null?"沒有足夠資料估算":v<1.3?"已低於130%警戒線":v<1.4?"位於130%至140%警戒區":v<1.5?"高於140%，但仍需留意":"高於140%，目前仍有緩衝";
     const pressureMeaning=v=>v>=75?"近期新增融資與潛在賣壓都偏高，應優先檢查高分個股。":v>=50?"近期融資壓力正在升高，需留意接近130%的股票。":v>=25?"市場整體壓力不高，但部分個股已出現集中風險。":"市場整體仍屬低壓，風險主要集中在少數個股。";
+    const overallRiskLabel=v=>v==null?"資料不足":v<1.3?"高風險訊號":v<1.4?"警戒":v<1.5?"留意":"相對有緩衝";
+    const overallRiskMeaning=v=>v==null?"CMoney整體維持率缺值":v<1.3?"已低於130%警戒線，屬高風險訊號":v<1.4?"位於130%至140%警戒區":v<1.5?"高於140%，但仍需留意":"高於150%，目前相對有緩衝";
+    const overallChipClass=v=>v!=null&&v<1.3?"risk":v!=null&&v<1.4?"watch":"safe";
+    const overallPriority=v=>v==null?0:v<1.3?3:v<1.4?2:1;
+    const overallBucket=v=>v!=null&&v<1.3?"high":v!=null&&v<1.4?"warn":"buffer";
     const toast=msg=>{const t=$("toast");t.textContent=msg;t.classList.remove("hidden");setTimeout(()=>t.classList.add("hidden"),1800)};
     const copy=async text=>{try{await navigator.clipboard.writeText(text);toast("已複製連結")}catch{toast("瀏覽器無法複製，請手動複製網址")}};
     const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -251,6 +257,8 @@
     function init(){
       STOCKS=DATA.stocks.map(row=>Object.fromEntries(DATA.stockColumns.map((key,i)=>[key,row[i]]))).map(s=>({
         ...s,
+        overallPriority:overallPriority(s.cmoney_maintenance),
+        overallRisk:overallRiskLabel(s.cmoney_maintenance),
         baseSell:(s.eligible_tomorrow_60||0)*(DATA.assumptions.non_cure_base??.25),
         candidateAdv:s.adv20>0?(s.eligible_tomorrow_60||0)/s.adv20:null
       }));
@@ -294,56 +302,67 @@
       if(!s)return;selected=s;$("stockCard").classList.remove("hidden");$("stockInput").value=`${s.code} ${s.name}`;
       const u=new URL(location.href);u.searchParams.set("stock",s.code);history.replaceState(null,"",u);
       $("stockName").textContent=s.name;$("stockCode").textContent=s.code;
-      $("stockChips").innerHTML=`<span class="chip">${esc(s.market)}</span><span class="chip">${esc(s.product_type)}</span><span class="chip risk">壓力 ${fmt0(s.score)} · ${riskLabel(s.score)}</span><span class="chip">資料信心 ${esc(s.confidence)}</span>`;
+      $("stockChips").innerHTML=`<span class="chip">${esc(s.market)}</span><span class="chip">${esc(s.product_type)}</span><span class="chip ${overallChipClass(s.cmoney_maintenance)}">整體融資：${overallRiskLabel(s.cmoney_maintenance)}</span><span class="chip">${(s.net_added_qty_60||0)>0?`60日新增壓力 ${fmt0(s.score)} · ${riskLabel(s.score)}`:"60日新增：無可追蹤部位"}</span><span class="chip">資料信心 ${esc(s.confidence)}</span>`;
       const q60=s.net_added_qty_60||0,change60=s.net_change_60||0,maint60=s.net_added_maintenance_60,trigger60=s.net_added_trigger_60;
-      const changeSummary=change60>0
-        ?`近60日融資增加${fmt0(change60)}張，占目前融資${pct1(s.net_added_share_current_60)}；這批新增部位維持率為${pct1(maint60)}，${maintMeaning(maint60)}。`
-        :`近60日融資${change60<0?`減少${fmt0(Math.abs(change60))}張`:"沒有增加"}，因此沒有形成可追蹤的60日新增融資部位。`;
-      const triggerSummary=q60<=0?"沒有新增部位可計算":s.current_price<=trigger60
-        ?`130%警戒價約${price(trigger60)}元，目前股價已低於這個水準`
-        :`股價再跌約${pct1(1-trigger60/s.current_price)}，約到${price(trigger60)}元會碰到130%`;
+      const periods=[60,120,160].map(n=>({
+        n,change:s[`net_change_${n}`]||0,qty:s[`net_added_qty_${n}`]||0,
+        maint:s[`net_added_maintenance_${n}`],under130:s[`net_added_under130_${n}`]||0
+      }));
+      const positivePeriods=periods.filter(x=>x.qty>0&&x.maint!=null);
+      const weakestPeriod=[...positivePeriods].sort((a,b)=>a.maint-b.maint)[0];
+      const allPeriodsDown=periods.every(x=>x.change<=0);
+      const periodHtml=periods.map(x=>`<div class="period-line"><b>${x.n}日</b><span>${x.change>0?`增加${fmt0(x.change)}張；新增部位維持率${pct1(x.maint)}，其中${fmt0(x.under130)}張低於130%`:`${x.change<0?`減少${fmt0(Math.abs(x.change))}張`:"持平"}；沒有可追蹤的新增部位`}</span></div>`).join("");
+      const headline=s.cmoney_maintenance!=null&&s.cmoney_maintenance<1.3
+        ?`CMoney整體維持率只有${pct1(s.cmoney_maintenance)}，已低於130%警戒線。${change60>0?`近60日融資還增加${fmt0(change60)}張，近期新增與整體風險同時存在。`:"即使近60日融資沒有增加，也不能判定為低風險。"}`
+        :weakestPeriod&&weakestPeriod.maint<1.3
+        ?`${weakestPeriod.n}日新增融資維持率為${pct1(weakestPeriod.maint)}，已低於130%警戒線；這是目前最需要注意的新增部位。`
+        :positivePeriods.length
+        ?`目前可追蹤到新增融資部位；其中最低維持率為${pct1(weakestPeriod.maint)}（${weakestPeriod.n}日），${maintMeaning(weakestPeriod.maint)}。`
+        :`60日、120日與160日融資都沒有增加；但仍須以CMoney整體維持率${pct1(s.cmoney_maintenance)}判斷剩餘融資部位的壓力。`;
       const candidateSummary=(s.eligible_tomorrow_60||0)>0
         ?`${fmt0(s.eligible_tomorrow_60)}張，約占20日均量${pct1(s.candidateAdv)}`
-        :"目前未辨識出候選張數";
-      const baseSummary=q60>0&&s.base_maintenance_60!=null
-        ?`其餘融資部位（不是近60日增加的部分）推估平均維持率為${pct1(s.base_maintenance_60)}，僅供分層比較。`
-        :"近60日沒有新增融資可分離，因此不另外比較其他部位。";
-      $("stockInterpretation").innerHTML=`<span class="stock-summary-title">先看結論</span><div class="stock-summary-head">${esc(changeSummary)}</div><div class="stock-summary-grid"><div class="stock-summary-item"><b>近期籌碼變化</b><span>${change60>0?`新增${fmt0(q60)}張，占目前融資${pct1(s.net_added_share_current_60)}`:`融資比60日前${change60<0?"減少":"持平"}`}</span></div><div class="stock-summary-item"><b>離130%警戒線多近</b><span>${esc(triggerSummary)}</span></div><div class="stock-summary-item"><b>明日可能處分候選（上限）</b><span>${esc(candidateSummary)}</span></div></div><p class="stock-summary-foot">全部融資的CMoney平均維持率為${pct1(s.cmoney_maintenance)}。${esc(baseSummary)}候選只是模型上限，不是券商實際處分名單。</p>`;
+        :"60日新增模型為0張；不代表其他融資部位沒有風險";
+      const boundarySummary=allPeriodsDown
+        ?"三個期間的融資都下降，因此沒有新增成本批次可用來估算剩餘部位的斷頭張數。"
+        :"各期間彼此重疊，不能把60日、120日與160日的新增張數相加。";
+      $("stockInterpretation").classList.toggle("alert",s.cmoney_maintenance!=null&&s.cmoney_maintenance<1.3);
+      $("stockInterpretation").innerHTML=`<span class="stock-summary-title">先看結論</span><div class="stock-summary-head">${esc(headline)}</div><div class="stock-summary-grid"><div class="stock-summary-item"><b>60／120／160日融資變化</b>${periodHtml}</div><div class="stock-summary-item"><b>CMoney整體風險訊號</b><span>${pct1(s.cmoney_maintenance)}；${overallRiskMeaning(s.cmoney_maintenance)}。這反映目前全部融資，不只近期新增部位。</span></div><div class="stock-summary-item"><b>明日可能處分候選（上限）</b><span>${esc(candidateSummary)}</span></div></div><p class="stock-summary-foot">${esc(boundarySummary)}CMoney整體值仍可作風險警示，但不等同於每一個融資戶都會被處分。</p>`;
       $("sPrice").textContent=price(s.current_price);$("sBalance").textContent=`融資餘額 ${fmt0(s.financing_balance)} 張`;
       $("sFinancingRatio").textContent=pct1(s.current_financing_to_issued);$("sIssued").textContent=`以官方已發行普通股 ${fmt0(s.issued_common_shares)} 股作代理分母`;
-      $("sCmoney").textContent=pct1(s.cmoney_maintenance);$("sCandidate").textContent=`${fmt0(s.eligible_tomorrow_60)} 張`;
-      $("sBaseSell").textContent=`若其中25%形成賣壓：約${fmt0(s.baseSell)}張；候選占20日均量${pct1(s.candidateAdv)}`;
+      $("sCmoney").textContent=pct1(s.cmoney_maintenance);$("sCmoney").className=`v ${maintClass(s.cmoney_maintenance)}`;$("sCandidate").textContent=`${fmt0(s.eligible_tomorrow_60)} 張${q60<=0?"*":""}`;
+      $("sBaseSell").textContent=q60>0?`若其中25%形成賣壓：約${fmt0(s.baseSell)}張；候選占20日均量${pct1(s.candidateAdv)}`:`*只代表60日新增模型；整體風險請看CMoney維持率`;
       $("stockWindowBody").innerHTML=[60,120,160].map(n=>{
         const q=s[`net_added_qty_${n}`]||0,maint=s[`net_added_maintenance_${n}`],baseM=s[`base_maintenance_${n}`];
-        return `<tr><td>${n}日</td><td>${date(s[`baseline_date_${n}`])}／${fmt0(s[`baseline_balance_${n}`])}張</td><td>${signed0(s[`net_change_${n}`])}張</td><td>${fmt0(q)}張</td><td>${pct1(s[`net_added_share_current_${n}`])}</td><td>${pct1(s[`net_added_to_issued_${n}`])}</td><td>${q>0?price(s[`net_added_avg_cost_${n}`]):"無新增"}</td><td class="${maintClass(maint)}">${q>0?pct1(maint):"—"}</td><td>${q>0?price(s[`net_added_trigger_${n}`]):"—"}</td><td class="${maintClass(baseM)}">${pct1(baseM)}</td></tr>`
+        return `<tr><td>${n}日</td><td>${date(s[`baseline_date_${n}`])}／${fmt0(s[`baseline_balance_${n}`])}張</td><td>${signed0(s[`net_change_${n}`])}張</td><td>${fmt0(q)}張</td><td>${pct1(s[`net_added_share_current_${n}`])}</td><td>${pct1(s[`net_added_to_issued_${n}`])}</td><td>${q>0?price(s[`net_added_avg_cost_${n}`]):"無新增"}</td><td class="${maintClass(maint)}">${q>0?pct1(maint):"—"}</td><td class="${q>0&&s[`net_added_under130_${n}`]>0?"danger":"muted"}">${q>0?`${fmt0(s[`net_added_under130_${n}`])}張`:"—"}</td><td>${q>0?price(s[`net_added_trigger_${n}`]):"—"}</td><td class="${maintClass(baseM)}">${pct1(baseM)}</td></tr>`
       }).join("");
       const shocks=[0,1,3,5,7,10],adds=[0,s.scenario_add_1,s.scenario_add_3,s.scenario_add_5,s.scenario_add_7,s.scenario_add_10];
+      $("stockScenarioNote").textContent=q60>0?"此表只追蹤近60日新增融資的成本批次；120／160日目前風險請看上方期間表。":`近60日融資未增加，所以本表為0；這不代表整體融資沒有風險。CMoney整體維持率目前為${pct1(s.cmoney_maintenance)}。`;
       $("stockScenarioBody").innerHTML=shocks.map((n,i)=>{const cumulative=(s.under130_60||0)+(adds[i]||0);return `<tr><td>${n===0?"目前":`再跌${n}%`}</td><td>${fmt0(s.under130_60)}</td><td>${fmt0(adds[i])}</td><td>${fmt0(cumulative)}</td><td>${pct1(s.adv20>0?cumulative/s.adv20:null)}</td></tr>`}).join("");
-      const warnings=[];if(s.quality_warning)warnings.push(s.quality_warning);if(s.cmoney_anchor_status!=="valid")warnings.push(`CMoney資料比對狀態：${s.cmoney_anchor_status||"不可用"}`);warnings.push("使用限制：本頁只估股票層級壓力，無法看到投資人的整戶現金、其他股票與抵繳證券。");
+      const warnings=[];if(q60<=0&&s.cmoney_maintenance!=null&&s.cmoney_maintenance<1.3)warnings.push(`重要：60日新增模型為0，不代表沒有風險；CMoney整體維持率${pct1(s.cmoney_maintenance)}已低於130%。`);if(s.quality_warning)warnings.push(s.quality_warning);if(s.cmoney_anchor_status!=="valid")warnings.push(`CMoney資料比對狀態：${s.cmoney_anchor_status||"不可用"}`);warnings.push("使用限制：本頁只估股票層級壓力，無法看到投資人的整戶現金、其他股票與抵繳證券。");
       $("stockWarning").textContent=warnings.join(" ");
       if(scroll)$("stockSection").scrollIntoView({behavior:"smooth",block:"start"});
     }
 
-    ["tableSearch","riskFilter","marketFilter"].forEach(id=>$(id).addEventListener(id==="tableSearch"?"input":"change",()=>{page=1;applyFilters()}));
-    document.querySelectorAll("table.rank th[data-sort]").forEach(th=>th.addEventListener("click",()=>{const k=th.dataset.sort;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=["code","name","market","confidence"].includes(k)?1:-1}page=1;applyFilters()}));
+    ["tableSearch","overallFilter","riskFilter","marketFilter"].forEach(id=>$(id).addEventListener(id==="tableSearch"?"input":"change",()=>{page=1;applyFilters()}));
+    document.querySelectorAll("table.rank th[data-sort]").forEach(th=>th.addEventListener("click",()=>{const k=th.dataset.sort;if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=k==="cmoney_maintenance"?1:["code","name","market","confidence","overallRisk"].includes(k)?1:-1}page=1;applyFilters()}));
     $("prevPage").addEventListener("click",()=>{if(page>1){page--;renderTable()}});
     $("nextPage").addEventListener("click",()=>{if(page<Math.ceil(filtered.length/pageSize)){page++;renderTable()}});
     function applyFilters(){
-      const q=$("tableSearch").value.trim().toLowerCase(),risk=$("riskFilter").value,market=$("marketFilter").value;
-      filtered=STOCKS.filter(s=>(!q||`${s.code} ${s.name}`.toLowerCase().includes(q))&&(market==="all"||s.market===market)&&(risk==="all"||riskClass(s.score)===risk));
+      const q=$("tableSearch").value.trim().toLowerCase(),overall=$("overallFilter").value,risk=$("riskFilter").value,market=$("marketFilter").value;
+      filtered=STOCKS.filter(s=>(!q||`${s.code} ${s.name}`.toLowerCase().includes(q))&&(market==="all"||s.market===market)&&(overall==="all"||overallBucket(s.cmoney_maintenance)===overall)&&(risk==="all"||riskClass(s.score)===risk));
       filtered.sort((a,b)=>{const av=a[sortKey],bv=b[sortKey];if(av==null&&bv==null)return 0;if(av==null)return 1;if(bv==null)return -1;return typeof av==="string"?av.localeCompare(bv,"zh-Hant")*sortDir:(+av-+bv)*sortDir});
       renderTable();
     }
     function renderTable(){
       const pages=Math.max(1,Math.ceil(filtered.length/pageSize));page=Math.min(page,pages);const rows=filtered.slice((page-1)*pageSize,page*pageSize);
-      $("rankingBody").innerHTML=rows.map(s=>`<tr data-code="${esc(s.code)}"><td>${esc(s.code)}</td><td>${esc(s.name)}</td><td>${price(s.current_price)}</td><td><span class="score ${riskClass(s.score)}">${fmt0(s.score)}</span></td><td class="${maintClass(s.cmoney_maintenance)}">${pct1(s.cmoney_maintenance)}</td><td>${signed0(s.net_change_60)}</td><td>${fmt0(s.net_added_qty_60)}</td><td>${pct1(s.net_added_share_current_60)}</td><td>${pct1(s.net_added_to_issued_60)}</td><td class="${maintClass(s.net_added_maintenance_60)}">${s.net_added_qty_60>0?pct1(s.net_added_maintenance_60):"—"}</td><td class="${maintClass(s.base_maintenance_60)}">${pct1(s.base_maintenance_60)}</td><td>${pct1(s.current_financing_to_issued)}</td><td>${fmt0(s.eligible_tomorrow_60)}</td><td>${fmt0(s.baseSell)}</td><td>${pct1(s.candidateAdv)}</td><td>${fmt0(s.scenario_add_5)}</td><td>${esc(s.confidence)}</td></tr>`).join("");
+      $("rankingBody").innerHTML=rows.map(s=>`<tr data-code="${esc(s.code)}"><td>${esc(s.code)}</td><td>${esc(s.name)}</td><td>${price(s.current_price)}</td><td><span class="chip ${overallChipClass(s.cmoney_maintenance)}">${overallRiskLabel(s.cmoney_maintenance)}</span></td><td class="${maintClass(s.cmoney_maintenance)}">${pct1(s.cmoney_maintenance)}</td><td><span class="score ${riskClass(s.score)}">${fmt0(s.score)}</span></td><td>${signed0(s.net_change_60)}</td><td>${fmt0(s.net_added_qty_60)}</td><td>${pct1(s.net_added_share_current_60)}</td><td>${pct1(s.net_added_to_issued_60)}</td><td class="${maintClass(s.net_added_maintenance_60)}">${s.net_added_qty_60>0?pct1(s.net_added_maintenance_60):"—"}</td><td class="${maintClass(s.base_maintenance_60)}">${pct1(s.base_maintenance_60)}</td><td>${pct1(s.current_financing_to_issued)}</td><td>${fmt0(s.eligible_tomorrow_60)}</td><td>${fmt0(s.baseSell)}</td><td>${pct1(s.candidateAdv)}</td><td>${fmt0(s.scenario_add_5)}</td><td>${esc(s.confidence)}</td></tr>`).join("");
       $("rankingBody").querySelectorAll("tr").forEach(tr=>tr.addEventListener("click",()=>selectStock(STOCKS.find(s=>s.code===tr.dataset.code))));
       $("tableCount").textContent=filtered.length?`符合 ${fmt0(filtered.length)} 支；顯示第 ${(page-1)*pageSize+1}–${Math.min(page*pageSize,filtered.length)} 支`:"沒有符合條件的股票";
       $("pageInfo").textContent=`${page} / ${pages}`;$("prevPage").disabled=page<=1;$("nextPage").disabled=page>=pages;
     }
     $("downloadCsv").addEventListener("click",()=>{
-      const cols=["code","name","market","current_price","score","cmoney_maintenance","net_change_60","net_added_qty_60","net_added_share_current_60","net_added_to_issued_60","net_added_maintenance_60","base_maintenance_60","current_financing_to_issued","eligible_tomorrow_60","baseSell","candidateAdv","scenario_add_5","confidence"];
-      const labels=["代號","名稱","市場","收盤","壓力分數","全部融資維持率(CMoney)","60日融資增減","可追蹤新增融資","新增占目前融資","新增占流通在外股代理值","新增部位維持率","其他部位維持率(推估)","總融資占流通在外股代理值","明日候選上限","假設25%形成賣壓","候選占20日均量","再跌5%新增跌破130%","資料信心"];
+      const cols=["code","name","market","current_price","overallRisk","cmoney_maintenance","score","net_change_60","net_added_qty_60","net_added_share_current_60","net_added_to_issued_60","net_added_maintenance_60","base_maintenance_60","current_financing_to_issued","eligible_tomorrow_60","baseSell","candidateAdv","scenario_add_5","confidence"];
+      const labels=["代號","名稱","市場","收盤","整體風險訊號","全部融資維持率(CMoney)","60日新增壓力分數","60日融資增減","可追蹤新增融資","新增占目前融資","新增占流通在外股代理值","新增部位維持率","其他部位維持率(推估)","總融資占流通在外股代理值","明日候選上限","假設25%形成賣壓","候選占20日均量","再跌5%新增跌破130%","資料信心"];
       const csv=v=>`"${String(v??"").replaceAll('"','""')}"`;const lines=[labels.map(csv).join(","),...filtered.map(s=>cols.map(k=>csv(s[k])).join(","))];
       const blob=new Blob(["\ufeff"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`融資淨新增壓力_${DATA.asOf}.csv`;a.click();URL.revokeObjectURL(a.href);
     });
