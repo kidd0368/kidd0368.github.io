@@ -41,7 +41,7 @@
     .wrap{max-width:1500px;margin:auto;padding:32px 22px 70px}.eyebrow{color:var(--blue);font-weight:950;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
     .hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(290px,.65fr);gap:16px}.panel{background:var(--surface);border:1px solid var(--line);border-radius:21px;box-shadow:var(--shadow)}
     .hero-copy,.hero-status{padding:27px}.hero h1{font-size:clamp(31px,4.2vw,56px);line-height:1.06;letter-spacing:-.045em;margin:10px 0 16px}.hero h1 span{color:var(--red)}
-    .lead{font-size:17px;line-height:1.75;color:var(--muted);max-width:920px}.lead b{color:var(--ink)}.today{margin:18px 0 0;padding:14px 16px;background:var(--red2);border-left:4px solid var(--red);border-radius:10px;line-height:1.65;font-size:14px}
+    .lead{font-size:17px;line-height:1.75;color:var(--muted);max-width:920px}.lead b{color:var(--ink)}.today{margin:18px 0 0;padding:14px 16px;background:var(--red2);border-left:4px solid var(--red);border-radius:10px;line-height:1.65;font-size:14px}.today b{display:block;margin-bottom:3px}.today span{color:var(--ink)}
     .status-top{display:flex;justify-content:space-between;align-items:center;gap:10px}.pill,.chip,.score{display:inline-flex;align-items:center;border-radius:999px;font-weight:850}
     .pill{padding:6px 11px;background:var(--amber2);color:var(--amber);font-size:13px}.asof{font-size:12px;color:var(--muted)}
     .gauge{position:relative;width:218px;height:114px;margin:26px auto 10px;overflow:hidden}.gauge-bg,.gauge-fill{position:absolute;inset:0;border-radius:218px 218px 0 0;clip-path:inset(0 0 0 0)}
@@ -56,7 +56,7 @@
     .step{position:relative;padding:16px;background:var(--surface2);border-radius:14px;min-height:158px}.step:not(:last-child):after{content:"→";position:absolute;right:-10px;top:60px;z-index:2;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--surface);color:var(--blue);font-weight:950}
     .step-no{display:grid;place-items:center;width:25px;height:25px;border-radius:8px;background:var(--navy);color:var(--surface);font-weight:950;font-size:11px;margin-bottom:11px}.step b{font-size:15px}.step p{font-size:13px;color:var(--muted);line-height:1.6;margin:8px 0 0}
     .callouts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.callout{padding:15px;border:1px solid var(--line);border-radius:13px;line-height:1.65;font-size:13px}.callout b{display:block;color:var(--blue);margin-bottom:4px}
-    .grid2{display:grid;grid-template-columns:1.18fr .82fr;gap:14px}.card{padding:20px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
+    .grid2{display:grid;grid-template-columns:1.18fr .82fr;gap:14px}.grid2>*{min-width:0}.card{min-width:0;padding:20px}.table-wrap{max-width:100%;overflow:auto;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
     table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}th{position:sticky;top:0;background:var(--navy);color:var(--surface);font-size:12px;z-index:1}th:first-child,td:first-child,th:nth-child(2),td:nth-child(2){text-align:left}tr:last-child td{border-bottom:0}tbody tr:hover{background:var(--surface2)}
     .note{color:var(--muted);font-size:12px;line-height:1.65;margin:12px 0 0}.risk-note{padding:14px 16px;background:var(--amber2);border-radius:12px;line-height:1.65;font-size:13px}
     .search-panel{padding:20px}.search-row{display:flex;gap:9px}.search-row input{flex:1;min-width:0;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--page);color:var(--ink)}
@@ -69,7 +69,7 @@
     .filters{display:flex;flex-wrap:wrap;gap:8px}.filters input,.filters select{padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
     table.rank th{cursor:pointer}.score{justify-content:center;min-width:45px;padding:4px 8px;background:var(--surface2)}.score.high{background:var(--red2);color:var(--red)}.score.mid{background:var(--amber2);color:var(--amber)}.pager{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;color:var(--muted);font-size:13px}
     .definitions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.definition{padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:13px;font-size:13px;line-height:1.65}.definition b{display:block;color:var(--blue);margin-bottom:4px}
-    footer{display:flex;justify-content:space-between;gap:12px;padding-top:28px;margin-top:34px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+    footer{display:flex;justify-content:space-between;gap:12px;padding-top:28px;margin-top:34px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}footer span{overflow-wrap:anywhere}
     .toast{position:fixed;right:20px;bottom:20px;z-index:50;padding:11px 15px;background:var(--ink);color:var(--surface);border-radius:10px;box-shadow:var(--shadow);font-size:13px}
     @media(max-width:1150px){.metrics{grid-template-columns:repeat(3,1fr)}.flow{grid-template-columns:repeat(2,1fr)}.step:nth-child(2):after{display:none}.stock-stats{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:820px){.hero,.grid2{grid-template-columns:1fr}.callouts,.definitions{grid-template-columns:1fr}.brand-sub{display:none}.header-inner,.wrap{padding-left:14px;padding-right:14px}.metrics{grid-template-columns:repeat(2,1fr)}.flow{grid-template-columns:1fr}.step:after{display:none!important}.section-head{align-items:start;flex-direction:column}.stock-title-row{flex-direction:column}.stock-stats{grid-template-columns:1fr 1fr}footer{flex-direction:column}}
@@ -100,10 +100,10 @@
     <div class="wrap">
       <section class="hero">
         <div class="hero-copy panel">
-          <div class="eyebrow">Net-added margin pressure</div>
-          <h1>真正要追的是：<span>近期多出來的融資</span>，離 130% 還有多近？</h1>
-          <p class="lead">這套模型不把「近60日仍留在場上的融資」誤當成新增。它先用期初與目前資餘算出<b>真正淨增加的融資層</b>，估算這一層的成本與維持率；再以同日 CMoney 整體維持率，倒算其餘<b>非淨新增層</b>的平均壓力。</p>
-          <div id="marketInterpretation" class="today"></div>
+          <div class="eyebrow">今日市場結論</div>
+          <h1>近期新增融資<br><span>壓力監測</span></h1>
+          <p id="heroLead" class="lead"></p>
+          <div class="today"><b>市場摘要</b><span id="marketInterpretation"></span></div>
         </div>
         <div class="hero-status panel">
           <div class="status-top"><span id="pressureLabel" class="pill"></span><span id="asOf" class="asof"></span></div>
@@ -113,46 +113,29 @@
       </section>
 
       <div class="metrics">
-        <article class="metric blue"><div class="k">CMoney 整體加權維持率</div><div id="mCmoney" class="v"></div><div class="s">全體融資的同日錨點，不代表每一整戶。</div></article>
-        <article class="metric teal"><div class="k">60日淨新增層維持率</div><div id="mNewMaintenance" class="v"></div><div class="s">真正高於60日期初資餘的融資層。</div></article>
-        <article class="metric amber"><div class="k">60日非淨新增層維持率</div><div id="mBaseMaintenance" class="v"></div><div class="s">由 CMoney 同日整體值扣除淨新增負債後倒算。</div></article>
-        <article class="metric"><div class="k">全市場60日淨增減</div><div id="mNetChange" class="v"></div><div class="s">可為負；回答全市場融資是擴張或收縮。</div></article>
-        <article class="metric red"><div class="k">明日可處分候選上限</div><div id="mCandidate" class="v"></div><div class="s">模型候選，不是券商實際處分名單。</div></article>
-        <article class="metric red"><div class="k">再跌5%新增低於130%</div><div id="mShock5" class="v"></div><div class="s">只計可辨識的60日淨新增成本批次。</div></article>
+        <article class="metric blue"><div class="k">CMoney 整體加權維持率</div><div id="mCmoney" class="v"></div><div class="s">目前全部融資部位的平均壓力。</div></article>
+        <article class="metric teal"><div class="k">60日淨新增融資維持率</div><div id="mNewMaintenance" class="v"></div><div class="s">近60日真正增加的融資部位。</div></article>
+        <article class="metric amber"><div class="k">其餘融資維持率</div><div id="mBaseMaintenance" class="v"></div><div class="s">扣除60日淨新增融資後的平均值。</div></article>
+        <article class="metric"><div class="k">全市場60日融資增減</div><div id="mNetChange" class="v"></div><div class="s">負值代表市場整體融資正在減少。</div></article>
+        <article class="metric red"><div class="k">明日風險候選上限</div><div id="mCandidate" class="v"></div><div class="s">可能進入處分觀察的模型估算上限。</div></article>
+        <article class="metric red"><div class="k">再跌5%的新增風險部位</div><div id="mShock5" class="v"></div><div class="s">股價再跌5%後，新落入130%以下的張數。</div></article>
       </div>
 
-      <section class="guide panel">
-        <div class="eyebrow">核心方法</div>
-        <h2>同一支股票拆成兩層，才不會把「舊風險」誤判成「最近追高」</h2>
-        <p>60／120／160日都是獨立視角：60日最貼近近期賣壓，120日確認中期，160日使用目前資料能穩定比較的最長區間。三個期間彼此重疊，不能相加。</p>
-        <div class="flow">
-          <div class="step"><span class="step-no">1</span><b>先算資餘淨增減</b><p>目前資餘－期初資餘。只有正值才形成「淨新增層」；若為負，代表這段期間整體去槓桿。</p></div>
-          <div class="step"><span class="step-no">2</span><b>只追蹤高於期初的部位</b><p>當餘額高於期初時，把新增量按當日成交均價加入；餘額下降時，等比例沖減既有新增成本批次。</p></div>
-          <div class="step"><span class="step-no">3</span><b>估算淨新增層維持率</b><p>以60%融資比率計算：目前市值 ÷ 估算融資負債。這回答近期真正多出來的籌碼是否虧損。</p></div>
-          <div class="step"><span class="step-no">4</span><b>CMoney 錨定其餘融資</b><p>由 CMoney 整體維持率倒推總融資負債，扣除淨新增負債後，求出非淨新增層的平均維持率。</p></div>
-        </div>
-        <div class="callouts">
-          <div class="callout"><b>兩種「增加」不能混用</b>全市場淨增減可為負，但個別股票正向淨新增層相加仍可很大，因為有些股票增加、另一些股票減少。</div>
-          <div class="callout"><b>非淨新增不等於原始老融資</b>期間內可能發生換手；它只是「目前餘額扣除可辨識淨新增層」後的剩餘集合。</div>
-          <div class="callout"><b>只能精細估淨新增層</b>非淨新增層只有倒算平均維持率，沒有每日成本批次，因此不宣稱能精準算出其中多少張會斷頭。</div>
-        </div>
-      </section>
-
       <section class="section">
-        <div class="section-head"><div><h2>市場 60／120／160 日分層</h2><p>先看全市場方向，再看各股正向淨新增層的規模與維持率。三列是不同時間窗的替代觀察，不是三批可以加總的籌碼。</p></div></div>
+        <div class="section-head"><div><h2>市場融資分層概況</h2><p>60日反映近期壓力，120日呈現中期變化，160日觀察較長週期。三個期間彼此重疊，應分別比較，不可加總。</p></div></div>
         <div class="grid2">
           <div class="card panel"><div class="table-wrap"><table><thead><tr><th>期間</th><th>全市場淨增減</th><th>各股淨新增層</th><th>占目前資餘</th><th>淨新增維持率</th><th>非淨新增維持率</th></tr></thead><tbody id="windowBody"></tbody></table></div><p id="windowNote" class="note"></p></div>
-          <div class="card panel"><h3>今天怎麼讀</h3><div id="marketRead" class="risk-note"></div><p class="note">維持率低不必然等於明天賣壓；仍要搭配候選張數、20日均量與價格情境。反之，全市場融資淨減少也不表示沒有個股壓力。</p></div>
+          <div class="card panel"><h3>今日市場判讀</h3><div id="marketRead" class="risk-note"></div><p class="note">維持率需搭配候選張數、20日均量與價格情境判讀。市場整體融資減少時，個別股票仍可能存在集中壓力。</p></div>
         </div>
       </section>
 
       <section class="section">
-        <div class="section-head"><div><h2>如果股價再跌，60日淨新增層會多出多少低於130%的部位？</h2><p>「目前低於130%」加上各跌幅新增落入130%以下的張數。右側壓力比例是假設候選部位中有多少會形成賣壓，不是確定成交量。</p></div></div>
+        <div class="section-head"><div><h2>股價下跌情境下的130%風險部位</h2><p>表格呈現目前已低於130%的部位，以及不同跌幅下新增落入風險線的張數。右側為可能賣壓情境，不代表確定成交量。</p></div></div>
         <div class="card panel"><div class="table-wrap"><table><thead><tr><th>價格情境</th><th>目前低於130%</th><th>情境新增</th><th>累計低於130%</th><th>累計／20日均量</th><th>低情境10%</th><th>基準25%</th><th>高情境40%</th></tr></thead><tbody id="marketScenarioBody"></tbody></table></div></div>
       </section>
 
       <section id="stockSection" class="section">
-        <div class="section-head"><div><h2>查一支股票：近期新增有沒有形成壓力？</h2><p>輸入股票代號或名稱。先看60日淨增減；若沒有正向淨新增，就不要把低維持率解讀成「最近60日追高融資」。</p></div></div>
+        <div class="section-head"><div><h2>個股融資壓力查詢</h2><p>輸入股票代號或名稱，可查看60／120／160日融資增減、淨新增成本、維持率與價格風險情境。</p></div></div>
         <div class="search-panel panel"><form id="stockForm" class="search-row"><input id="stockInput" list="stockOptions" placeholder="例如 2492 或 華新科" autocomplete="off"><datalist id="stockOptions"></datalist><button class="primary">查看個股</button></form></div>
         <article id="stockCard" class="stock-card panel hidden">
           <div class="stock-title-row">
@@ -186,8 +169,25 @@
         <div class="pager"><span id="tableCount"></span><div><button id="prevPage" class="ghost">上一頁</button> <span id="pageInfo"></span> <button id="nextPage" class="ghost">下一頁</button></div></div>
       </section>
 
+      <section class="guide panel section">
+        <div class="eyebrow">計算說明</div>
+        <h2>融資部位的兩層拆分方式</h2>
+        <p>目前融資分為「各期間淨新增融資」與「其餘融資」兩層。60／120／160日各自代表不同觀察週期，三者彼此重疊，不可相加。</p>
+        <div class="flow">
+          <div class="step"><span class="step-no">1</span><b>計算融資餘額變化</b><p>目前資餘減去期初資餘。正值形成淨新增融資；負值代表該期間融資總量下降。</p></div>
+          <div class="step"><span class="step-no">2</span><b>建立淨新增成本</b><p>融資餘額高於期初時，新增量按當日成交均價加入；餘額下降時，等比例沖減成本批次。</p></div>
+          <div class="step"><span class="step-no">3</span><b>計算淨新增維持率</b><p>以60%融資比率估算淨新增融資負債，再以目前市值計算該層維持率。</p></div>
+          <div class="step"><span class="step-no">4</span><b>倒算其餘融資</b><p>由 CMoney 整體維持率推估總融資負債，扣除淨新增負債後，計算其餘融資的平均維持率。</p></div>
+        </div>
+        <div class="callouts">
+          <div class="callout"><b>市場淨增減</b>全市場增減互抵後的結果，可用來判斷整體融資是擴張或收縮。</div>
+          <div class="callout"><b>其餘融資層</b>包含期初既有部位及期間內可能發生的換手，不等同於可辨識的原始舊融資。</div>
+          <div class="callout"><b>估算邊界</b>其餘融資只有平均倒算值，缺少每日成本批次，無法精確估算其中的斷頭張數。</div>
+        </div>
+      </section>
+
       <section class="section">
-        <div class="section-head"><div><h2>定義、限制與讀者判斷邊界</h2><p>這是一套股票層級的公開資料壓力篩選，不是券商整戶追繳與處分系統。</p></div></div>
+        <div class="section-head"><div><h2>指標定義與模型限制</h2><p>本頁提供股票層級的公開資料壓力篩選，不等同於券商整戶追繳與處分系統。</p></div></div>
         <div class="definitions">
           <div class="definition"><b>淨新增層</b>目前資餘高於期初資餘的部分；以每日成交均價近似新增成本。若淨增減≤0，該期間淨新增層為0。</div>
           <div class="definition"><b>CMoney 整體錨點</b>只在 CMoney 維持率日期、資餘日期與本模型資料相符時倒算。百分比不能直接相減。</div>
@@ -256,12 +256,13 @@
       const m=DATA.market,w=DATA.marketWindows["60"];
       $("temperature").textContent=Math.round(m.temperature);$("pressureLabel").textContent=`${m.pressure_label}情境`;$("asOf").textContent=`共同資料日 ${date(DATA.asOf)}`;
       $("gaugeFill").style.opacity=Math.max(.18,Math.min(1,m.temperature/70));
-      $("marketInterpretation").textContent=m.interpretation;
+      $("heroLead").innerHTML=`全市場60日融資${w.net_change>=0?"增加":"減少"}<b>${fmt0(Math.abs(w.net_change))}張</b>，個股正向淨新增融資合計<b>${fmt0(w.net_added_qty)}張</b>。目前市場壓力溫度為<b>${Math.round(m.temperature)}（${esc(m.pressure_label)}）</b>，淨新增融資維持率為<b>${pct1(w.net_added_maintenance)}</b>。`;
+      $("marketInterpretation").textContent=`目前已有${fmt0(DATA.scenarios[0]?.current_under130)}張淨新增融資低於130%；明日風險候選上限為${fmt0(m.eligible_tomorrow_60)}張。若股價再跌5%，預估將再新增${fmt0(m.shock5_added_60)}張落入130%以下。`;
       $("mCmoney").textContent=pct1(m.cmoney_maintenance);$("mNewMaintenance").textContent=pct1(w.net_added_maintenance);$("mBaseMaintenance").textContent=pct1(w.base_maintenance_valid);
       $("mNetChange").textContent=`${signed0(w.net_change)} 張`;$("mCandidate").textContent=`${fmt0(m.eligible_tomorrow_60)} 張`;$("mShock5").textContent=`${fmt0(m.shock5_added_60)} 張`;
       $("windowBody").innerHTML=[60,120,160].map(n=>{const x=DATA.marketWindows[String(n)];return `<tr><td>${n}日</td><td>${signed0(x.net_change)}張</td><td>${fmt0(x.net_added_qty)}張</td><td>${pct1(x.net_added_share_current)}</td><td class="${maintClass(x.net_added_maintenance)}">${pct1(x.net_added_maintenance)}</td><td class="${maintClass(x.base_maintenance_valid)}">${pct1(x.base_maintenance_valid)}</td></tr>`}).join("");
       $("windowNote").textContent=`目前全市場融資餘額 ${fmt0(m.total_balance)} 張；60日各股正向淨新增層合計 ${fmt0(w.net_added_qty)} 張，占目前資餘 ${pct1(w.net_added_share_current)}。`;
-      $("marketRead").innerHTML=`全市場60日資餘合計為<b>${signed0(w.net_change)}張</b>，但有正向增加的股票，其淨新增層仍合計<b>${fmt0(w.net_added_qty)}張</b>。這兩個數字不矛盾：前者是全市場增減互抵後的方向，後者是只把個股正向新增相加，用來定位局部賣壓。`;
+      $("marketRead").innerHTML=`全市場60日融資餘額為<b>${signed0(w.net_change)}張</b>，顯示整體融資${w.net_change>=0?"擴張":"收縮"}；個股正向淨新增融資仍達<b>${fmt0(w.net_added_qty)}張</b>，風險主要集中在部分融資增加的股票。`;
       const lo=DATA.assumptions.non_cure_low??.1,base=DATA.assumptions.non_cure_base??.25,hi=DATA.assumptions.non_cure_high??.4;
       $("marketScenarioBody").innerHTML=DATA.scenarios.map(x=>`<tr><td>${x.decline===0?"目前":`再跌${Math.round(Math.abs(x.decline)*100)}%`}</td><td>${fmt0(x.current_under130)}</td><td>${fmt0(x.added_under130)}</td><td>${fmt0(x.cumulative_under130)}</td><td>${pct1(x.cumulative_to_adv)}</td><td>${fmt0(x.cumulative_under130*lo)}</td><td>${fmt0(x.cumulative_under130*base)}</td><td>${fmt0(x.cumulative_under130*hi)}</td></tr>`).join("");
     }
