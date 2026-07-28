@@ -145,12 +145,12 @@
           <div id="stockInterpretation" class="stock-summary"></div>
           <div class="stock-stats">
             <div class="stock-stat"><div class="k">收盤價</div><div id="sPrice" class="v"></div><div id="sBalance" class="s"></div></div>
-            <div class="stock-stat"><div class="k">目前融資／已發行股</div><div id="sFinancingRatio" class="v"></div><div id="sIssued" class="s"></div></div>
+            <div class="stock-stat"><div class="k">目前總融資／流通在外股*</div><div id="sFinancingRatio" class="v"></div><div id="sIssued" class="s"></div></div>
             <div class="stock-stat"><div class="k">CMoney 整體維持率</div><div id="sCmoney" class="v"></div><div class="s">全體融資同日錨點</div></div>
             <div class="stock-stat"><div class="k">明日候選／基準賣壓</div><div id="sCandidate" class="v"></div><div id="sBaseSell" class="s"></div></div>
           </div>
           <h3>60／120／160日拆分</h3>
-          <div class="table-wrap"><table><thead><tr><th>期間</th><th>基準日／期初資餘</th><th>淨增減</th><th>淨新增張數</th><th>占目前資餘</th><th>淨新增平均成本</th><th>淨新增維持率</th><th>130%觸發價</th><th>非淨新增維持率</th></tr></thead><tbody id="stockWindowBody"></tbody></table></div>
+          <div class="table-wrap"><table><thead><tr><th>期間</th><th>基準日／期初資餘</th><th>淨增減</th><th>淨新增張數</th><th>占目前資餘</th><th>淨新增／流通在外股*</th><th>淨新增平均成本</th><th>淨新增維持率</th><th>130%觸發價</th><th>非淨新增維持率</th></tr></thead><tbody id="stockWindowBody"></tbody></table></div>
           <h3 style="margin-top:20px">60日淨新增層價格情境</h3>
           <div class="table-wrap"><table><thead><tr><th>價格情境</th><th>目前低於130%</th><th>情境新增</th><th>累計</th><th>累計／20日均量</th></tr></thead><tbody id="stockScenarioBody"></tbody></table></div>
           <div id="stockWarning" class="warning"></div>
@@ -162,8 +162,8 @@
         <div class="filters"><input id="tableSearch" placeholder="代號或名稱"><select id="riskFilter"><option value="all">全部壓力</option><option value="high">高壓 75+</option><option value="mid">升溫 50–74</option><option value="low">偏低 25–49</option><option value="cool">低溫 0–24</option></select><select id="marketFilter"><option value="all">全部市場</option><option value="上市">上市</option><option value="上櫃">上櫃</option></select></div>
         <div class="table-wrap" style="margin-top:11px"><table class="rank"><thead><tr>
           <th data-sort="code">代號</th><th data-sort="name">名稱</th><th data-sort="current_price">收盤</th><th data-sort="score">壓力</th><th data-sort="cmoney_maintenance">CMoney整體</th>
-          <th data-sort="net_change_60">60日淨增減</th><th data-sort="net_added_qty_60">60日淨新增</th><th data-sort="net_added_share_current_60">淨新增／目前資餘</th>
-          <th data-sort="net_added_maintenance_60">淨新增維持率</th><th data-sort="base_maintenance_60">非淨新增維持率</th><th data-sort="current_financing_to_issued">融資／已發行股</th>
+          <th data-sort="net_change_60">60日淨增減</th><th data-sort="net_added_qty_60">60日淨新增</th><th data-sort="net_added_share_current_60">淨新增／目前資餘</th><th data-sort="net_added_to_issued_60">淨新增／流通在外股*</th>
+          <th data-sort="net_added_maintenance_60">淨新增維持率</th><th data-sort="base_maintenance_60">非淨新增維持率</th><th data-sort="current_financing_to_issued">總融資／流通在外股*</th>
           <th data-sort="eligible_tomorrow_60">明日候選</th><th data-sort="baseSell">基準賣壓</th><th data-sort="candidateAdv">候選／20日均量</th><th data-sort="scenario_add_5">再跌5%新增</th><th data-sort="confidence">信心</th>
         </tr></thead><tbody id="rankingBody"></tbody></table></div>
         <div class="pager"><span id="tableCount"></span><div><button id="prevPage" class="ghost">上一頁</button> <span id="pageInfo"></span> <button id="nextPage" class="ghost">下一頁</button></div></div>
@@ -193,7 +193,7 @@
           <div class="definition"><b>CMoney 整體錨點</b>只在 CMoney 維持率日期、資餘日期與本模型資料相符時倒算。百分比不能直接相減。</div>
           <div class="definition"><b>非淨新增層</b>目前資餘扣除淨新增層後的集合；可能包含舊部位與期間內換手，只有平均倒算值。</div>
           <div class="definition"><b>明日候選上限</b>模型可辨識的淨新增成本批次中，符合前一日已低於130%且尚未修復的候選量；不是已知券商名單。</div>
-          <div class="definition"><b>融資／已發行股</b>用官方已發行普通股數作分母，不等於真正自由流通股數，因此適合一致比較，不宜當精確流通籌碼。</div>
+          <div class="definition"><b>融資／流通在外股*</b>目前以官方已發行普通股數作代理分母。尚未扣除庫藏股、策略持股等限制流通部位，因此適合一致比較，不等於精確自由流通股比率。</div>
           <div class="definition"><b>整戶制度不可見</b>券商會合併現金、其他持股、抵繳證券與擔保品；公開個股資料無法重建投資人真實整戶維持率。</div>
         </div>
       </section>
@@ -284,14 +284,14 @@
       const u=new URL(location.href);u.searchParams.set("stock",s.code);history.replaceState(null,"",u);
       $("stockName").textContent=s.name;$("stockCode").textContent=s.code;
       $("stockChips").innerHTML=`<span class="chip">${esc(s.market)}</span><span class="chip">${esc(s.product_type)}</span><span class="chip risk">壓力 ${fmt0(s.score)} · ${riskLabel(s.score)}</span><span class="chip">資料信心 ${esc(s.confidence)}</span>`;
-      $("stockInterpretation").innerHTML=`<b>系統解讀｜</b>${esc(s.plain_interpretation||"資料不足，暫無法產生完整解讀。")}`;
+      $("stockInterpretation").innerHTML=`<b>系統解讀｜</b>${esc((s.plain_interpretation||"資料不足，暫無法產生完整解讀。").replaceAll("已發行普通股","流通在外股份代理值"))}`;
       $("sPrice").textContent=price(s.current_price);$("sBalance").textContent=`融資餘額 ${fmt0(s.financing_balance)} 張`;
-      $("sFinancingRatio").textContent=pct1(s.current_financing_to_issued);$("sIssued").textContent=`已發行普通股 ${fmt0(s.issued_common_shares)} 股`;
+      $("sFinancingRatio").textContent=pct1(s.current_financing_to_issued);$("sIssued").textContent=`代理分母 ${fmt0(s.issued_common_shares)} 股（官方已發行普通股數）`;
       $("sCmoney").textContent=pct1(s.cmoney_maintenance);$("sCandidate").textContent=`${fmt0(s.eligible_tomorrow_60)} 張`;
       $("sBaseSell").textContent=`基準25%：${fmt0(s.baseSell)} 張；候選／20日均量 ${pct1(s.candidateAdv)}`;
       $("stockWindowBody").innerHTML=[60,120,160].map(n=>{
         const q=s[`net_added_qty_${n}`]||0,maint=s[`net_added_maintenance_${n}`],baseM=s[`base_maintenance_${n}`];
-        return `<tr><td>${n}日</td><td>${date(s[`baseline_date_${n}`])}／${fmt0(s[`baseline_balance_${n}`])}張</td><td>${signed0(s[`net_change_${n}`])}張</td><td>${fmt0(q)}張</td><td>${pct1(s[`net_added_share_current_${n}`])}</td><td>${q>0?price(s[`net_added_avg_cost_${n}`]):"無淨新增層"}</td><td class="${maintClass(maint)}">${q>0?pct1(maint):"不計算"}</td><td>${q>0?price(s[`net_added_trigger_${n}`]):"—"}</td><td class="${maintClass(baseM)}">${pct1(baseM)}</td></tr>`
+        return `<tr><td>${n}日</td><td>${date(s[`baseline_date_${n}`])}／${fmt0(s[`baseline_balance_${n}`])}張</td><td>${signed0(s[`net_change_${n}`])}張</td><td>${fmt0(q)}張</td><td>${pct1(s[`net_added_share_current_${n}`])}</td><td>${pct1(s[`net_added_to_issued_${n}`])}</td><td>${q>0?price(s[`net_added_avg_cost_${n}`]):"無淨新增層"}</td><td class="${maintClass(maint)}">${q>0?pct1(maint):"不計算"}</td><td>${q>0?price(s[`net_added_trigger_${n}`]):"—"}</td><td class="${maintClass(baseM)}">${pct1(baseM)}</td></tr>`
       }).join("");
       const shocks=[0,1,3,5,7,10],adds=[0,s.scenario_add_1,s.scenario_add_3,s.scenario_add_5,s.scenario_add_7,s.scenario_add_10];
       $("stockScenarioBody").innerHTML=shocks.map((n,i)=>{const cumulative=(s.under130_60||0)+(adds[i]||0);return `<tr><td>${n===0?"目前":`再跌${n}%`}</td><td>${fmt0(s.under130_60)}</td><td>${fmt0(adds[i])}</td><td>${fmt0(cumulative)}</td><td>${pct1(s.adv20>0?cumulative/s.adv20:null)}</td></tr>`}).join("");
@@ -312,14 +312,14 @@
     }
     function renderTable(){
       const pages=Math.max(1,Math.ceil(filtered.length/pageSize));page=Math.min(page,pages);const rows=filtered.slice((page-1)*pageSize,page*pageSize);
-      $("rankingBody").innerHTML=rows.map(s=>`<tr data-code="${esc(s.code)}"><td>${esc(s.code)}</td><td>${esc(s.name)}</td><td>${price(s.current_price)}</td><td><span class="score ${riskClass(s.score)}">${fmt0(s.score)}</span></td><td class="${maintClass(s.cmoney_maintenance)}">${pct1(s.cmoney_maintenance)}</td><td>${signed0(s.net_change_60)}</td><td>${fmt0(s.net_added_qty_60)}</td><td>${pct1(s.net_added_share_current_60)}</td><td class="${maintClass(s.net_added_maintenance_60)}">${s.net_added_qty_60>0?pct1(s.net_added_maintenance_60):"—"}</td><td class="${maintClass(s.base_maintenance_60)}">${pct1(s.base_maintenance_60)}</td><td>${pct1(s.current_financing_to_issued)}</td><td>${fmt0(s.eligible_tomorrow_60)}</td><td>${fmt0(s.baseSell)}</td><td>${pct1(s.candidateAdv)}</td><td>${fmt0(s.scenario_add_5)}</td><td>${esc(s.confidence)}</td></tr>`).join("");
+      $("rankingBody").innerHTML=rows.map(s=>`<tr data-code="${esc(s.code)}"><td>${esc(s.code)}</td><td>${esc(s.name)}</td><td>${price(s.current_price)}</td><td><span class="score ${riskClass(s.score)}">${fmt0(s.score)}</span></td><td class="${maintClass(s.cmoney_maintenance)}">${pct1(s.cmoney_maintenance)}</td><td>${signed0(s.net_change_60)}</td><td>${fmt0(s.net_added_qty_60)}</td><td>${pct1(s.net_added_share_current_60)}</td><td>${pct1(s.net_added_to_issued_60)}</td><td class="${maintClass(s.net_added_maintenance_60)}">${s.net_added_qty_60>0?pct1(s.net_added_maintenance_60):"—"}</td><td class="${maintClass(s.base_maintenance_60)}">${pct1(s.base_maintenance_60)}</td><td>${pct1(s.current_financing_to_issued)}</td><td>${fmt0(s.eligible_tomorrow_60)}</td><td>${fmt0(s.baseSell)}</td><td>${pct1(s.candidateAdv)}</td><td>${fmt0(s.scenario_add_5)}</td><td>${esc(s.confidence)}</td></tr>`).join("");
       $("rankingBody").querySelectorAll("tr").forEach(tr=>tr.addEventListener("click",()=>selectStock(STOCKS.find(s=>s.code===tr.dataset.code))));
       $("tableCount").textContent=filtered.length?`符合 ${fmt0(filtered.length)} 支；顯示第 ${(page-1)*pageSize+1}–${Math.min(page*pageSize,filtered.length)} 支`:"沒有符合條件的股票";
       $("pageInfo").textContent=`${page} / ${pages}`;$("prevPage").disabled=page<=1;$("nextPage").disabled=page>=pages;
     }
     $("downloadCsv").addEventListener("click",()=>{
-      const cols=["code","name","market","current_price","score","cmoney_maintenance","net_change_60","net_added_qty_60","net_added_share_current_60","net_added_maintenance_60","base_maintenance_60","current_financing_to_issued","eligible_tomorrow_60","baseSell","candidateAdv","scenario_add_5","confidence"];
-      const labels=["代號","名稱","市場","收盤","壓力","CMoney整體維持率","60日淨增減","60日淨新增","淨新增/目前資餘","淨新增維持率","非淨新增維持率","融資/已發行股","明日候選","基準賣壓","候選/20日均量","再跌5%新增","信心"];
+      const cols=["code","name","market","current_price","score","cmoney_maintenance","net_change_60","net_added_qty_60","net_added_share_current_60","net_added_to_issued_60","net_added_maintenance_60","base_maintenance_60","current_financing_to_issued","eligible_tomorrow_60","baseSell","candidateAdv","scenario_add_5","confidence"];
+      const labels=["代號","名稱","市場","收盤","壓力","CMoney整體維持率","60日淨增減","60日淨新增","淨新增/目前資餘","淨新增/流通在外股代理值","淨新增維持率","非淨新增維持率","總融資/流通在外股代理值","明日候選","基準賣壓","候選/20日均量","再跌5%新增","信心"];
       const csv=v=>`"${String(v??"").replaceAll('"','""')}"`;const lines=[labels.map(csv).join(","),...filtered.map(s=>cols.map(k=>csv(s[k])).join(","))];
       const blob=new Blob(["\ufeff"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`融資淨新增壓力_${DATA.asOf}.csv`;a.click();URL.revokeObjectURL(a.href);
     });
