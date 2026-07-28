@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>私人市場分析</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page:#f7f6f2; --surface:#fff; --surface2:#f0efea; --ink:#17202a; --muted:#68717b;
+      --line:#dcdedb; --navy:#123852; --blue:#1f6f8b; --teal:#0e8a92; --green:#2f8f5b;
+      --amber:#d98500; --amber2:#fff1c8; --red:#c63a2d; --red2:#ffe0da; --shadow:0 14px 36px rgba(18,56,82,.08);
+    }
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --page:#0f1418; --surface:#171e23; --surface2:#222b31; --ink:#edf3f5; --muted:#a6b1b8;
+      --line:#334049; --navy:#dcebf2; --blue:#69bbd2; --teal:#45c0c5; --green:#64c690;
+      --amber:#ffb747; --amber2:#493719; --red:#ff7669; --red2:#4c2826; --shadow:0 14px 36px rgba(0,0,0,.25);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--page);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    .hidden{display:none!important}
+    .login-screen{min-height:100vh;display:grid;place-items:center;padding:24px;background:
+      radial-gradient(circle at 12% 12%,rgba(31,111,139,.18),transparent 32%),
+      radial-gradient(circle at 90% 80%,rgba(198,58,45,.11),transparent 30%),var(--page)}
+    .login-card{width:min(460px,100%);background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:32px;box-shadow:var(--shadow)}
+    .lock-mark{width:54px;height:54px;border-radius:16px;background:var(--navy);color:var(--surface);display:grid;place-items:center;font-size:25px;font-weight:800;margin-bottom:22px}
+    .login-card h1{font-size:28px;letter-spacing:-.02em;margin:0 0 9px}
+    .login-card p{margin:0 0 24px;color:var(--muted);line-height:1.7}
+    .login-card label{display:block;font-size:13px;color:var(--muted);font-weight:700;margin-bottom:8px}
+    .password-row{display:flex;gap:8px}
+    .password-row input{min-width:0;flex:1;border:1px solid var(--line);background:var(--page);color:var(--ink);border-radius:12px;padding:13px 14px;outline:none}
+    .password-row input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,111,139,.15)}
+    .primary{border:0;border-radius:12px;padding:12px 17px;background:var(--navy);color:var(--surface);font-weight:800}
+    [data-theme="dark"] .primary{color:#10202a}
+    .login-error{min-height:22px;color:var(--red);font-size:13px;margin-top:12px}
+    .privacy-note{margin-top:18px!important;font-size:12px!important;border-top:1px solid var(--line);padding-top:16px}
+    .app-header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--page) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+    .header-inner{max-width:1480px;margin:auto;padding:13px 24px;display:flex;align-items:center;gap:12px}
+    .brand{display:flex;align-items:center;gap:11px;min-width:0}
+    .brand-mark{width:34px;height:34px;border-radius:10px;background:var(--navy);color:var(--surface);display:grid;place-items:center;font-weight:900}
+    [data-theme="dark"] .brand-mark{color:#10202a}
+    .brand-title{font-weight:900;white-space:nowrap}.brand-sub{font-size:12px;color:var(--muted);white-space:nowrap}
+    .header-actions{margin-left:auto;display:flex;gap:8px}
+    .ghost{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:9px 12px;font-weight:700}
+    .wrap{max-width:1480px;margin:auto;padding:34px 24px 70px}
+    .eyebrow{color:var(--blue);text-transform:uppercase;letter-spacing:.11em;font-weight:900;font-size:12px}
+    .hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:18px;align-items:stretch}
+    .hero-copy,.hero-status{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:26px;box-shadow:var(--shadow)}
+    .hero h1{font-size:clamp(30px,4vw,54px);line-height:1.08;letter-spacing:-.045em;margin:9px 0 16px}
+    .hero h1 span{color:var(--red)}
+    .hero-copy p{color:var(--muted);font-size:16px;line-height:1.75;margin:0;max-width:780px}
+    .status-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .status-pill{padding:6px 11px;border-radius:999px;background:var(--red2);color:var(--red);font-weight:900;font-size:13px}
+    .status-date{font-size:12px;color:var(--muted)}
+    .gauge{position:relative;margin:26px auto 10px;width:210px;height:108px;overflow:hidden}
+    .gauge-ring{position:absolute;inset:0;border-radius:210px 210px 0 0;background:conic-gradient(from 270deg at 50% 100%,var(--green) 0 25%,var(--amber) 25% 55%,var(--red) 55% 100%,transparent 100%);clip-path:inset(0 0 0 0)}
+    .gauge-ring:after{content:"";position:absolute;left:24px;right:24px;bottom:-1px;height:84px;border-radius:170px 170px 0 0;background:var(--surface)}
+    .gauge-value{position:absolute;left:0;right:0;bottom:0;text-align:center;font-weight:950;font-size:44px;line-height:1}
+    .gauge-label{text-align:center;color:var(--muted);font-size:12px}
+    .metric-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:18px 0 26px}
+    .metric{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:17px;min-height:128px}
+    .metric .label{color:var(--muted);font-size:12px;font-weight:800;line-height:1.5}
+    .metric .value{font-size:clamp(23px,2.3vw,36px);font-weight:950;letter-spacing:-.035em;margin:11px 0 5px;white-space:nowrap}
+    .metric .hint{font-size:12px;color:var(--muted);line-height:1.5}
+    .metric.red{border-top:4px solid var(--red)}.metric.amber{border-top:4px solid var(--amber)}.metric.blue{border-top:4px solid var(--blue)}.metric.teal{border-top:4px solid var(--teal)}
+    .section{margin-top:26px}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin:0 2px 12px}
+    .section-head h2{font-size:24px;letter-spacing:-.025em;margin:0}.section-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .two-col{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(320px,.55fr);gap:14px}
+    .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 8px 24px rgba(18,56,82,.04)}
+    .card-title{font-weight:900;font-size:16px;margin:0 0 4px}.card-sub{font-size:12px;color:var(--muted);line-height:1.6}
+    .chart-wrap{position:relative;height:330px;margin-top:16px}.chart-wrap canvas{width:100%;height:100%;display:block}
+    .legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px;font-size:12px;color:var(--muted)}
+    .legend span:before{content:"";display:inline-block;width:20px;height:3px;border-radius:3px;background:var(--c);vertical-align:middle;margin-right:6px}
+    .candidate-list{display:grid;gap:12px;margin-top:16px}
+    .candidate{display:grid;grid-template-columns:85px 1fr auto;gap:10px;align-items:center}
+    .candidate-name{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .candidate-bar{height:9px;border-radius:9px;background:var(--surface2);overflow:hidden}
+    .candidate-bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--amber),var(--red))}
+    .candidate-value{font-variant-numeric:tabular-nums;font-size:12px;font-weight:800}
+    .insights{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+    .insight{background:var(--surface2);border-radius:14px;padding:15px;line-height:1.65;font-size:13px}
+    .insight b{display:block;color:var(--blue);margin-bottom:4px}
+    .search-card{padding:22px}
+    .search-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .search-row input{flex:1;min-width:220px;border:1px solid var(--line);border-radius:12px;background:var(--page);color:var(--ink);padding:12px 14px;outline:none}
+    .search-row input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,111,139,.14)}
+    .stock-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin:22px 0 14px;padding-top:20px;border-top:1px solid var(--line)}
+    .stock-name{font-size:30px;font-weight:950;letter-spacing:-.035em}.stock-code{color:var(--muted);font-size:14px;margin-left:7px}
+    .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.chip{font-size:11px;font-weight:800;padding:4px 8px;border-radius:999px;background:var(--surface2);color:var(--muted)}
+    .chip.risk{background:var(--red2);color:var(--red)}
+    .stock-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .stock-stat{border:1px solid var(--line);border-radius:14px;padding:14px}.stock-stat .k{font-size:12px;color:var(--muted);line-height:1.4}.stock-stat .v{font-size:24px;font-weight:950;margin:8px 0 3px}.stock-stat .s{font-size:11px;color:var(--muted)}
+    .bands{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+    .band{background:var(--surface2);border-radius:13px;padding:13px}.band-top{display:flex;justify-content:space-between;font-size:12px;font-weight:800}.band-track{height:7px;background:var(--line);border-radius:7px;margin-top:10px;overflow:hidden}.band-fill{height:100%;border-radius:7px;background:var(--blue)}
+    .scenario-table{width:100%;border-collapse:collapse;margin-top:15px;font-size:12px}.scenario-table th,.scenario-table td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right}.scenario-table th:first-child,.scenario-table td:first-child{text-align:left}.scenario-table th{color:var(--muted);font-size:11px}
+    .controls{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+    .controls input,.controls select{border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:10px 11px}
+    .controls input{min-width:220px}
+    .table-card{padding:0;overflow:hidden}
+    .table-scroll{overflow:auto;max-height:720px}
+    table.rank{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;min-width:1260px}
+    table.rank th{position:sticky;top:0;z-index:3;background:var(--navy);color:var(--surface);padding:11px 10px;text-align:right;white-space:nowrap;cursor:pointer}
+    [data-theme="dark"] table.rank th{color:#10202a}
+    table.rank th:first-child,table.rank th:nth-child(2){text-align:left}
+    table.rank td{padding:10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+    table.rank td:first-child,table.rank td:nth-child(2){text-align:left}
+    table.rank tbody tr:hover{background:var(--surface2);cursor:pointer}
+    table.rank td:first-child{font-weight:900;color:var(--blue)}
+    .score{display:inline-grid;place-items:center;min-width:38px;height:24px;border-radius:999px;font-weight:900}.score.critical{background:var(--red2);color:var(--red)}.score.high{background:var(--amber2);color:var(--amber)}.score.watch{background:var(--surface2);color:var(--blue)}
+    .pagination{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+    .page-actions{display:flex;gap:6px}.page-actions button{border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:7px 10px}
+    details.method{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+    details.method summary{font-weight:900;cursor:pointer}
+    .method-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px}
+    .method-grid div{background:var(--surface2);border-radius:12px;padding:13px;color:var(--muted);font-size:12px;line-height:1.7}.method-grid b{color:var(--ink);display:block}
+    .warning{margin-top:13px;border-left:4px solid var(--amber);background:var(--amber2);border-radius:10px;padding:13px 15px;font-size:12px;line-height:1.7}
+    footer{margin-top:32px;color:var(--muted);font-size:11px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .toast{position:fixed;right:18px;bottom:18px;background:var(--navy);color:var(--surface);border-radius:11px;padding:11px 14px;font-size:12px;font-weight:800;box-shadow:var(--shadow);z-index:50}
+    [data-theme="dark"] .toast{color:#10202a}
+    @media(max-width:1100px){.metric-grid{grid-template-columns:repeat(3,1fr)}.two-col{grid-template-columns:1fr}.stock-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:740px){
+      .header-inner,.wrap{padding-left:14px;padding-right:14px}.brand-sub{display:none}.hero{grid-template-columns:1fr}.hero-copy,.hero-status{padding:20px}
+      .metric-grid{grid-template-columns:repeat(2,1fr)}.metric{min-height:112px}.metric .value{font-size:25px}.insights,.bands{grid-template-columns:1fr}.stock-grid{grid-template-columns:1fr 1fr}
+      .section-head{align-items:flex-start;flex-direction:column}.controls{width:100%}.controls input{width:100%}.chart-wrap{height:260px}.method-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:460px){.metric-grid,.stock-grid{grid-template-columns:1fr}.header-actions .link-text{display:none}.stock-head{flex-direction:column}.candidate{grid-template-columns:76px 1fr auto}}
+  </style>
+</head>
+<body>
+  <section id="loginScreen" class="login-screen">
+    <form id="loginForm" class="login-card" autocomplete="off">
+      <div class="lock-mark" aria-hidden="true">鎖</div>
+      <div class="eyebrow">Encrypted private view</div>
+      <h1>私人分析頁</h1>
+      <p>頁面資料已加密。請輸入密碼後在瀏覽器中解密；密碼不會傳送或保存。</p>
+      <label for="passwordInput">存取密碼</label>
+      <div class="password-row">
+        <input id="passwordInput" type="password" required autocomplete="current-password" aria-describedby="loginError">
+        <button class="primary" type="submit">解鎖</button>
+      </div>
+      <div id="loginError" class="login-error" role="alert" aria-live="polite"></div>
+      <p class="privacy-note">基於安全考量，閒置30分鐘後會自動鎖定。資料日期：20260728</p>
+    </form>
+  </section>
+
+  <div id="app" class="hidden">
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-mark">M</div>
+          <div><div class="brand-title">融資壓力雷達</div><div class="brand-sub">近60日主模型 · 20日短線 · 120日確認</div></div>
+        </div>
+        <div class="header-actions">
+          <button id="copyLink" class="ghost" type="button"><span class="link-text">複製個股連結</span></button>
+          <button id="themeButton" class="ghost" type="button" aria-label="切換深色模式">◐</button>
+          <button id="lockButton" class="ghost" type="button">鎖定</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">Taiwan margin pressure · <span id="dataDateA"></span></div>
+          <h1>明天可能面對多少<span>融資賣壓？</span></h1>
+          <p id="heroNarrative"></p>
+        </div>
+        <div class="hero-status">
+          <div class="status-top"><span id="pressureLabel" class="status-pill"></span><span id="dataDateB" class="status-date"></span></div>
+          <div class="gauge"><div class="gauge-ring"></div><div id="temperature" class="gauge-value"></div></div>
+          <div class="gauge-label">融資壓力溫度（0–100）</div>
+        </div>
+      </section>
+
+      <section class="metric-grid" aria-label="市場關鍵指標">
+        <article class="metric amber"><div class="label">近60日加權維持率</div><div id="marketMaintenance" class="value"></div><div class="hint">公開資料估算，不是券商整戶維持率</div></article>
+        <article class="metric red"><div class="label">明日可處分候選上限</div><div id="marketCandidate" class="value"></div><div class="hint">兩個交易日前新跌破130%且尚未回升</div></article>
+        <article class="metric blue"><div class="label">推估明日賣壓｜基準</div><div id="marketBaseSell" class="value"></div><div class="hint">候選上限 × 25%，可在模型假設調整</div></article>
+        <article class="metric teal"><div class="label">再跌5%新增低於130%</div><div id="marketShock5" class="value"></div><div id="marketShock5Hint" class="hint"></div></article>
+        <article class="metric"><div class="label">可估成本覆蓋率</div><div id="marketCoverage" class="value"></div><div id="marketCoverageHint" class="hint"></div></article>
+      </section>
+
+      <section class="section">
+        <div class="section-head"><div><h2>市場壓力情境</h2><p>回答「如果再跌，會有多少近期融資進一步掉進130%以下」。</p></div></div>
+        <div class="two-col">
+          <article class="card">
+            <div class="card-title">再跌幅度與低於130%融資部位</div>
+            <div class="card-sub">橘線是新增部位，紅線是包含目前已低於130%的累計部位；單位為張。</div>
+            <div class="chart-wrap"><canvas id="stressChart" role="img" aria-label="價格下跌情境與低於130%融資部位折線圖"></canvas></div>
+            <div class="legend"><span style="--c:var(--amber)">新增低於130%</span><span style="--c:var(--red)">累計低於130%</span></div>
+          </article>
+          <article class="card">
+            <div class="card-title">明日候選張數最大個股</div>
+            <div class="card-sub">是可處分候選上限，並非已知券商斷頭名單。</div>
+            <div id="candidateList" class="candidate-list"></div>
+          </article>
+        </div>
+        <div class="insights">
+          <div class="insight"><b>看市場溫度</b><span id="insightTemperature"></span></div>
+          <div class="insight"><b>看明日候選</b><span id="insightCandidate"></span></div>
+          <div class="insight"><b>看尾端風險</b><span id="insightShock"></span></div>
+        </div>
+      </section>
+
+      <section id="stockSection" class="section">
+        <div class="section-head"><div><h2>查詢特定股票</h2><p>輸入股票代號或名稱；網址會同步成可分享的個股深連結。</p></div></div>
+        <article class="card search-card">
+          <form id="stockForm" class="search-row">
+            <input id="stockInput" list="stockOptions" placeholder="例如 2330、台積電" aria-label="股票代號或名稱">
+            <datalist id="stockOptions"></datalist>
+            <button class="primary" type="submit">查看個股</button>
+          </form>
+          <div class="stock-head">
+            <div><span id="stockName" class="stock-name"></span><span id="stockCode" class="stock-code"></span><div id="stockChips" class="chips"></div></div>
+            <button id="copyStockLink" class="ghost" type="button">複製這支股票連結</button>
+          </div>
+          <div class="stock-grid">
+            <div class="stock-stat"><div class="k">收盤價</div><div id="stockPrice" class="v"></div><div id="stockBalance" class="s"></div></div>
+            <div class="stock-stat"><div class="k">60日估算維持率</div><div id="stockMaintenance" class="v"></div><div id="stockCost" class="s"></div></div>
+            <div class="stock-stat"><div class="k">130%觸發價／還可跌</div><div id="stockTrigger" class="v"></div><div id="stockDistance" class="s"></div></div>
+            <div class="stock-stat"><div class="k">明日候選／基準賣壓</div><div id="stockCandidate" class="v"></div><div id="stockBaseSell" class="s"></div></div>
+          </div>
+          <div id="maintenanceBands" class="bands"></div>
+          <table class="scenario-table">
+            <thead><tr><th>價格情境</th><th>目前低於130%</th><th>新增低於130%</th><th>累計</th><th>累計／20日均量</th></tr></thead>
+            <tbody id="stockScenarioBody"></tbody>
+          </table>
+          <div id="stockWarning" class="warning"></div>
+        </article>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div><h2>全市場個股排行</h2><p>點欄名排序，點個股列即可更新上方分析。</p></div>
+          <div class="controls">
+            <input id="tableSearch" placeholder="搜尋代號或名稱" aria-label="搜尋排行">
+            <select id="riskFilter" aria-label="風險篩選"><option value="all">全部溫度</option><option value="critical">80以上</option><option value="high">60–79</option><option value="watch">40–59</option><option value="calm">40以下</option></select>
+            <select id="marketFilter" aria-label="市場篩選"><option value="all">上市＋上櫃</option><option value="上市">上市</option><option value="上櫃">上櫃</option></select>
+            <button id="downloadCsv" class="ghost" type="button">下載篩選CSV</button>
+          </div>
+        </div>
+        <article class="card table-card">
+          <div class="table-scroll">
+            <table class="rank">
+              <thead><tr>
+                <th data-sort="code">代號</th><th data-sort="name">名稱</th><th data-sort="market">市場</th><th data-sort="current_price">收盤價</th>
+                <th data-sort="score">壓力溫度</th><th data-sort="maintenance60">60日維持率</th><th data-sort="trigger60">130%觸發價</th>
+                <th data-sort="distance60">還可跌</th><th data-sort="eligible_tomorrow_60">明日候選</th><th data-sort="baseSell">基準賣壓</th>
+                <th data-sort="candidateAdv">候選／20日均量</th><th data-sort="recent20Share">20日新增占餘額</th><th data-sort="scenario_add_5">再跌5%新增</th>
+                <th data-sort="known_coverage">成本覆蓋率</th><th data-sort="confidence">信心</th>
+              </tr></thead>
+              <tbody id="rankingBody"></tbody>
+            </table>
+          </div>
+          <div class="pagination"><span id="tableCount"></span><div class="page-actions"><button id="prevPage" type="button">上一頁</button><span id="pageInfo"></span><button id="nextPage" type="button">下一頁</button></div></div>
+        </article>
+      </section>
+
+      <section class="section">
+        <details class="method">
+          <summary>模型定義、資料來源與限制</summary>
+          <div class="method-grid">
+            <div><b>資料與主窗格</b><span id="methodSource"></span></div>
+            <div><b>每日融資成本</b>每日成交金額（千元）÷ 成交量（張），近似當日融資買進成本；舊融資未知成本不混入20／60／120日。</div>
+            <div><b>明日候選定義</b>模型可辨識的60日部位中，兩個交易日前新跌破130%，且至資料日仍低於130%的張數。</div>
+            <div><b>基準賣壓</b>明日候選上限 × 25%。低／高情境為10%／40%，只是未補繳或被處分比例假設。</div>
+          </div>
+          <div class="warning">公開資料無法看到投資人的整戶擔保品、實際授信比率、補繳行為與券商處分名單；因此本頁是融資壓力篩選與情境分析，不是精確斷頭預報。原始檔未提供除權息／減資／分割調整，事件附近的歷史成本可能失真。</div>
+        </details>
+      </section>
+
+      <footer><span>CMoney 公開欄位衍生模型 · 私人加密檢視</span><span>資料日 <span id="footerDate"></span> · payload 161823c200bb336ff8e8cba447ae7bd1c71e35528da478df925d28614f3d7af7</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script>
+  (() => {
+    "use strict";
+    const PAYLOAD_URL = "./payload.enc";
+    const $ = id => document.getElementById(id);
+    let DATA = null, STOCKS = [], filtered = [], selected = null, idleTimer = null;
+    let sortKey = "score", sortDir = -1, page = 1;
+    const pageSize = 50;
+
+    const fmt0 = n => Number.isFinite(+n) ? Math.round(+n).toLocaleString("zh-TW") : "—";
+    const fmt1 = n => Number.isFinite(+n) ? (+n).toLocaleString("zh-TW",{minimumFractionDigits:1,maximumFractionDigits:1}) : "—";
+    const pct1 = n => Number.isFinite(+n) ? `${(+n*100).toFixed(1)}%` : "—";
+    const pct100 = n => Number.isFinite(+n) ? `${(+n).toFixed(1)}%` : "—";
+    const price = n => Number.isFinite(+n) ? (+n).toLocaleString("zh-TW",{minimumFractionDigits:2,maximumFractionDigits:2}) : "—";
+    const shortDate = s => `${s.slice(0,4)}/${s.slice(4,6)}/${s.slice(6,8)}`;
+    const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+    const maintenance = (stock, days=60) => {
+      const c = stock[`avg_cost_${days}`]; return c>0 ? stock.current_price/(c*DATA.assumptions.financing_ratio) : null;
+    };
+    const trigger = (stock, days=60) => {
+      const c = stock[`avg_cost_${days}`]; return c>0 ? c*DATA.assumptions.financing_ratio*DATA.assumptions.maintenance_threshold : null;
+    };
+    const distance = (stock, days=60) => {
+      const t=trigger(stock,days); return t>0&&stock.current_price>0 ? (stock.current_price-t)/stock.current_price : null;
+    };
+    const derive = stock => Object.assign(stock,{
+      maintenance60:maintenance(stock,60),trigger60:trigger(stock,60),distance60:distance(stock,60),
+      baseSell:stock.eligible_tomorrow_60*DATA.assumptions.non_cure_base,
+      candidateAdv:stock.adv20>0?stock.eligible_tomorrow_60/stock.adv20:null,
+      recent20Share:stock.financing_balance>0?stock.recent_qty_20/stock.financing_balance:null
+    });
+    const riskClass = score => score>=80?"critical":score>=60?"high":score>=40?"watch":"calm";
+    const riskLabel = score => score>=80?"極高":score>=60?"高壓":score>=40?"偏高":"一般";
+
+    function b64(s){ return Uint8Array.from(atob(s),c=>c.charCodeAt(0)); }
+    async function decryptPayload(password){
+      const encrypted = await fetch(PAYLOAD_URL,{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("資料載入失敗");return r.json();});
+      const keyMaterial = await crypto.subtle.importKey("raw",new TextEncoder().encode(password),"PBKDF2",false,["deriveKey"]);
+      const key = await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64(encrypted.salt),iterations:encrypted.iterations,hash:"SHA-256"},keyMaterial,{name:"AES-GCM",length:256},false,["decrypt"]);
+      const plain = await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(encrypted.iv),tagLength:128},key,b64(encrypted.ciphertext));
+      return JSON.parse(new TextDecoder().decode(plain));
+    }
+    function toast(message){$("toast").textContent=message;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),2200);}
+    function resetIdle(){clearTimeout(idleTimer);idleTimer=setTimeout(lock,30*60*1000);}
+    function lock(){
+      DATA=null;STOCKS=[];filtered=[];selected=null;clearTimeout(idleTimer);
+      $("app").classList.add("hidden");$("loginScreen").classList.remove("hidden");$("passwordInput").value="";$("passwordInput").focus();
+      history.replaceState(null,"",location.pathname);
+    }
+    async function copy(text){try{await navigator.clipboard.writeText(text);toast("連結已複製");}catch{toast("瀏覽器未允許複製");}}
+
+    $("loginForm").addEventListener("submit",async e=>{
+      e.preventDefault();const input=$("passwordInput"),button=e.submitter,error=$("loginError");
+      error.textContent="";button.disabled=true;button.textContent="解密中…";
+      try{
+        DATA=await decryptPayload(input.value);input.value="";
+        STOCKS=DATA.stocks.map(row=>derive(Object.fromEntries(DATA.stockColumns.map((c,i)=>[c,row[i]]))));
+        $("loginScreen").classList.add("hidden");$("app").classList.remove("hidden");
+        initialize();resetIdle();
+      }catch(err){error.textContent=err.message==="資料載入失敗"?err.message:"密碼錯誤，請重新輸入。";input.select();}
+      finally{button.disabled=false;button.textContent="解鎖";}
+    });
+    ["click","keydown","scroll","touchstart"].forEach(ev=>document.addEventListener(ev,()=>DATA&&resetIdle(),{passive:true}));
+    $("lockButton").addEventListener("click",lock);
+    $("themeButton").addEventListener("click",()=>{
+      const next=document.documentElement.dataset.theme==="dark"?"":"dark";
+      document.documentElement.dataset.theme=next;localStorage.setItem("margin-theme",next);if(DATA)drawStressChart();
+    });
+    document.documentElement.dataset.theme=localStorage.getItem("margin-theme")||"";
+
+    function initialize(){
+      const latest=DATA.trend[DATA.trend.length-1], m=DATA.market, q=DATA.quality;
+      $("dataDateA").textContent=$("dataDateB").textContent=$("footerDate").textContent=shortDate(DATA.asOf);
+      $("pressureLabel").textContent=m.pressure_label;
+      $("temperature").textContent=Math.round(m.temperature);
+      $("marketMaintenance").textContent=pct1(latest.maintenance_60);
+      $("marketCandidate").textContent=`${fmt0(m.eligible_tomorrow_60)} 張`;
+      $("marketBaseSell").textContent=`${fmt0(m.estimated_sell_base)} 張`;
+      $("marketShock5").textContent=`${fmt0(m.shock5_added_60)} 張`;
+      $("marketShock5Hint").textContent=`約占市場20日均量 ${pct1(m.shock5_to_adv)}`;
+      $("marketCoverage").textContent=pct1(m.known_coverage);
+      $("marketCoverageHint").textContent=`融資流量勾稽差異率 ${pct1(q.reconciliation_mismatch_rate)}`;
+      $("heroNarrative").textContent=`截至${shortDate(DATA.asOf)}，近60日融資壓力溫度為${Math.round(m.temperature)}（${m.pressure_label}）。明日可處分候選上限約${fmt0(m.eligible_tomorrow_60)}張；基準情境估計其中約${fmt0(m.estimated_sell_base)}張形成賣壓。`;
+      $("insightTemperature").textContent=`溫度${Math.round(m.temperature)}代表近期融資集中度、低維持率部位與跌價敏感度同時升高。`;
+      $("insightCandidate").textContent=`候選上限${fmt0(m.eligible_tomorrow_60)}張，規劃區間${fmt0(m.estimated_sell_low)}–${fmt0(m.estimated_sell_high)}張。`;
+      $("insightShock").textContent=`若整體價格再跌5%，模型估計新增${fmt0(m.shock5_added_60)}張落入130%以下。`;
+      $("methodSource").textContent=`CMoney ${shortDate(DATA.dateStart)}–${shortDate(DATA.asOf)}，共${DATA.dateCount}個交易日；主指標使用近60日。`;
+      renderCandidateList();drawStressChart();populateOptions();
+      const requested=new URLSearchParams(location.search).get("stock");
+      selectStock(STOCKS.find(s=>s.code===requested)||STOCKS.find(s=>s.code==="2330")||STOCKS[0],false);
+      applyFilters();
+      requestAnimationFrame(drawStressChart);
+    }
+    function renderCandidateList(){
+      const rows=[...STOCKS].sort((a,b)=>b.eligible_tomorrow_60-a.eligible_tomorrow_60).slice(0,10);
+      const max=rows[0]?.eligible_tomorrow_60||1;
+      $("candidateList").innerHTML=rows.map(s=>`<div class="candidate" data-code="${s.code}"><div class="candidate-name">${s.code} ${s.name}</div><div class="candidate-bar"><i style="width:${clamp(s.eligible_tomorrow_60/max*100,1,100)}%"></i></div><div class="candidate-value">${fmt0(s.eligible_tomorrow_60)}</div></div>`).join("");
+      $("candidateList").querySelectorAll(".candidate").forEach(el=>el.addEventListener("click",()=>{selectStock(STOCKS.find(s=>s.code===el.dataset.code));$("stockSection").scrollIntoView();}));
+    }
+    function drawStressChart(){
+      const canvas=$("stressChart");if(!canvas||!DATA)return;
+      const rect=canvas.getBoundingClientRect(),dpr=devicePixelRatio||1;canvas.width=rect.width*dpr;canvas.height=rect.height*dpr;
+      const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
+      const w=rect.width,h=rect.height,p={l:58,r:18,t:18,b:42};const rows=DATA.scenarios;
+      const max=Math.max(...rows.map(r=>r.cumulative_under130))*1.08;
+      const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+      ctx.clearRect(0,0,w,h);ctx.font="11px system-ui";ctx.strokeStyle=css("--line");ctx.fillStyle=css("--muted");ctx.lineWidth=1;
+      for(let i=0;i<=4;i++){const y=p.t+(h-p.t-p.b)*i/4;ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();const v=max*(1-i/4);ctx.fillText(v>=1e6?`${(v/1e6).toFixed(1)}M`:fmt0(v),4,y+4);}
+      const x=i=>p.l+(w-p.l-p.r)*i/(rows.length-1), y=v=>p.t+(h-p.t-p.b)*(1-v/max);
+      rows.forEach((r,i)=>{ctx.fillText(`${Math.round(r.decline*100)}%`,x(i)-8,h-15);});
+      [["added_under130","--amber"],["cumulative_under130","--red"]].forEach(([key,color])=>{
+        ctx.strokeStyle=css(color);ctx.lineWidth=3;ctx.beginPath();rows.forEach((r,i)=>i?ctx.lineTo(x(i),y(r[key])):ctx.moveTo(x(i),y(r[key])));ctx.stroke();
+        ctx.fillStyle=css(color);rows.forEach((r,i)=>{ctx.beginPath();ctx.arc(x(i),y(r[key]),3.5,0,Math.PI*2);ctx.fill();});
+      });
+    }
+    new ResizeObserver(()=>DATA&&drawStressChart()).observe($("stressChart"));
+
+    function populateOptions(){
+      $("stockOptions").innerHTML=STOCKS.map(s=>`<option value="${s.code}">${s.name}</option>`).join("");
+    }
+    function findStock(query){
+      const q=query.trim().toLowerCase();return STOCKS.find(s=>s.code===q)||STOCKS.find(s=>s.name.toLowerCase()===q)||STOCKS.find(s=>`${s.code} ${s.name}`.toLowerCase().includes(q));
+    }
+    $("stockForm").addEventListener("submit",e=>{e.preventDefault();const s=findStock($("stockInput").value);s?selectStock(s):toast("找不到這支股票");});
+    $("copyStockLink").addEventListener("click",()=>selected&&copy(stockUrl(selected.code)));
+    $("copyLink").addEventListener("click",()=>selected&&copy(stockUrl(selected.code)));
+    function stockUrl(code){const u=new URL(location.href);u.searchParams.set("stock",code);return u.toString();}
+    function selectStock(stock,scroll=true){
+      if(!stock)return;selected=stock;$("stockInput").value=`${stock.code} ${stock.name}`;
+      const u=new URL(location.href);u.searchParams.set("stock",stock.code);history.replaceState(null,"",u);
+      $("stockName").textContent=stock.name;$("stockCode").textContent=stock.code;
+      $("stockChips").innerHTML=`<span class="chip">${stock.market}</span><span class="chip">${stock.product_type}</span><span class="chip risk">壓力${fmt0(stock.score)} · ${riskLabel(stock.score)}</span><span class="chip">資料信心 ${stock.confidence}</span>`;
+      $("stockPrice").textContent=price(stock.current_price);$("stockBalance").textContent=`融資餘額 ${fmt0(stock.financing_balance)} 張`;
+      $("stockMaintenance").textContent=pct1(stock.maintenance60);$("stockCost").textContent=`60日估算成本 ${price(stock.avg_cost_60)}`;
+      $("stockTrigger").textContent=price(stock.trigger60);
+      $("stockDistance").textContent=stock.distance60==null?"成本不足":stock.distance60>=0?`距觸發價還可跌 ${pct1(stock.distance60)}`:`已低於觸發價 ${pct1(-stock.distance60)}`;
+      $("stockCandidate").textContent=`${fmt0(stock.eligible_tomorrow_60)} 張`;$("stockBaseSell").textContent=`基準賣壓 ${fmt0(stock.baseSell)} 張；候選占均量 ${pct1(stock.candidateAdv)}`;
+      $("maintenanceBands").innerHTML=[20,60,120].map(days=>{const v=maintenance(stock,days);const width=clamp((v||0)/2*100,0,100);return `<div class="band"><div class="band-top"><span>${days}日維持率</span><span>${pct1(v)}</span></div><div class="band-track"><div class="band-fill" style="width:${width}%;background:${v!=null&&v<1.3?"var(--red)":v!=null&&v<1.4?"var(--amber)":"var(--blue)"}"></div></div></div>`}).join("");
+      const shocks=[0,1,3,5,7,10],adds=[0,stock.scenario_add_1,stock.scenario_add_3,stock.scenario_add_5,stock.scenario_add_7,stock.scenario_add_10];
+      $("stockScenarioBody").innerHTML=shocks.map((s,i)=>{const cumulative=stock.under130_60+adds[i];return `<tr><td>${s===0?"目前":`再跌${s}%`}</td><td>${fmt0(stock.under130_60)}</td><td>${fmt0(adds[i])}</td><td>${fmt0(cumulative)}</td><td>${pct1(stock.adv20>0?cumulative/stock.adv20:null)}</td></tr>`}).join("");
+      const warnings=[];if(stock.quality_warning)warnings.push(stock.quality_warning);if(stock.known_coverage<.7)warnings.push("可估成本覆蓋率低於70%，個股成本與維持率可信度較低。");
+      warnings.push("本頁是股票層級公開資料推估；投資人的整戶現金、其他股票與抵繳證券不可見。");
+      $("stockWarning").textContent=warnings.join(" ");
+      if(scroll)$("stockSection").scrollIntoView({behavior:"smooth",block:"start"});
+    }
+
+    ["tableSearch","riskFilter","marketFilter"].forEach(id=>$(id).addEventListener(id==="tableSearch"?"input":"change",()=>{page=1;applyFilters();}));
+    document.querySelectorAll("table.rank th[data-sort]").forEach(th=>th.addEventListener("click",()=>{
+      const key=th.dataset.sort;if(sortKey===key)sortDir*=-1;else{sortKey=key;sortDir=key==="code"||key==="name"||key==="market"||key==="confidence"?1:-1;}page=1;applyFilters();
+    }));
+    $("prevPage").addEventListener("click",()=>{if(page>1){page--;renderTable();}});
+    $("nextPage").addEventListener("click",()=>{if(page<Math.ceil(filtered.length/pageSize)){page++;renderTable();}});
+    function applyFilters(){
+      const q=$("tableSearch").value.trim().toLowerCase(),risk=$("riskFilter").value,market=$("marketFilter").value;
+      filtered=STOCKS.filter(s=>(!q||`${s.code} ${s.name}`.toLowerCase().includes(q))&&(market==="all"||s.market===market)&&(risk==="all"||riskClass(s.score)===risk));
+      filtered.sort((a,b)=>{const av=a[sortKey],bv=b[sortKey];if(av==null&&bv==null)return 0;if(av==null)return 1;if(bv==null)return -1;return typeof av==="string"?av.localeCompare(bv,"zh-Hant")*sortDir:(av-bv)*sortDir;});
+      renderTable();
+    }
+    function renderTable(){
+      const pages=Math.max(1,Math.ceil(filtered.length/pageSize));page=Math.min(page,pages);
+      const rows=filtered.slice((page-1)*pageSize,page*pageSize);
+      $("rankingBody").innerHTML=rows.map(s=>`<tr data-code="${s.code}">
+        <td>${s.code}</td><td>${s.name}</td><td>${s.market}</td><td>${price(s.current_price)}</td>
+        <td><span class="score ${riskClass(s.score)}">${fmt0(s.score)}</span></td><td>${pct1(s.maintenance60)}</td><td>${price(s.trigger60)}</td><td>${s.distance60==null?"—":pct1(s.distance60)}</td>
+        <td>${fmt0(s.eligible_tomorrow_60)}</td><td>${fmt0(s.baseSell)}</td><td>${pct1(s.candidateAdv)}</td><td>${pct1(s.recent20Share)}</td>
+        <td>${fmt0(s.scenario_add_5)}</td><td>${pct1(s.known_coverage)}</td><td>${s.confidence}</td></tr>`).join("");
+      $("rankingBody").querySelectorAll("tr").forEach(tr=>tr.addEventListener("click",()=>selectStock(STOCKS.find(s=>s.code===tr.dataset.code))));
+      $("tableCount").textContent=`符合 ${fmt0(filtered.length)} 支；顯示第 ${(page-1)*pageSize+1}–${Math.min(page*pageSize,filtered.length)} 支`;
+      $("pageInfo").textContent=`${page} / ${pages}`;$("prevPage").disabled=page<=1;$("nextPage").disabled=page>=pages;
+    }
+    $("downloadCsv").addEventListener("click",()=>{
+      const cols=["code","name","market","current_price","score","maintenance60","trigger60","distance60","eligible_tomorrow_60","baseSell","candidateAdv","recent20Share","scenario_add_5","known_coverage","confidence"];
+      const labels=["股票代號","股票名稱","市場","收盤價","壓力溫度","60日維持率","130%觸發價","還可跌","明日候選","基準賣壓","候選/20日均量","20日新增占餘額","再跌5%新增","成本覆蓋率","信心"];
+      const esc=v=>`"${String(v??"").replaceAll('"','""')}"`;const lines=[labels.map(esc).join(","),...filtered.map(s=>cols.map(c=>esc(s[c])).join(","))];
+      const blob=new Blob(["\ufeff"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`margin-pressure-${DATA.asOf}.csv`;a.click();URL.revokeObjectURL(a.href);
+    });
+  })();
+  </script>
+</body>
+</html>
