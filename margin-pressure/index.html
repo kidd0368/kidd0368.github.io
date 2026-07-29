@@ -296,7 +296,10 @@
     function renderMarket(){
       const s=DATA.segments.mainstream,f=DATA.segments.full_market,t=DATA.segments.tsmc,w60=s.windows["60"],w120=s.windows["120"],w160=s.windows["160"];
       const score=Math.round(s.combined_pressure_score),label=groupLabel(score);
-      const title=score>=70?"非台積電子主流股已進入高壓，<br><span>先處理最接近130%的融資</span>":score>=40?"主流電子已深度回檔，<br><span>融資壓力正在升溫</span>":score>=20?"主流電子大幅回檔，<br><span>融資風險開始浮現</span>":"主流電子雖已回檔，<br><span>目前融資訊號仍偏低</span>";
+      const editorial=DATA.editorial&&DATA.editorial.data_date===DATA.asOf?DATA.editorial:null;
+      const title=editorial
+        ?`${esc(editorial.headline)}<br><span>${esc(editorial.headline_emphasis)}</span>`
+        :score>=70?"非台積電子主流股已進入高壓，<br><span>先處理最接近130%的融資</span>":score>=40?"主流電子已深度回檔，<br><span>融資壓力正在升溫</span>":score>=20?"主流電子大幅回檔，<br><span>融資風險開始浮現</span>":"主流電子雖已回檔，<br><span>目前融資訊號仍偏低</span>";
       $("heroTitle").innerHTML=title;
       $("temperature").textContent=score;$("pressureLabel").textContent=label;$("asOf").textContent=`資料日 ${date(DATA.asOf)}`;
       $("pressurePointer").style.left=`${Math.max(2,Math.min(98,score))}%`;
@@ -307,8 +310,13 @@
       $("mainstreamMaintenanceHead").textContent=maintenanceLabel();
       $("rankingMaintenanceHead").textContent=maintenanceLabel();
       $("maintenanceDefinition").textContent=maintenanceSourceText();
-      $("heroLead").innerHTML=`先排除台積電與非電子產業，再以60／120／160日累積成交金額選出<b>${fmt0(s.stock_count)}檔資金主流股</b>。這批股票近60日成交金額加權回檔達<b>${pct1(w60.amount_weighted_drawdown_from_high)}</b>；<b>${pct1(w60.stock_share_down20_from_high)}</b>的股票已從區間高點回檔超過20%，不能再用全市場平均判斷主流股體感。`;
-      $("marketInterpretation").textContent=`主流股中，約${fmt0(s.cmoney_under130_balance)}張融資集中在${maintenanceLabel()}已低於130%的股票。新增融資壓力為60日${fmt0(w60.pressure_score)}分、120日${fmt0(w120.pressure_score)}分、160日${fmt0(w160.pressure_score)}分：最近60日新增不強，但120／160日累積風險明顯較高。`;
+      if(editorial){
+        $("heroLead").textContent=editorial.market_summary;
+        $("marketInterpretation").textContent=editorial.attention_summary;
+      }else{
+        $("heroLead").innerHTML=`先排除台積電與非電子產業，再以60／120／160日累積成交金額選出<b>${fmt0(s.stock_count)}檔資金主流股</b>。這批股票近60日成交金額加權回檔達<b>${pct1(w60.amount_weighted_drawdown_from_high)}</b>；<b>${pct1(w60.stock_share_down20_from_high)}</b>的股票已從區間高點回檔超過20%，不能再用全市場平均判斷主流股體感。`;
+        $("marketInterpretation").textContent=`主流股中，約${fmt0(s.cmoney_under130_balance)}張融資集中在${maintenanceLabel()}已低於130%的股票。新增融資壓力為60日${fmt0(w60.pressure_score)}分、120日${fmt0(w120.pressure_score)}分、160日${fmt0(w160.pressure_score)}分：最近60日新增不強，但120／160日累積風險明顯較高。`;
+      }
       $("mCmoney").textContent=pct1(s.cmoney_maintenance);
       $("mUnder130").textContent=`${fmt0(s.cmoney_under130_balance)}張`;
       $("mDrawdown60").textContent=pct1(w60.amount_weighted_drawdown_from_high);
