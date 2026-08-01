@@ -136,6 +136,7 @@ a { color:var(--s1); text-decoration:none; }
       <h3 style="align-self:flex-start">去槓桿壓力指數</h3>
       <div id="gauge"></div>
       <div id="zoneLabel" style="font-size:13px;font-weight:600;margin-top:-6px"></div>
+      <div id="scoreHist" style="width:100%;margin-top:10px"></div>
       <div class="fn" style="text-align:center">0=出清完成 · 100=極端槓桿壓力<br>綜合9項子指標，方法見頁尾</div>
     </div>
     <div class="card">
@@ -197,6 +198,18 @@ else if(IND.partial){ const hasSk=IND.pctl_source&&IND.pctl_source.indexOf('快�
   $('#genline').after(b); }
 
 /* ---------- gauge ---------- */
+function renderScoreHist(){
+  const host=$('#scoreHist'); if(!host) return;
+  const H=(IND.composite||{}).hist;
+  host.innerHTML='';
+  if(!H||!H.dates||H.dates.length<2) return;
+  const hv=el('div'); host.append(hv);
+  chart(hv,{dates:H.dates,series:[{name:'壓力指數',data:H.score,color:css('--s1'),type:'line'}],
+            yFmt:v=>fmtN(v,0), refLines:[{v:25,label:'25'},{v:45,label:'45'},{v:70,label:'70'}], h:110});
+  host.append(el('div','fn','指數歷史：自 '+fmtD(H.dates[0])+'（本輪基期）起以同一口徑逐日回算'
+    +(H.etf_from?('；'+fmtD(H.etf_from).slice(5)+' 起計入ETF分項（權重當日切換）'):'')
+    +'。指數量的是「當下壓力強度」，去槓桿一波一波，分數會反覆——判斷接近完成，看三燈與融資/斷頭走平，不是單看分數落區。'));
+}
 function gauge(score,zone){
   const w=250,h=150,cx=w/2,cy=135,r=100,r2=86;
   const zones=[[0,25,css('--good')],[25,45,css('--warn')],[45,70,css('--serious')],[70,100,css('--crit')]];
@@ -730,6 +743,7 @@ function method(){
 /* ---------- render all ---------- */
 function renderAll(){
   gauge(IND.composite.score, IND.composite.zone);
+  renderScoreHist();
   tiles(); chips(); renderComment();
   const cardsBox=$('#cards');
   if(!cardsBox.dataset.built){ CARDS.forEach(c=>cardsBox.append(cardEl(c))); cardsBox.append(etfCard(),ctxCard(),partsCard()); cardsBox.dataset.built=1; }

@@ -332,6 +332,72 @@ def compute(bulk, etf=None, hist=None):
         "asof_naver": (etf_ctx or {}).get("asof"),
     }
 
+    # 綜合指數歷史：自本輪基期(bdate)起逐日回算，口徑與當期一致——
+    # 讀數是「當下壓力強度」而非進度條，歷史曲線讓一波一波的形狀可見，避免單點誤讀。
+    # ETF 分項自其時序首日起計入（該日權重×0.85＋ETF，前端標註切換日）。
+    comp_hist = None
+    if not partial:
+        e_peak = None
+        try:
+            e_peak = float((etf or {}).get("unit_peak_tril") or 0) or None
+        except (TypeError, ValueError):
+            pass
+        e_map = {}
+        if e_peak:
+            e_ser = (etf or {}).get("series") or {}
+            for dd_, vv_ in zip(e_ser.get("dates") or [], e_ser.get("unit_value") or []):
+                if vv_ is not None:
+                    e_map[dd_] = max(0.0, min(1.0, vv_ / e_peak))
+        Pff = {}
+        for key in P:                     # 百分位向前填補＝比照當期 lp() 取最後有效值
+            arr, lastv = [], None
+            for v in P[key]:
+                if v is not None:
+                    lastv = v
+                arr.append(lastv)
+            Pff[key] = arr
+        _idx_of = {i: k for k, (i, _v) in enumerate(mt_valid)}
+        mpos, _p = [None] * n, None
+        for i in range(n):
+            if i in _idx_of:
+                _p = _idx_of[i]
+            mpos[i] = _p
+        mvals = [v for _i, v in mt_valid]
+        Wb, EW = CONFIG["weights"], CONFIG["etf_weight"]
+        hd, hs = [], []
+        peak_run = None
+        for i, d in enumerate(dates):
+            if d < bdate:
+                continue
+            k = mpos[i]
+            if k is None:
+                continue
+            cur_i = mvals[k]
+            peak_run = cur_i if peak_run is None else max(peak_run, cur_i)
+            U_i = 1.0 if peak_run <= base_v else max(0.0, min(1.0, (peak_run - cur_i) / (peak_run - base_v)))
+            d5_i = (mvals[k] / mvals[k - 5] - 1) if (k >= 5 and mvals[k - 5]) else None
+            mom_i = 1.0 if (d5_i is None or d5_i > 0.01) else (0.5 if d5_i > -0.01 else 0.25)
+            rem_i = e_map.get(d)
+            f = 0.85 if rem_i is not None else 1.0
+            def _pv(key):
+                v = Pff[key][i]
+                return 50.0 if v is None else v
+            sc = (Wb["lvl_margin_pctl"] * f * _pv("margin_total") / 100
+                  + Wb["lvl_mcap_pctl"] * f * _pv("margin_mcap") / 100
+                  + Wb["lvl_dep_pctl"] * f * _pv("margin_dep") / 100
+                  + Wb["unwind_remaining"] * f * (1 - U_i)
+                  + Wb["momentum"] * f * mom_i
+                  + Wb["forced_amt_pctl"] * f * _pv("bandae_amt") / 100
+                  + Wb["forced_ratio_pctl"] * f * _pv("bandae_ratio") / 100
+                  + Wb["vol_pctl"] * f * _pv("rv20") / 100
+                  + Wb["turnover_pctl"] * f * _pv("turn_heat") / 100
+                  + (EW * rem_i if rem_i is not None else 0.0))
+            hd.append(d)
+            hs.append(round(sc, 1))
+        if hd:
+            comp_hist = {"dates": hd, "score": hs,
+                         "etf_from": min(e_map) if e_map else None}
+
     s1_ok_etf = (etf is None) or (etf.get("aum_d5") is None) or etf["aum_d5"] > -0.02
     if bp_now is not None and bp_now < 50 and not bandae_rising and s1_ok_etf:
         s1 = "green"      # 斷頭平靜（即使融資仍在下降＝主動去槓桿，也算賣壓衰竭）
@@ -403,7 +469,8 @@ def compute(bulk, etf=None, hist=None):
                    "excess_peak": round(peak_v - base_v, 2), "excess_now": round(cur - base_v, 2),
                    "normal_base": normal_base, "excess_vs_normal": excess_vs_normal},
         "composite": {"score": score, "zone": zone[0], "zone_label": zone[1],
-                      "parts": {k: round(v, 2) for k, v in parts.items()}},
+                      "parts": {k: round(v, 2) for k, v in parts.items()},
+                      "hist": comp_hist},
         "stage": {"n": stage, "label": stage_label,
                   "bandae_mtd": bandae_mtd, "bandae_pctl": bp_now, "rv_pctl": rv_now},
         "mode": {"key": mode, "label": mode_label},
