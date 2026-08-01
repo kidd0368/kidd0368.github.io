@@ -606,6 +606,94 @@ function renderEtf(){
   fn.innerHTML='數據源：'+(E.source||'')+'；行情截至 '+fmtD(E.asof)+'。正向槓桿 '+E.n_lev+' 檔、反向2倍 '+E.n_inv+' 檔（統計僅計正向）。'+
     (E.unit_peak_tril?'份額高點 '+fmtN(E.unit_peak_tril,1)+' 兆₩、規模高點 '+fmtN(E.aum_peak_tril,1)+' 兆₩（含本管線啟用前的已記錄觀測值）。':'');
 }
+/* ---------- 交叉驗證：接手方與市場座標 ---------- */
+const CTX_HOW=
+ '上面每張卡量的都是<b>賣方</b>：槓桿被砍掉多少、份額被註銷多少。但出清要「結束」，還有一個條件——倒出來的籌碼要<b>有人接走</b>。這張卡看的就是接手那一面的三個座標。'
++'<br><br><b>外資持股比率</b>＝外資手上的股票市值，佔全市場市值的百分比。散戶被斷頭、基金單位被註銷時，股票不會消失，只是換人拿。這個比率在升，代表籌碼正從被清算的人手上換到外資手上——換手完成的出清，底部比較紮實；反過來，份額在減、外資比率卻不動甚至下降，代表沒人接，下跌可能只是中場休息。三星電子／SK海力士的個股版本是同一道理，而且這兩檔正是槓桿ETF的標的。'
++'<br><br><b>KOSDAQ</b> 是韓國散戶投機最集中的板塊，也是本輪槓桿的重災區。它跌回哪一天的水位，就是這場出清把市場打回多遠的座標。'
++'<br><br><b>券商股價</b>靠散戶交易佣金和融資利息吃飯，等於槓桿生意的溫度計。券商股不再創新低，通常領先或同步於出清尾聲。'
++'<br><br>此卡只作交叉驗證，<b>不計入綜合指數</b>——這些現象和上方指標是同一件事的兩面，重複計分會高估壓力變化。';
+
+function ctxCard(){
+  const d=el('div','card'); d.id='card-ctx';
+  const hd=el('div','hd'), hl=el('div');
+  hl.append(el('h3',null,'出清的另一面：誰在接、市場跌到哪'),
+            el('div','desc','上方各卡量「賣方」；這裡看「接手方」——外資接了沒、大盤座標在哪、券商股價多慘。交叉驗證用，不計入綜合指數。'));
+  const dt=el('details','how'); dt.innerHTML='<summary>怎麼看這張圖</summary><div class="hb">'+CTX_HOW+'</div>'; hl.append(dt);
+  hd.append(hl, el('div','spacer')); d.append(hd);
+  const tl=el('div','tiles'); tl.id='ctxTiles'; tl.style.margin='14px 0 16px'; d.append(tl);
+  const body=el('div','body'); body.id='ctxBody'; d.append(body);
+  const lg=el('div','legend'); lg.id='ctxLegend'; d.append(lg);
+  const fn=el('div','fn'); fn.id='ctxFn'; d.append(fn);
+  return d;
+}
+function renderCtx(){
+  const tl=$('#ctxTiles'); if(!tl) return;
+  const body=$('#ctxBody'), lg=$('#ctxLegend'), fn=$('#ctxFn');
+  tl.innerHTML=''; body.innerHTML=''; lg.innerHTML=''; fn.innerHTML='';
+  const C=IND.ctx||{};
+  const F=C.fpct, K=C.kosdaq, SF=C.stock_frgn, BR=C.brokers;
+  if(!F&&!K&&!SF&&!BR){
+    body.append(el('div','pending','⏳ 交叉驗證數據尚未產出（管線下次執行後自動出現）。此處不以估算值填補。'));
+    return;
+  }
+  const P=(v,dp)=>v==null?'–':(v>0?'+':'')+fmtN(v*100,dp==null?1:dp)+'%';
+  const pp=v=>v==null?'–':(v>0?'+':'')+fmtN(v,2)+' pp';
+  /* tiles */
+  const T=[];
+  if(F) T.push({l:'KOSPI 外資持股比率', v:fmtN(F.kospi,2)+'%',
+     d:'20日 '+pp(F.kospi_d20pp)+' · KOSDAQ '+(F.kosdaq==null?'–':fmtN(F.kosdaq,2)+'%')+'（20日 '+pp(F.kosdaq_d20pp)+'）'});
+  if(SF&&SF.stat){ const a=SF.stat['005930']||{}, b=SF.stat['000660']||{};
+    T.push({l:'三星電子 外資持股率', v:a.latest==null?'–':fmtN(a.latest,2)+'%',
+       d:'20日 '+pp(a.d20_pp)+' · SK海力士 '+(b.latest==null?'–':fmtN(b.latest,2)+'%')+'（20日 '+pp(b.d20_pp)+'）'});}
+  if(K) T.push({l:'KOSDAQ 指數', v:fmtN(K.now,0),
+     d:'距52週高 '+P(K.vs_hi52)+(K.seen_date?' · 跌回 '+fmtD(K.seen_date).slice(0,7)+' 的水位':'')});
+  if(BR&&BR.stat){ const a=BR.stat['006800']||{}, b=BR.stat['039490']||{};
+    T.push({l:'未來資產證券 距52週高', v:a.vs_hi52==null?'–':P(a.vs_hi52),
+       d:'現價 '+fmtN(a.price,0)+'₩ · Kiwoom證券 '+(b.vs_hi52==null?'–':P(b.vs_hi52))});}
+  T.forEach(x=>{ const c=el('div','tile');
+    c.append(el('div','lbl',x.l), el('div','val',x.v), el('div','delta',x.d)); tl.append(c); });
+
+  const LG=[];
+  /* 圖1：市場外資比重（KOFIA 全歷史，吃全域區間篩選） */
+  if(S.kospi_fpct&&S.kospi_fpct.some(v=>v!=null)){
+    body.append(el('div','desc','外資持股比率（%，外資持股市值佔全市場市值）'));
+    const h1=el('div'); body.append(h1);
+    chart(h1,{series:[{name:'KOSPI',key:'kospi_fpct',color:css('--s1'),type:'line'},
+                      {name:'KOSDAQ',key:'kosdaq_fpct',color:css('--s3'),type:'line'}],
+              yFmt:v=>fmtN(v,0)+'%', h:150});
+    LG.push(['--s1','KOSPI 外資比重'],['--s3','KOSDAQ 外資比重']);
+  }
+  /* 圖2：個股外資持股率（近一年，自帶時間軸） */
+  if(SF&&SF.dates&&SF.dates.length>1){
+    body.append(el('div','desc','個股外資持股率（%，近一年）——槓桿ETF的兩檔標的'));
+    const h2=el('div'); body.append(h2);
+    chart(h2,{dates:SF.dates,series:[
+      {name:'三星電子',data:SF.series['005930']||[],color:css('--s2'),type:'line'},
+      {name:'SK海力士',data:SF.series['000660']||[],color:css('--s5'),type:'line'}],
+      yFmt:v=>fmtN(v,0)+'%', h:150});
+    LG.push(['--s2','三星電子'],['--s5','SK海力士']);
+  } else {
+    body.append(el('div','pending','個股外資持股率：本次未取得（行情端點未回應或欄位變動，probe 已記錄）。不以估算值填補。'));
+  }
+  /* 圖3：券商股價 對52週最高收盤（近一年） */
+  if(BR&&BR.dates&&BR.dates.length>1){
+    body.append(el('div','desc','券商股價 對52週最高收盤（%）——槓桿生意溫度計'));
+    const h3=el('div'); body.append(h3);
+    const nrm=(arr,hi)=>arr.map(v=>v==null||!hi?null:Math.round((v/hi-1)*1000)/10);
+    chart(h3,{dates:BR.dates,series:[
+      {name:'未來資產證券',data:nrm(BR.close['006800']||[],(BR.stat['006800']||{}).hi52),color:css('--s1'),type:'line'},
+      {name:'Kiwoom證券',data:nrm(BR.close['039490']||[],(BR.stat['039490']||{}).hi52),color:css('--s6'),type:'line'}],
+      yFmt:v=>fmtN(v,0)+'%', refLines:[{v:0,label:'52週最高收盤'}], h:150});
+    LG.push(['--s1','未來資產證券'],['--s6','Kiwoom證券']);
+  } else {
+    body.append(el('div','pending','券商股價：本次未取得。不以估算值填補。'));
+  }
+  lg.innerHTML=LG.map(x=>'<span class="key"><span class="ln" style="background:'+css(x[0])+'"></span>'+x[1]+'</span>').join('');
+  fn.innerHTML='數據源：市場外資比重＝KOFIA 兩市統計內含欄位（1998至今，隨主管線每日全量重抓）；個股外資持股率與券商股價＝Naver 日線（近一年，每日全量重抓、無自建狀態，任一天漏跑自動補齊）。'
+    +(C.asof_naver?'個股／券商行情截至 '+fmtD(C.asof_naver)+'。':'')+'此卡不參與綜合指數計算。';
+}
+
 /* composite parts card */
 function partsCard(){
   const d=el('div','card'); d.append(el('h3',null,'壓力指數分解（各分項貢獻）'));
@@ -633,7 +721,7 @@ function method(){
   '<h4>綜合壓力指數（0-100）</h4>'+((IND.etf&&IND.etf.enabled&&IND.etf.remaining!=null)?'五大維度十分項':'四大維度九分項')+'：槓桿水位（融資餘額5年百分位 '+w.lvl_margin_pctl+'、融資/市值 '+w.lvl_mcap_pctl+'、融資/預託金 '+w.lvl_dep_pctl+'）＋出清進度（未出清比例 '+w.unwind_remaining+'、融資5日動能 '+w.momentum+'）＋被動賣壓（斷頭金額 '+w.forced_amt_pctl+'、斷頭比率 '+w.forced_ratio_pctl+'）＋市場應激（波動率 '+w.vol_pctl+'、成交熱度 '+w.turnover_pctl+'）。'+
   ((IND.etf&&IND.etf.enabled&&IND.etf.remaining!=null)?'槓桿ETF分項已啟用，額外加入「ETF未出清程度 '+(IND.config.etf_weight||15)+'」（＝份額對應資產÷其高點），上列九分項權重同步乘以 0.85 重新歸一，總分上限維持 100。':'槓桿ETF分項未計入，上列九分項權重維持原值。')+
   '<h4>出清進度 U</h4><code>U =（峰值 − 目前）/（峰值 − 基期）</code>，基期預設 2026/04/30——本輪 AI 行情啟動前的槓桿水位（可於 CONFIG 調整）；U=100% 表示本輪新增槓桿全數退出。'+
-  '<h4>數據源與時滯</h4>信用與市場數據：KOFIA 金融投資協會綜合統計（신용거래융자·투자자예탁금·미수금·반대매매·兩市指數/成交/市值，日度，1998至今）。槓桿ETF：Naver 金融公開行情（逐檔現價/淨值/市值/成交，份額由市值÷現價推算）＋KOFIA 基金統計（全體 ETF 規模，作為佔比分母）。波動率以20日已實現波動率年化替代 VKOSPI。<b>回撤口徑</b>：距高點一律以「收盤對收盤」計（KOFIA 僅發布每日收盤指數）；盤中高點通常更高（例如 2026/6/19 盤中一度 9,385 vs 最高收盤 9,114）。<b>ETF 時序</b>：逐檔價格歷史自 2026/05/27 上市日起完整；規模與份額無公開歷史檔，自本管線啟用日起逐日累積，缺口不以估算值填補。<b>公布時滯</b>：指數/成交額為當日收盤後入庫；信用融資/預託金/斷頭數據為 KOFIA T+1 公布（實測常於次日下午更新），故信用類截止日通常比行情晚 1-2 個交易日，圖上融資線尾端較指數線短屬正常。'+
+  '<h4>數據源與時滯</h4>信用與市場數據：KOFIA 金融投資協會綜合統計（신용거래융자·투자자예탁금·미수금·반대매매·兩市指數/成交/市值，日度，1998至今）。槓桿ETF：Naver 金融公開行情（逐檔現價/淨值/市值/成交，份額由市值÷現價推算）＋KOFIA 基金統計（全體 ETF 規模，作為佔比分母）。波動率以20日已實現波動率年化替代 VKOSPI。交叉驗證卡：市場外資比重取自 KOFIA 兩市統計內含欄位（1998至今）；個股外資持股率與券商股價取自 Naver 日線（近一年、每日全量重抓，無自建狀態），不計入綜合指數。<b>回撤口徑</b>：距高點一律以「收盤對收盤」計（KOFIA 僅發布每日收盤指數）；盤中高點通常更高（例如 2026/6/19 盤中一度 9,385 vs 最高收盤 9,114）。<b>ETF 時序</b>：逐檔價格歷史自 2026/05/27 上市日起完整；規模與份額無公開歷史檔，自本管線啟用日起逐日累積，缺口不以估算值填補。<b>公布時滯</b>：指數/成交額為當日收盤後入庫；信用融資/預託金/斷頭數據為 KOFIA T+1 公布（實測常於次日下午更新），故信用類截止日通常比行情晚 1-2 個交易日，圖上融資線尾端較指數線短屬正常。'+
   '<h4>訊號判定</h4>①技術性賣壓衰竭＝斷頭金額5日均百分位&lt;50 且 融資5日跌幅&lt;1%，且槓桿ETF規模5日萎縮未達 2%（ETF規模時序累積滿6日後生效）；②③為人工旗標，依新聞更新。'+
   '<h4>韓文術語對照</h4>신용거래융자＝信用融資（散戶向券商借錢買股）；투자자예탁금＝預託金（散戶帳上待投現金）；미수금＝未繳款（散戶欠券商的交割/保證金款項）；반대매매＝斷頭（券商強制平倉賣出）。';
   $('#foot').innerHTML='指標定義與權重可在 compute_indicators.py 的 CONFIG 調整；KOFIA 信用口徑僅涵蓋場內信用融資（不含股票質押與場外配資），槓桿 ETF 內含槓桿另以獨立分項計量，信用數據為 T+1 公布。';
@@ -644,9 +732,10 @@ function renderAll(){
   gauge(IND.composite.score, IND.composite.zone);
   tiles(); chips(); renderComment();
   const cardsBox=$('#cards');
-  if(!cardsBox.dataset.built){ CARDS.forEach(c=>cardsBox.append(cardEl(c))); cardsBox.append(etfCard(),partsCard()); cardsBox.dataset.built=1; }
+  if(!cardsBox.dataset.built){ CARDS.forEach(c=>cardsBox.append(cardEl(c))); cardsBox.append(etfCard(),ctxCard(),partsCard()); cardsBox.dataset.built=1; }
   CARDS.forEach(renderCard);
   renderEtf();
+  renderCtx();
   method();
 }
 renderAll();

@@ -88,7 +88,8 @@ def compute(bulk, etf=None, hist=None):
     dates, S = [], {k: [] for k in [
         "margin_total","margin_kospi","margin_kosdaq","pledge","deposit",
         "margin_dep","margin_mcap","margin_val","misu","bandae_amt","bandae_ratio",
-        "kospi_idx","kosdaq_idx","turn_val","turn_heat","kospi_ret"]}
+        "kospi_idx","kosdaq_idx","turn_val","turn_heat","kospi_ret",
+        "kospi_fpct","kosdaq_fpct"]}
 
     # 主軸 = 行情日期 (KOSPI ∩ KOSDAQ); 信用/資金缺口 = null
     for k in bulk["kospi"]:
@@ -123,6 +124,9 @@ def compute(bulk, etf=None, hist=None):
         S["bandae_ratio"].append(b_rat)
         S["kospi_idx"].append(ki)
         S["kosdaq_idx"].append(qi)
+        # KOFIA 兩市統計自帶「外國人時價總額比重」欄（f_pct）——市場整體外資持股比率
+        S["kospi_fpct"].append(num(k[6]) if len(k) > 6 else None)
+        S["kosdaq_fpct"].append(num(q[6]) if len(q) > 6 else None)
         S["turn_val"].append(val / 1e6)
         S["turn_heat"].append(None if mcap == 0 else round(100 * val / mcap, 3))
         n = len(S["kospi_idx"])
@@ -294,6 +298,40 @@ def compute(bulk, etf=None, hist=None):
     cur_month = dates[-1][:6]
     bandae_mtd = round(sum(v for i, v in enumerate(S["bandae_amt"]) if v is not None and dates[i][:6] == cur_month), 0)
 
+    # 交叉驗證卡（IND.ctx，不參與綜合指數——避免與賣方指標重複計分）
+    # 市場外資比重／KOSDAQ 座標由 KOFIA 全歷史即得；個股外資與券商由 fetch_etf 選配提供
+    def d20pp(arr):
+        va = [v for v in arr if v is not None]
+        return round(va[-1] - va[-21], 2) if len(va) >= 21 else None
+    fp_ko, fp_ko_d, _ = last_valid(S["kospi_fpct"], dates)
+    fp_kq, _, _ = last_valid(S["kosdaq_fpct"], dates)
+    q_pairs = [(i, v) for i, v in enumerate(S["kosdaq_idx"]) if v is not None]
+    ctx_kosdaq = None
+    if q_pairs:
+        q_now = q_pairs[-1][1]
+        recent = [(i, v) for i, v in q_pairs if i >= n - W52]
+        q_hi_i, q_hi = max(recent, key=lambda t: t[1])
+        q_seen = None          # 52週高點之前、最近一次收在現值以下的日期＝「跌回哪天的水位」
+        for i, v in reversed(q_pairs):
+            if i < q_hi_i and v <= q_now:
+                q_seen = dates[i]
+                break
+        ctx_kosdaq = {"now": round(q_now, 2), "hi52": round(q_hi, 2),
+                      "hi52_date": dates[q_hi_i],
+                      "vs_hi52": round(q_now / q_hi - 1, 4),
+                      "seen_date": q_seen}
+    etf_ctx = etf.pop("ctx", None) if isinstance(etf, dict) else None
+    ctx_out = {
+        "fpct": None if fp_ko is None else {
+            "kospi": fp_ko, "kosdaq": fp_kq, "asof": fp_ko_d,
+            "kospi_d20pp": d20pp(S["kospi_fpct"]),
+            "kosdaq_d20pp": d20pp(S["kosdaq_fpct"])},
+        "kosdaq": ctx_kosdaq,
+        "stock_frgn": (etf_ctx or {}).get("stock_frgn"),
+        "brokers": (etf_ctx or {}).get("brokers"),
+        "asof_naver": (etf_ctx or {}).get("asof"),
+    }
+
     s1_ok_etf = (etf is None) or (etf.get("aum_d5") is None) or etf["aum_d5"] > -0.02
     if bp_now is not None and bp_now < 50 and not bandae_rising and s1_ok_etf:
         s1 = "green"      # 斷頭平靜（即使融資仍在下降＝主動去槓桿，也算賣壓衰竭）
@@ -346,6 +384,7 @@ def compute(bulk, etf=None, hist=None):
             "bandae_amt": pick(S["bandae_amt"]), "bandae_ratio": pick(S["bandae_ratio"]),
             "bandae_amt_ma": pick(bandae_amt_ma), "bandae_ratio_ma": pick(bandae_ratio_ma),
             "kospi_idx": pick(S["kospi_idx"]), "kosdaq_idx": pick(S["kosdaq_idx"]),
+            "kospi_fpct": pick(S["kospi_fpct"]), "kosdaq_fpct": pick(S["kosdaq_fpct"]),
             "kospi_dd": pick(dd), "rv20": pick(rv20),
             "turn_val": pick(S["turn_val"]), "turn_heat": pick(S["turn_heat"]),
             "pctl_margin_total": pick(P["margin_total"]),
@@ -380,6 +419,7 @@ def compute(bulk, etf=None, hist=None):
         },
         "etf": etf or {"enabled": False,
                        "note": "本次執行未產出 ETF 數據檔（fetch_etf.py 未執行，或行情來源暫時無回應）"},
+        "ctx": ctx_out,
     }
     return out
 

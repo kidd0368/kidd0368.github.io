@@ -250,6 +250,119 @@ def naver_mcap(sess, code):
     return None
 
 
+# ------------------------------------------ E. 交叉驗證：外資持股率與券商股價
+# 目的：儀表板主體量「賣方」（份額註銷、融資去化）；此塊量「接手方」與座標——
+#   個股外資持股率（三星電子/SK海力士，槓桿ETF標的）＋券商股價（槓桿景氣溫度計）。
+# 設計：每次全量重抓近400日，無自建狀態 → 任一天漏跑都能自癒；缺數據不估算。
+CTX_STOCKS = [("005930", "三星電子"), ("000660", "SK海力士")]
+CTX_BROKERS = [("006800", "未來資產證券"), ("039490", "Kiwoom證券")]
+
+
+def sise_rows(sess, code, d1, d2):
+    """siseJson 原始表 → (表頭, 資料列)。欄位一律用表頭標籤定位，不硬編位置。"""
+    url = ("https://api.finance.naver.com/siseJson.naver?symbol=%s&requestType=1"
+           "&startTime=%s&endTime=%s&timeframe=day" % (code, d1, d2))
+    arr = json.loads(get(sess, url, tries=2, timeout=12).text.strip().replace("'", '"'))
+    if not isinstance(arr, list) or len(arr) < 2:
+        return [], []
+    return [str(x) for x in arr[0]], arr[1:]
+
+
+def col_of(header, kw):
+    for i, h in enumerate(header):
+        if kw in h:
+            return i
+    return None
+
+
+def pack_col(rows, ci):
+    """{YYYYMMDD: float}；空值/壞列直接略過。"""
+    out = {}
+    for r in rows:
+        d = str(r[0])
+        if re.fullmatch(r"\d{8}", d) and ci is not None and ci < len(r):
+            try:
+                out[d] = float(r[ci])
+            except (TypeError, ValueError):
+                pass
+    return out
+
+
+def fetch_ctx(sess):
+    d2 = kst_today()
+    d1 = (datetime.now(timezone.utc) + timedelta(hours=9)
+          - timedelta(days=400)).strftime("%Y%m%d")
+    ctx = {}
+
+    # 個股外資持股率（외국인소진율 欄；標籤含「외국인」）
+    frgn = {}
+    for code, _zh in CTX_STOCKS:
+        if budget_left() < 25:
+            PROBE["ctx_skipped"] = "budget"
+            break
+        try:
+            hd, rows = sise_rows(sess, code, d1, d2)
+            PROBE.setdefault("ctx_header", hd[:8])
+            ci = col_of(hd, "외국인")
+            if ci is None:
+                PROBE.setdefault("ctx_nofrgn", []).append(code)
+                continue
+            m = pack_col(rows, ci)
+            if m:
+                frgn[code] = m
+        except Exception as e:
+            PROBE.setdefault("ctx_err", []).append("%s:%s" % (code, str(e)[:50]))
+        time.sleep(0.25)
+    if frgn:
+        alld = sorted(set().union(*[set(m) for m in frgn.values()]))
+        stat = {}
+        for c, m in frgn.items():
+            ds = sorted(m)
+            prev = m[ds[-21]] if len(ds) >= 21 else None
+            stat[c] = {"latest": round(m[ds[-1]], 2),
+                       "d20_pp": round(m[ds[-1]] - prev, 2) if prev is not None else None}
+        ctx["stock_frgn"] = {
+            "dates": alld,
+            "series": {c: [round(m[d], 2) if d in m else None for d in alld]
+                       for c, m in frgn.items()},
+            "stat": stat, "names": dict(CTX_STOCKS)}
+
+    # 券商收盤價 → 距52週高（52週高由抓回的歷史自身計得，不引用外部欄位）
+    brok = {}
+    for code, _zh in CTX_BROKERS:
+        if budget_left() < 25:
+            PROBE["ctx_skipped"] = "budget"
+            break
+        try:
+            hd, rows = sise_rows(sess, code, d1, d2)
+            m = pack_col(rows, col_of(hd, "종가"))
+            if m:
+                brok[code] = m
+            else:
+                PROBE.setdefault("ctx_noclose", []).append(code)
+        except Exception as e:
+            PROBE.setdefault("ctx_err", []).append("%s:%s" % (code, str(e)[:50]))
+        time.sleep(0.25)
+    if brok:
+        alld = sorted(set().union(*[set(m) for m in brok.values()]))
+        stat = {}
+        for c, m in brok.items():
+            ds = sorted(m)[-252:]
+            hi = max(m[d] for d in ds)
+            cur = m[sorted(m)[-1]]
+            stat[c] = {"price": round(cur), "hi52": round(hi),
+                       "hi52_date": max(d for d in ds if m[d] == hi),
+                       "vs_hi52": round(cur / hi - 1, 4)}
+        ctx["brokers"] = {
+            "dates": alld,
+            "close": {c: [round(m[d]) if d in m else None for d in alld]
+                      for c, m in brok.items()},
+            "stat": stat, "names": dict(CTX_BROKERS)}
+
+    ctx["asof"] = d2
+    return ctx if (ctx.get("stock_frgn") or ctx.get("brokers")) else None
+
+
 # --------------------------------------------------------- 前次狀態（時序）
 def load_prev(path="index.html"):
     try:
@@ -421,6 +534,14 @@ def main():
                 if prev.get(k):
                     result[k] = prev[k]
         print("ETF fetch failed:", e, file=sys.stderr)
+
+    # 交叉驗證數據：獨立於主體之外，任何失敗都不影響上方 ETF 讀數
+    try:
+        ctx = fetch_ctx(sess)
+        if ctx:
+            result["ctx"] = ctx
+    except Exception as e:
+        PROBE["ctx_fatal"] = str(e)[:120]
 
     PROBE["elapsed_s"] = round(time.time() - _T0[0], 1)
     result["probe"] = PROBE
