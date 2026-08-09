@@ -79,7 +79,7 @@ footer{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line)
     <div class="mark"><div class="logo" aria-hidden="true"></div><div class="brand">Market Path Engine<small>TrendSync Research Lab</small></div></div>
     <nav class="topnav">
       <a class="navlink" href="#modules">Signal stack</a><a class="navlink" href="#archive">Archive</a><a class="navlink" href="#sources">Sources</a>
-      <button class="ghost ai-action" id="analysisOpen" type="button">✦ 全站資料給 ChatGPT</button>
+      <button class="ghost ai-action" id="analysisOpen" type="button">✦ 11 個網頁資料給 ChatGPT</button>
       <span id="status" class="status"><i></i><span>Loading</span></span>
       <button class="ghost" id="theme" type="button" aria-label="切換明暗主題">◐</button>
     </nav>
@@ -137,7 +137,7 @@ footer{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line)
 <section class="analysis-modal" id="analysisModal" role="dialog" aria-modal="true" aria-labelledby="analysisTitle" hidden>
   <div class="analysis-dialog">
     <header class="analysis-head">
-      <div><div class="eyebrow">Cross-site research bundle</div><h2 id="analysisTitle">把全站資料交給 ChatGPT 分析</h2><p>整合 Market Path 與「我的網頁總覽」中的 10 個已發布研究頁。系統會收集各頁可見內容、表格與可讀取的結構化資料，再產生一份完整資料包和繁中分析指令。</p></div>
+      <div><div class="eyebrow">Cross-site research bundle</div><h2 id="analysisTitle">把 11 個網頁資料交給 ChatGPT 分析</h2><p>整合目前的 Market Path Engine（1 個網頁）與「我的網頁總覽」中的 10 個已發布研究頁，合計 11 個網頁。系統會收集各頁可見內容、表格與可讀取的結構化資料，再產生一份完整資料包和繁中分析指令。</p></div>
       <button class="analysis-close" id="analysisClose" type="button" aria-label="關閉">×</button>
     </header>
     <div class="analysis-body">
@@ -148,7 +148,7 @@ footer{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line)
       </div>
       <div class="analysis-password">
         <div><label for="bundlePassword">各研究頁的共用密碼（只在這次建立期間使用）</label><input id="bundlePassword" type="password" autocomplete="current-password" placeholder="若剛以密碼登入本頁，可直接建立"></div>
-        <button class="primary-btn" id="buildBundle" type="button">建立全站分析包</button>
+        <button class="primary-btn" id="buildBundle" type="button">建立 11 個網頁分析包</button>
       </div>
       <p class="privacy-note">資料和密碼不會由本頁自動傳給 ChatGPT；密碼不會寫入資料包。完成後由你決定下載、複製與上傳。</p>
       <div class="collection-status" id="collectionStatus">
