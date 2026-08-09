@@ -52,8 +52,10 @@ try {
 footer{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line);padding-top:18px;margin-top:30px;color:var(--muted);font-size:10px}footer .right{margin-left:auto;text-align:right}
 .auth-gate{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 20%,color-mix(in srgb,var(--mint) 16%,transparent),transparent 36%),var(--bg)}
 .auth-panel{width:min(420px,100%);padding:30px;border:1px solid var(--line);border-radius:22px;background:var(--surface);box-shadow:var(--shadow);text-align:center}.auth-panel .logo{margin:0 auto 18px}.auth-panel h1{font-family:Georgia,"Noto Serif TC",serif;font-size:28px;line-height:1.15;margin:0}.auth-panel>p{color:var(--muted);font-size:12px;margin:10px auto 22px;max-width:320px}.auth-form{text-align:left}.auth-form label{display:block;font-size:11px;font-weight:750;margin-bottom:7px}.auth-input-row{display:flex;gap:7px}.auth-input-row input{min-width:0;flex:1;border:1px solid var(--line);border-radius:11px;background:var(--surface-2);color:var(--ink);padding:11px 12px;outline:none;font:inherit}.auth-input-row input:focus{border-color:var(--mint);box-shadow:0 0 0 3px color-mix(in srgb,var(--mint) 16%,transparent)}.auth-input-row button{border:1px solid var(--line);border-radius:11px;background:var(--surface-2);color:var(--muted);padding:0 12px;cursor:pointer}.auth-submit{width:100%;margin-top:10px;border:0;border-radius:11px;padding:11px 14px;background:var(--forest);color:var(--surface);font-weight:760;cursor:pointer}.auth-submit:hover{filter:brightness(1.08)}.auth-error{min-height:18px;margin:7px 0 0;color:var(--red);font-size:10.5px;text-align:center}.auth-foot{border-top:1px solid var(--line-2);padding-top:14px;margin-bottom:0!important;font-size:9.5px!important}.auth-ok .auth-gate{display:none}.auth-locked{overflow:hidden}.auth-locked .shell,html:not(.auth-ok):not(.auth-locked) .shell{visibility:hidden}
+.ai-action{border-color:color-mix(in srgb,var(--mint) 45%,var(--line));background:color-mix(in srgb,var(--mint) 8%,var(--surface));color:var(--forest);font-weight:760}.ai-action:hover{background:color-mix(in srgb,var(--mint) 14%,var(--surface))}
+.analysis-modal[hidden]{display:none}.analysis-modal{position:fixed;inset:0;z-index:900;display:grid;place-items:center;padding:20px;background:rgba(5,12,8,.58);backdrop-filter:blur(5px)}.analysis-dialog{width:min(920px,100%);max-height:min(900px,94vh);display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:0 28px 80px rgba(0,0,0,.28);overflow:hidden}.analysis-head{display:flex;align-items:flex-start;gap:16px;padding:21px 23px 16px;border-bottom:1px solid var(--line)}.analysis-head h2{font-family:Georgia,"Noto Serif TC",serif;font-size:24px;line-height:1.1;margin:0 0 6px}.analysis-head p{font-size:11px;color:var(--muted);margin:0;max-width:680px}.analysis-close{margin-left:auto;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);border-radius:50%;width:34px;height:34px;cursor:pointer;flex:none}.analysis-body{padding:18px 23px 23px;overflow:auto}.analysis-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:15px}.analysis-step{border:1px solid var(--line);border-radius:11px;padding:9px 11px;background:var(--surface-2);font-size:10px;color:var(--muted)}.analysis-step b{display:block;color:var(--ink);font-size:11px;margin-bottom:2px}.analysis-password{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin:12px 0}.analysis-password label{display:block;font-size:10px;color:var(--muted);margin-bottom:5px}.analysis-password input{width:100%;border:1px solid var(--line);border-radius:11px;background:var(--surface-2);color:var(--ink);padding:10px 11px;outline:none}.analysis-password input:focus{border-color:var(--mint);box-shadow:0 0 0 3px color-mix(in srgb,var(--mint) 14%,transparent)}.primary-btn,.secondary-btn{border-radius:11px;padding:10px 14px;cursor:pointer;font-weight:720}.primary-btn{border:1px solid var(--forest);background:var(--forest);color:var(--surface)}.secondary-btn{border:1px solid var(--line);background:var(--surface-2);color:var(--ink)}.primary-btn:disabled,.secondary-btn:disabled{opacity:.5;cursor:not-allowed}.privacy-note{font-size:10px;color:var(--muted);margin:0 0 12px}.collection-status{border:1px solid var(--line);border-radius:13px;background:var(--surface-2);padding:11px 12px;margin:12px 0}.collection-summary{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:720}.collection-summary i{width:8px;height:8px;border-radius:50%;background:var(--amber)}.collection-summary.ok i{background:var(--mint)}.collection-summary.error i{background:var(--red)}.collection-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 14px;margin-top:8px}.collection-item{display:flex;gap:7px;align-items:center;font-size:9.5px;color:var(--muted);min-width:0}.collection-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.collection-item i{width:6px;height:6px;border-radius:50%;background:var(--line);flex:none}.collection-item.loading i{background:var(--amber)}.collection-item.ok i{background:var(--mint)}.collection-item.partial i{background:var(--blue)}.collection-item.error i{background:var(--red)}.prompt-area{margin-top:14px}.prompt-area label{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:var(--muted);margin-bottom:5px}.prompt-area textarea{width:100%;min-height:210px;resize:vertical;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);color:var(--ink);padding:12px;font:11px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}.analysis-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.analysis-message{min-height:18px;margin:8px 0 0;font-size:10.5px;color:var(--muted)}.analysis-message.ok{color:var(--up)}.analysis-message.error{color:var(--red)}.collector-frame{position:fixed!important;width:2px!important;height:2px!important;right:0!important;bottom:0!important;opacity:.01!important;pointer-events:none!important;border:0!important}
 @media(max-width:980px){.intro{align-items:flex-start;flex-direction:column}.intro-meta{margin-left:0;width:100%}.grid-hero{grid-template-columns:1fr}.pulse{grid-template-columns:repeat(3,1fr)}.module-grid,.lower{grid-template-columns:1fr}.method-grid{grid-template-columns:repeat(2,1fr)}.method-item:nth-child(2){border:0}}
-@media(max-width:650px){.shell{padding:12px 12px 44px}.topnav .navlink{display:none}.intro h1{font-size:38px}.path-grid{grid-template-columns:1fr}.pulse{grid-template-columns:repeat(2,1fr)}.metric{grid-template-columns:minmax(110px,1fr) 72px 70px}.spark{display:none}.regime-main{align-items:flex-start}.dial{width:108px;height:108px}.dial strong{font-size:26px}.module{padding:16px}.method-grid{grid-template-columns:1fr}.method-item{border-right:0;border-bottom:1px solid var(--line-2);padding-bottom:10px}footer{display:block}footer .right{margin-top:8px;text-align:left}}
+@media(max-width:650px){.shell{padding:12px 12px 44px}.topnav .navlink{display:none}.intro h1{font-size:38px}.path-grid{grid-template-columns:1fr}.pulse{grid-template-columns:repeat(2,1fr)}.metric{grid-template-columns:minmax(110px,1fr) 72px 70px}.spark{display:none}.regime-main{align-items:flex-start}.dial{width:108px;height:108px}.dial strong{font-size:26px}.module{padding:16px}.method-grid{grid-template-columns:1fr}.method-item{border-right:0;border-bottom:1px solid var(--line-2);padding-bottom:10px}footer{display:block}footer .right{margin-top:8px;text-align:left}.ai-action{padding:6px 9px}.analysis-modal{padding:7px}.analysis-dialog{max-height:97vh;border-radius:16px}.analysis-head,.analysis-body{padding-left:15px;padding-right:15px}.analysis-steps{grid-template-columns:1fr}.analysis-password{grid-template-columns:1fr}.analysis-password .primary-btn{width:100%}.collection-list{grid-template-columns:1fr}.analysis-actions>*{width:100%}}
 </style>
 </head>
 <body>
@@ -77,6 +79,7 @@ footer{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line)
     <div class="mark"><div class="logo" aria-hidden="true"></div><div class="brand">Market Path Engine<small>TrendSync Research Lab</small></div></div>
     <nav class="topnav">
       <a class="navlink" href="#modules">Signal stack</a><a class="navlink" href="#archive">Archive</a><a class="navlink" href="#sources">Sources</a>
+      <button class="ghost ai-action" id="analysisOpen" type="button">✦ 全站資料給 ChatGPT</button>
       <span id="status" class="status"><i></i><span>Loading</span></span>
       <button class="ghost" id="theme" type="button" aria-label="切換明暗主題">◐</button>
     </nav>
@@ -131,12 +134,49 @@ footer{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line)
   <footer><div>Market Path Engine V1 · Free / existing data prototype</div><div class="right">Generated <span id="generated">—</span><br>GitHub Pages · static, auditable, dependency-free</div></footer>
 </main>
 
+<section class="analysis-modal" id="analysisModal" role="dialog" aria-modal="true" aria-labelledby="analysisTitle" hidden>
+  <div class="analysis-dialog">
+    <header class="analysis-head">
+      <div><div class="eyebrow">Cross-site research bundle</div><h2 id="analysisTitle">把全站資料交給 ChatGPT 分析</h2><p>整合 Market Path 與「我的網頁總覽」中的 10 個已發布研究頁。系統會收集各頁可見內容、表格與可讀取的結構化資料，再產生一份完整資料包和繁中分析指令。</p></div>
+      <button class="analysis-close" id="analysisClose" type="button" aria-label="關閉">×</button>
+    </header>
+    <div class="analysis-body">
+      <div class="analysis-steps">
+        <div class="analysis-step"><b>1. 建立資料包</b>輸入共用密碼，逐頁解鎖並在本機整理。</div>
+        <div class="analysis-step"><b>2. 下載＋複製</b>下載完整 JSON，再複製專用分析指令。</div>
+        <div class="analysis-step"><b>3. 交給 ChatGPT</b>上傳 JSON、貼上指令，即可產生報告。</div>
+      </div>
+      <div class="analysis-password">
+        <div><label for="bundlePassword">各研究頁的共用密碼（只在這次建立期間使用）</label><input id="bundlePassword" type="password" autocomplete="current-password" placeholder="若剛以密碼登入本頁，可直接建立"></div>
+        <button class="primary-btn" id="buildBundle" type="button">建立全站分析包</button>
+      </div>
+      <p class="privacy-note">資料和密碼不會由本頁自動傳給 ChatGPT；密碼不會寫入資料包。完成後由你決定下載、複製與上傳。</p>
+      <div class="collection-status" id="collectionStatus">
+        <div class="collection-summary" id="collectionSummary"><i></i><span>尚未開始 · 預計收集 11 份來源</span></div>
+        <div class="collection-list" id="collectionList"></div>
+      </div>
+      <div class="prompt-area">
+        <label for="analysisPrompt"><span>ChatGPT 分析指令</span><span id="bundleSize">尚未建立</span></label>
+        <textarea id="analysisPrompt" readonly placeholder="建立完成後，這裡會出現可直接貼給 ChatGPT 的繁中分析指令。"></textarea>
+      </div>
+      <div class="analysis-actions">
+        <button class="primary-btn" id="downloadBundle" type="button" disabled>① 下載完整資料 JSON</button>
+        <button class="secondary-btn" id="copyPrompt" type="button" disabled>② 複製分析指令</button>
+        <button class="secondary-btn" id="copyAll" type="button" disabled>複製指令＋全部資料</button>
+        <button class="secondary-btn" id="openChatGPT" type="button" disabled>③ 開啟 ChatGPT ↗</button>
+      </div>
+      <p class="analysis-message" id="analysisMessage" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
 <script>
 const AUTH_HASH='d1f3a25e249218ef25bcd4d3493783face7e21fae8ce92ea78dd266ffdf0fb8e';
 const AUTH_KEY='mpe-auth-d1f3a25e';
+let analysisSessionPassword='';
 const authForm=document.getElementById('authForm'),authPassword=document.getElementById('authPassword'),authError=document.getElementById('authError'),authToggle=document.getElementById('authToggle');
 async function authHash(value){const bytes=new TextEncoder().encode(value);const digest=await crypto.subtle.digest('SHA-256',bytes);return Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('')}
-authForm.addEventListener('submit',async event=>{event.preventDefault();authError.textContent='驗證中…';const candidate=await authHash(authPassword.value);if(candidate===AUTH_HASH){try{sessionStorage.setItem(AUTH_KEY,'ok')}catch(_){}document.documentElement.classList.remove('auth-locked');document.documentElement.classList.add('auth-ok');authPassword.value='';authError.textContent=''}else{authError.textContent='密碼不正確，請再試一次。';authPassword.select()}});
+authForm.addEventListener('submit',async event=>{event.preventDefault();authError.textContent='驗證中…';const plain=authPassword.value;const candidate=await authHash(plain);if(candidate===AUTH_HASH){analysisSessionPassword=plain;try{sessionStorage.setItem(AUTH_KEY,'ok')}catch(_){}document.documentElement.classList.remove('auth-locked');document.documentElement.classList.add('auth-ok');authPassword.value='';authError.textContent=''}else{authError.textContent='密碼不正確，請再試一次。';authPassword.select()}});
 authToggle.addEventListener('click',()=>{const show=authPassword.type==='password';authPassword.type=show?'text':'password';authToggle.textContent=show?'隱藏':'顯示';authToggle.setAttribute('aria-label',show?'隱藏密碼':'顯示密碼')});
 const DATA = /*__MPE_DATA__*/null;
 const moduleMeta = {
@@ -213,5 +253,6 @@ const saved=localStorage.getItem('mpe-theme'); if(saved)document.documentElement
 $('#theme').addEventListener('click',()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=next;localStorage.setItem('mpe-theme',next)});
 init();
 </script>
+<script src="/market_path_engine/analysis_bundle.js?v=5"></script>
 </body>
 </html>
