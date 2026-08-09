@@ -133,8 +133,25 @@ def fetch_polymarket():
 # ---------------- FRED ----------------
 
 def _fred_csv(series):
+    key = os.environ.get("FRED_API_KEY", "").strip()
+    if key:
+        # 官方 API（有 key 就走這條，雲端 IP 不會被擋）
+        r = requests.get("https://api.stlouisfed.org/fred/series/observations",
+                         params={"series_id": series, "api_key": key, "file_type": "json"},
+                         headers=UA, timeout=25)
+        r.raise_for_status()
+        rows = []
+        for o in r.json().get("observations", []):
+            v = o.get("value")
+            if v not in (".", "", None):
+                try:
+                    rows.append((o["date"], float(v)))
+                except ValueError:
+                    pass
+        return rows
+    # 無 key 退回 fredgraph.csv（雲端 IP 可能被限流，timeout 縮短避免拖時間）
     r = requests.get("https://fred.stlouisfed.org/graph/fredgraph.csv",
-                     params={"id": series}, headers=UA, timeout=30)
+                     params={"id": series}, headers=UA, timeout=12)
     r.raise_for_status()
     rows = []
     for line in r.text.strip().splitlines()[1:]:
@@ -384,3 +401,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
