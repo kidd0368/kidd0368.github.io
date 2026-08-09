@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kidd0368.github.io/market_path_engine/schema/validation.schema.json",
+  "title": "Market Path Engine validation record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "validation_id",
+    "prediction_id",
+    "model_version",
+    "horizon",
+    "target_date",
+    "return_pct",
+    "predicted_class",
+    "realized_class",
+    "brier_score",
+    "log_loss",
+    "validated_at"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "validation_id": { "type": "string" },
+    "prediction_id": { "type": "string" },
+    "model_version": { "type": "string" },
+    "horizon": { "type": "string" },
+    "target_date": { "type": "string", "format": "date" },
+    "anchor_close": { "type": "number" },
+    "target_close": { "type": "number" },
+    "return_pct": { "type": "number" },
+    "threshold_pct": { "type": "number", "minimum": 0 },
+    "predicted_class": { "enum": ["up", "range", "down"] },
+    "realized_class": { "enum": ["up", "range", "down"] },
+    "brier_score": { "type": "number", "minimum": 0 },
+    "log_loss": { "type": "number", "minimum": 0 },
+    "validated_at": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

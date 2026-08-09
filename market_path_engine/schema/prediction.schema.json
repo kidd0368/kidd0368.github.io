@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kidd0368.github.io/market_path_engine/schema/prediction.schema.json",
+  "title": "Market Path Engine prediction archive record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "prediction_id",
+    "model_version",
+    "generated_at",
+    "asof",
+    "anchor",
+    "regime",
+    "paths",
+    "features"
+  ],
+  "properties": {
+    "schema_version": { "type": "string" },
+    "prediction_id": { "type": "string" },
+    "model_version": { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "asof": { "type": "string", "format": "date" },
+    "anchor": {
+      "type": "object",
+      "required": ["symbol", "date", "close"],
+      "properties": {
+        "symbol": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "close": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "regime": {
+      "type": "object",
+      "required": ["name", "code", "stress_score", "confidence"],
+      "properties": {
+        "name": { "type": "string" },
+        "code": { "type": "string" },
+        "stress_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 100 },
+        "summary": { "type": "string" }
+      }
+    },
+    "paths": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["horizon", "trading_days", "threshold_pct", "probabilities", "dominant_path"],
+        "properties": {
+          "horizon": { "type": "string" },
+          "trading_days": { "type": "integer", "minimum": 1 },
+          "threshold_pct": { "type": "number", "minimum": 0 },
+          "probabilities": {
+            "type": "object",
+            "required": ["up", "range", "down"],
+            "properties": {
+              "up": { "type": "number", "minimum": 0, "maximum": 100 },
+              "range": { "type": "number", "minimum": 0, "maximum": 100 },
+              "down": { "type": "number", "minimum": 0, "maximum": 100 }
+            },
+            "additionalProperties": false
+          },
+          "dominant_path": { "enum": ["up", "range", "down"] },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "additionalProperties": { "type": "number", "minimum": 0, "maximum": 100 }
+    },
+    "disclosure": { "type": "string" }
+  },
+  "additionalProperties": true
+}

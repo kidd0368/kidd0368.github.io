@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Market Path Engine — Regime & Probability Map</title>
+<style>
+:root {
+  --bg:#f4f6f3; --surface:#ffffff; --surface-2:#f8f9f7; --ink:#111914; --muted:#66706a;
+  --faint:#929b95; --line:#dfe4df; --line-2:#edf0ed; --shadow:0 12px 32px rgba(25,45,31,.07);
+  --forest:#174c3c; --mint:#2b8a6e; --blue:#3267d6; --amber:#d49322; --red:#cb4b43; --violet:#7656c9;
+  --up:#237a5e; --range:#bc7b13; --down:#bf443f; --radius:18px;
+}
+[data-theme="dark"] {
+  --bg:#0e1411; --surface:#151d19; --surface-2:#19231e; --ink:#eef5f0; --muted:#a3aea7;
+  --faint:#7c8981; --line:#2a3630; --line-2:#222d27; --shadow:0 14px 34px rgba(0,0,0,.24);
+  --forest:#8bd1b8; --mint:#62c5a1; --blue:#7da3ff; --amber:#e8b95e; --red:#ef827d; --violet:#ab91ef;
+  --up:#64c5a2; --range:#e5b45a; --down:#eb7771;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;
+  font-size:14px;line-height:1.55} button,a{font:inherit} a{color:var(--blue);text-decoration:none} a:hover{text-decoration:underline}
+.shell{max-width:1280px;margin:0 auto;padding:18px 22px 64px}.topbar{display:flex;align-items:center;gap:14px;padding:6px 0 18px}
+.mark{display:flex;align-items:center;gap:11px}.logo{width:34px;height:34px;border-radius:11px;background:var(--forest);position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)}
+.logo:before,.logo:after{content:"";position:absolute;left:8px;right:8px;height:2px;background:var(--surface);transform:rotate(-28deg);border-radius:2px}
+.logo:before{top:13px}.logo:after{top:20px}.brand{font-size:13px;font-weight:760;letter-spacing:.02em}.brand small{display:block;color:var(--muted);font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase}
+.topnav{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.navlink{color:var(--muted);font-size:12px;padding:6px 8px}.ghost{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 10px;cursor:pointer}.ghost:hover{background:var(--surface-2)}
+.status{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 9px;color:var(--muted);font-size:11px;font-weight:650}.status i{width:7px;height:7px;border-radius:50%;background:var(--amber)}.status.live i{background:var(--mint)}.status.degraded i{background:var(--red)}
+.intro{display:flex;align-items:flex-end;gap:30px;margin:24px 0 20px}.eyebrow{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--mint);font-weight:800}.intro h1{font-family:Georgia,"Noto Serif TC",serif;font-size:clamp(34px,5vw,64px);line-height:.98;letter-spacing:-.045em;margin:8px 0 13px;font-weight:600;max-width:800px}.intro h1 span{color:var(--forest)}
+.dek{max-width:730px;color:var(--muted);font-size:15px;margin:0}.intro-meta{margin-left:auto;min-width:250px;display:grid;grid-template-columns:1fr 1fr;gap:8px}.meta-box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}.meta-box b{display:block;font-size:15px}.meta-box span{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+.grid-hero{display:grid;grid-template-columns:minmax(330px,.85fr) minmax(520px,1.55fr);gap:16px}.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.regime{padding:23px;position:relative;overflow:hidden}.regime:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:-115px;top:-125px;background:color-mix(in srgb,var(--mint) 13%,transparent)}
+.kicker{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:750}.regime-main{display:flex;gap:20px;align-items:center;margin:22px 0 18px}.dial{--score:50;width:132px;height:132px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--red) calc(var(--score)*1%),var(--line-2) 0);position:relative;flex:none}.dial:before{content:"";position:absolute;inset:11px;border-radius:50%;background:var(--surface)}.dial div{z-index:1;text-align:center}.dial strong{font-size:32px;line-height:1;display:block;font-variant-numeric:tabular-nums}.dial small{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+.regime-name{font-family:Georgia,"Noto Serif TC",serif;font-size:27px;line-height:1.1;margin:0 0 8px}.regime-code{display:inline-flex;border-radius:999px;padding:4px 8px;background:var(--surface-2);border:1px solid var(--line);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.regime-summary{color:var(--muted);font-size:12.5px;margin:0}.confidence{border-top:1px solid var(--line-2);padding-top:14px;display:flex;align-items:center;gap:12px}.confidence span{color:var(--muted);font-size:11px}.confidence .track{height:7px;background:var(--line-2);border-radius:99px;flex:1;overflow:hidden}.confidence .track i{display:block;height:100%;background:var(--mint);border-radius:99px}
+.paths{padding:20px 21px}.section-hd{display:flex;align-items:flex-start;gap:12px;margin-bottom:15px}.section-hd h2,.section-hd h3{margin:0;font-size:15px;letter-spacing:-.01em}.section-hd p{margin:2px 0 0;color:var(--muted);font-size:11px}.section-hd .right{margin-left:auto;text-align:right}.pill{font-size:10px;text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--line);border-radius:999px;padding:4px 8px;color:var(--muted);background:var(--surface-2)}
+.path-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.path{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:14px}.path-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px}.path h3{font-size:14px;margin:0}.path .lead{font-size:10px;font-weight:780;text-transform:uppercase;letter-spacing:.06em}.path .lead.up{color:var(--up)}.path .lead.range{color:var(--range)}.path .lead.down{color:var(--down)}
+.prob{margin-top:13px}.prob-row{display:grid;grid-template-columns:42px 1fr 43px;align-items:center;gap:7px;margin:7px 0;font-size:10.5px;color:var(--muted)}.prob-row b{text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}.bar{height:7px;border-radius:99px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;border-radius:99px}.bar .up{background:var(--up)}.bar .range{background:var(--range)}.bar .down{background:var(--down)}.path-note{border-top:1px solid var(--line);padding-top:9px;margin-top:10px;color:var(--muted);font-size:10.5px;min-height:42px}
+.pulse{margin:16px 0;padding:15px 17px;display:grid;grid-template-columns:repeat(6,1fr);gap:10px}.pulse-item{padding-right:10px;border-right:1px solid var(--line-2)}.pulse-item:last-child{border:0}.pulse-label{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pulse-line{display:flex;align-items:baseline;gap:6px;margin:4px 0}.pulse-line b{font-size:21px;font-variant-numeric:tabular-nums}.pulse-line span{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mini-track{height:3px;background:var(--line-2);border-radius:9px}.mini-track i{display:block;height:100%;border-radius:9px;background:var(--mint)}
+.modules-hd{display:flex;align-items:flex-end;margin:30px 0 12px}.modules-hd h2{font-family:Georgia,"Noto Serif TC",serif;font-size:27px;margin:0}.modules-hd p{margin:0 0 4px 14px;color:var(--muted);font-size:12px}.module-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.module{padding:19px 20px}.module-head{display:flex;align-items:flex-start;gap:12px}.module-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--surface-2);border:1px solid var(--line);font-weight:800;color:var(--forest)}.module-title h3{margin:0;font-size:15px}.module-title p{margin:2px 0 0;color:var(--muted);font-size:10.5px}.module-score{margin-left:auto;text-align:right}.module-score b{display:block;font-size:23px;line-height:1;font-variant-numeric:tabular-nums}.module-score span{font-size:10px;color:var(--muted)}
+.module-summary{color:var(--muted);font-size:11.5px;margin:13px 0 10px;min-height:36px}.metric-list{border-top:1px solid var(--line-2)}.metric{display:grid;grid-template-columns:minmax(130px,1.35fr) minmax(70px,.65fr) 90px 88px;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--line-2)}.metric:last-child{border-bottom:0}.metric-label{min-width:0}.metric-label b{font-size:11.5px;font-weight:680;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tagline{display:flex;gap:4px;align-items:center;margin-top:2px}.src{font-size:8px;text-transform:uppercase;letter-spacing:.06em;padding:1px 4px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line);color:var(--faint)}.quality{font-size:8px;color:var(--muted)}.quality.proxy,.quality.deferred{color:var(--amber)}.quality.missing,.quality.degraded{color:var(--red)}.metric-value{text-align:right;font-variant-numeric:tabular-nums}.metric-value strong{font-size:13px}.metric-value span{font-size:9px;color:var(--muted);margin-left:2px}.change{text-align:right;font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}.change .pos{color:var(--up)}.change .neg{color:var(--down)}.spark{height:28px;width:88px}.spark svg{width:100%;height:100%;overflow:visible}.spark polyline{fill:none;stroke:var(--blue);stroke-width:1.7;vector-effect:non-scaling-stroke}.spark circle{fill:var(--blue)}
+.curve{margin-top:12px;padding:12px;border-radius:12px;background:var(--surface-2);border:1px solid var(--line)}.curve-bars{display:flex;align-items:flex-end;height:80px;gap:14px;padding:4px 14px 0}.curve-col{height:100%;flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}.curve-col b{font-size:10px}.curve-col i{display:block;width:100%;max-width:50px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--blue),color-mix(in srgb,var(--blue) 38%,transparent))}.curve-col span{font-size:9px;color:var(--muted)}
+.lower{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;margin-top:28px}.archive,.sources{padding:20px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.table{width:100%;border-collapse:collapse;font-size:10.5px;min-width:560px}.table th,.table td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line-2);white-space:nowrap}.table th{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.06em;background:var(--surface-2)}.table td.num{text-align:right;font-variant-numeric:tabular-nums}.table tr:last-child td{border-bottom:0}.class-up{color:var(--up)}.class-range{color:var(--range)}.class-down{color:var(--down)}
+.source-list{display:grid;gap:8px}.source-item{border:1px solid var(--line);background:var(--surface-2);border-radius:11px;padding:10px 11px}.source-top{display:flex;align-items:center;gap:7px}.source-top b{font-size:11.5px}.source-kind{margin-left:auto;font-size:8px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}.source-item p{font-size:10px;color:var(--muted);margin:5px 0 0}.health{display:inline-flex;align-items:center;gap:4px;font-size:8px;padding:2px 5px;border-radius:99px;border:1px solid var(--line)}.health:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--amber)}.health.live:before{background:var(--mint)}.health.missing:before,.health.degraded:before{background:var(--red)}
+.method{margin-top:14px;padding:20px}.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.method-item{padding-right:12px;border-right:1px solid var(--line-2)}.method-item:last-child{border:0}.method-item b{display:block;font-size:11.5px;margin-bottom:4px}.method-item p{font-size:10.5px;color:var(--muted);margin:0}.notice{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid color-mix(in srgb,var(--amber) 35%,var(--line));background:color-mix(in srgb,var(--amber) 7%,var(--surface));color:var(--muted);font-size:10.5px}.warning-box{margin-top:10px}.warning-box summary{cursor:pointer;color:var(--muted);font-size:10px}.warning-box pre{white-space:pre-wrap;font-size:9px;color:var(--muted);background:var(--surface-2);padding:10px;border-radius:8px;border:1px solid var(--line)}
+footer{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line);padding-top:18px;margin-top:30px;color:var(--muted);font-size:10px}footer .right{margin-left:auto;text-align:right}
+@media(max-width:980px){.intro{align-items:flex-start;flex-direction:column}.intro-meta{margin-left:0;width:100%}.grid-hero{grid-template-columns:1fr}.pulse{grid-template-columns:repeat(3,1fr)}.module-grid,.lower{grid-template-columns:1fr}.method-grid{grid-template-columns:repeat(2,1fr)}.method-item:nth-child(2){border:0}}
+@media(max-width:650px){.shell{padding:12px 12px 44px}.topnav .navlink{display:none}.intro h1{font-size:38px}.path-grid{grid-template-columns:1fr}.pulse{grid-template-columns:repeat(2,1fr)}.metric{grid-template-columns:minmax(110px,1fr) 72px 70px}.spark{display:none}.regime-main{align-items:flex-start}.dial{width:108px;height:108px}.dial strong{font-size:26px}.module{padding:16px}.method-grid{grid-template-columns:1fr}.method-item{border-right:0;border-bottom:1px solid var(--line-2);padding-bottom:10px}footer{display:block}footer .right{margin-top:8px;text-align:left}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="topbar">
+    <div class="mark"><div class="logo" aria-hidden="true"></div><div class="brand">Market Path Engine<small>TrendSync Research Lab</small></div></div>
+    <nav class="topnav">
+      <a class="navlink" href="#modules">Signal stack</a><a class="navlink" href="#archive">Archive</a><a class="navlink" href="#sources">Sources</a>
+      <span id="status" class="status"><i></i><span>Loading</span></span>
+      <button class="ghost" id="theme" type="button" aria-label="切換明暗主題">◐</button>
+    </nav>
+  </div>
+
+  <section class="intro">
+    <div><div class="eyebrow">Regime → Path → Validation</div><h1>Read the pressure.<br><span>Map the path.</span></h1><p class="dek">不使用 EPS 預估。把金融條件、流動性、波動、部位、跨資產與事件衝擊壓成一個可追蹤的市場路徑框架；免費官方資料優先，proxy 明確標示。</p></div>
+    <div class="intro-meta"><div class="meta-box"><span>Data as of</span><b id="asof">—</b></div><div class="meta-box"><span>Coverage</span><b id="coverage">—</b></div><div class="meta-box"><span>Model</span><b id="version">—</b></div><div class="meta-box"><span>EPS input</span><b>Excluded</b></div></div>
+  </section>
+
+  <section class="grid-hero">
+    <article class="card regime">
+      <div class="kicker">Current market regime</div>
+      <div class="regime-main"><div class="dial" id="dial"><div><strong id="stress">—</strong><small>stress / 100</small></div></div><div><h2 class="regime-name" id="regimeName">—</h2><span class="regime-code" id="regimeCode">—</span></div></div>
+      <p class="regime-summary" id="regimeSummary"></p>
+      <div class="confidence"><span>Signal confidence</span><div class="track"><i id="confidenceBar"></i></div><b id="confidence">—</b></div>
+    </article>
+    <article class="card paths">
+      <div class="section-hd"><div><h2>Path probabilities</h2><p>Direction priors, not price targets</p></div><div class="right"><span class="pill">Heuristic V1 · uncalibrated</span></div></div>
+      <div class="path-grid" id="paths"></div>
+    </article>
+  </section>
+
+  <section class="card pulse" id="pulse"></section>
+
+  <div class="modules-hd" id="modules"><h2>Signal stack</h2><p>每一層都保留來源、時點與 proxy 身分。</p></div>
+  <section class="module-grid" id="moduleGrid"></section>
+
+  <section class="lower">
+    <article class="card archive" id="archive">
+      <div class="section-hd"><div><h2>Prediction archive & validation</h2><p id="archiveCount">Every dated forecast stays auditable.</p></div><div class="right"><span class="pill">Brier + log loss</span></div></div>
+      <div id="validationTable"></div>
+    </article>
+    <article class="card sources" id="sources">
+      <div class="section-hd"><div><h2>Source ledger</h2><p>Official first; public and proxy are never disguised.</p></div></div>
+      <div class="source-list" id="sourceList"></div>
+    </article>
+  </section>
+
+  <section class="card method">
+    <div class="section-hd"><div><h2>V1 model contract</h2><p>What the dashboard does—and deliberately does not claim.</p></div></div>
+    <div class="method-grid">
+      <div class="method-item"><b>No EPS layer</b><p>盈利預估完全不進模型，避免來源不一致與歷史 point-in-time 偏誤。</p></div>
+      <div class="method-item"><b>Free-data first</b><p>FRED、Cboe、CFTC 為主要觀測；跨資產報價 adapter 可換成既有 IBKR。</p></div>
+      <div class="method-item"><b>Proxy disclosure</b><p>Net Liquidity、CTA、vol-control、Event Shock 與 VIX curve 皆公開公式與限制。</p></div>
+      <div class="method-item"><b>Validation before calibration</b><p>先逐日封存，再用成熟 horizon 的 S&amp;P 500 實現路徑計算 Brier 與 log loss。</p></div>
+    </div>
+    <div class="notice"><b>Important:</b> 本頁是研究原型，不是投資建議。V1 機率是透明 heuristic prior，尚未經足夠 out-of-sample 樣本校準；完整歷史 SPX option chain、dealer GEX 與真實 CTA/vol-control exposure 不在免費資料範圍內。</div>
+    <details class="warning-box" id="warningBox"><summary>查看本次資料抓取警告</summary><pre id="warnings"></pre></details>
+  </section>
+
+  <footer><div>Market Path Engine V1 · Free / existing data prototype</div><div class="right">Generated <span id="generated">—</span><br>GitHub Pages · static, auditable, dependency-free</div></footer>
+</main>
+
+<script>
+const DATA = /*__MPE_DATA__*/null;
+const moduleMeta = {
+  financial:{title:'Financial Conditions',sub:'rates · real yields · USD · credit',icon:'FC'},
+  liquidity:{title:'Liquidity',sub:'Fed BS · reserves · TGA · RRP',icon:'LQ'},
+  volatility:{title:'Volatility',sub:'VIX · VVIX · term curve',icon:'VX'},
+  positioning:{title:'Positioning',sub:'CFTC · CTA · vol-control',icon:'PX'},
+  cross_asset:{title:'Cross-Asset Confirmation',sub:'equity · credit · duration · USD',icon:'XA'},
+  event_shock:{title:'Event Shock',sub:'realized cross-asset shock proxy',icon:'ES'}
+};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=(v,d=1)=>v===null||v===undefined||Number.isNaN(Number(v))?'—':Number(v).toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:0});
+const pct=v=>`${num(v,1)}%`;
+const $=s=>document.querySelector(s);
+
+function sparkline(history){
+  const values=(history||[]).map(x=>Number(x[1])).filter(Number.isFinite); if(values.length<2)return '';
+  const min=Math.min(...values),max=Math.max(...values),span=max-min||1,w=88,h=26;
+  const pts=values.map((v,i)=>`${(i/(values.length-1)*w).toFixed(1)},${(h-(v-min)/span*(h-4)-2).toFixed(1)}`).join(' ');
+  const last=pts.split(' ').pop().split(',');
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><polyline points="${pts}"/><circle cx="${last[0]}" cy="${last[1]}" r="2.2"/></svg>`;
+}
+function renderPaths(){
+  $('#paths').innerHTML=(DATA.paths||[]).map(p=>{
+    const q=p.probabilities||{};
+    const rows=['up','range','down'].map(k=>`<div class="prob-row"><span>${k==='up'?'上行':k==='range'?'盤整':'下行'}</span><div class="bar"><i class="${k}" style="width:${q[k]||0}%"></i></div><b>${pct(q[k])}</b></div>`).join('');
+    return `<div class="path"><div class="path-top"><h3>${esc(p.horizon)}</h3><span class="lead ${esc(p.dominant_path)}">${esc(p.dominant_path)}</span></div><div class="prob">${rows}</div><div class="path-note">${esc(p.note)}<br>驗證門檻 ±${num(p.threshold_pct)}%</div></div>`;
+  }).join('');
+}
+function qualityLabel(q){return q==='live'?'live':q==='proxy'?'proxy':q==='deferred'?'deferred':q||'unknown'}
+function renderMetric(m){
+  const change=m.change===null||m.change===undefined?'—':`${m.change>0?'+':''}${num(m.change,2)}`;
+  const cls=m.change>0?'pos':m.change<0?'neg':'';
+  const title=m.note?` title="${esc(m.note)}"`:'';
+  return `<div class="metric"${title}><div class="metric-label"><b>${esc(m.label)}</b><div class="tagline"><span class="src">${esc(m.source)}</span><span class="quality ${esc(m.quality)}">${esc(qualityLabel(m.quality))}</span></div></div><div class="metric-value"><strong>${typeof m.value==='string'?esc(m.value):num(m.value,2)}</strong><span>${esc(m.unit)}</span></div><div class="change"><span class="${cls}">${change}</span><br>${esc(m.change_label||'')}</div><div class="spark">${sparkline(m.history)}</div></div>`;
+}
+function renderCurve(){
+  const rows=(DATA.vix_curve||[]).filter(x=>Number.isFinite(Number(x.value))); if(!rows.length)return '';
+  const max=Math.max(...rows.map(x=>Number(x.value)),1);
+  return `<div class="curve"><div class="kicker">Official index-tenor curve proxy</div><div class="curve-bars">${rows.map(x=>`<div class="curve-col"><b>${num(x.value,1)}</b><i style="height:${Math.max(12,Number(x.value)/max*54)}px"></i><span>${esc(x.tenor)}</span></div>`).join('')}</div></div>`;
+}
+function renderModules(){
+  $('#moduleGrid').innerHTML=Object.entries(moduleMeta).map(([key,meta])=>{
+    const m=DATA.modules[key]||{};
+    return `<article class="card module"><div class="module-head"><div class="module-icon">${meta.icon}</div><div class="module-title"><h3>${meta.title}</h3><p>${meta.sub}</p></div><div class="module-score"><b>${num(m.score,1)}</b><span>${esc(m.stance||'')}</span></div></div><p class="module-summary">${esc(m.summary||'')}</p><div class="metric-list">${(m.metrics||[]).map(renderMetric).join('')}</div>${key==='volatility'?renderCurve():''}</article>`;
+  }).join('');
+}
+function renderPulse(){
+  $('#pulse').innerHTML=Object.entries(moduleMeta).map(([key,meta])=>{const m=DATA.modules[key]||{};return `<div class="pulse-item"><div class="pulse-label">${meta.title}</div><div class="pulse-line"><b>${num(m.score,0)}</b><span>${esc(m.stance||'')}</span></div><div class="mini-track"><i style="width:${Math.max(0,Math.min(100,m.score||0))}%"></i></div></div>`}).join('');
+}
+function renderSources(){
+  const status=DATA.source_status||{};
+  $('#sourceList').innerHTML=Object.entries(DATA.source_registry||{}).map(([key,s])=>{
+    const h=status[key]||{status:key==='model'?'proxy':'n/a'};
+    return `<div class="source-item"><div class="source-top"><a href="${esc(s.url)}" target="_blank" rel="noreferrer"><b>${esc(s.name)}</b></a><span class="health ${esc(h.status)}">${esc(h.status)}</span><span class="source-kind">${esc(s.kind)}</span></div><p>${esc(s.note)}${h.asof?` · as of ${esc(h.asof)}`:''}</p></div>`;
+  }).join('');
+}
+function renderArchive(){
+  const a=DATA.archive||{},vals=a.recent_validations||[];
+  $('#archiveCount').textContent=`${a.prediction_count||0} predictions · ${a.validation_count||0} matured horizon checks`;
+  if(!vals.length){$('#validationTable').innerHTML='<div class="notice">第一筆預測已封存。5 個交易日後會自動出現第一筆實現路徑驗證；20D 與 63D 隨後成熟。</div>';return}
+  const rows=vals.map(v=>`<tr><td>${esc(v.target_date)}</td><td>${esc(v.horizon)}</td><td class="class-${esc(v.predicted_class)}">${esc(v.predicted_class)}</td><td class="class-${esc(v.realized_class)}">${esc(v.realized_class)}</td><td class="num">${v.return_pct>0?'+':''}${num(v.return_pct,2)}%</td><td class="num">${num(v.brier_score,3)}</td><td class="num">${num(v.log_loss,3)}</td></tr>`).join('');
+  $('#validationTable').innerHTML=`<div class="table-wrap"><table class="table"><thead><tr><th>Target date</th><th>Horizon</th><th>Predicted</th><th>Realized</th><th>Return</th><th>Brier</th><th>Log loss</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function init(){
+  const s=DATA.status||'degraded'; $('#status').className=`status ${s}`; $('#status span').textContent=s;
+  $('#asof').textContent=DATA.asof||'—'; $('#coverage').textContent=pct(DATA.coverage_pct); $('#version').textContent=DATA.model_version||'—';
+  $('#generated').textContent=(DATA.generated_at||'').replace('T',' ').replace('+00:00',' UTC');
+  const r=DATA.regime||{}; $('#dial').style.setProperty('--score',r.stress_score||0); $('#stress').textContent=num(r.stress_score,1); $('#regimeName').textContent=r.name||'—'; $('#regimeCode').textContent=r.code||'—'; $('#regimeSummary').textContent=r.summary||''; $('#confidence').textContent=pct(r.confidence); $('#confidenceBar').style.width=`${r.confidence||0}%`;
+  renderPaths();renderPulse();renderModules();renderArchive();renderSources();
+  const warnings=DATA.warnings||[]; $('#warnings').textContent=warnings.length?warnings.join('\n'):'No source warnings in this build.'; if(!warnings.length)$('#warningBox').style.display='none';
+}
+const saved=localStorage.getItem('mpe-theme'); if(saved)document.documentElement.dataset.theme=saved;
+$('#theme').addEventListener('click',()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=next;localStorage.setItem('mpe-theme',next)});
+init();
+</script>
+</body>
+</html>
