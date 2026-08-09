@@ -224,6 +224,7 @@ class Jin10MCP:
         r = self.s.post(self.URL, json=body, headers=h, timeout=25)
         if "Mcp-Session-Id" in r.headers:
             self.sid = r.headers["Mcp-Session-Id"]
+        r.encoding = "utf-8"  # 金十回應無 charset 標頭，強制 UTF-8 防亂碼
         if notify or not r.text.strip():
             return None
         txt = r.text
@@ -412,6 +413,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
