@@ -22,6 +22,12 @@ Official FRED, Cboe and CFTC data are preferred. V1 uses official FRED market se
 
 The VIX curve in V1 is the official VIX9D/VIX/VIX3M index-tenor curve, not a full tradable futures strip. CTA, vol-control, Event Shock, Net Liquidity, regime and path probabilities are model proxies. Probabilities are heuristic priors and are not yet statistically calibrated.
 
+## Cross-site ChatGPT analysis bundle
+
+The dashboard action **「全站資料給 ChatGPT」** builds an analysis bundle locally in the browser. It combines the complete Market Path payload with the ten published research pages listed under `/github/`. For every page it records the visible research text, HTML tables and safely serializable page-level data objects when available. Collection status is shown page by page; a failed source is recorded as an error instead of being silently omitted.
+
+The shared page password is held in memory only while the bundle is being built and is explicitly excluded from the export. The dashboard does not automatically transmit data to ChatGPT. The user downloads the complete JSON, copies the generated Traditional Chinese analysis instruction, then uploads and submits them manually. A copy-all option is also provided for smaller bundles, but JSON upload is the recommended path for large histories.
+
 ## Run locally
 
 ```bash
