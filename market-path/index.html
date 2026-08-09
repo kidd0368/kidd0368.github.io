@@ -137,7 +137,7 @@ footer{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line)
 <section class="analysis-modal" id="analysisModal" role="dialog" aria-modal="true" aria-labelledby="analysisTitle" hidden>
   <div class="analysis-dialog">
     <header class="analysis-head">
-      <div><div class="eyebrow">Cross-site research bundle</div><h2 id="analysisTitle">把 12 個網頁資料交給 ChatGPT 分析</h2><p>整合目前的 Market Path Engine（1 個網頁）與「我的網頁總覽」中的 11 個已發布研究頁，合計 12 個網頁。系統會收集各頁可見內容、表格與可讀取的結構化資料，再產生一份完整資料包和繁中分析指令。</p></div>
+      <div><div class="eyebrow">Cross-site research bundle</div><h2 id="analysisTitle">把 12 個網頁資料交給 ChatGPT 分析</h2><p>整合目前的 Market Path Engine（1 個網頁）與「我的網頁總覽」中的 11 個已發布研究頁，合計 12 個網頁。系統會收集各頁可見內容、表格與可讀取的結構化資料，再產生完整資料包，以及一份要求完整敘事、白話解釋、可直接分享給一般讀者的繁中分析指令。</p></div>
       <button class="analysis-close" id="analysisClose" type="button" aria-label="關閉">×</button>
     </header>
     <div class="analysis-body">
@@ -253,6 +253,6 @@ const saved=localStorage.getItem('mpe-theme'); if(saved)document.documentElement
 $('#theme').addEventListener('click',()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=next;localStorage.setItem('mpe-theme',next)});
 init();
 </script>
-<script src="/market_path_engine/analysis_bundle.js?v=6"></script>
+<script src="/market_path_engine/analysis_bundle.js?v=7"></script>
 </body>
 </html>
