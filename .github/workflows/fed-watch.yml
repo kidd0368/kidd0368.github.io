@@ -1,0 +1,51 @@
+name: FED 機率儀表板自動更新
+
+on:
+  schedule:
+    - cron: "23 1,7,13,19 * * *"   # UTC 01:23/07:23/13:23/19:23 = 台北 09:23/15:23/21:23/03:23
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fed-watch
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 安裝依賴
+        run: pip install requests cryptography
+
+      - name: 收集資料（Kalshi／Polymarket／FRED／金十）
+        env:
+          PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
+          JIN10_MCP_TOKEN: ${{ secrets.JIN10_MCP_TOKEN }}
+        run: python fed-watch/scripts/collect.py
+
+      - name: 跑模型並組頁（加密發布）
+        env:
+          PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
+        run: python fed-watch/scripts/build_page.py
+
+      - name: 提交更新
+        run: |
+          git config user.name "fed-watch-bot"
+          git config user.email "actions@github.com"
+          git add fed-watch/
+          if git diff --cached --quiet; then
+            echo "無變化，跳過提交"
+          else
+            git commit -m "fed-watch 自動更新 $(date -u +'%Y-%m-%d %H:%M')"
+            git pull --rebase origin main
+            git push
+          fi
