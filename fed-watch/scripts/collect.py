@@ -275,23 +275,35 @@ def fetch_jin10(existing_ids):
     quotes = []
     try:
         cli = Jin10MCP(token)
-        cli.start()
+        init_res = cli.start()
+        log("jin10 init:", json.dumps(init_res, ensure_ascii=False)[:250] if init_res else "None")
         tools = cli.tool_names()
+        if tools:
+            log("jin10 tools:", list(tools)[:12])
         search = "search_flash" if "search_flash" in tools else ("list_flash" if "list_flash" in tools else None)
-        if not search:
-            log("jin10: no flash tool found:", list(tools)[:10])
-            return []
-        # 從 schema 找關鍵字參數名
-        props = tools[search].get("inputSchema", {}).get("properties", {})
-        kw_param = next((p for p in ("keyword", "query", "q", "search", "keywords") if p in props), None)
+        props = {}
+        if search:
+            props = tools[search].get("inputSchema", {}).get("properties", {})
+        else:
+            # tools/list 拿不到就按官方文件盲呼叫
+            log("jin10: tools/list empty, fallback to blind search_flash")
+            search = "search_flash"
+        kw_param = next((p for p in ("keyword", "query", "q", "search", "keywords") if p in props), "keyword")
         markers = CFG["institution_markers"]
+        first_kw = True
         for kw in CFG["jin10_keywords"]:
-            args = {kw_param: kw} if kw_param else {}
-            for lim in ("limit", "size", "count"):
-                if lim in props:
-                    args[lim] = 30
-                    break
+            args = {kw_param: kw}
+            if props:
+                for lim in ("limit", "size", "count"):
+                    if lim in props:
+                        args[lim] = 30
+                        break
+            else:
+                args["limit"] = 30
             payload = cli.call(search, args)
+            if first_kw and not _flash_items(payload):
+                log("jin10 raw payload:", json.dumps(payload, ensure_ascii=False)[:350])
+            first_kw = False
             for it in _flash_items(payload):
                 qid = str(it.get("id", ""))
                 text = (it.get("content") or "") + (it.get("title") or "")
@@ -401,4 +413,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
