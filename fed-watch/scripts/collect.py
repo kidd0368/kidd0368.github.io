@@ -5,6 +5,7 @@
 用法：PAGE_PASSWORD=... [JIN10_MCP_TOKEN=...] python collect.py
 """
 import datetime as dt
+import hashlib
 import json
 import os
 import re
@@ -309,8 +310,12 @@ def fetch_jin10(existing_ids):
                     log("jin10 raw payload:", json.dumps(payload, ensure_ascii=False)[:350])
             first_kw = False
             for it in items:
-                qid = str(it.get("id", ""))
                 text = (it.get("content") or "") + (it.get("title") or "")
+                qid = str(it.get("id", ""))
+                if not qid and it.get("url"):
+                    qid = it["url"].rstrip("/").split("/")[-1]
+                if not qid and text:
+                    qid = hashlib.md5(text.encode("utf-8")).hexdigest()[:16]
                 if not qid or qid in existing_ids or not text:
                     continue
                 relevant = ("美联储" in text or "FOMC" in text or "联储" in text)
@@ -417,6 +422,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
