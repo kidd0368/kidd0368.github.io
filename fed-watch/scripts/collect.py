@@ -298,8 +298,7 @@ def fetch_jin10(existing_ids):
                     if lim in props:
                         args[lim] = 30
                         break
-            else:
-                args["limit"] = 30
+            # 盲呼叫模式：金十 search_flash 只收 keyword，不加其他參數
             payload = cli.call(search, args)
             if first_kw and not _flash_items(payload):
                 log("jin10 raw payload:", json.dumps(payload, ensure_ascii=False)[:350])
@@ -413,5 +412,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
