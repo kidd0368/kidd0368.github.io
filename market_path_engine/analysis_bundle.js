@@ -9,8 +9,10 @@ const ANALYSIS_SOURCES=[
   {id:'ai_capex',title:'AI 算力基建對帳戰情板',path:'/ai-capex-tracker/',vars:['DATA','STATE','REPORT','MODEL','EVENTS']},
   {id:'iran_war',title:'中東戰事 × 市場傳導儀表',path:'/iran-war/',vars:['DATA','STATE','REPORT','MODEL','EVENTS']},
   {id:'tw_event_pulse',title:'事件 × 台股主流人氣股反應監測',path:'/tw-event-pulse/',vars:['DATA','STATE','REPORT','MODEL','EVENTS']},
-  {id:'mainstream_index',title:'台股人氣主流股指數',path:'/mainstream-index/',vars:['DATA','STATE','INDEX_DATA','SERIES','CONSTITUENTS']}
+  {id:'mainstream_index',title:'台股人氣主流股指數',path:'/mainstream-index/',vars:['DATA','STATE','INDEX_DATA','SERIES','CONSTITUENTS']},
+  {id:'fed_watch',title:'FED 升降息機率儀表板',path:'/fed-watch/',vars:['DATA','STATE','MEETINGS','PROBABILITIES','HISTORY','FACTORS','COMMENTARY']}
 ];
+const ANALYSIS_SOURCE_COUNT=ANALYSIS_SOURCES.length+1;
 
 let latestBundleJSON='',latestPrompt='',latestBundleName='',bundleBuilding=false;
 const analysisEls={
@@ -230,7 +232,7 @@ async function buildFullBundle(){
   const password=analysisEls.password.value||analysisSessionPassword;
   if(!password){setBundleMessage('請先輸入各研究頁的共用密碼。','error');analysisEls.password.focus();return}
   bundleBuilding=true;analysisEls.build.disabled=true;analysisEls.download.disabled=true;analysisEls.copyPrompt.disabled=true;analysisEls.copyAll.disabled=true;analysisEls.openChatGPT.disabled=true;
-  setBundleMessage('正在逐頁收集，請不要關閉這個視窗。');resetBundleSourceList();analysisEls.summary.className='collection-summary';analysisEls.summary.querySelector('span').textContent='開始建立 · 0 / 11';
+  setBundleMessage('正在逐頁收集，請不要關閉這個視窗。');resetBundleSourceList();analysisEls.summary.className='collection-summary';analysisEls.summary.querySelector('span').textContent=`開始建立 · 0 / ${ANALYSIS_SOURCE_COUNT}`;
   const sources=[];
   try{
     const current=collectCurrentBundleSource();sources.push(current);renderBundleSourceItem({id:'market_path',title:'Market Path Engine'},'ok','完成');
@@ -243,13 +245,13 @@ async function buildFullBundle(){
         sources.push({id:source.id,title:source.title,url:new URL(source.path,location.origin).href,collected_at:new Date().toISOString(),status:'error',error:String(error?.message||error),visible_text:'',tables:[],structured_data:{variables:[],omitted:[],serialized_chars:0}});
         renderBundleSourceItem(source,'error',String(error?.message||'失敗').slice(0,80));
       }
-      completed++;analysisEls.summary.querySelector('span').textContent=`正在建立 · ${completed} / 11`;
+      completed++;analysisEls.summary.querySelector('span').textContent=`正在建立 · ${completed} / ${ANALYSIS_SOURCE_COUNT}`;
     }
     const bundle={
       schema_version:'mpe-cross-site-analysis-v1',generated_at:new Date().toISOString(),generated_from:location.href,inventory_url:new URL('/github/',location.origin).href,
       privacy:'Password is never stored in this bundle. Collection happens locally in the browser; transfer occurs only when the user downloads or copies.',
       instructions:'Use visible_text, tables and structured_data together. Respect source dates, quality labels and proxy disclosures. Directory metadata is not a market signal.',
-      source_count_expected:11,source_count_collected:sources.filter(source=>source.status!=='error').length,sources
+      source_count_expected:ANALYSIS_SOURCE_COUNT,source_count_collected:sources.filter(source=>source.status!=='error').length,sources
     };
     latestBundleJSON=JSON.stringify(bundle,null,2);
     const stamp=new Date().toISOString().replace(/[:.]/g,'-');latestBundleName=`market-path-full-analysis-bundle-${stamp}.json`;
@@ -257,7 +259,7 @@ async function buildFullBundle(){
     const bytes=new Blob([latestBundleJSON],{type:'application/json'}).size,errors=sources.filter(source=>source.status==='error').length;
     analysisEls.size.textContent=`完整資料 ${formatBundleBytes(bytes)} · 指令 ${latestPrompt.length.toLocaleString()} 字`;
     analysisEls.summary.className=`collection-summary ${errors?'error':'ok'}`;
-    analysisEls.summary.querySelector('span').textContent=errors?`完成，但有 ${errors} 個頁面未能收集；詳見下方狀態`:'完成 · 11 / 11 份來源已收集';
+    analysisEls.summary.querySelector('span').textContent=errors?`完成，但有 ${errors} 個頁面未能收集；詳見下方狀態`:`完成 · ${ANALYSIS_SOURCE_COUNT} / ${ANALYSIS_SOURCE_COUNT} 份來源已收集`;
     analysisEls.download.disabled=false;analysisEls.copyPrompt.disabled=false;analysisEls.copyAll.disabled=false;analysisEls.openChatGPT.disabled=false;
     setBundleMessage(errors?'資料包已建立；請留意紅色失敗項目，ChatGPT 指令會要求不得假裝已讀。':'資料包已建立。請先下載 JSON，再複製指令交給 ChatGPT。',errors?'error':'ok');
   }finally{
