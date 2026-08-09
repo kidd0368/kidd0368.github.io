@@ -32,6 +32,11 @@ jobs:
           JIN10_MCP_TOKEN: ${{ secrets.JIN10_MCP_TOKEN }}
         run: python fed-watch/scripts/collect.py
 
+      - name: 合併 Claude 註記（分類與推演）
+        env:
+          PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
+        run: python fed-watch/scripts/merge_annotations.py
+
       - name: 跑模型並組頁（加密發布）
         env:
           PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
@@ -49,3 +54,4 @@ jobs:
             git pull --rebase origin main
             git push
           fi
+
