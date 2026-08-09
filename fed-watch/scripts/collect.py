@@ -301,10 +301,14 @@ def fetch_jin10(existing_ids):
                         break
             # 盲呼叫模式：金十 search_flash 只收 keyword，不加其他參數
             payload = cli.call(search, args)
-            if first_kw and not _flash_items(payload):
-                log("jin10 raw payload:", json.dumps(payload, ensure_ascii=False)[:350])
+            items = _flash_items(payload)
+            if first_kw:
+                if items:
+                    log("jin10 sample item:", json.dumps(items[0], ensure_ascii=False)[:300])
+                else:
+                    log("jin10 raw payload:", json.dumps(payload, ensure_ascii=False)[:350])
             first_kw = False
-            for it in _flash_items(payload):
+            for it in items:
                 qid = str(it.get("id", ""))
                 text = (it.get("content") or "") + (it.get("title") or "")
                 if not qid or qid in existing_ids or not text:
@@ -413,6 +417,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
