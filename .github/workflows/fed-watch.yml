@@ -30,6 +30,7 @@ jobs:
         env:
           PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
           JIN10_MCP_TOKEN: ${{ secrets.JIN10_MCP_TOKEN }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python fed-watch/scripts/collect.py
 
       - name: 合併 Claude 註記（分類與推演）
@@ -54,4 +55,5 @@ jobs:
             git pull --rebase origin main
             git push
           fi
+
 
