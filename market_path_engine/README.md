@@ -2,6 +2,8 @@
 
 Market Path Engine is an isolated GitHub Pages prototype at `/market-path/`. It does not modify the existing root dashboard or its data pipeline, and it intentionally excludes EPS forecasts.
 
+The page includes a client-side password gate. Only a SHA-256 digest is committed; the plaintext password is not stored in the repository. Because GitHub Pages is public static hosting, this is a casual-access barrier rather than server-side authorization: a determined technical user can still inspect or bypass client-side controls. Use an authenticated proxy such as Cloudflare Access when true access control is required.
+
 ## What V1 covers
 
 - Financial Conditions: Treasury yields, 10-year real yield, broad USD and credit OAS.

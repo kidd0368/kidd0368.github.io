@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>Market Path Engine — Regime & Probability Map</title>
+<script>
+try {
+  const key='mpe-auth-d1f3a25e';
+  document.documentElement.classList.add(sessionStorage.getItem(key)==='ok'?'auth-ok':'auth-locked');
+} catch (_) { document.documentElement.classList.add('auth-locked'); }
+</script>
 <style>
 :root {
   --bg:#f4f6f3; --surface:#ffffff; --surface-2:#f8f9f7; --ink:#111914; --muted:#66706a;
@@ -44,11 +50,28 @@
 .source-list{display:grid;gap:8px}.source-item{border:1px solid var(--line);background:var(--surface-2);border-radius:11px;padding:10px 11px}.source-top{display:flex;align-items:center;gap:7px}.source-top b{font-size:11.5px}.source-kind{margin-left:auto;font-size:8px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}.source-item p{font-size:10px;color:var(--muted);margin:5px 0 0}.health{display:inline-flex;align-items:center;gap:4px;font-size:8px;padding:2px 5px;border-radius:99px;border:1px solid var(--line)}.health:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--amber)}.health.live:before{background:var(--mint)}.health.missing:before,.health.degraded:before{background:var(--red)}
 .method{margin-top:14px;padding:20px}.method-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.method-item{padding-right:12px;border-right:1px solid var(--line-2)}.method-item:last-child{border:0}.method-item b{display:block;font-size:11.5px;margin-bottom:4px}.method-item p{font-size:10.5px;color:var(--muted);margin:0}.notice{margin-top:14px;padding:12px 14px;border-radius:12px;border:1px solid color-mix(in srgb,var(--amber) 35%,var(--line));background:color-mix(in srgb,var(--amber) 7%,var(--surface));color:var(--muted);font-size:10.5px}.warning-box{margin-top:10px}.warning-box summary{cursor:pointer;color:var(--muted);font-size:10px}.warning-box pre{white-space:pre-wrap;font-size:9px;color:var(--muted);background:var(--surface-2);padding:10px;border-radius:8px;border:1px solid var(--line)}
 footer{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line);padding-top:18px;margin-top:30px;color:var(--muted);font-size:10px}footer .right{margin-left:auto;text-align:right}
+.auth-gate{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 20%,color-mix(in srgb,var(--mint) 16%,transparent),transparent 36%),var(--bg)}
+.auth-panel{width:min(420px,100%);padding:30px;border:1px solid var(--line);border-radius:22px;background:var(--surface);box-shadow:var(--shadow);text-align:center}.auth-panel .logo{margin:0 auto 18px}.auth-panel h1{font-family:Georgia,"Noto Serif TC",serif;font-size:28px;line-height:1.15;margin:0}.auth-panel>p{color:var(--muted);font-size:12px;margin:10px auto 22px;max-width:320px}.auth-form{text-align:left}.auth-form label{display:block;font-size:11px;font-weight:750;margin-bottom:7px}.auth-input-row{display:flex;gap:7px}.auth-input-row input{min-width:0;flex:1;border:1px solid var(--line);border-radius:11px;background:var(--surface-2);color:var(--ink);padding:11px 12px;outline:none;font:inherit}.auth-input-row input:focus{border-color:var(--mint);box-shadow:0 0 0 3px color-mix(in srgb,var(--mint) 16%,transparent)}.auth-input-row button{border:1px solid var(--line);border-radius:11px;background:var(--surface-2);color:var(--muted);padding:0 12px;cursor:pointer}.auth-submit{width:100%;margin-top:10px;border:0;border-radius:11px;padding:11px 14px;background:var(--forest);color:var(--surface);font-weight:760;cursor:pointer}.auth-submit:hover{filter:brightness(1.08)}.auth-error{min-height:18px;margin:7px 0 0;color:var(--red);font-size:10.5px;text-align:center}.auth-foot{border-top:1px solid var(--line-2);padding-top:14px;margin-bottom:0!important;font-size:9.5px!important}.auth-ok .auth-gate{display:none}.auth-locked{overflow:hidden}.auth-locked .shell,html:not(.auth-ok):not(.auth-locked) .shell{visibility:hidden}
 @media(max-width:980px){.intro{align-items:flex-start;flex-direction:column}.intro-meta{margin-left:0;width:100%}.grid-hero{grid-template-columns:1fr}.pulse{grid-template-columns:repeat(3,1fr)}.module-grid,.lower{grid-template-columns:1fr}.method-grid{grid-template-columns:repeat(2,1fr)}.method-item:nth-child(2){border:0}}
 @media(max-width:650px){.shell{padding:12px 12px 44px}.topnav .navlink{display:none}.intro h1{font-size:38px}.path-grid{grid-template-columns:1fr}.pulse{grid-template-columns:repeat(2,1fr)}.metric{grid-template-columns:minmax(110px,1fr) 72px 70px}.spark{display:none}.regime-main{align-items:flex-start}.dial{width:108px;height:108px}.dial strong{font-size:26px}.module{padding:16px}.method-grid{grid-template-columns:1fr}.method-item{border-right:0;border-bottom:1px solid var(--line-2);padding-bottom:10px}footer{display:block}footer .right{margin-top:8px;text-align:left}}
 </style>
 </head>
 <body>
+<section class="auth-gate" id="authGate" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="auth-panel">
+    <div class="logo" aria-hidden="true"></div>
+    <div class="eyebrow">Private research dashboard</div>
+    <h1 id="authTitle">Market Path Engine</h1>
+    <p>此頁面已設定基本密碼門。請輸入密碼後繼續。</p>
+    <form class="auth-form" id="authForm" autocomplete="off">
+      <label for="authPassword">密碼</label>
+      <div class="auth-input-row"><input id="authPassword" name="password" type="password" autocomplete="current-password" required autofocus><button id="authToggle" type="button" aria-label="顯示密碼">顯示</button></div>
+      <button class="auth-submit" type="submit">進入儀表板</button>
+      <p class="auth-error" id="authError" role="alert" aria-live="polite"></p>
+    </form>
+    <p class="auth-foot">GitHub Pages 為公開靜態網站；此功能可阻擋一般瀏覽，但不是伺服器端存取控制。</p>
+  </div>
+</section>
 <main class="shell">
   <div class="topbar">
     <div class="mark"><div class="logo" aria-hidden="true"></div><div class="brand">Market Path Engine<small>TrendSync Research Lab</small></div></div>
@@ -109,6 +132,12 @@ footer{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line)
 </main>
 
 <script>
+const AUTH_HASH='d1f3a25e249218ef25bcd4d3493783face7e21fae8ce92ea78dd266ffdf0fb8e';
+const AUTH_KEY='mpe-auth-d1f3a25e';
+const authForm=document.getElementById('authForm'),authPassword=document.getElementById('authPassword'),authError=document.getElementById('authError'),authToggle=document.getElementById('authToggle');
+async function authHash(value){const bytes=new TextEncoder().encode(value);const digest=await crypto.subtle.digest('SHA-256',bytes);return Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('')}
+authForm.addEventListener('submit',async event=>{event.preventDefault();authError.textContent='驗證中…';const candidate=await authHash(authPassword.value);if(candidate===AUTH_HASH){try{sessionStorage.setItem(AUTH_KEY,'ok')}catch(_){}document.documentElement.classList.remove('auth-locked');document.documentElement.classList.add('auth-ok');authPassword.value='';authError.textContent=''}else{authError.textContent='密碼不正確，請再試一次。';authPassword.select()}});
+authToggle.addEventListener('click',()=>{const show=authPassword.type==='password';authPassword.type=show?'text':'password';authToggle.textContent=show?'隱藏':'顯示';authToggle.setAttribute('aria-label',show?'隱藏密碼':'顯示密碼')});
 const DATA = /*__MPE_DATA__*/null;
 const moduleMeta = {
   financial:{title:'Financial Conditions',sub:'rates · real yields · USD · credit',icon:'FC'},
