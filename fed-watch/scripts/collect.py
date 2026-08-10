@@ -348,6 +348,7 @@ def extract_fedwatch(quotes, meetings):
     nxt = meetings[0]
     zh = nxt["zh_month"]
     best = None
+    cands = []
     now = dt.datetime.now(dt.timezone.utc)
     for q in quotes:
         t = q["text"]
@@ -376,8 +377,13 @@ def extract_fedwatch(quotes, meetings):
             elif action == "降息":
                 probs["cut25" if bp <= 25 else "cut50p"] = pct
         n = norm(probs)
-        if n and n.get("hold", 0) + n.get("hike25", 0) + n.get("cut25", 0) > 0.5:
-            best = {"meeting": nxt["key"], "probs": n, "src": q["url"], "time": q["time"], "raw": t[:300]}
+        # 至少要解析出兩個桶才算完整引用（避免只提「不變」的殘句變成 100%）
+        if n and len(probs) >= 2 and n.get("hold", 0) + n.get("hike25", 0) + n.get("cut25", 0) > 0.5:
+            cands.append((q["time"], len(probs),
+                          {"meeting": nxt["key"], "probs": n, "src": q["url"], "time": q["time"], "raw": t[:300]}))
+    if cands:
+        cands.sort(key=lambda c: (c[0], c[1]))  # 時間最新、桶數最多者勝
+        best = cands[-1][2]
     return best
 
 
@@ -436,6 +442,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
