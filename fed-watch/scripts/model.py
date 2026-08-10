@@ -15,32 +15,85 @@ def _clip(x, lo, hi):
 
 
 def factors_from_macro(macro, target_mid):
-    """回傳 [(代號, 說明, 原始值, 正規化分數, 權重)]；分數>0 偏鷹。"""
+    """回傳 [(代號, 說明, 顯示值, 正規化分數, 權重)]；分數>0 偏鷹。
+    設計原則：日頻前瞻因子（通膨預期／曲線／實質利率）與落後的物價實績並用，
+    但不放「2年債 − 目標中值」——那等於用債市推利率路徑，會跟市場層重複計算。
+    """
     f = []
+
+    # ---- 物價實績（落後，降權） ----
     pce = macro.get("PCEPILFE", {})
     if "yoy" in pce:
-        f.append(("infl", "核心PCE年增率 − 2%目標", pce["yoy"],
-                  _clip((pce["yoy"] - 2.0) / 1.0, -2, 2), 0.35))
+        f.append(("infl", "核心PCE年增率 − 2%%目標（%s）" % pce.get("date", "")[:7], pce["yoy"],
+                  _clip((pce["yoy"] - 2.0) / 1.0, -2, 2), 0.25))
     cpi = macro.get("CPILFESL", {})
     if "m3ann" in cpi:
         f.append(("mom", "核心CPI三個月年化動能 − 2%", cpi["m3ann"],
-                  _clip((cpi["m3ann"] - 2.0) / 1.5, -2, 2), 0.20))
-    oil = macro.get("DCOILWTICO", {})
-    if "chg60d" in oil:
-        f.append(("oil", "WTI 60天漲跌幅（供給衝擊傳導）", oil["chg60d"],
-                  _clip(oil["chg60d"] / 25.0, -1.5, 1.5), 0.15))
+                  _clip((cpi["m3ann"] - 2.0) / 1.5, -2, 2), 0.15))
+
+    # ---- 通膨預期（前瞻，日頻） ----
+    ie = macro.get("T10YIE", {})
+    if "value" in ie:
+        v = ie["value"]
+        s = _clip((v - 2.3) / 0.4, -2, 2)
+        d20 = ie.get("chg20d")
+        if d20 is not None:
+            s += _clip(d20 / 0.15, -1, 1) * 0.5  # 近期動向加成
+        f.append(("be", "10年通膨預期 − 2.3%%（20日變化 %s）"
+                  % ("%+.2f" % d20 if d20 is not None else "—"), v,
+                  _clip(s, -2, 2), 0.15))
+
+    # ---- 就業動能 ----
     pay = macro.get("PAYEMS", {})
     un = macro.get("UNRATE", {})
     if "diff3avg" in pay:
         labor = _clip((pay["diff3avg"] - 100.0) / 150.0, -1.5, 1.5)
         if "chg3m" in un:
             labor -= 0.6 * _clip(un["chg3m"] / 0.3, -1.5, 1.5)
-        f.append(("labor", "就業動能（非農3月均 vs 10萬；失業率3月變化）",
+        f.append(("labor", "就業動能（非農3月均 %s 千人 vs 10萬）" % pay.get("diff3avg"),
                   pay.get("diff3avg"), _clip(labor, -2, 2), 0.15))
-    dgs2 = macro.get("DGS2", {})
-    if "value" in dgs2 and target_mid:
-        f.append(("mkt", "2年期美債 − 目標區間中值（債市定價）", dgs2["value"],
-                  _clip((dgs2["value"] - target_mid) / 0.5, -2, 2), 0.15))
+
+    # ---- 油價衝擊（部分已被通膨預期吸收，降權） ----
+    oil = macro.get("DCOILWTICO", {})
+    if "chg60d" in oil:
+        f.append(("oil", "WTI 60天漲跌幅（供給衝擊傳導）", oil["chg60d"],
+                  _clip(oil["chg60d"] / 25.0, -1.5, 1.5), 0.10))
+
+    # ---- 曲線斜率（分解牛熊陡化） ----
+    sp = macro.get("T10Y2Y", {})
+    d2, d10 = macro.get("DGS2", {}), macro.get("DGS10", {})
+    if "value" in sp:
+        bp = sp["value"] * 100
+        c2, c10 = d2.get("chg20d"), d10.get("chg20d")
+        if c2 is not None and c10 is not None:
+            dslope = c10 - c2
+            short_leads = abs(c2) >= abs(c10)  # 哪一腳主導了形狀變化
+            if dslope > 0.03:                  # 陡化
+                if short_leads:
+                    kind = "牛市陡化（2年領跌→降息預期）"
+                    s = -_clip(-c2 / 0.20, 0, 1.5)
+                else:
+                    kind = "熊市陡化（10年領漲→期限溢價／財政）"
+                    s = _clip(c10 / 0.30, 0, 0.6)
+            elif dslope < -0.03:               # 平坦化
+                if short_leads:
+                    kind = "熊市平坦化（2年領漲→升息預期）"
+                    s = _clip(c2 / 0.20, 0, 1.5)
+                else:
+                    kind = "牛市平坦化（10年領跌→成長疑慮）"
+                    s = -_clip(-c10 / 0.30, 0, 0.6)
+            else:
+                kind, s = "形狀持平", 0.0
+        else:
+            kind, s = "（缺20日變化，僅看水位）", -_clip((bp - 20) / 60.0, -0.8, 0.8)
+        f.append(("slope", "2s10s 斜率 %.0f bp｜%s" % (bp, kind), "%.0f bp" % bp,
+                  _clip(s, -2, 2), 0.12))
+
+    # ---- 10年實質利率（金融條件，鴿派抵銷） ----
+    if "value" in d10 and "value" in ie:
+        rr = d10["value"] - ie["value"]
+        f.append(("real", "10年實質利率（金融條件；越高越不需升息）", round(rr, 2),
+                  _clip(-(rr - 1.9) / 0.5, -1.5, 1.5), 0.08))
     return f
 
 
@@ -146,3 +199,4 @@ def blend(market, model, expert, meetings, weights):
         tw = sum(w for w, _d in layers)
         out[key] = {b: round(sum(w * d.get(b, 0.0) for w, d in layers) / tw, 4) for b in BUCKETS}
     return out
+
