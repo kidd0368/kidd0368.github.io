@@ -1,31 +1,201 @@
 {
   "_readme": "FED 升降息機率儀表板設定。meetings 每次 FOMC 過後要往前滾動（刪掉已開完的、補下一場）。weights 是三層合成權重。",
-  "current_target": {"low": 3.50, "high": 3.75, "asof": "2026-08-10"},
+  "current_target": {
+    "low": 3.5,
+    "high": 3.75,
+    "asof": "2026-08-10"
+  },
   "meetings": [
-    {"key": "26SEP", "date": "2026-09-16", "label": "2026年9月 (9/15-16)", "kalshi_event": "KXFEDDECISION-26SEP", "pm_month": "september", "pm_year": "2026", "zh_month": "9月"},
-    {"key": "26OCT", "date": "2026-10-28", "label": "2026年10月 (10/27-28)", "kalshi_event": "KXFEDDECISION-26OCT", "pm_month": "october", "pm_year": "2026", "zh_month": "10月"},
-    {"key": "26DEC", "date": "2026-12-09", "label": "2026年12月 (12/8-9)", "kalshi_event": "KXFEDDECISION-26DEC", "pm_month": "december", "pm_year": "2026", "zh_month": "12月"},
-    {"key": "27JAN", "date": "2027-01-27", "label": "2027年1月 (1/26-27)", "kalshi_event": "KXFEDDECISION-27JAN", "pm_month": "january", "pm_year": "2027", "zh_month": "1月"}
+    {
+      "key": "26SEP",
+      "date": "2026-09-16",
+      "label": "2026年9月 (9/15-16)",
+      "kalshi_event": "KXFEDDECISION-26SEP",
+      "pm_month": "september",
+      "pm_year": "2026",
+      "zh_month": "9月"
+    },
+    {
+      "key": "26OCT",
+      "date": "2026-10-28",
+      "label": "2026年10月 (10/27-28)",
+      "kalshi_event": "KXFEDDECISION-26OCT",
+      "pm_month": "october",
+      "pm_year": "2026",
+      "zh_month": "10月"
+    },
+    {
+      "key": "26DEC",
+      "date": "2026-12-09",
+      "label": "2026年12月 (12/8-9)",
+      "kalshi_event": "KXFEDDECISION-26DEC",
+      "pm_month": "december",
+      "pm_year": "2026",
+      "zh_month": "12月"
+    },
+    {
+      "key": "27JAN",
+      "date": "2027-01-27",
+      "label": "2027年1月 (1/26-27)",
+      "kalshi_event": "KXFEDDECISION-27JAN",
+      "pm_month": "january",
+      "pm_year": "2027",
+      "zh_month": "1月"
+    }
   ],
-  "buckets": ["cut50p", "cut25", "hold", "hike25", "hike50p"],
-  "bucket_labels": {"cut50p": "降≥2碼", "cut25": "降1碼", "hold": "不變", "hike25": "升1碼", "hike50p": "升≥2碼"},
-  "weights": {"market": 0.5, "model": 0.3, "expert": 0.2},
+  "buckets": [
+    "cut50p",
+    "cut25",
+    "hold",
+    "hike25",
+    "hike50p"
+  ],
+  "bucket_labels": {
+    "cut50p": "降≥2碼",
+    "cut25": "降1碼",
+    "hold": "不變",
+    "hike25": "升1碼",
+    "hike50p": "升≥2碼"
+  },
+  "weights": {
+    "market": 0.5,
+    "model": 0.3,
+    "expert": 0.2
+  },
   "expert_min_quotes": 3,
   "expert_lookback_days": 21,
   "fred_series": {
-    "PCEPILFE": {"name": "核心PCE", "freq": "m", "calc": ["yoy", "m3ann"]},
-    "CPILFESL": {"name": "核心CPI", "freq": "m", "calc": ["yoy", "m3ann"]},
-    "CPIAUCSL": {"name": "CPI", "freq": "m", "calc": ["yoy"]},
-    "UNRATE":   {"name": "失業率", "freq": "m", "calc": ["level", "chg3m"]},
-    "PAYEMS":   {"name": "非農就業", "freq": "m", "calc": ["diff", "diff3avg"]},
-    "DFF":      {"name": "有效聯邦基金利率", "freq": "d", "calc": ["level"]},
-    "DGS2":     {"name": "2年期美債", "freq": "d", "calc": ["level"]},
-    "DGS10":    {"name": "10年期美債", "freq": "d", "calc": ["level"]},
-    "T10YIE":   {"name": "10年通膨預期", "freq": "d", "calc": ["level"]},
-    "DCOILWTICO": {"name": "WTI原油", "freq": "d", "calc": ["level", "chg60d"]}
+    "PCEPILFE": {
+      "name": "核心PCE",
+      "freq": "m",
+      "calc": [
+        "yoy",
+        "m3ann"
+      ]
+    },
+    "CPILFESL": {
+      "name": "核心CPI",
+      "freq": "m",
+      "calc": [
+        "yoy",
+        "m3ann"
+      ]
+    },
+    "CPIAUCSL": {
+      "name": "CPI",
+      "freq": "m",
+      "calc": [
+        "yoy"
+      ]
+    },
+    "UNRATE": {
+      "name": "失業率",
+      "freq": "m",
+      "calc": [
+        "level",
+        "chg3m"
+      ]
+    },
+    "PAYEMS": {
+      "name": "非農就業",
+      "freq": "m",
+      "calc": [
+        "diff",
+        "diff3avg"
+      ]
+    },
+    "DFF": {
+      "name": "有效聯邦基金利率",
+      "freq": "d",
+      "calc": [
+        "level"
+      ]
+    },
+    "DGS2": {
+      "name": "2年期美債",
+      "freq": "d",
+      "calc": [
+        "level",
+        "chg20d"
+      ]
+    },
+    "DGS10": {
+      "name": "10年期美債",
+      "freq": "d",
+      "calc": [
+        "level",
+        "chg20d"
+      ]
+    },
+    "T10YIE": {
+      "name": "10年通膨預期",
+      "freq": "d",
+      "calc": [
+        "level",
+        "chg20d"
+      ]
+    },
+    "DCOILWTICO": {
+      "name": "WTI原油",
+      "freq": "d",
+      "calc": [
+        "level",
+        "chg60d"
+      ]
+    },
+    "T10Y2Y": {
+      "name": "2s10s 殖利率曲線",
+      "freq": "d",
+      "calc": [
+        "level",
+        "chg20d"
+      ]
+    }
   },
-  "jin10_keywords": ["美联储观察", "美联储 加息", "美联储 降息", "FOMC", "鲍威尔"],
-  "institution_markers": ["高盛", "摩根士丹利", "大摩", "摩根大通", "小摩", "美银", "花旗", "富国", "瑞银", "野村", "巴克莱", "德意志", "德银", "汇丰", "贝莱德", "PIMCO", "太平洋投资", "渣打", "法国兴业", "法兴", "法国巴黎银行", "三菱日联", "凯投宏观", "牛津经济", "潘森宏观", "高频经济", "安联", "荷兰国际", "ING", "经济学家", "首席", "美联储观察", "点阵图", "利率期货"],
+  "jin10_keywords": [
+    "美联储观察",
+    "美联储 加息",
+    "美联储 降息",
+    "FOMC",
+    "鲍威尔"
+  ],
+  "institution_markers": [
+    "高盛",
+    "摩根士丹利",
+    "大摩",
+    "摩根大通",
+    "小摩",
+    "美银",
+    "花旗",
+    "富国",
+    "瑞银",
+    "野村",
+    "巴克莱",
+    "德意志",
+    "德银",
+    "汇丰",
+    "贝莱德",
+    "PIMCO",
+    "太平洋投资",
+    "渣打",
+    "法国兴业",
+    "法兴",
+    "法国巴黎银行",
+    "三菱日联",
+    "凯投宏观",
+    "牛津经济",
+    "潘森宏观",
+    "高频经济",
+    "安联",
+    "荷兰国际",
+    "ING",
+    "经济学家",
+    "首席",
+    "美联储观察",
+    "点阵图",
+    "利率期货"
+  ],
   "max_quotes_stored": 500,
   "snapshot_keep": 2000
 }
+
