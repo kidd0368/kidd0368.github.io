@@ -68,45 +68,152 @@ def meeting_card(m, market, mdl, expert, blended, srcs):
             % (esc(m["label"]), max(days, 0), head, rows))
 
 
-def history_svg(snapshots, next_key):
-    pts = []
-    for s in snapshots:
+def _hike(p):
+    return p.get("hike25", 0) + p.get("hike50p", 0)
+
+
+def _cut(p):
+    return p.get("cut25", 0) + p.get("cut50p", 0)
+
+
+def history_svg(store, next_key, next_label):
+    """市場歷史軌跡（Kalshi 日K回填）＋ 我們的綜合機率（快照累積）。"""
+    mkt = [(d, p) for d, p in (store.get("market_history", {}).get(next_key) or [])]
+    ours = []
+    for s in store.get("snapshots", []):
         bl = (s.get("blend") or {}).get(next_key)
         if bl:
-            pts.append((s["ts"], bl))
-    pts = pts[-150:]
-    if len(pts) < 2:
-        return '<p class="muted">歷史軌跡將隨每日快照累積後出現。</p>'
-    W, H, PAD = 860, 240, 34
-    n = len(pts)
+            ours.append((s["ts"][:10], bl))
+    if len(mkt) < 2:
+        return '<p class="muted">市場歷史尚未回填，下次自動更新後出現。</p>'
 
-    def xy(i, v):
-        x = PAD + (W - 2 * PAD) * i / (n - 1)
-        y = H - PAD - (H - 2 * PAD) * v
+    days = sorted({d for d, _ in mkt} | {d for d, _ in ours})
+    idx = {d: i for i, d in enumerate(days)}
+    n = len(days)
+    W, H, PAD, TOP = 860, 250, 40, 30
+
+    def xy(d, v):
+        x = PAD + (W - 2 * PAD) * idx[d] / max(n - 1, 1)
+        y = H - PAD - (H - PAD - TOP) * v
         return "%.1f,%.1f" % (x, y)
 
-    series = {
-        "升息(≥1碼)": ("#ff5c78", [p["hike25"] + p["hike50p"] for _t, p in pts]),
-        "按兵不動": ("#f6c453", [p["hold"] for _t, p in pts]),
-        "降息(≥1碼)": ("#39c6be", [p["cut25"] + p["cut50p"] for _t, p in pts]),
-    }
-    lines, legend = "", ""
-    for i, (name, (c, vals)) in enumerate(series.items()):
-        path = " ".join(xy(j, v) for j, v in enumerate(vals))
-        lines += '<polyline points="%s" fill="none" stroke="%s" stroke-width="2.2"/>' % (path, c)
-        legend += ('<tspan x="%d" dy="0" fill="%s">● %s %.0f%%</tspan>'
-                   % (PAD + i * 200, c, name, vals[-1] * 100))
-    grid = "".join('<line x1="%d" y1="%.1f" x2="%d" y2="%.1f" stroke="#293545" stroke-width="1"/>'
-                   '<text x="6" y="%.1f" fill="#9ba8b7" font-size="11">%d%%</text>'
-                   % (PAD, H - PAD - (H - 2 * PAD) * v, W - PAD,
-                      H - PAD - (H - 2 * PAD) * v, H - PAD - (H - 2 * PAD) * v + 4, v * 100)
-                   for v in (0, 0.25, 0.5, 0.75, 1))
-    t0, t1 = pts[0][0][:10], pts[-1][0][:10]
-    return ('<svg viewBox="0 0 %d %d" role="img">%s%s'
-            '<text x="%d" y="18" font-size="12">%s</text>'
-            '<text x="%d" y="%d" fill="#9ba8b7" font-size="11">%s</text>'
-            '<text x="%d" y="%d" fill="#9ba8b7" font-size="11" text-anchor="end">%s</text></svg>'
-            % (W, H, grid, lines, PAD, legend, PAD, H - 8, t0, W - PAD, H - 8, t1))
+    def line(pts, color, dash="", width=2.2):
+        if len(pts) < 2:
+            return ""
+        p = " ".join(xy(d, v) for d, v in pts)
+        return ('<polyline points="%s" fill="none" stroke="%s" stroke-width="%s"%s/>'
+                % (p, color, width, (' stroke-dasharray="%s"' % dash) if dash else ""))
+
+    mk_hike = [(d, _hike(p)) for d, p in mkt]
+    mk_hold = [(d, p.get("hold", 0)) for d, p in mkt]
+    our_hike = [(d, _hike(p)) for d, p in ours]
+
+    body = line(mk_hold, "#f6c453") + line(mk_hike, "#ff5c78")
+    if len(our_hike) >= 2:
+        body += line(our_hike, "#ffa8ba", "5,4", 2.6)
+    elif our_hike:
+        d, v = our_hike[-1]
+        cx, cy = xy(d, v).split(",")
+        body += '<circle cx="%s" cy="%s" r="4" fill="#ffa8ba"/>' % (cx, cy)
+
+    grid = ""
+    for v in (0, 0.25, 0.5, 0.75, 1):
+        y = H - PAD - (H - PAD - TOP) * v
+        grid += ('<line x1="%d" y1="%.1f" x2="%d" y2="%.1f" stroke="#293545" stroke-width="1"/>'
+                 '<text x="4" y="%.1f" fill="#9ba8b7" font-size="10">%d%%</text>'
+                 % (PAD, y, W - PAD, y, y + 3, v * 100))
+
+    peak = max(mk_hike, key=lambda x: x[1])
+    marks = ""
+    if peak[1] > 0.55:
+        px, py = xy(peak[0], peak[1]).split(",")
+        marks += ('<circle cx="%s" cy="%s" r="3" fill="#ff5c78"/>'
+                  '<text x="%s" y="%.1f" fill="#ff5c78" font-size="10" text-anchor="middle">高點 %.0f%%</text>'
+                  % (px, py, px, float(py) - 8, peak[1] * 100))
+
+    legend = ('<tspan x="%d" fill="#ff5c78">━ 市場·升息 %.0f%%</tspan>'
+              '<tspan x="%d" fill="#f6c453">━ 市場·不變 %.0f%%</tspan>'
+              '<tspan x="%d" fill="#ffa8ba">┅ 我們·升息 %s</tspan>'
+              % (PAD, mk_hike[-1][1] * 100, PAD + 210, mk_hold[-1][1] * 100,
+                 PAD + 420, ("%.0f%%" % (our_hike[-1][1] * 100)) if our_hike else "累積中"))
+    return ('<svg viewBox="0 0 %d %d" role="img">%s%s%s'
+            '<text x="%d" y="16" font-size="11">%s</text>'
+            '<text x="%d" y="%d" fill="#9ba8b7" font-size="10">%s</text>'
+            '<text x="%d" y="%d" fill="#9ba8b7" font-size="10" text-anchor="end">%s</text></svg>'
+            % (W, H, grid, body, marks, PAD, legend,
+               PAD, H - 12, days[0], W - PAD, H - 12, days[-1]))
+
+
+def expected_moves(dist):
+    """機率分布 → 預期動作碼數。"""
+    return sum(dist.get(b, 0) * M.MOVES[b] for b in BUCKETS)
+
+
+def path_svg(market, blended, meetings, mid):
+    """預期政策利率路徑：市場 vs 我們的綜合，累積碼數換算成利率水準。"""
+    rows = []
+    for src, dists in (("market", market["dists"]), ("ours", blended)):
+        cum, pts = 0.0, [(-1, mid, "現在")]
+        for i, m in enumerate(meetings):
+            d = dists.get(m["key"])
+            if not d:
+                continue
+            cum += expected_moves(d)
+            pts.append((i, mid + 0.25 * cum, m["zh_month"]))
+        rows.append((src, pts))
+    if not rows or len(rows[0][1]) < 2:
+        return '<p class="muted">等待市場資料。</p>'
+
+    allv = [v for _s, pts in rows for _i, v, _l in pts]
+    lo, hi = min(allv) - 0.12, max(allv) + 0.12
+    W, H, PADL, PADR, TOP, BOT = 860, 240, 52, 26, 34, 44
+    n = len(meetings)
+
+    def xy(i, v):
+        x = PADL + (W - PADL - PADR) * (i + 1) / n
+        y = H - BOT - (H - BOT - TOP) * (v - lo) / (hi - lo or 1)
+        return x, y
+
+    grid = ""
+    step = 0.25
+    g = round(lo / step) * step
+    while g <= hi:
+        _x, y = xy(0, g)
+        grid += ('<line x1="%d" y1="%.1f" x2="%d" y2="%.1f" stroke="#293545" stroke-width="1"/>'
+                 '<text x="4" y="%.1f" fill="#9ba8b7" font-size="10">%.2f%%</text>'
+                 % (PADL, y, W - PADR, y, y + 3, g))
+        g += step
+
+    xlab = ""
+    for i, m in enumerate(meetings):
+        x, _y = xy(i, lo)
+        xlab += ('<text x="%.1f" y="%d" fill="#9ba8b7" font-size="10" text-anchor="middle">%s</text>'
+                 % (x, H - 14, m["label"].split(" ")[0].replace("2026年", "").replace("2027年", "27/")))
+    x0, _ = xy(-1, lo)
+    xlab += ('<text x="%.1f" y="%d" fill="#9ba8b7" font-size="10" text-anchor="middle">現在</text>'
+             % (x0, H - 14))
+
+    body, legend = "", ""
+    style = {"market": ("#7fb4ff", "", "市場定價"), "ours": ("#f6c453", "6,4", "我們的綜合")}
+    for k, (src, pts) in enumerate(rows):
+        col, dash, name = style[src]
+        coords = [xy(i, v) for i, v, _l in pts]
+        body += ('<polyline points="%s" fill="none" stroke="%s" stroke-width="2.6"%s/>'
+                 % (" ".join("%.1f,%.1f" % c for c in coords), col,
+                    (' stroke-dasharray="%s"' % dash) if dash else ""))
+        for cx, cy in coords:
+            body += '<circle cx="%.1f" cy="%.1f" r="3.2" fill="%s"/>' % (cx, cy, col)
+        ex, ey = coords[-1]
+        body += ('<text x="%.1f" y="%.1f" fill="%s" font-size="11" font-weight="800" '
+                 'text-anchor="end">%.2f%%</text>' % (ex - 6, ey - 8, col, pts[-1][1]))
+        legend += '<tspan x="%d" fill="%s">%s %s</tspan>' % (PADL + k * 190, col,
+                                                             "┅" if dash else "━", name)
+    gap = rows[1][1][-1][1] - rows[0][1][-1][1] if len(rows) > 1 else 0
+    return ('<svg viewBox="0 0 %d %d" role="img">%s%s%s'
+            '<text x="%d" y="16" font-size="11">%s</text></svg>'
+            '<p class="muted">終點差距 %+.2f 個百分點（%s）。正值代表我們比市場鷹派。</p>'
+            % (W, H, grid, body, xlab, PADL, legend, gap,
+               "我們更鷹" if gap > 0.03 else ("我們更鴿" if gap < -0.03 else "基本一致")))
 
 
 def factor_table(mdl):
@@ -221,8 +328,9 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:v
 <h1>FED 升降息機率儀表板</h1>
 <p class="sub">現行目標區間 <b>{{TLOW}}%–{{THIGH}}%</b>｜下次會議 {{NLABEL}}｜更新 {{NOW}}（台北）</p>
 <div class="hero">{{HERO}}<div class="sub" style="margin-left:auto;max-width:300px">下次會議（{{NLABEL}}）三層合成機率：市場定價 {{WM}}%━反應函數模型 {{WO}}%━專家共識 {{WE}}%</div></div>
-<h2>四次會議機率路徑</h2>{{CARDS}}
-<h2>歷史軌跡（下次會議・綜合機率）</h2><div class="card">{{HIST}}</div>
+<h2>預期政策利率路徑</h2><div class="card">{{PATH}}</div>
+<h2>四次會議機率分布</h2>{{CARDS}}
+<h2>歷史軌跡（{{NLABEL}}・升息機率）</h2><div class="card">{{HIST}}</div>
 <h2>模型因子（第二層）</h2><div class="card">{{FACTORS}}</div>
 <h2>券商與專家言論（第三層）</h2><div class="card">{{QUOTES}}</div>
 <h2>機率推演（Claude 每日分析）</h2>{{COMM}}
@@ -240,7 +348,9 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:v
         "WM": "%.0f" % (CFG["weights"]["market"] * 100),
         "WO": "%.0f" % (CFG["weights"]["model"] * 100),
         "WE": "%.0f" % (CFG["weights"]["expert"] * 100),
-        "CARDS": cards, "HIST": history_svg(store["snapshots"], nxt["key"]),
+        "CARDS": cards,
+        "PATH": path_svg(market, blended, meetings, mid),
+        "HIST": history_svg(store, nxt["key"], nxt["label"]),
         "FACTORS": factor_table(mdl), "QUOTES": quotes_html(store["quotes"]),
         "COMM": commentary_html(store["commentary"]), "MINQ": str(CFG["expert_min_quotes"]),
     }
@@ -253,3 +363,4 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:v
 
 if __name__ == "__main__":
     main()
+
