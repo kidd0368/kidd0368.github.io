@@ -339,7 +339,7 @@ def fetch_jin10(existing_ids):
 
 # CME FedWatch 數字常出現在金十快訊，例如：
 # 「据CME"美联储观察"：美联储9月维持利率不变的概率为66%，加息25个基点的概率为34%」
-FW_PAT = re.compile(r"(维持利率不变|按兵不动|不变|加息|升息|降息)\D{0,12}?概率[为為]\s*(\d+(?:\.\d+)?)\s*%")
+FW_PAT = re.compile(r"(维持利率不变|按兵不动|不变|加息|升息|降息).{0,15}?概率[为為]\s*(\d+(?:\.\d+)?)\s*%")
 FW_SIZE = re.compile(r"(加息|升息|降息)\s*(\d+)\s*个?基点")
 
 
@@ -363,9 +363,16 @@ def extract_fedwatch(quotes, meetings):
         except Exception:
             continue
         probs = {}
+        cur = "target" if t.startswith("【") and zh in t.split("】")[0] else None
         for seg in re.split(r"[，。；,;]", t):
+            # 追蹤段落屬於哪個月份，避免 10 月／12 月的數字混進目標會議
+            others = [m2["zh_month"] for m2 in meetings[1:]]
+            if any(om in seg for om in others):
+                cur = "other"
+            elif zh in seg:
+                cur = "target"
             mm = FW_PAT.search(seg)
-            if not mm:
+            if not mm or cur != "target":
                 continue
             action, pct = mm.group(1), float(mm.group(2)) / 100.0
             size = FW_SIZE.search(seg)
@@ -442,6 +449,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
