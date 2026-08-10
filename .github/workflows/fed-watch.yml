@@ -33,6 +33,11 @@ jobs:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python fed-watch/scripts/collect.py
 
+      - name: 回填市場歷史（Kalshi 日K）
+        env:
+          PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
+        run: python fed-watch/scripts/backfill.py
+
       - name: 合併 Claude 註記（分類與推演）
         env:
           PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
@@ -55,5 +60,6 @@ jobs:
             git pull --rebase origin main
             git push
           fi
+
 
 
