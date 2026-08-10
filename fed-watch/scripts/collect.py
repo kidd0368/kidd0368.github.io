@@ -188,6 +188,8 @@ def fetch_fred():
                 m["diff"] = round(rows[-1][1] - rows[-2][1], 1)  # FRED 原始單位已是千人
             if "diff3avg" in calc and len(rows) >= 4:
                 m["diff3avg"] = round((rows[-1][1] - rows[-4][1]) / 3, 1)
+            if "chg20d" in calc and len(rows) >= 21:
+                m["chg20d"] = round(rows[-1][1] - rows[-21][1], 3)
             if "chg60d" in calc and len(rows) >= 45:
                 m["chg60d"] = round((rows[-1][1] / rows[-45][1] - 1) * 100, 1)  # 日資料約45筆=60個日曆天
             macro[sid] = m
@@ -449,6 +451,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
