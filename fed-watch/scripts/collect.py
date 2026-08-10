@@ -185,9 +185,9 @@ def fetch_fred():
             if "chg3m" in calc and len(rows) >= 4:
                 m["chg3m"] = round(rows[-1][1] - rows[-4][1], 2)
             if "diff" in calc and len(rows) >= 2:
-                m["diff"] = round((rows[-1][1] - rows[-2][1]) * 1000, 0)  # 千人
+                m["diff"] = round(rows[-1][1] - rows[-2][1], 1)  # FRED 原始單位已是千人
             if "diff3avg" in calc and len(rows) >= 4:
-                m["diff3avg"] = round((rows[-1][1] - rows[-4][1]) / 3 * 1000, 0)
+                m["diff3avg"] = round((rows[-1][1] - rows[-4][1]) / 3, 1)
             if "chg60d" in calc and len(rows) >= 45:
                 m["chg60d"] = round((rows[-1][1] / rows[-45][1] - 1) * 100, 1)  # 日資料約45筆=60個日曆天
             macro[sid] = m
@@ -348,9 +348,18 @@ def extract_fedwatch(quotes, meetings):
     nxt = meetings[0]
     zh = nxt["zh_month"]
     best = None
+    now = dt.datetime.now(dt.timezone.utc)
     for q in quotes:
         t = q["text"]
         if "美联储观察" not in t or zh not in t:
+            continue
+        try:
+            qt = dt.datetime.fromisoformat(str(q.get("time", "")).replace("Z", "+00:00"))
+            if qt.tzinfo is None:
+                qt = qt.replace(tzinfo=dt.timezone.utc)
+            if (now - qt).days > 3:
+                continue  # 搜尋會撈出歷史舊聞，只收 3 天內的引用
+        except Exception:
             continue
         probs = {}
         for seg in re.split(r"[，。；,;]", t):
@@ -389,14 +398,19 @@ def main():
     store["quotes"].extend(new_quotes)
     store["quotes"] = store["quotes"][-CFG["max_quotes_stored"]:]
 
-    fw = extract_fedwatch(new_quotes, CFG["meetings"])
+    # 用全部庫存 quotes 掃（不只 new），時間過濾在 extract 內做
+    fw = extract_fedwatch(store["quotes"], CFG["meetings"])
     if not fw:
         for snap in reversed(store["snapshots"]):
             if snap.get("fedwatch"):
-                age = (dt.datetime.now(dt.timezone.utc)
-                       - dt.datetime.fromisoformat(snap["ts"])).total_seconds() / 86400
-                if age <= 3:
-                    fw = snap["fedwatch"]
+                try:
+                    ft = dt.datetime.fromisoformat(str(snap["fedwatch"].get("time", "")).replace("Z", "+00:00"))
+                    if ft.tzinfo is None:
+                        ft = ft.replace(tzinfo=dt.timezone.utc)
+                    if (dt.datetime.now(dt.timezone.utc) - ft).days <= 3:
+                        fw = snap["fedwatch"]
+                except Exception:
+                    pass
                 break
 
     if macro:
@@ -422,6 +436,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
