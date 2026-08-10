@@ -1,16 +1,16 @@
 {
   "schema_version": "1.0",
   "model_version": "mpe-v1.0.0",
-  "generated_at": "2026-08-09T16:35:25+00:00",
-  "asof": "2026-08-07",
+  "generated_at": "2026-08-10T23:53:31+00:00",
+  "asof": "2026-08-10",
   "coverage_pct": 100.0,
   "status": "live",
   "regime": {
     "name": "Risk-on / Fragile",
     "code": "risk_on_fragile",
-    "stress_score": 43.7,
-    "confidence": 96.5,
-    "summary": "Composite stress is 43.7/100. Financial conditions are neutral, liquidity is draining, and cross-asset confirmation is confirming risk."
+    "stress_score": 42.9,
+    "confidence": 96.0,
+    "summary": "Composite stress is 42.9/100. Financial conditions are neutral, liquidity is draining, and cross-asset confirmation is confirming risk."
   },
   "paths": [
     {
@@ -18,9 +18,9 @@
       "trading_days": 5,
       "threshold_pct": 1.0,
       "probabilities": {
-        "up": 26.9,
+        "up": 28.0,
         "range": 45.0,
-        "down": 28.1
+        "down": 27.0
       },
       "dominant_path": "range",
       "note": "震盪消化、等待新催化"
@@ -30,9 +30,9 @@
       "trading_days": 20,
       "threshold_pct": 3.0,
       "probabilities": {
-        "up": 26.2,
-        "range": 44.8,
-        "down": 29.0
+        "up": 27.0,
+        "range": 45.1,
+        "down": 27.9
       },
       "dominant_path": "range",
       "note": "震盪消化、等待新催化"
@@ -42,9 +42,9 @@
       "trading_days": 63,
       "threshold_pct": 6.0,
       "probabilities": {
-        "up": 25.4,
-        "range": 44.3,
-        "down": 30.3
+        "up": 26.0,
+        "range": 44.7,
+        "down": 29.3
       },
       "dominant_path": "range",
       "note": "震盪消化、等待新催化"
@@ -52,24 +52,20 @@
   ],
   "modules": {
     "financial": {
-      "score": 56.2,
+      "score": 51.7,
       "stance": "Neutral",
       "summary": "Rates, real yields, dollar and credit are combined as a tightening score; higher is more restrictive.",
       "metrics": [
         {
           "label": "US 2Y",
-          "value": 4.25,
+          "value": 4.19,
           "unit": "%",
-          "change": 0.09,
+          "change": -0.02,
           "change_label": "20 obs",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-03-31",
-              3.79
-            ],
             [
               "2026-04-01",
               3.81
@@ -425,23 +421,23 @@
             [
               "2026-08-06",
               4.25
+            ],
+            [
+              "2026-08-07",
+              4.19
             ]
           ]
         },
         {
           "label": "US 10Y",
-          "value": 4.69,
+          "value": 4.65,
           "unit": "%",
-          "change": 0.15,
+          "change": 0.09,
           "change_label": "20 obs",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-03-31",
-              4.3
-            ],
             [
               "2026-04-01",
               4.33
@@ -797,23 +793,23 @@
             [
               "2026-08-06",
               4.69
+            ],
+            [
+              "2026-08-07",
+              4.65
             ]
           ]
         },
         {
           "label": "10Y real yield",
-          "value": 2.43,
+          "value": 2.4,
           "unit": "%",
-          "change": 0.12,
+          "change": 0.08,
           "change_label": "20 obs",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-03-31",
-              2.0
-            ],
             [
               "2026-04-01",
               2.02
@@ -1169,39 +1165,23 @@
             [
               "2026-08-06",
               2.43
+            ],
+            [
+              "2026-08-07",
+              2.4
             ]
           ]
         },
         {
           "label": "Broad USD",
-          "value": 119.7,
+          "value": 119.06,
           "unit": "index",
-          "change": -0.82,
+          "change": -1.19,
           "change_label": "20 obs %",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-03-25",
-              120.1282
-            ],
-            [
-              "2026-03-26",
-              120.389
-            ],
-            [
-              "2026-03-27",
-              120.8851
-            ],
-            [
-              "2026-03-30",
-              121.2851
-            ],
-            [
-              "2026-03-31",
-              121.035
-            ],
             [
               "2026-04-01",
               120.1198
@@ -1541,6 +1521,26 @@
             [
               "2026-07-31",
               119.7034
+            ],
+            [
+              "2026-08-03",
+              120.7739
+            ],
+            [
+              "2026-08-04",
+              119.5977
+            ],
+            [
+              "2026-08-05",
+              119.3881
+            ],
+            [
+              "2026-08-06",
+              119.5113
+            ],
+            [
+              "2026-08-07",
+              119.0649
             ]
           ]
         },
@@ -1548,16 +1548,12 @@
           "label": "IG OAS",
           "value": 0.78,
           "unit": "%",
-          "change": 0.02,
+          "change": 0.01,
           "change_label": "20 obs",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-06",
-              0.85
-            ],
             [
               "2026-04-07",
               0.86
@@ -1913,12 +1909,16 @@
             [
               "2026-08-06",
               0.78
+            ],
+            [
+              "2026-08-07",
+              0.78
             ]
           ]
         },
         {
           "label": "HY OAS",
-          "value": 2.71,
+          "value": 2.7,
           "unit": "%",
           "change": 0.01,
           "change_label": "20 obs",
@@ -1926,10 +1926,6 @@
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-06",
-              3.05
-            ],
             [
               "2026-04-07",
               3.12
@@ -2285,13 +2281,17 @@
             [
               "2026-08-06",
               2.71
+            ],
+            [
+              "2026-08-07",
+              2.7
             ]
           ]
         }
       ]
     },
     "liquidity": {
-      "score": 25.1,
+      "score": 25.2,
       "stance": "Draining",
       "summary": "Net Liquidity is a market proxy: Fed assets − TGA − ON RRP. It is not an official Federal Reserve measure.",
       "metrics": [
@@ -3413,18 +3413,14 @@
         },
         {
           "label": "ON RRP",
-          "value": 1.45,
+          "value": 0.97,
           "unit": "$bn",
-          "change": 0.9,
+          "change": 0.18,
           "change_label": "20 obs",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-03-31",
-              15.782
-            ],
             [
               "2026-04-01",
               2.107
@@ -3780,14 +3776,18 @@
             [
               "2026-08-07",
               1.45
+            ],
+            [
+              "2026-08-10",
+              0.975
             ]
           ]
         },
         {
           "label": "Net liquidity proxy",
-          "value": 5839.79,
+          "value": 5840.27,
           "unit": "$bn",
-          "change": -121.21,
+          "change": -120.48,
           "change_label": "~4 weeks",
           "source": "model",
           "quality": "live",
@@ -3797,24 +3797,20 @@
       ]
     },
     "volatility": {
-      "score": 27.7,
+      "score": 27.8,
       "stance": "Contained",
       "summary": "The free VIX curve uses official 9-day, 30-day and 3-month volatility indices; it is labelled as a futures-curve proxy.",
       "metrics": [
         {
           "label": "VIX",
-          "value": 15.15,
+          "value": 14.9,
           "unit": "",
-          "change": -1.94,
+          "change": -1.09,
           "change_label": "5 obs",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-02",
-              23.87
-            ],
             [
               "2026-04-06",
               24.17
@@ -4170,23 +4166,23 @@
             [
               "2026-08-06",
               15.15
+            ],
+            [
+              "2026-08-07",
+              14.9
             ]
           ]
         },
         {
           "label": "VVIX",
-          "value": 90.42,
+          "value": 92.51,
           "unit": "",
-          "change": -1.22,
+          "change": 1.7,
           "change_label": "5 obs",
           "source": "cboe",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-03-31",
-              116.05
-            ],
             [
               "2026-04-01",
               114.83
@@ -4542,12 +4538,16 @@
             [
               "2026-08-07",
               90.42
+            ],
+            [
+              "2026-08-10",
+              92.51
             ]
           ]
         },
         {
           "label": "VIX9D",
-          "value": 11.96,
+          "value": 12.77,
           "unit": "",
           "change": null,
           "change_label": "",
@@ -4555,10 +4555,6 @@
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-03-31",
-              24.18
-            ],
             [
               "2026-04-01",
               23.61
@@ -4914,12 +4910,16 @@
             [
               "2026-08-07",
               11.96
+            ],
+            [
+              "2026-08-10",
+              12.77
             ]
           ]
         },
         {
           "label": "VIX3M",
-          "value": 18.72,
+          "value": 18.98,
           "unit": "",
           "change": null,
           "change_label": "",
@@ -4927,10 +4927,6 @@
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-03-31",
-              25.55
-            ],
             [
               "2026-04-01",
               24.86
@@ -5286,12 +5282,16 @@
             [
               "2026-08-07",
               18.72
+            ],
+            [
+              "2026-08-10",
+              18.98
             ]
           ]
         },
         {
           "label": "VIX term slope",
-          "value": 23.56,
+          "value": 27.38,
           "unit": "%",
           "change": null,
           "change_label": "",
@@ -5342,7 +5342,7 @@
         },
         {
           "label": "CTA gross trend proxy",
-          "value": 42.06,
+          "value": 39.84,
           "unit": "%",
           "change": null,
           "change_label": "",
@@ -5365,7 +5365,7 @@
       ]
     },
     "cross_asset": {
-      "score": 65.8,
+      "score": 66.9,
       "stance": "Confirming risk",
       "summary": "Equities, credit, the dollar, energy and rates vote on whether the primary risk direction is confirmed or divergent.",
       "metrics": [
@@ -6115,7 +6115,7 @@
         },
         {
           "label": "HY OAS",
-          "value": 2.71,
+          "value": 2.7,
           "unit": "%",
           "change": 0.01,
           "change_label": "20 obs",
@@ -6123,10 +6123,6 @@
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-06",
-              3.05
-            ],
             [
               "2026-04-07",
               3.12
@@ -6482,39 +6478,23 @@
             [
               "2026-08-06",
               2.71
+            ],
+            [
+              "2026-08-07",
+              2.7
             ]
           ]
         },
         {
           "label": "Broad USD",
-          "value": 119.7,
+          "value": 119.06,
           "unit": "index",
-          "change": -0.82,
+          "change": -1.19,
           "change_label": "20 obs %",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-03-25",
-              120.1282
-            ],
-            [
-              "2026-03-26",
-              120.389
-            ],
-            [
-              "2026-03-27",
-              120.8851
-            ],
-            [
-              "2026-03-30",
-              121.2851
-            ],
-            [
-              "2026-03-31",
-              121.035
-            ],
             [
               "2026-04-01",
               120.1198
@@ -6854,6 +6834,26 @@
             [
               "2026-07-31",
               119.7034
+            ],
+            [
+              "2026-08-03",
+              120.7739
+            ],
+            [
+              "2026-08-04",
+              119.5977
+            ],
+            [
+              "2026-08-05",
+              119.3881
+            ],
+            [
+              "2026-08-06",
+              119.5113
+            ],
+            [
+              "2026-08-07",
+              119.0649
             ]
           ]
         },
@@ -7231,18 +7231,14 @@
         },
         {
           "label": "US 10Y yield",
-          "value": 4.69,
+          "value": 4.65,
           "unit": "%",
-          "change": 0.15,
+          "change": 0.09,
           "change_label": "20 obs",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-03-31",
-              4.3
-            ],
             [
               "2026-04-01",
               4.33
@@ -7598,13 +7594,17 @@
             [
               "2026-08-06",
               4.69
+            ],
+            [
+              "2026-08-07",
+              4.65
             ]
           ]
         }
       ]
     },
     "event_shock": {
-      "score": 16.4,
+      "score": 20.3,
       "stance": "Quiet",
       "summary": "V1 measures realized cross-asset shock intensity. A forward official event calendar is intentionally deferred rather than filled with an unstable feed.",
       "metrics": [
@@ -7621,7 +7621,7 @@
         },
         {
           "label": "10Y yield 1D move z",
-          "value": 1.2,
+          "value": -0.93,
           "unit": "σ",
           "change": null,
           "change_label": "",
@@ -7632,7 +7632,7 @@
         },
         {
           "label": "USD 1D return z",
-          "value": 0.03,
+          "value": -1.2,
           "unit": "σ",
           "change": null,
           "change_label": "",
@@ -7643,7 +7643,7 @@
         },
         {
           "label": "VIX 1D return z",
-          "value": -0.5,
+          "value": -0.16,
           "unit": "σ",
           "change": null,
           "change_label": "",
@@ -7669,15 +7669,15 @@
   "vix_curve": [
     {
       "tenor": "9D",
-      "value": 11.96
+      "value": 12.77
     },
     {
       "tenor": "30D",
-      "value": 15.15
+      "value": 14.9
     },
     {
       "tenor": "3M",
-      "value": 18.72
+      "value": 18.98
     }
   ],
   "source_registry": {
@@ -7715,13 +7715,13 @@
   "source_status": {
     "fred": {
       "status": "live",
-      "asof": "2026-08-07",
+      "asof": "2026-08-10",
       "received": 16,
       "expected": 16
     },
     "cboe": {
       "status": "live",
-      "asof": "2026-08-07",
+      "asof": "2026-08-10",
       "received": 3,
       "expected": 3
     },
@@ -7750,10 +7750,6 @@
   "raw": {
     "fred": {
       "dgs2": [
-        [
-          "2022-12-30",
-          4.41
-        ],
         [
           "2023-01-03",
           4.4
@@ -11349,13 +11345,13 @@
         [
           "2026-08-06",
           4.25
+        ],
+        [
+          "2026-08-07",
+          4.19
         ]
       ],
       "dgs10": [
-        [
-          "2022-12-30",
-          3.88
-        ],
         [
           "2023-01-03",
           3.79
@@ -14951,13 +14947,13 @@
         [
           "2026-08-06",
           4.69
+        ],
+        [
+          "2026-08-07",
+          4.65
         ]
       ],
       "dgs30": [
-        [
-          "2022-12-30",
-          3.97
-        ],
         [
           "2023-01-03",
           3.88
@@ -18553,13 +18549,13 @@
         [
           "2026-08-06",
           5.22
+        ],
+        [
+          "2026-08-07",
+          5.19
         ]
       ],
       "real10": [
-        [
-          "2022-12-30",
-          1.58
-        ],
         [
           "2023-01-03",
           1.53
@@ -22155,29 +22151,13 @@
         [
           "2026-08-06",
           2.43
+        ],
+        [
+          "2026-08-07",
+          2.4
         ]
       ],
       "usd_broad": [
-        [
-          "2022-12-27",
-          121.7539
-        ],
-        [
-          "2022-12-28",
-          122.0075
-        ],
-        [
-          "2022-12-29",
-          121.6577
-        ],
-        [
-          "2022-12-30",
-          121.4256
-        ],
-        [
-          "2023-01-03",
-          122.0905
-        ],
         [
           "2023-01-04",
           121.5008
@@ -25757,21 +25737,29 @@
         [
           "2026-07-31",
           119.7034
+        ],
+        [
+          "2026-08-03",
+          120.7739
+        ],
+        [
+          "2026-08-04",
+          119.5977
+        ],
+        [
+          "2026-08-05",
+          119.3881
+        ],
+        [
+          "2026-08-06",
+          119.5113
+        ],
+        [
+          "2026-08-07",
+          119.0649
         ]
       ],
       "ig_oas": [
-        [
-          "2023-08-08",
-          1.23
-        ],
-        [
-          "2023-08-09",
-          1.23
-        ],
-        [
-          "2023-08-10",
-          1.22
-        ],
         [
           "2023-08-11",
           1.22
@@ -28903,21 +28891,13 @@
         [
           "2026-08-06",
           0.78
+        ],
+        [
+          "2026-08-07",
+          0.78
         ]
       ],
       "bbb_oas": [
-        [
-          "2023-08-08",
-          1.52
-        ],
-        [
-          "2023-08-09",
-          1.52
-        ],
-        [
-          "2023-08-10",
-          1.51
-        ],
         [
           "2023-08-11",
           1.51
@@ -32053,21 +32033,13 @@
         [
           "2026-08-06",
           0.97
+        ],
+        [
+          "2026-08-07",
+          0.97
         ]
       ],
       "hy_oas": [
-        [
-          "2023-08-08",
-          4.0
-        ],
-        [
-          "2023-08-09",
-          3.94
-        ],
-        [
-          "2023-08-10",
-          3.83
-        ],
         [
           "2023-08-11",
           3.83
@@ -35203,6 +35175,10 @@
         [
           "2026-08-06",
           2.71
+        ],
+        [
+          "2026-08-07",
+          2.7
         ]
       ],
       "fed_assets": [
@@ -46013,10 +45989,6 @@
       ],
       "rrp": [
         [
-          "2022-12-29",
-          2308.319
-        ],
-        [
           "2022-12-30",
           2553.716
         ],
@@ -49611,13 +49583,13 @@
         [
           "2026-08-07",
           1.45
+        ],
+        [
+          "2026-08-10",
+          0.975
         ]
       ],
       "vix": [
-        [
-          "2023-02-10",
-          20.53
-        ],
         [
           "2023-02-13",
           20.34
@@ -53213,6 +53185,10 @@
         [
           "2026-08-06",
           15.15
+        ],
+        [
+          "2026-08-07",
+          14.9
         ]
       ],
       "sp500": [
@@ -64025,10 +64001,6 @@
     "cboe": {
       "vix9d": [
         [
-          "2023-01-05",
-          24.54
-        ],
-        [
           "2023-01-06",
           21.57
         ],
@@ -67623,13 +67595,13 @@
         [
           "2026-08-07",
           11.96
+        ],
+        [
+          "2026-08-10",
+          12.77
         ]
       ],
       "vix3m": [
-        [
-          "2023-01-05",
-          24.07
-        ],
         [
           "2023-01-06",
           23.18
@@ -71225,13 +71197,13 @@
         [
           "2026-08-07",
           18.72
+        ],
+        [
+          "2026-08-10",
+          18.98
         ]
       ],
       "vvix": [
-        [
-          "2023-01-05",
-          75.96
-        ],
         [
           "2023-01-06",
           73.88
@@ -74827,6 +74799,10 @@
         [
           "2026-08-07",
           90.42
+        ],
+        [
+          "2026-08-10",
+          92.51
         ]
       ]
     },
@@ -74839,9 +74815,75 @@
     }
   },
   "archive": {
-    "prediction_count": 1,
+    "prediction_count": 2,
     "validation_count": 0,
     "recent_predictions": [
+      {
+        "schema_version": "1.0",
+        "prediction_id": "mpe-v1.0.0:2026-08-10",
+        "model_version": "mpe-v1.0.0",
+        "generated_at": "2026-08-10T23:53:31+00:00",
+        "asof": "2026-08-10",
+        "anchor": {
+          "symbol": "SP500",
+          "date": "2026-08-07",
+          "close": 7757.64
+        },
+        "regime": {
+          "name": "Risk-on / Fragile",
+          "code": "risk_on_fragile",
+          "stress_score": 42.9,
+          "confidence": 96.0,
+          "summary": "Composite stress is 42.9/100. Financial conditions are neutral, liquidity is draining, and cross-asset confirmation is confirming risk."
+        },
+        "paths": [
+          {
+            "horizon": "1–5D",
+            "trading_days": 5,
+            "threshold_pct": 1.0,
+            "probabilities": {
+              "up": 28.0,
+              "range": 45.0,
+              "down": 27.0
+            },
+            "dominant_path": "range",
+            "note": "震盪消化、等待新催化"
+          },
+          {
+            "horizon": "1–4W",
+            "trading_days": 20,
+            "threshold_pct": 3.0,
+            "probabilities": {
+              "up": 27.0,
+              "range": 45.1,
+              "down": 27.9
+            },
+            "dominant_path": "range",
+            "note": "震盪消化、等待新催化"
+          },
+          {
+            "horizon": "1–3M",
+            "trading_days": 63,
+            "threshold_pct": 6.0,
+            "probabilities": {
+              "up": 26.0,
+              "range": 44.7,
+              "down": 29.3
+            },
+            "dominant_path": "range",
+            "note": "震盪消化、等待新催化"
+          }
+        ],
+        "features": {
+          "financial": 51.7,
+          "liquidity": 25.2,
+          "volatility": 27.8,
+          "positioning": 64.2,
+          "cross_asset": 66.9,
+          "event_shock": 20.3
+        },
+        "disclosure": "Heuristic V1 probabilities; not statistically calibrated and not investment advice."
+      },
       {
         "anchor": {
           "close": 7757.64,
