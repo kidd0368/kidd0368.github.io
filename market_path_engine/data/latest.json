@@ -1,16 +1,16 @@
 {
   "schema_version": "1.0",
   "model_version": "mpe-v1.0.0",
-  "generated_at": "2026-08-13T00:01:13+00:00",
-  "asof": "2026-08-12",
+  "generated_at": "2026-08-14T00:02:00+00:00",
+  "asof": "2026-08-13",
   "coverage_pct": 100.0,
   "status": "live",
   "regime": {
     "name": "Risk-on / Fragile",
     "code": "risk_on_fragile",
-    "stress_score": 44.0,
-    "confidence": 96.7,
-    "summary": "Composite stress is 44.0/100. Financial conditions are neutral, liquidity is draining, and cross-asset confirmation is confirming risk."
+    "stress_score": 46.6,
+    "confidence": 98.1,
+    "summary": "Composite stress is 46.6/100. Financial conditions are neutral, liquidity is draining, and cross-asset confirmation is confirming risk."
   },
   "paths": [
     {
@@ -18,9 +18,9 @@
       "trading_days": 5,
       "threshold_pct": 1.0,
       "probabilities": {
-        "up": 26.7,
-        "range": 44.9,
-        "down": 28.4
+        "up": 19.5,
+        "range": 40.6,
+        "down": 39.9
       },
       "dominant_path": "range",
       "note": "震盪消化、等待新催化"
@@ -30,46 +30,42 @@
       "trading_days": 20,
       "threshold_pct": 3.0,
       "probabilities": {
-        "up": 26.0,
-        "range": 44.6,
-        "down": 29.4
+        "up": 19.1,
+        "range": 40.4,
+        "down": 40.5
       },
-      "dominant_path": "range",
-      "note": "震盪消化、等待新催化"
+      "dominant_path": "down",
+      "note": "去風險／流動性壓力延續"
     },
     {
       "horizon": "1–3M",
       "trading_days": 63,
       "threshold_pct": 6.0,
       "probabilities": {
-        "up": 25.2,
-        "range": 44.2,
-        "down": 30.6
+        "up": 18.7,
+        "range": 40.0,
+        "down": 41.3
       },
-      "dominant_path": "range",
-      "note": "震盪消化、等待新催化"
+      "dominant_path": "down",
+      "note": "去風險／流動性壓力延續"
     }
   ],
   "modules": {
     "financial": {
-      "score": 53.1,
+      "score": 53.4,
       "stance": "Neutral",
       "summary": "Rates, real yields, dollar and credit are combined as a tightening score; higher is more restrictive.",
       "metrics": [
         {
           "label": "US 2Y",
-          "value": 4.22,
+          "value": 4.2,
           "unit": "%",
-          "change": 0.04,
+          "change": 0.07,
           "change_label": "20 obs",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-03",
-              3.84
-            ],
             [
               "2026-04-06",
               3.84
@@ -425,23 +421,23 @@
             [
               "2026-08-11",
               4.22
+            ],
+            [
+              "2026-08-12",
+              4.2
             ]
           ]
         },
         {
           "label": "US 10Y",
-          "value": 4.7,
+          "value": 4.68,
           "unit": "%",
-          "change": 0.12,
+          "change": 0.13,
           "change_label": "20 obs",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-03",
-              4.35
-            ],
             [
               "2026-04-06",
               4.34
@@ -797,12 +793,16 @@
             [
               "2026-08-11",
               4.7
+            ],
+            [
+              "2026-08-12",
+              4.68
             ]
           ]
         },
         {
           "label": "10Y real yield",
-          "value": 2.43,
+          "value": 2.42,
           "unit": "%",
           "change": 0.1,
           "change_label": "20 obs",
@@ -810,10 +810,6 @@
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-03",
-              1.99
-            ],
             [
               "2026-04-06",
               1.98
@@ -1169,6 +1165,10 @@
             [
               "2026-08-11",
               2.43
+            ],
+            [
+              "2026-08-12",
+              2.42
             ]
           ]
         },
@@ -1555,10 +1555,6 @@
           "note": "",
           "history": [
             [
-              "2026-04-09",
-              0.83
-            ],
-            [
               "2026-04-10",
               0.82
             ],
@@ -1913,12 +1909,16 @@
             [
               "2026-08-11",
               0.79
+            ],
+            [
+              "2026-08-12",
+              0.79
             ]
           ]
         },
         {
           "label": "HY OAS",
-          "value": 2.72,
+          "value": 2.71,
           "unit": "%",
           "change": 0.0,
           "change_label": "20 obs",
@@ -1926,10 +1926,6 @@
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-09",
-              2.9
-            ],
             [
               "2026-04-10",
               2.94
@@ -2285,30 +2281,30 @@
             [
               "2026-08-11",
               2.72
+            ],
+            [
+              "2026-08-12",
+              2.71
             ]
           ]
         }
       ]
     },
     "liquidity": {
-      "score": 25.2,
+      "score": 8.3,
       "stance": "Draining",
       "summary": "Net Liquidity is a market proxy: Fed assets − TGA − ON RRP. It is not an official Federal Reserve measure.",
       "metrics": [
         {
           "label": "Fed assets",
-          "value": 6748.57,
+          "value": 6759.95,
           "unit": "$bn",
-          "change": 12.96,
+          "change": 16.93,
           "change_label": "4 weeks",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2024-11-20",
-              6923.731
-            ],
             [
               "2024-11-27",
               6905.14
@@ -2664,23 +2660,23 @@
             [
               "2026-08-05",
               6748.567
+            ],
+            [
+              "2026-08-12",
+              6759.955
             ]
           ]
         },
         {
           "label": "Reserve balances",
-          "value": 2993.35,
+          "value": 2944.06,
           "unit": "$bn",
-          "change": -105.56,
+          "change": -198.66,
           "change_label": "4 weeks",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2024-11-20",
-              3286.885
-            ],
             [
               "2024-11-27",
               3227.674
@@ -3036,23 +3032,23 @@
             [
               "2026-08-05",
               2993.349
+            ],
+            [
+              "2026-08-12",
+              2944.059
             ]
           ]
         },
         {
           "label": "TGA",
-          "value": 907.32,
+          "value": 963.95,
           "unit": "$bn",
-          "change": 133.26,
+          "change": 207.73,
           "change_label": "4 weeks",
           "source": "fred",
           "quality": "live",
           "note": "FRED weekly Treasury General Account series; direct Daily Treasury Statement can replace it in V2.",
           "history": [
-            [
-              "2024-11-20",
-              751.873
-            ],
             [
               "2024-11-27",
               775.25
@@ -3408,23 +3404,23 @@
             [
               "2026-08-05",
               907.324
+            ],
+            [
+              "2026-08-12",
+              963.95
             ]
           ]
         },
         {
           "label": "ON RRP",
-          "value": 0.72,
+          "value": 0.45,
           "unit": "$bn",
-          "change": 0.57,
+          "change": 0.33,
           "change_label": "20 obs",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-06",
-              0.227
-            ],
             [
               "2026-04-07",
               15.345
@@ -3780,14 +3776,18 @@
             [
               "2026-08-12",
               0.725
+            ],
+            [
+              "2026-08-13",
+              0.45
             ]
           ]
         },
         {
           "label": "Net liquidity proxy",
-          "value": 5840.52,
+          "value": 5795.56,
           "unit": "$bn",
-          "change": -120.88,
+          "change": -191.13,
           "change_label": "~4 weeks",
           "source": "model",
           "quality": "live",
@@ -3797,24 +3797,20 @@
       ]
     },
     "volatility": {
-      "score": 27.4,
+      "score": 26.5,
       "stance": "Contained",
       "summary": "The free VIX curve uses official 9-day, 30-day and 3-month volatility indices; it is labelled as a futures-curve proxy.",
       "metrics": [
         {
           "label": "VIX",
-          "value": 15.28,
+          "value": 14.55,
           "unit": "",
-          "change": -1.22,
+          "change": -1.26,
           "change_label": "5 obs",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-08",
-              21.04
-            ],
             [
               "2026-04-09",
               19.49
@@ -4170,23 +4166,23 @@
             [
               "2026-08-11",
               15.28
+            ],
+            [
+              "2026-08-12",
+              14.55
             ]
           ]
         },
         {
           "label": "VVIX",
-          "value": 88.5,
+          "value": 89.42,
           "unit": "",
-          "change": -1.93,
+          "change": 0.7,
           "change_label": "5 obs",
           "source": "cboe",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-06",
-              113.53
-            ],
             [
               "2026-04-07",
               117.3
@@ -4542,12 +4538,16 @@
             [
               "2026-08-12",
               88.5
+            ],
+            [
+              "2026-08-13",
+              89.42
             ]
           ]
         },
         {
           "label": "VIX9D",
-          "value": 11.09,
+          "value": 11.37,
           "unit": "",
           "change": null,
           "change_label": "",
@@ -4555,10 +4555,6 @@
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-06",
-              23.9
-            ],
             [
               "2026-04-07",
               27.27
@@ -4914,12 +4910,16 @@
             [
               "2026-08-12",
               11.09
+            ],
+            [
+              "2026-08-13",
+              11.37
             ]
           ]
         },
         {
           "label": "VIX3M",
-          "value": 18.53,
+          "value": 18.61,
           "unit": "",
           "change": null,
           "change_label": "",
@@ -4927,10 +4927,6 @@
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-06",
-              24.77
-            ],
             [
               "2026-04-07",
               25.57
@@ -5286,12 +5282,16 @@
             [
               "2026-08-12",
               18.53
+            ],
+            [
+              "2026-08-13",
+              18.61
             ]
           ]
         },
         {
           "label": "VIX term slope",
-          "value": 21.27,
+          "value": 27.9,
           "unit": "%",
           "change": null,
           "change_label": "",
@@ -5303,7 +5303,7 @@
       ]
     },
     "positioning": {
-      "score": 60.9,
+      "score": 63.8,
       "stance": "Supportive",
       "summary": "CFTC is observed weekly data. CTA and vol-control are transparent trend/risk-target proxies, not bank exposure estimates.",
       "metrics": [
@@ -5331,7 +5331,7 @@
         },
         {
           "label": "CTA risk trend score",
-          "value": 53.86,
+          "value": 59.96,
           "unit": "/100",
           "change": null,
           "change_label": "",
@@ -5342,7 +5342,7 @@
         },
         {
           "label": "CTA gross trend proxy",
-          "value": 27.0,
+          "value": 27.59,
           "unit": "%",
           "change": null,
           "change_label": "",
@@ -5353,7 +5353,7 @@
         },
         {
           "label": "Vol-control exposure",
-          "value": 71.36,
+          "value": 71.9,
           "unit": "% NAV",
           "change": null,
           "change_label": "",
@@ -5365,24 +5365,20 @@
       ]
     },
     "cross_asset": {
-      "score": 62.1,
+      "score": 61.8,
       "stance": "Confirming risk",
       "summary": "Equities, credit, the dollar, energy and rates vote on whether the primary risk direction is confirmed or divergent.",
       "metrics": [
         {
           "label": "S&P 500",
-          "value": 7728.2,
+          "value": 7748.5,
           "unit": "index",
-          "change": 2.45,
+          "change": 2.33,
           "change_label": "20 obs %",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-02",
-              6582.69
-            ],
             [
               "2026-04-06",
               6611.83
@@ -5738,23 +5734,23 @@
             [
               "2026-08-11",
               7728.2
+            ],
+            [
+              "2026-08-12",
+              7748.5
             ]
           ]
         },
         {
           "label": "Nasdaq Composite",
-          "value": 26445.45,
+          "value": 26588.49,
           "unit": "index",
-          "change": 1.3,
+          "change": 1.22,
           "change_label": "20 obs %",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-02",
-              21879.18
-            ],
             [
               "2026-04-06",
               21996.34
@@ -6110,12 +6106,16 @@
             [
               "2026-08-11",
               26445.45
+            ],
+            [
+              "2026-08-12",
+              26588.49
             ]
           ]
         },
         {
           "label": "HY OAS",
-          "value": 2.72,
+          "value": 2.71,
           "unit": "%",
           "change": 0.0,
           "change_label": "20 obs",
@@ -6123,10 +6123,6 @@
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-09",
-              2.9
-            ],
             [
               "2026-04-10",
               2.94
@@ -6482,6 +6478,10 @@
             [
               "2026-08-11",
               2.72
+            ],
+            [
+              "2026-08-12",
+              2.71
             ]
           ]
         },
@@ -7231,18 +7231,14 @@
         },
         {
           "label": "US 10Y yield",
-          "value": 4.7,
+          "value": 4.68,
           "unit": "%",
-          "change": 0.12,
+          "change": 0.13,
           "change_label": "20 obs",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-03",
-              4.35
-            ],
             [
               "2026-04-06",
               4.34
@@ -7598,19 +7594,23 @@
             [
               "2026-08-11",
               4.7
+            ],
+            [
+              "2026-08-12",
+              4.68
             ]
           ]
         }
       ]
     },
     "event_shock": {
-      "score": 15.7,
+      "score": 17.3,
       "stance": "Quiet",
       "summary": "V1 measures realized cross-asset shock intensity. A forward official event calendar is intentionally deferred rather than filled with an unstable feed.",
       "metrics": [
         {
           "label": "S&P 500 1D return z",
-          "value": -0.42,
+          "value": 0.22,
           "unit": "σ",
           "change": null,
           "change_label": "",
@@ -7621,7 +7621,7 @@
         },
         {
           "label": "10Y yield 1D move z",
-          "value": -0.5,
+          "value": -0.48,
           "unit": "σ",
           "change": null,
           "change_label": "",
@@ -7643,7 +7643,7 @@
         },
         {
           "label": "VIX 1D return z",
-          "value": -0.11,
+          "value": -0.57,
           "unit": "σ",
           "change": null,
           "change_label": "",
@@ -7669,15 +7669,15 @@
   "vix_curve": [
     {
       "tenor": "9D",
-      "value": 11.09
+      "value": 11.37
     },
     {
       "tenor": "30D",
-      "value": 15.28
+      "value": 14.55
     },
     {
       "tenor": "3M",
-      "value": 18.53
+      "value": 18.61
     }
   ],
   "source_registry": {
@@ -7715,13 +7715,13 @@
   "source_status": {
     "fred": {
       "status": "live",
-      "asof": "2026-08-12",
+      "asof": "2026-08-13",
       "received": 16,
       "expected": 16
     },
     "cboe": {
       "status": "live",
-      "asof": "2026-08-12",
+      "asof": "2026-08-13",
       "received": 3,
       "expected": 3
     },
@@ -7750,10 +7750,6 @@
   "raw": {
     "fred": {
       "dgs2": [
-        [
-          "2023-01-05",
-          4.45
-        ],
         [
           "2023-01-06",
           4.24
@@ -11349,13 +11345,13 @@
         [
           "2026-08-11",
           4.22
+        ],
+        [
+          "2026-08-12",
+          4.2
         ]
       ],
       "dgs10": [
-        [
-          "2023-01-05",
-          3.71
-        ],
         [
           "2023-01-06",
           3.55
@@ -14951,13 +14947,13 @@
         [
           "2026-08-11",
           4.7
+        ],
+        [
+          "2026-08-12",
+          4.68
         ]
       ],
       "dgs30": [
-        [
-          "2023-01-05",
-          3.78
-        ],
         [
           "2023-01-06",
           3.67
@@ -18553,13 +18549,13 @@
         [
           "2026-08-11",
           5.24
+        ],
+        [
+          "2026-08-12",
+          5.24
         ]
       ],
       "real10": [
-        [
-          "2023-01-05",
-          1.49
-        ],
         [
           "2023-01-06",
           1.34
@@ -22155,6 +22151,10 @@
         [
           "2026-08-11",
           2.43
+        ],
+        [
+          "2026-08-12",
+          2.42
         ]
       ],
       "usd_broad": [
@@ -28899,6 +28899,10 @@
         [
           "2026-08-11",
           0.79
+        ],
+        [
+          "2026-08-12",
+          0.79
         ]
       ],
       "bbb_oas": [
@@ -32044,6 +32048,10 @@
         ],
         [
           "2026-08-11",
+          0.98
+        ],
+        [
+          "2026-08-12",
           0.98
         ]
       ],
@@ -35191,13 +35199,13 @@
         [
           "2026-08-11",
           2.72
+        ],
+        [
+          "2026-08-12",
+          2.71
         ]
       ],
       "fed_assets": [
-        [
-          "2009-05-13",
-          2196351.0
-        ],
         [
           "2009-05-20",
           2181632.0
@@ -38793,13 +38801,13 @@
         [
           "2026-08-05",
           6748567.0
+        ],
+        [
+          "2026-08-12",
+          6759955.0
         ]
       ],
       "reserves": [
-        [
-          "2009-05-13",
-          858146.0
-        ],
         [
           "2009-05-20",
           934135.0
@@ -42395,13 +42403,13 @@
         [
           "2026-08-05",
           2993349.0
+        ],
+        [
+          "2026-08-12",
+          2944059.0
         ]
       ],
       "tga": [
-        [
-          "2009-05-13",
-          76059.0
-        ],
         [
           "2009-05-20",
           49838.0
@@ -45997,13 +46005,13 @@
         [
           "2026-08-05",
           907324.0
+        ],
+        [
+          "2026-08-12",
+          963950.0
         ]
       ],
       "rrp": [
-        [
-          "2023-01-04",
-          2229.542
-        ],
         [
           "2023-01-05",
           2242.486
@@ -49599,13 +49607,13 @@
         [
           "2026-08-12",
           0.725
+        ],
+        [
+          "2026-08-13",
+          0.45
         ]
       ],
       "vix": [
-        [
-          "2023-02-15",
-          18.23
-        ],
         [
           "2023-02-16",
           20.17
@@ -53201,13 +53209,13 @@
         [
           "2026-08-11",
           15.28
+        ],
+        [
+          "2026-08-12",
+          14.55
         ]
       ],
       "sp500": [
-        [
-          "2023-01-09",
-          3892.09
-        ],
         [
           "2023-01-10",
           3919.25
@@ -56803,13 +56811,13 @@
         [
           "2026-08-11",
           7728.2
+        ],
+        [
+          "2026-08-12",
+          7748.5
         ]
       ],
       "nasdaq": [
-        [
-          "2023-01-09",
-          10635.65
-        ],
         [
           "2023-01-10",
           10742.63
@@ -60405,6 +60413,10 @@
         [
           "2026-08-11",
           26445.45
+        ],
+        [
+          "2026-08-12",
+          26588.49
         ]
       ],
       "wti": [
@@ -64013,10 +64025,6 @@
     "cboe": {
       "vix9d": [
         [
-          "2023-01-10",
-          21.5
-        ],
-        [
           "2023-01-11",
           22.41
         ],
@@ -67611,13 +67619,13 @@
         [
           "2026-08-12",
           11.09
+        ],
+        [
+          "2026-08-13",
+          11.37
         ]
       ],
       "vix3m": [
-        [
-          "2023-01-10",
-          22.74
-        ],
         [
           "2023-01-11",
           22.74
@@ -71213,13 +71221,13 @@
         [
           "2026-08-12",
           18.53
+        ],
+        [
+          "2026-08-13",
+          18.61
         ]
       ],
       "vvix": [
-        [
-          "2023-01-10",
-          76.02
-        ],
         [
           "2023-01-11",
           78.94
@@ -74815,6 +74823,10 @@
         [
           "2026-08-12",
           88.5
+        ],
+        [
+          "2026-08-13",
+          89.42
         ]
       ]
     },
@@ -74827,26 +74839,26 @@
     }
   },
   "archive": {
-    "prediction_count": 4,
+    "prediction_count": 5,
     "validation_count": 0,
     "recent_predictions": [
       {
         "schema_version": "1.0",
-        "prediction_id": "mpe-v1.0.0:2026-08-12",
+        "prediction_id": "mpe-v1.0.0:2026-08-13",
         "model_version": "mpe-v1.0.0",
-        "generated_at": "2026-08-13T00:01:13+00:00",
-        "asof": "2026-08-12",
+        "generated_at": "2026-08-14T00:02:00+00:00",
+        "asof": "2026-08-13",
         "anchor": {
           "symbol": "SP500",
-          "date": "2026-08-11",
-          "close": 7728.2
+          "date": "2026-08-12",
+          "close": 7748.5
         },
         "regime": {
           "name": "Risk-on / Fragile",
           "code": "risk_on_fragile",
-          "stress_score": 44.0,
-          "confidence": 96.7,
-          "summary": "Composite stress is 44.0/100. Financial conditions are neutral, liquidity is draining, and cross-asset confirmation is confirming risk."
+          "stress_score": 46.6,
+          "confidence": 98.1,
+          "summary": "Composite stress is 46.6/100. Financial conditions are neutral, liquidity is draining, and cross-asset confirmation is confirming risk."
         },
         "paths": [
           {
@@ -74854,9 +74866,9 @@
             "trading_days": 5,
             "threshold_pct": 1.0,
             "probabilities": {
-              "up": 26.7,
-              "range": 44.9,
-              "down": 28.4
+              "up": 19.5,
+              "range": 40.6,
+              "down": 39.9
             },
             "dominant_path": "range",
             "note": "震盪消化、等待新催化"
@@ -74866,35 +74878,101 @@
             "trading_days": 20,
             "threshold_pct": 3.0,
             "probabilities": {
-              "up": 26.0,
-              "range": 44.6,
-              "down": 29.4
+              "up": 19.1,
+              "range": 40.4,
+              "down": 40.5
             },
-            "dominant_path": "range",
-            "note": "震盪消化、等待新催化"
+            "dominant_path": "down",
+            "note": "去風險／流動性壓力延續"
           },
           {
             "horizon": "1–3M",
             "trading_days": 63,
             "threshold_pct": 6.0,
             "probabilities": {
-              "up": 25.2,
-              "range": 44.2,
-              "down": 30.6
+              "up": 18.7,
+              "range": 40.0,
+              "down": 41.3
             },
-            "dominant_path": "range",
-            "note": "震盪消化、等待新催化"
+            "dominant_path": "down",
+            "note": "去風險／流動性壓力延續"
           }
         ],
         "features": {
-          "financial": 53.1,
-          "liquidity": 25.2,
-          "volatility": 27.4,
-          "positioning": 60.9,
-          "cross_asset": 62.1,
-          "event_shock": 15.7
+          "financial": 53.4,
+          "liquidity": 8.3,
+          "volatility": 26.5,
+          "positioning": 63.8,
+          "cross_asset": 61.8,
+          "event_shock": 17.3
         },
         "disclosure": "Heuristic V1 probabilities; not statistically calibrated and not investment advice."
+      },
+      {
+        "anchor": {
+          "close": 7728.2,
+          "date": "2026-08-11",
+          "symbol": "SP500"
+        },
+        "asof": "2026-08-12",
+        "disclosure": "Heuristic V1 probabilities; not statistically calibrated and not investment advice.",
+        "features": {
+          "cross_asset": 62.1,
+          "event_shock": 15.7,
+          "financial": 53.1,
+          "liquidity": 25.2,
+          "positioning": 60.9,
+          "volatility": 27.4
+        },
+        "generated_at": "2026-08-13T00:01:13+00:00",
+        "model_version": "mpe-v1.0.0",
+        "paths": [
+          {
+            "dominant_path": "range",
+            "horizon": "1–5D",
+            "note": "震盪消化、等待新催化",
+            "probabilities": {
+              "down": 28.4,
+              "range": 44.9,
+              "up": 26.7
+            },
+            "threshold_pct": 1.0,
+            "trading_days": 5
+          },
+          {
+            "dominant_path": "range",
+            "horizon": "1–4W",
+            "note": "震盪消化、等待新催化",
+            "probabilities": {
+              "down": 29.4,
+              "range": 44.6,
+              "up": 26.0
+            },
+            "threshold_pct": 3.0,
+            "trading_days": 20
+          },
+          {
+            "dominant_path": "range",
+            "horizon": "1–3M",
+            "note": "震盪消化、等待新催化",
+            "probabilities": {
+              "down": 30.6,
+              "range": 44.2,
+              "up": 25.2
+            },
+            "threshold_pct": 6.0,
+            "trading_days": 63
+          }
+        ],
+        "prediction_id": "mpe-v1.0.0:2026-08-12",
+        "regime": {
+          "code": "risk_on_fragile",
+          "confidence": 96.7,
+          "name": "Risk-on / Fragile",
+          "stress_score": 44.0,
+          "summary": "Composite stress is 44.0/100. Financial conditions are neutral, liquidity is draining, and cross-asset confirmation is confirming risk."
+        },
+        "schema_version": "1.0"
       },
       {
         "anchor": {
