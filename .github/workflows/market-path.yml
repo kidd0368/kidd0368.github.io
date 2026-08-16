@@ -24,7 +24,11 @@ jobs:
           python-version: "3.12"
 
       - name: Build Market Path Engine
-        run: python market_path_engine/engine.py
+        run: |
+          python market_path_engine/sync_catalog.py
+          python market_path_engine/engine.py
+          python market_path_engine/validate.py
+          node --check market_path_engine/analysis_bundle.js
 
       - name: Commit data, archive and dashboard if changed
         run: |
