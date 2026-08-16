@@ -39,7 +39,7 @@ def parse_bulk(path):
     with open(path, encoding="utf-8") as f:
         raw = json.load(f)
     out = {}
-    for key in ["credit", "funds", "kospi", "kosdaq"]:
+    for key in ["credit", "funds", "kospi", "kosdaq", "lending"]:   # lending 選配（2026-08-16 起）
         rows = [r for r in (raw.get(key) or []) if r and r[0]]
         rows.sort(key=lambda r: r[0])
         # 去重 (保留最後一筆)
