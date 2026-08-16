@@ -36,6 +36,28 @@ def pull(sess, obj, d1, d2, tries=4):
                 raise
             time.sleep(3 * (i + 1))
 
+
+def pull_lending(sess, d1, d2, tries=4):
+    """대차거래추이（借券餘額時序，STATSCU0100000140BO，2026-08-16 實測）。
+    此 BO 回應尾端附「합계／평균」列，合計欄溢位時被伺服器印成 119794######，
+    會讓整包 JSON 解析失敗——先把數字內的 # 剔掉再解析，並只留 8 位日期列。"""
+    import re
+    body = {"dmSearch": {"tmpV40": "1000000", "tmpV41": "1", "tmpV1": "D",
+                         "tmpV45": d1, "tmpV46": d2, "OBJ_NM": "STATSCU0100000140BO"}}
+    for i in range(tries):
+        try:
+            r = sess.post(URL, json=body, headers=HEADERS, timeout=60)
+            r.raise_for_status()
+            txt = re.sub(r"(\d)#+", r"\1", r.text)
+            rows = [x for x in (json.loads(txt).get("ds1") or [])
+                    if re.fullmatch(r"\d{8}", str(x.get("TMPV1", "")))]
+            rows.sort(key=lambda x: x["TMPV1"])
+            return rows
+        except Exception:
+            if i == tries - 1:
+                raise
+            time.sleep(3 * (i + 1))
+
 def pack(rows, nc):
     out = []
     for r in rows:
@@ -81,6 +103,18 @@ def main():
         bulk[key] = [ded[d] for d in sorted(ded)]
         print(f"{key}: {len(bulk[key])} rows, {bulk[key][0][0]} → {bulk[key][-1][0]}")
         time.sleep(0.4)
+    # 借券餘額（대차거래추이）：對做方的原料庫存。2008-10 起日度、全歷史單次可得；
+    # 選配——失敗只留空鍵，不中斷主管線（前端該分項顯示 pending，不估算）。
+    bulk["meta"]["cols"]["lending"] = "date,exec_qty,repay_qty,bal_qty,bal_val"
+    try:
+        lrows = pull_lending(sess, "20080101", kst_today)
+        bulk["lending"] = [[r["TMPV1"], r.get("TMPV3"), r.get("TMPV4"),
+                            r.get("TMPV5"), r.get("TMPV6")] for r in lrows]
+        print(f"lending: {len(bulk['lending'])} rows, "
+              f"{bulk['lending'][0][0]} → {bulk['lending'][-1][0]}")
+    except Exception as e:
+        bulk["lending"] = []
+        print("lending skipped:", e, file=sys.stderr)
     # 基本健全性檢查
     assert len(bulk["credit"]) > 6000 and len(bulk["kospi"]) > 6000, "歷史長度異常"
     import os

@@ -625,13 +625,14 @@ const CTX_HOW=
 +'<br><br><b>外資持股比率</b>＝外資手上的股票市值，佔全市場市值的百分比。散戶被斷頭、基金單位被註銷時，股票不會消失，只是換人拿。這個比率在升，代表籌碼正從被清算的人手上換到外資手上——換手完成的出清，底部比較紮實；反過來，份額在減、外資比率卻不動甚至下降，代表沒人接，下跌可能只是中場休息。三星電子／SK海力士的個股版本是同一道理，而且這兩檔正是槓桿ETF的標的。'
 +'<br><br><b>KOSDAQ</b> 是韓國散戶投機最集中的板塊，也是本輪槓桿的重災區。它跌回哪一天的水位，就是這場出清把市場打回多遠的座標。'
 +'<br><br><b>券商股價</b>靠散戶交易佣金和融資利息吃飯，等於槓桿生意的溫度計。券商股不再創新低，通常領先或同步於出清尾聲。'
++'<br><br><b>借券餘額</b>是第三張臉——<b>對做方</b>。放空要先借到股票，借券餘額就是空方的原料庫存（韓國放空九成以上是外資和機構，散戶不到 2%），與交易所公布的放空餘額方向一致但更領先、且免登入可得。<b>看股數不看金額</b>：金額會隨股價漲跌重估，反彈時金額增加不代表有人新放空，股數增加才是。判讀要跟上方合看：散戶被清、外資在接、空方在回補＝出清接近完成；散戶在補槓桿（份額回升）、空方同時在加借（股數創高）＝<b>兩邊都在加槓桿</b>，波動沒有解決，只是換了對手。借券餘額本身也是懸在頭上的未來回補量：行情續漲時是軋空燃料，行情失敗時是順勢追殺。'
 +'<br><br>此卡只作交叉驗證，<b>不計入綜合指數</b>——這些現象和上方指標是同一件事的兩面，重複計分會高估壓力變化。';
 
 function ctxCard(){
   const d=el('div','card'); d.id='card-ctx';
   const hd=el('div','hd'), hl=el('div');
-  hl.append(el('h3',null,'出清的另一面：誰在接、市場跌到哪'),
-            el('div','desc','上方各卡量「賣方」；這裡看「接手方」——外資接了沒、大盤座標在哪、券商股價多慘。交叉驗證用，不計入綜合指數。'));
+  hl.append(el('h3',null,'出清的另一面：誰在接、誰在對做、市場跌到哪'),
+            el('div','desc','上方各卡量「賣方」；這裡看「接手方」與「對做方」——外資接了沒、空方借券在加還是在還、大盤座標在哪、券商股價多慘。交叉驗證用，不計入綜合指數。'));
   const dt=el('details','how'); dt.innerHTML='<summary>怎麼看這張圖</summary><div class="hb">'+CTX_HOW+'</div>'; hl.append(dt);
   hd.append(hl, el('div','spacer')); d.append(hd);
   const tl=el('div','tiles'); tl.id='ctxTiles'; tl.style.margin='14px 0 16px'; d.append(tl);
@@ -645,8 +646,8 @@ function renderCtx(){
   const body=$('#ctxBody'), lg=$('#ctxLegend'), fn=$('#ctxFn');
   tl.innerHTML=''; body.innerHTML=''; lg.innerHTML=''; fn.innerHTML='';
   const C=IND.ctx||{};
-  const F=C.fpct, K=C.kosdaq, SF=C.stock_frgn, BR=C.brokers;
-  if(!F&&!K&&!SF&&!BR){
+  const F=C.fpct, K=C.kosdaq, SF=C.stock_frgn, BR=C.brokers, LD=C.lending;
+  if(!F&&!K&&!SF&&!BR&&!LD){
     body.append(el('div','pending','⏳ 交叉驗證數據尚未產出（管線下次執行後自動出現）。此處不以估算值填補。'));
     return;
   }
@@ -664,6 +665,10 @@ function renderCtx(){
   if(BR&&BR.stat){ const a=BR.stat['006800']||{}, b=BR.stat['039490']||{};
     T.push({l:'未來資產證券 距52週高', v:a.vs_hi52==null?'–':P(a.vs_hi52),
        d:'現價 '+fmtN(a.price,0)+'₩ · Kiwoom證券 '+(b.vs_hi52==null?'–':P(b.vs_hi52))});}
+  if(LD) T.push({l:'借券餘額（對做方）', v:fmtN(LD.qty,1)+' 億股',
+     d:'5日 '+P(LD.qty_d5)+' · 距52週高 '+P(LD.vs_hi52)+'（'+fmtD(LD.qty_hi52_date).slice(2)+'）'
+       +(LD.net5!=null?' · 5日淨借入 '+(LD.net5>0?'+':'')+fmtN(LD.net5,2)+' 億股':'')
+       +(LD.mcap_pct!=null?' · 金額佔市值 '+fmtN(LD.mcap_pct,2)+'%':'')});
   T.forEach(x=>{ const c=el('div','tile');
     c.append(el('div','lbl',x.l), el('div','val',x.v), el('div','delta',x.d)); tl.append(c); });
 
@@ -702,9 +707,24 @@ function renderCtx(){
   } else {
     body.append(el('div','pending','券商股價：本次未取得。不以估算值填補。'));
   }
+  /* 圖4：借券餘額（KOFIA 全歷史 2008-10 起，吃全域區間篩選）——對做方 */
+  if(S.lend_qty&&S.lend_qty.some(v=>v!=null)){
+    body.append(el('div','desc','借券餘額（億股，上圖）與日淨借入＝借入−歸還（億股，下圖）——空方原料庫存，看股數不看金額'));
+    const h4=el('div'); body.append(h4);
+    chart(h4,{series:[{name:'借券餘額（億股）',key:'lend_qty',color:css('--s4'),type:'area'}],
+              yFmt:v=>fmtN(v,0), h:150});
+    const h5=el('div'); body.append(h5);
+    chart(h5,{series:[{name:'日淨借入（億股）',key:'lend_net',color:css('--s4'),type:'bar'}],
+              yFmt:v=>fmtN(v,1), zero:true, h:90});
+    LG.push(['--s4','借券餘額／日淨借入']);
+  } else {
+    body.append(el('div','pending','借券餘額：本次未取得（KOFIA 대차거래추이 未回應），不以估算值填補。'));
+  }
   lg.innerHTML=LG.map(x=>'<span class="key"><span class="ln" style="background:'+css(x[0])+'"></span>'+x[1]+'</span>').join('');
-  fn.innerHTML='數據源：市場外資比重＝KOFIA 兩市統計內含欄位（1998至今，隨主管線每日全量重抓）；個股外資持股率與券商股價＝Naver 日線（近一年，每日全量重抓、無自建狀態，任一天漏跑自動補齊）。'
-    +(C.asof_naver?'個股／券商行情截至 '+fmtD(C.asof_naver)+'。':'')+'此卡不參與綜合指數計算。';
+  fn.innerHTML='數據源：市場外資比重＝KOFIA 兩市統計內含欄位（1998至今）、借券餘額＝KOFIA 대차거래추이（2008-10至今），皆隨主管線每日全量重抓；個股外資持股率與券商股價＝Naver 日線（近一年，每日全量重抓、無自建狀態，任一天漏跑自動補齊）。'
+    +(C.asof_naver?'個股／券商行情截至 '+fmtD(C.asof_naver)+'。':'')
+    +(LD?'借券餘額截至 '+fmtD(LD.asof)+'（KOFIA 當日或 T+1 公布）。':'')
+    +'借券餘額≠放空餘額：借券另含避險、套利、ETF 用途，通常為交易所放空餘額的 8-12 倍，方向一致、可作領先代理；KRX 放空餘額本身自 2026 年起改為登入制，本站不持有帳密故不直接抓取。此卡不參與綜合指數計算。';
 }
 
 /* composite parts card */
@@ -734,7 +754,7 @@ function method(){
   '<h4>綜合壓力指數（0-100）</h4>'+((IND.etf&&IND.etf.enabled&&IND.etf.remaining!=null)?'五大維度十分項':'四大維度九分項')+'：槓桿水位（融資餘額5年百分位 '+w.lvl_margin_pctl+'、融資/市值 '+w.lvl_mcap_pctl+'、融資/預託金 '+w.lvl_dep_pctl+'）＋出清進度（未出清比例 '+w.unwind_remaining+'、融資5日動能 '+w.momentum+'）＋被動賣壓（斷頭金額 '+w.forced_amt_pctl+'、斷頭比率 '+w.forced_ratio_pctl+'）＋市場應激（波動率 '+w.vol_pctl+'、成交熱度 '+w.turnover_pctl+'）。'+
   ((IND.etf&&IND.etf.enabled&&IND.etf.remaining!=null)?'槓桿ETF分項已啟用，額外加入「ETF未出清程度 '+(IND.config.etf_weight||15)+'」（＝份額對應資產÷其高點），上列九分項權重同步乘以 0.85 重新歸一，總分上限維持 100。':'槓桿ETF分項未計入，上列九分項權重維持原值。')+
   '<h4>出清進度 U</h4><code>U =（峰值 − 目前）/（峰值 − 基期）</code>，基期預設 2026/04/30——本輪 AI 行情啟動前的槓桿水位（可於 CONFIG 調整）；U=100% 表示本輪新增槓桿全數退出。'+
-  '<h4>數據源與時滯</h4>信用與市場數據：KOFIA 金融投資協會綜合統計（신용거래융자·투자자예탁금·미수금·반대매매·兩市指數/成交/市值，日度，1998至今）。槓桿ETF：Naver 金融公開行情（逐檔現價/淨值/市值/成交，份額由市值÷現價推算）＋KOFIA 基金統計（全體 ETF 規模，作為佔比分母）。波動率以20日已實現波動率年化替代 VKOSPI。交叉驗證卡：市場外資比重取自 KOFIA 兩市統計內含欄位（1998至今）；個股外資持股率與券商股價取自 Naver 日線（近一年、每日全量重抓，無自建狀態），不計入綜合指數。<b>回撤口徑</b>：距高點一律以「收盤對收盤」計（KOFIA 僅發布每日收盤指數）；盤中高點通常更高（例如 2026/6/19 盤中一度 9,385 vs 最高收盤 9,114）。<b>ETF 時序</b>：逐檔價格歷史自 2026/05/27 上市日起完整；規模與份額無公開歷史檔，自本管線啟用日起逐日累積，缺口不以估算值填補。<b>公布時滯</b>：指數/成交額為當日收盤後入庫；信用融資/預託金/斷頭數據為 KOFIA T+1 公布（實測常於次日下午更新），故信用類截止日通常比行情晚 1-2 個交易日，圖上融資線尾端較指數線短屬正常。'+
+  '<h4>數據源與時滯</h4>信用與市場數據：KOFIA 金融投資協會綜合統計（신용거래융자·투자자예탁금·미수금·반대매매·兩市指數/成交/市值，日度，1998至今）。槓桿ETF：Naver 金融公開行情（逐檔現價/淨值/市值/成交，份額由市值÷現價推算）＋KOFIA 基金統計（全體 ETF 規模，作為佔比分母）。波動率以20日已實現波動率年化替代 VKOSPI。交叉驗證卡：市場外資比重取自 KOFIA 兩市統計內含欄位（1998至今）；借券餘額取自 KOFIA 대차거래추이（2008-10至今，作放空餘額的免登入領先代理）；個股外資持股率與券商股價取自 Naver 日線（近一年、每日全量重抓，無自建狀態），不計入綜合指數。<b>回撤口徑</b>：距高點一律以「收盤對收盤」計（KOFIA 僅發布每日收盤指數）；盤中高點通常更高（例如 2026/6/19 盤中一度 9,385 vs 最高收盤 9,114）。<b>ETF 時序</b>：逐檔價格歷史自 2026/05/27 上市日起完整；規模與份額無公開歷史檔，自本管線啟用日起逐日累積，缺口不以估算值填補。<b>公布時滯</b>：指數/成交額為當日收盤後入庫；信用融資/預託金/斷頭數據為 KOFIA T+1 公布（實測常於次日下午更新），故信用類截止日通常比行情晚 1-2 個交易日，圖上融資線尾端較指數線短屬正常。'+
   '<h4>訊號判定</h4>①技術性賣壓衰竭＝斷頭金額5日均百分位&lt;50 且 融資5日跌幅&lt;1%，且槓桿ETF規模5日萎縮未達 2%（ETF規模時序累積滿6日後生效）；②③為人工旗標，依新聞更新。'+
   '<h4>韓文術語對照</h4>신용거래융자＝信用融資（散戶向券商借錢買股）；투자자예탁금＝預託金（散戶帳上待投現金）；미수금＝未繳款（散戶欠券商的交割/保證金款項）；반대매매＝斷頭（券商強制平倉賣出）。';
   $('#foot').innerHTML='指標定義與權重可在 compute_indicators.py 的 CONFIG 調整；KOFIA 信用口徑僅涵蓋場內信用融資（不含股票質押與場外配資），槓桿 ETF 內含槓桿另以獨立分項計量，信用數據為 T+1 公布。';

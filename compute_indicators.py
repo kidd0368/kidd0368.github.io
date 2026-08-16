@@ -84,12 +84,14 @@ def rolling_pctl(series, window):
 def compute(bulk, etf=None, hist=None):
     credit_m, funds_m = to_map(bulk["credit"]), to_map(bulk["funds"])
     kosdaq_m = to_map(bulk["kosdaq"])
+    lend_m = to_map(bulk.get("lending") or [])   # 借券餘額（선配，2008-10 起）
 
     dates, S = [], {k: [] for k in [
         "margin_total","margin_kospi","margin_kosdaq","pledge","deposit",
         "margin_dep","margin_mcap","margin_val","misu","bandae_amt","bandae_ratio",
         "kospi_idx","kosdaq_idx","turn_val","turn_heat","kospi_ret",
-        "kospi_fpct","kosdaq_fpct"]}
+        "kospi_fpct","kosdaq_fpct",
+        "lend_qty","lend_val","lend_mcap","lend_net"]}
 
     # 主軸 = 行情日期 (KOSPI ∩ KOSDAQ); 信用/資金缺口 = null
     for k in bulk["kospi"]:
@@ -127,6 +129,15 @@ def compute(bulk, etf=None, hist=None):
         # KOFIA 兩市統計自帶「外國人時價總額比重」欄（f_pct）——市場整體外資持股比率
         S["kospi_fpct"].append(num(k[6]) if len(k) > 6 else None)
         S["kosdaq_fpct"].append(num(q[6]) if len(q) > 6 else None)
+        # 借券餘額：股數（億股，不受價格重估影響）、金額（兆₩）、佔兩市市值（%）、日淨借入（億股）
+        L = lend_m.get(d)
+        lq = num(L[3]) if L else None
+        lv = num(L[4]) if L else None
+        le, lr = (num(L[1]), num(L[2])) if L else (None, None)
+        S["lend_qty"].append(None if lq is None else round(lq / 1e8, 3))
+        S["lend_val"].append(None if lv is None else round(lv / 1e6, 2))
+        S["lend_mcap"].append(None if (lv is None or mcap == 0) else round(100 * lv / mcap, 3))
+        S["lend_net"].append(None if (le is None or lr is None) else round((le - lr) / 1e8, 3))
         S["turn_val"].append(val / 1e6)
         S["turn_heat"].append(None if mcap == 0 else round(100 * val / mcap, 3))
         n = len(S["kospi_idx"])
@@ -321,12 +332,31 @@ def compute(bulk, etf=None, hist=None):
                       "vs_hi52": round(q_now / q_hi - 1, 4),
                       "seen_date": q_seen}
     etf_ctx = etf.pop("ctx", None) if isinstance(etf, dict) else None
+    # 對做方：借券餘額（放空的原料庫存；KRX 放空餘額本身已改為登入制，借券為免登入且方向一致的代理）
+    ctx_lend = None
+    lq_pairs = [(i, v) for i, v in enumerate(S["lend_qty"]) if v is not None]
+    if len(lq_pairs) >= 6:
+        li, lq_now = lq_pairs[-1]
+        lq_prev5 = lq_pairs[-6][1]
+        y1 = [(i, v) for i, v in lq_pairs if i >= n - W52]
+        hi_i, hi_v = max(y1, key=lambda t: t[1])
+        lo_i, lo_v = min(y1, key=lambda t: t[1])
+        net5 = [S["lend_net"][i] for i, _ in lq_pairs[-5:] if S["lend_net"][i] is not None]
+        lm, lm_d, _ = last_valid(S["lend_mcap"], dates)
+        ctx_lend = {"asof": dates[li], "qty": lq_now,
+                    "qty_d5": round(lq_now / lq_prev5 - 1, 4) if lq_prev5 else None,
+                    "qty_hi52": hi_v, "qty_hi52_date": dates[hi_i],
+                    "qty_lo52": lo_v, "qty_lo52_date": dates[lo_i],
+                    "vs_hi52": round(lq_now / hi_v - 1, 4) if hi_v else None,
+                    "net5": round(sum(net5), 3) if net5 else None,
+                    "val": S["lend_val"][li], "mcap_pct": lm, "mcap_pct_asof": lm_d}
     ctx_out = {
         "fpct": None if fp_ko is None else {
             "kospi": fp_ko, "kosdaq": fp_kq, "asof": fp_ko_d,
             "kospi_d20pp": d20pp(S["kospi_fpct"]),
             "kosdaq_d20pp": d20pp(S["kosdaq_fpct"])},
         "kosdaq": ctx_kosdaq,
+        "lending": ctx_lend,
         "stock_frgn": (etf_ctx or {}).get("stock_frgn"),
         "brokers": (etf_ctx or {}).get("brokers"),
         "asof_naver": (etf_ctx or {}).get("asof"),
@@ -451,6 +481,8 @@ def compute(bulk, etf=None, hist=None):
             "bandae_amt_ma": pick(bandae_amt_ma), "bandae_ratio_ma": pick(bandae_ratio_ma),
             "kospi_idx": pick(S["kospi_idx"]), "kosdaq_idx": pick(S["kosdaq_idx"]),
             "kospi_fpct": pick(S["kospi_fpct"]), "kosdaq_fpct": pick(S["kosdaq_fpct"]),
+            "lend_qty": pick(S["lend_qty"]), "lend_mcap": pick(S["lend_mcap"]),
+            "lend_net": pick(S["lend_net"]),
             "kospi_dd": pick(dd), "rv20": pick(rv20),
             "turn_val": pick(S["turn_val"]), "turn_heat": pick(S["turn_heat"]),
             "pctl_margin_total": pick(P["margin_total"]),
