@@ -1,16 +1,16 @@
 {
   "schema_version": "1.0",
   "model_version": "mpe-v1.0.0",
-  "generated_at": "2026-08-14T23:41:01+00:00",
+  "generated_at": "2026-08-16T09:48:16+00:00",
   "asof": "2026-08-14",
   "coverage_pct": 100.0,
   "status": "live",
   "regime": {
     "name": "Risk-on / Fragile",
     "code": "risk_on_fragile",
-    "stress_score": 45.0,
-    "confidence": 97.2,
-    "summary": "Composite stress is 45.0/100. Financial conditions are neutral, liquidity is draining, and cross-asset confirmation is confirming risk."
+    "stress_score": 44.2,
+    "confidence": 96.8,
+    "summary": "Composite stress is 44.2/100. Financial conditions are neutral, liquidity is draining, and cross-asset confirmation is confirming risk."
   },
   "paths": [
     {
@@ -18,9 +18,9 @@
       "trading_days": 5,
       "threshold_pct": 1.0,
       "probabilities": {
-        "up": 21.0,
-        "range": 41.8,
-        "down": 37.2
+        "up": 21.8,
+        "range": 42.3,
+        "down": 35.9
       },
       "dominant_path": "range",
       "note": "震盪消化、等待新催化"
@@ -30,9 +30,9 @@
       "trading_days": 20,
       "threshold_pct": 3.0,
       "probabilities": {
-        "up": 20.5,
-        "range": 41.4,
-        "down": 38.1
+        "up": 21.2,
+        "range": 41.9,
+        "down": 36.9
       },
       "dominant_path": "range",
       "note": "震盪消化、等待新催化"
@@ -42,9 +42,9 @@
       "trading_days": 63,
       "threshold_pct": 6.0,
       "probabilities": {
-        "up": 19.9,
-        "range": 40.9,
-        "down": 39.2
+        "up": 20.5,
+        "range": 41.3,
+        "down": 38.2
       },
       "dominant_path": "range",
       "note": "震盪消化、等待新催化"
@@ -5303,7 +5303,7 @@
       ]
     },
     "positioning": {
-      "score": 65.4,
+      "score": 66.8,
       "stance": "Supportive",
       "summary": "CFTC is observed weekly data. CTA and vol-control are transparent trend/risk-target proxies, not bank exposure estimates.",
       "metrics": [
@@ -5331,7 +5331,7 @@
         },
         {
           "label": "CTA risk trend score",
-          "value": 63.46,
+          "value": 65.32,
           "unit": "/100",
           "change": null,
           "change_label": "",
@@ -5342,7 +5342,7 @@
         },
         {
           "label": "CTA gross trend proxy",
-          "value": 29.54,
+          "value": 32.39,
           "unit": "%",
           "change": null,
           "change_label": "",
@@ -5353,7 +5353,7 @@
         },
         {
           "label": "Vol-control exposure",
-          "value": 72.09,
+          "value": 74.5,
           "unit": "% NAV",
           "change": null,
           "change_label": "",
@@ -5365,24 +5365,20 @@
       ]
     },
     "cross_asset": {
-      "score": 66.3,
+      "score": 69.0,
       "stance": "Confirming risk",
       "summary": "Equities, credit, the dollar, energy and rates vote on whether the primary risk direction is confirmed or divergent.",
       "metrics": [
         {
           "label": "S&P 500",
-          "value": 7798.99,
+          "value": 7785.76,
           "unit": "index",
-          "change": 3.52,
+          "change": 4.4,
           "change_label": "20 obs %",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-07",
-              6616.85
-            ],
             [
               "2026-04-08",
               6782.81
@@ -5738,23 +5734,23 @@
             [
               "2026-08-13",
               7798.99
+            ],
+            [
+              "2026-08-14",
+              7785.76
             ]
           ]
         },
         {
           "label": "Nasdaq Composite",
-          "value": 26803.03,
+          "value": 26729.16,
           "unit": "index",
-          "change": 3.56,
+          "change": 4.74,
           "change_label": "20 obs %",
           "source": "fred",
           "quality": "live",
           "note": "",
           "history": [
-            [
-              "2026-04-07",
-              22017.85
-            ],
             [
               "2026-04-08",
               22635.0
@@ -6110,6 +6106,10 @@
             [
               "2026-08-13",
               26803.03
+            ],
+            [
+              "2026-08-14",
+              26729.16
             ]
           ]
         },
@@ -7604,13 +7604,13 @@
       ]
     },
     "event_shock": {
-      "score": 21.5,
+      "score": 19.1,
       "stance": "Quiet",
       "summary": "V1 measures realized cross-asset shock intensity. A forward official event calendar is intentionally deferred rather than filled with an unstable feed.",
       "metrics": [
         {
           "label": "S&P 500 1D return z",
-          "value": 0.65,
+          "value": -0.31,
           "unit": "σ",
           "change": null,
           "change_label": "",
@@ -7743,6 +7743,27 @@
     "eps_included": false,
     "probability_type": "heuristic_prior",
     "calibrated": false,
+    "regime_weights": {
+      "financial_conditions": 0.22,
+      "liquidity_drain": 0.18,
+      "volatility": 0.22,
+      "positioning_defense": 0.14,
+      "cross_asset_defense": 0.16,
+      "event_shock": 0.08
+    },
+    "path_probability_inputs": [
+      "regime_stress",
+      "liquidity",
+      "event_shock"
+    ],
+    "external_site_policy": {
+      "catalog": "https://kidd0368.github.io/github/catalog.json",
+      "direct_weight": false,
+      "core_signal": "confirmation_or_contradiction_only",
+      "conditional_module": "activate_only_when_triggered",
+      "research_only": "context_only",
+      "new_site_default": "research_only"
+    },
     "net_liquidity_formula": "Fed assets − TGA − ON RRP",
     "free_data_first": true,
     "ibkr_adapter": "planned; public quote adapter is used in V1"
@@ -53217,10 +53238,6 @@
       ],
       "sp500": [
         [
-          "2023-01-11",
-          3969.61
-        ],
-        [
           "2023-01-12",
           3983.17
         ],
@@ -56815,13 +56832,13 @@
         [
           "2026-08-13",
           7798.99
+        ],
+        [
+          "2026-08-14",
+          7785.76
         ]
       ],
       "nasdaq": [
-        [
-          "2023-01-11",
-          10931.67
-        ],
         [
           "2023-01-12",
           11001.1
@@ -60417,6 +60434,10 @@
         [
           "2026-08-13",
           26803.03
+        ],
+        [
+          "2026-08-14",
+          26729.16
         ]
       ],
       "wti": [
@@ -74840,73 +74861,73 @@
   },
   "archive": {
     "prediction_count": 6,
-    "validation_count": 0,
+    "validation_count": 2,
     "recent_predictions": [
       {
-        "schema_version": "1.0",
-        "prediction_id": "mpe-v1.0.0:2026-08-14",
-        "model_version": "mpe-v1.0.0",
-        "generated_at": "2026-08-14T23:41:01+00:00",
-        "asof": "2026-08-14",
         "anchor": {
-          "symbol": "SP500",
+          "close": 7798.99,
           "date": "2026-08-13",
-          "close": 7798.99
+          "symbol": "SP500"
         },
-        "regime": {
-          "name": "Risk-on / Fragile",
-          "code": "risk_on_fragile",
-          "stress_score": 45.0,
-          "confidence": 97.2,
-          "summary": "Composite stress is 45.0/100. Financial conditions are neutral, liquidity is draining, and cross-asset confirmation is confirming risk."
-        },
-        "paths": [
-          {
-            "horizon": "1–5D",
-            "trading_days": 5,
-            "threshold_pct": 1.0,
-            "probabilities": {
-              "up": 21.0,
-              "range": 41.8,
-              "down": 37.2
-            },
-            "dominant_path": "range",
-            "note": "震盪消化、等待新催化"
-          },
-          {
-            "horizon": "1–4W",
-            "trading_days": 20,
-            "threshold_pct": 3.0,
-            "probabilities": {
-              "up": 20.5,
-              "range": 41.4,
-              "down": 38.1
-            },
-            "dominant_path": "range",
-            "note": "震盪消化、等待新催化"
-          },
-          {
-            "horizon": "1–3M",
-            "trading_days": 63,
-            "threshold_pct": 6.0,
-            "probabilities": {
-              "up": 19.9,
-              "range": 40.9,
-              "down": 39.2
-            },
-            "dominant_path": "range",
-            "note": "震盪消化、等待新催化"
-          }
-        ],
+        "asof": "2026-08-14",
+        "disclosure": "Heuristic V1 probabilities; not statistically calibrated and not investment advice.",
         "features": {
+          "cross_asset": 66.3,
+          "event_shock": 21.5,
           "financial": 49.2,
           "liquidity": 8.4,
-          "volatility": 26.1,
           "positioning": 65.4,
-          "cross_asset": 66.3,
-          "event_shock": 21.5
+          "volatility": 26.1
         },
-        "disclosure": "Heuristic V1 probabilities; not statistically calibrated and not investment advice."
+        "generated_at": "2026-08-14T23:41:01+00:00",
+        "model_version": "mpe-v1.0.0",
+        "paths": [
+          {
+            "dominant_path": "range",
+            "horizon": "1–5D",
+            "note": "震盪消化、等待新催化",
+            "probabilities": {
+              "down": 37.2,
+              "range": 41.8,
+              "up": 21.0
+            },
+            "threshold_pct": 1.0,
+            "trading_days": 5
+          },
+          {
+            "dominant_path": "range",
+            "horizon": "1–4W",
+            "note": "震盪消化、等待新催化",
+            "probabilities": {
+              "down": 38.1,
+              "range": 41.4,
+              "up": 20.5
+            },
+            "threshold_pct": 3.0,
+            "trading_days": 20
+          },
+          {
+            "dominant_path": "range",
+            "horizon": "1–3M",
+            "note": "震盪消化、等待新催化",
+            "probabilities": {
+              "down": 39.2,
+              "range": 40.9,
+              "up": 19.9
+            },
+            "threshold_pct": 6.0,
+            "trading_days": 63
+          }
+        ],
+        "prediction_id": "mpe-v1.0.0:2026-08-14",
+        "regime": {
+          "code": "risk_on_fragile",
+          "confidence": 97.2,
+          "name": "Risk-on / Fragile",
+          "stress_score": 45.0,
+          "summary": "Composite stress is 45.0/100. Financial conditions are neutral, liquidity is draining, and cross-asset confirmation is confirming risk."
+        },
+        "schema_version": "1.0"
       },
       {
         "anchor": {
@@ -75239,7 +75260,42 @@
         "schema_version": "1.0"
       }
     ],
-    "recent_validations": [],
+    "recent_validations": [
+      {
+        "anchor_close": 7757.64,
+        "brier_score": 0.15127,
+        "horizon": "1–5D",
+        "log_loss": 0.79851,
+        "model_version": "mpe-v1.0.0",
+        "predicted_class": "range",
+        "prediction_id": "mpe-v1.0.0:2026-08-10",
+        "realized_class": "range",
+        "return_pct": 0.362,
+        "schema_version": "1.0",
+        "target_close": 7785.76,
+        "target_date": "2026-08-14",
+        "threshold_pct": 1.0,
+        "validated_at": "2026-08-16T09:43:04+00:00",
+        "validation_id": "mpe-v1.0.0:2026-08-10:5D"
+      },
+      {
+        "anchor_close": 7757.64,
+        "brier_score": 0.15127,
+        "horizon": "1–5D",
+        "log_loss": 0.79851,
+        "model_version": "mpe-v1.0.0",
+        "predicted_class": "range",
+        "prediction_id": "mpe-v1.0.0:2026-08-07",
+        "realized_class": "range",
+        "return_pct": 0.362,
+        "schema_version": "1.0",
+        "target_close": 7785.76,
+        "target_date": "2026-08-14",
+        "threshold_pct": 1.0,
+        "validated_at": "2026-08-16T09:43:04+00:00",
+        "validation_id": "mpe-v1.0.0:2026-08-07:5D"
+      }
+    ],
     "schema_paths": {
       "prediction": "../market_path_engine/schema/prediction.schema.json",
       "validation": "../market_path_engine/schema/validation.schema.json"

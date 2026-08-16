@@ -1,25 +1,91 @@
 /* Market Path cross-site ChatGPT bundle builder. Runs entirely in the browser. */
-const ANALYSIS_SOURCES=[
-  {id:'korea_deleveraging',title:'韓股去槓桿壓力儀表板',path:'/',vars:['IND']},
-  {id:'taiwan_volatility',title:'台股波動率監控',path:'/taiwan-vol/',vars:['D','QMETA','CAP','PRE','ML']},
-  {id:'margin_pressure',title:'個股融資賣壓風險雷達',path:'/margin-pressure/',vars:['DATA']},
-  {id:'chip_uptrend',title:'籌碼上漲機會追蹤',path:'/chip-uptrend/',vars:['DATA','IND','STATE','REPORT','MODEL','RESULTS']},
-  {id:'rebound_stats',title:'暴跌後長紅的歷史機率',path:'/rebound-stats/',vars:['DATA','STATS','RESULTS']},
-  {id:'crash_rebound',title:'台股崩跌反彈候選研究頁',path:'/crash-rebound-screen/',vars:['DATA','STATE','REPORT','MODEL','RESULTS']},
-  {id:'ai_capex',title:'AI 算力基建對帳戰情板',path:'/ai-capex-tracker/',vars:['DATA','STATE','REPORT','MODEL','EVENTS']},
-  {id:'iran_war',title:'中東戰事 × 市場傳導儀表',path:'/iran-war/',vars:['DATA','STATE','REPORT','MODEL','EVENTS']},
-  {id:'tw_event_pulse',title:'事件 × 台股主流人氣股反應監測',path:'/tw-event-pulse/',vars:['DATA','STATE','REPORT','MODEL','EVENTS']},
-  {id:'mainstream_index',title:'台股人氣主流股指數',path:'/mainstream-index/',vars:['DATA','STATE','INDEX_DATA','SERIES','CONSTITUENTS']},
-  {id:'fed_watch',title:'FED 升降息機率儀表板',path:'/fed-watch/',vars:['DATA','STATE','MEETINGS','PROBABILITIES','HISTORY','FACTORS','COMMENTARY']}
-];
-const ANALYSIS_SOURCE_COUNT=ANALYSIS_SOURCES.length+1;
-
+const ANALYSIS_CATALOG_URL=new URL('/github/catalog.json',location.origin).href;
+const ANALYSIS_CATALOG_SNAPSHOT_URL=new URL('/market_path_engine/site_catalog_snapshot.json',location.origin).href;
+const ANALYSIS_CATALOG_FALLBACK_URL='https://raw.githubusercontent.com/kidd0368/github/main/sites.json';
+const ANALYSIS_ROLE_META={
+  core_signal:{label:'核心市場路徑訊號',short:'核心',usage:'交叉確認與矛盾檢查；跨站來源不自動改寫 heuristic 權重或機率。'},
+  conditional_module:{label:'條件式事件／主題模組',short:'條件式',usage:'只有啟用條件成立時才進入敘事，不直接計權重。'},
+  research_only:{label:'僅供研究、不直接計權重',short:'研究',usage:'保留背景與個案證據，不得由個股工具或研究頁直接反推大盤。'}
+};
+let ANALYSIS_SOURCES=[],analysisCatalog=null,analysisCatalogPromise=null;
 let latestBundleJSON='',latestPrompt='',latestBundleName='',bundleBuilding=false;
 const analysisEls={
   modal:$('#analysisModal'),open:$('#analysisOpen'),close:$('#analysisClose'),password:$('#bundlePassword'),build:$('#buildBundle'),
   summary:$('#collectionSummary'),list:$('#collectionList'),prompt:$('#analysisPrompt'),size:$('#bundleSize'),message:$('#analysisMessage'),
-  download:$('#downloadBundle'),copyPrompt:$('#copyPrompt'),copyAll:$('#copyAll'),openChatGPT:$('#openChatGPT')
+  download:$('#downloadBundle'),copyPrompt:$('#copyPrompt'),copyAll:$('#copyAll'),openChatGPT:$('#openChatGPT'),title:$('#analysisTitle'),intro:$('#analysisIntro'),inventory:$('#analysisInventory')
 };
+
+function analysisSlug(value){return String(value||'site').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||'site'}
+function fallbackSiteURL(key,meta){
+  if(meta.repo_only)return null;
+  if(key==='kidd0368.github.io')return `${location.origin}/`;
+  if(key.startsWith('kidd0368.github.io/'))return `${location.origin}/${key.split('/').slice(1).join('/')}/`;
+  return `${location.origin}/${key}/`;
+}
+function catalogFromSitesDocument(doc){
+  const sites=Object.entries(doc?.sites||{}).map(([key,meta])=>{
+    const config=meta.market_path||{},role=ANALYSIS_ROLE_META[config.role]?config.role:'research_only',url=fallbackSiteURL(key,meta),isCurrent=key==='kidd0368.github.io/market-path';
+    return {
+      inventory_key:key,id:config.id||analysisSlug(key),title:meta.name||key,description:meta.desc||'',tags:meta.tags||[],order:meta.order||999,url,status:meta.repo_only?'unpublished':'assumed_online',locked:Boolean(meta.locked),
+      market_path:{role,role_label:ANALYSIS_ROLE_META[role].label,usage:config.usage||(role==='core_signal'?'confirmation_only':role==='conditional_module'?'conditional_context':'research_only'),bundle:Boolean(config.bundle??(url&&!isCurrent))&&Boolean(url)&&!isCurrent,model_input:config.usage==='base_model',vars:config.vars||[],note:config.note||'新網站自動以研究用途納入；人工分類前不直接計入任何權重。',configured:Boolean(meta.market_path)}
+    };
+  }).sort((a,b)=>a.order-b.order);
+  const roleCounts=Object.fromEntries(Object.keys(ANALYSIS_ROLE_META).map(role=>[role,sites.filter(site=>site.market_path.role===role).length]));
+  return {schema_version:'pages-hub-sites-fallback-v1',generated_at:null,source:ANALYSIS_CATALOG_FALLBACK_URL,policy:{default_role:'research_only',new_published_sites_auto_bundle:true,external_sites_direct_weight:false},counts:{inventory:sites.length,published:sites.filter(site=>site.url).length,bundle:sites.filter(site=>site.market_path.bundle).length,roles:roleCounts},sites,fallback:true};
+}
+function normalizeAnalysisCatalog(catalog){
+  const sites=(catalog?.sites||[]).map(site=>{
+    const config=site.market_path||{},role=ANALYSIS_ROLE_META[config.role]?config.role:'research_only';
+    return {...site,market_path:{...config,role,role_label:config.role_label||ANALYSIS_ROLE_META[role].label,usage:config.usage||'research_only',vars:Array.isArray(config.vars)?config.vars:[],bundle:Boolean(config.bundle)}};
+  });
+  return {...catalog,sites};
+}
+function sourceFromCatalogSite(site){
+  const config=site.market_path||{},role=config.role||'research_only';
+  return {id:site.id||analysisSlug(site.inventory_key),title:site.title||site.inventory_key,url:site.url,vars:config.vars||[],role,role_label:config.role_label||ANALYSIS_ROLE_META[role].label,usage:config.usage||'research_only',role_note:config.note||ANALYSIS_ROLE_META[role].usage,inventory_key:site.inventory_key,status:site.status,configured:Boolean(config.configured)};
+}
+function updateAnalysisRolePanel(catalog){
+  for(const role of Object.keys(ANALYSIS_ROLE_META)){
+    const sites=(catalog.sites||[]).filter(site=>site.market_path?.role===role),count=document.querySelector(`[data-role-count="${role}"]`),names=document.querySelector(`[data-role-sites="${role}"]`);
+    if(count)count.textContent=String(sites.length);
+    if(names)names.textContent=sites.length?sites.map(site=>site.title).join('、'):'目前沒有網站';
+  }
+}
+function updateAnalysisInventoryUI(){
+  const total=ANALYSIS_SOURCES.length+1,inventory=analysisCatalog?.counts?.inventory??analysisCatalog?.sites?.length??ANALYSIS_SOURCES.length;
+  analysisEls.open.textContent=`✦ ${total} 個網站資料給 ChatGPT`;
+  analysisEls.title.textContent=`把 ${total} 個網站資料交給 ChatGPT 分析`;
+  analysisEls.build.textContent=`建立 ${total} 個網站分析包`;
+  analysisEls.intro.textContent=`來源不是固定頁數：每次都先讀取「我的網頁總覽」母清單，再收集其中 ${ANALYSIS_SOURCES.length} 個已發布研究頁，加上本頁 Market Path。新網站會自動以「僅供研究」進入資料包，除非母清單另行分類。`;
+  analysisEls.inventory.textContent=`總覽共 ${inventory} 個項目 · 本次資料包 ${total} 個網站 · 跨站來源不直接改寫 heuristic 權重或機率`;
+  updateAnalysisRolePanel(analysisCatalog);
+}
+async function loadAnalysisCatalog(force=false){
+  if(analysisCatalogPromise&&!force)return analysisCatalogPromise;
+  analysisCatalogPromise=(async()=>{
+    let catalog;
+    try{
+      const response=await fetch(`${ANALYSIS_CATALOG_URL}?cb=${Date.now()}`,{cache:'no-store'});
+      if(!response.ok)throw new Error(`HTTP ${response.status}`);
+      catalog=await response.json();
+    }catch(primaryError){
+      try{
+        const snapshotResponse=await fetch(`${ANALYSIS_CATALOG_SNAPSHOT_URL}?cb=${Date.now()}`,{cache:'no-store'});
+        if(!snapshotResponse.ok)throw new Error(`HTTP ${snapshotResponse.status}`);
+        catalog=await snapshotResponse.json();catalog.fallback=true;catalog.fallback_source='last_known_catalog_snapshot';
+      }catch(snapshotError){
+        const response=await fetch(`${ANALYSIS_CATALOG_FALLBACK_URL}?cb=${Date.now()}`,{cache:'no-store'});
+        if(!response.ok)throw new Error(`總覽目錄、最近快照與 sites.json 都無法讀取（catalog: ${String(primaryError?.message||primaryError)}；snapshot: ${String(snapshotError?.message||snapshotError)}；sites.json: HTTP ${response.status}）`);
+        catalog=catalogFromSitesDocument(await response.json());
+      }
+    }
+    analysisCatalog=normalizeAnalysisCatalog(catalog);
+    ANALYSIS_SOURCES=analysisCatalog.sites.filter(site=>site.market_path?.bundle&&site.url).map(sourceFromCatalogSite);
+    updateAnalysisInventoryUI();resetBundleSourceList();
+    return analysisCatalog;
+  })();
+  try{return await analysisCatalogPromise}catch(error){analysisCatalogPromise=null;throw error}
+}
 
 function normalizeBundleText(value){return String(value||'').replace(/\u00a0/g,' ').replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n').trim()}
 function isSensitiveBundleKey(key){return /^(?:password|passwd|secret|token|api[_-]?key|authorization|auth|salt|iv|ciphertext|payload)$/i.test(String(key||''))}
@@ -142,7 +208,7 @@ async function unlockBundleFrame(frame,password){
   throw new Error('解鎖逾時或密碼不正確');
 }
 async function collectBundleSource(source,password){
-  const url=new URL(source.path,location.origin);url.searchParams.set('_mpe_bundle',`${Date.now()}-${source.id}`);
+  const url=new URL(source.url,location.origin);url.searchParams.set('_mpe_bundle',`${Date.now()}-${source.id}`);
   const frame=await loadBundleFrame(url.href);
   try{
     let protectedPayload=null;
@@ -154,7 +220,7 @@ async function collectBundleSource(source,password){
     if(text.length<40)throw new Error('頁面沒有足夠的可讀內容');
     if(protectedPayload){structured.variables.unshift({name:'DECRYPTED_FULL_PAGE_PAYLOAD',size_chars:protectedPayload.size_chars,value:protectedPayload});structured.serialized_chars+=protectedPayload.size_chars}
     return {
-      id:source.id,title:source.title,url:new URL(source.path,location.origin).href,collected_at:new Date().toISOString(),
+      id:source.id,title:source.title,url:new URL(source.url,location.origin).href,inventory_key:source.inventory_key,role:source.role,role_label:source.role_label,usage:source.usage,role_note:source.role_note,collected_at:new Date().toISOString(),
       status:structured.variables.length?'ok':'partial',unlock_used:unlock.needed,full_encrypted_payload_decrypted:Boolean(protectedPayload),visible_text:text,tables,structured_data:structured,
       collection_note:protectedPayload?'已在本機解密完整頁面 payload，並收集可見內容、表格及資料腳本。':structured.variables.length?'已收集可見內容、表格及可讀取的頁面資料物件。':'已收集可見內容與表格；頁面未暴露可安全匯出的資料物件。'
     };
@@ -163,7 +229,7 @@ async function collectBundleSource(source,password){
 function collectCurrentBundleSource(){
   const main=document.querySelector('main'),serialized=safeBundleStringify(DATA);
   return {
-    id:'market_path',title:'Market Path Engine',url:location.href.split('#')[0],collected_at:new Date().toISOString(),status:'ok',unlock_used:false,
+    id:'market_path',title:'Market Path Engine',url:location.href.split('#')[0],inventory_key:'kidd0368.github.io/market-path',role:'core_signal',role_label:ANALYSIS_ROLE_META.core_signal.label,usage:'base_model',role_note:'本頁六模組是 heuristic 基準模型的直接輸入；跨站來源不直接改寫權重或機率。',collected_at:new Date().toISOString(),status:'ok',unlock_used:false,
     visible_text:normalizeBundleText(main.innerText),tables:extractTables(main),
     structured_data:{variables:[{name:'DATA',size_chars:serialized.length,value:JSON.parse(serialized)}],omitted:[],serialized_chars:serialized.length},
     collection_note:'完整 Market Path payload，含模組、歷史、來源、proxy、預測封存與驗證。'
@@ -172,16 +238,17 @@ function collectCurrentBundleSource(){
 function renderBundleSourceItem(source,state='pending',detail='等待中'){
   let node=document.querySelector(`[data-source-id="${source.id}"]`);
   if(!node){node=document.createElement('div');node.className='collection-item';node.dataset.sourceId=source.id;node.innerHTML='<i></i><span></span>';analysisEls.list.appendChild(node)}
-  node.className=`collection-item ${state}`;node.querySelector('span').textContent=`${source.title} · ${detail}`;
+  const role=source.role_label||ANALYSIS_ROLE_META[source.role||'core_signal']?.short||'';
+  node.className=`collection-item ${state}`;node.querySelector('span').textContent=`${source.title}${role?`［${role}］`:''} · ${detail}`;
 }
-function resetBundleSourceList(){analysisEls.list.innerHTML='';renderBundleSourceItem({id:'market_path',title:'Market Path Engine'});ANALYSIS_SOURCES.forEach(source=>renderBundleSourceItem(source))}
+function resetBundleSourceList(){analysisEls.list.innerHTML='';renderBundleSourceItem({id:'market_path',title:'Market Path Engine',role:'core_signal',role_label:'基準模型'});ANALYSIS_SOURCES.forEach(source=>renderBundleSourceItem(source))}
 function setBundleMessage(text,state=''){analysisEls.message.textContent=text;analysisEls.message.className=`analysis-message ${state}`}
 function formatBundleBytes(bytes){if(bytes<1024)return `${bytes} B`;if(bytes<1024*1024)return `${(bytes/1024).toFixed(1)} KB`;return `${(bytes/1024/1024).toFixed(1)} MB`}
 
 function createAnalysisPrompt(bundle,fileName){
-  const sourceLines=bundle.sources.map(source=>`- ${source.title}｜狀態：${source.status}｜${source.url}`).join('\n');
+  const sourceLines=bundle.sources.map(source=>`- ${source.title}｜角色：${source.role_label||source.role}｜用途：${source.usage}｜狀態：${source.status}｜${source.url}`).join('\n');
   const failed=bundle.sources.filter(source=>source.status==='error').map(source=>source.title);
-  return `你是一位資深的全球總經、跨資產與台美韓股策略分析師，同時也是擅長向一般讀者說故事的財經編輯。請讀取我上傳的「${fileName}」，使用其中全部可用資料，寫成一份可以直接轉傳給朋友、客戶或一般投資人閱讀的繁體中文市場研究報告。
+  return `你是一位資深的全球總經、跨資產與台美韓股策略分析師，同時也是擅長向一般讀者說故事的財經編輯。請讀取我上傳的「${fileName}」，依照每個來源的角色與用途使用全部可用資料，寫成一份可以直接轉傳給朋友、客戶或一般投資人閱讀的繁體中文市場研究報告。
 
 【讀者與成品定位】
 1. 讀者沒有看過這些儀表板，也不熟悉金融工程；只假設他知道股票會漲跌、利率會影響市場。
@@ -196,12 +263,13 @@ function createAnalysisPrompt(bundle,fileName){
 3. 清楚區分客觀觀測值、模型／proxy，以及分析推論。不得把 proxy 寫成官方統計或真實部位。
 4. 只根據附件資料推演；沒有資料支持的地方明說「目前資料不足」，不要編造數字、門檻或因果。
 5. 若不同頁面互相矛盾，要說明矛盾為什麼會出現、哪個訊號可能較領先或落後，以及如何影響結論，不可只挑支持單一方向的證據。
-6. Market Path 的 V1 機率是尚未完整校準的初步機率。先引用原始機率，再用其他頁面證據透明調整；每個時間範圍的上行／盤整／下行必須合計 100%。
-7. 不用保證式語氣；用「較可能、條件式、目前證據偏向」等符合不確定性的措辭。
+6. Market Path 的 V1 機率是尚未完整校準的 heuristic prior。原樣引用它作為「基準機率」，不得把其他網站逐頁加減分，也不得自行產生一組看似更精確的調整後百分比。外部證據只能用來描述交叉確認、矛盾、信心高低、啟用條件與失效條件。
+7. 嚴格遵守三層角色：核心市場路徑訊號只做交叉確認；條件式事件／主題模組只有在傳導鏈或事件定義成立時才啟用；僅供研究來源不得直接改變市場方向、權重或機率。新網站若尚未人工分類，一律按「僅供研究」處理。
+8. 不用保證式語氣；用「較可能、條件式、目前證據偏向」等符合不確定性的措辭。
 
 【先建立報告主線，再寫正文】
 - 先找出一個中心判斷：市場目前最主要在交易什麼，以及多空最大的拉扯是什麼。
-- 把因果串成一條讀者跟得上的故事：Fed 升降息預期 → 市場利率與美元 → 資金與信用環境 → 波動與系統性資金部位 → 美股 → 台股與韓股。油價、地緣政治、AI 資本支出、籌碼與融資壓力應放在這條主線中解釋，不要各寫成互不相干的小抄。
+- 把因果串成一條讀者跟得上的故事：Fed 升降息預期 → 市場利率與美元 → 資金與信用環境 → 波動與系統性資金部位 → 美股 → 台股與韓股。油價、地緣政治、AI 資本支出與 AI 模型事件只有傳導鏈成立時才放入主線；籌碼、融資與個股工具只用來說明局部風險或機會，不得反推整體市場。
 - 每個主要段落依序回答四件事：看到了什麼證據 → 白話代表什麼 → 對股市可能有何影響 → 哪個訊號會讓判斷改變。
 - 將「大盤方向、波動風險、個股機會」分開說明，避免把指數偏弱誤寫成所有股票都沒有機會。
 - 歷史事件研究只能當條件式參考；說明樣本數、時代差異與本次情境是否相似。
@@ -211,13 +279,13 @@ function createAnalysisPrompt(bundle,fileName){
 2. 「給一般讀者的三分鐘結論」：用 3–5 個短段落回答目前盤勢、最可能路徑、最大風險與最重要觀察點。每段先用粗體寫一句結論，再用 2–4 句完整敘事解釋。開頭不要放表格、方法或資料品質清單。
 3. 「市場現在到底在交易什麼」：用完整敘事交代背景、核心矛盾與目前多空力量。讀者只看這一節也應理解市場故事。
 4. 「壓力如何一步一步傳到股市」：沿著政策預期、利率／美元、流動性／信用、波動／部位、美股、台韓股的順序寫。可以先放一行箭頭摘要，但每一步都必須另用白話段落解釋。
-5. 「未來三段時間可能怎麼走」：分別討論 1–5 個交易日、1–4 週、1–3 個月。每段先用 2–4 個段落說明主路徑，再放一張精簡表列原始機率、調整後上行／盤整／下行機率、主要觸發與失效條件。解釋這些百分比是條件式可能性，不是報酬率或保證。
+5. 「未來三段時間可能怎麼走」：分別討論 1–5 個交易日、1–4 週、1–3 個月。每段先用 2–4 個段落說明主路徑，再放一張精簡表列 Market Path 基準機率、核心交叉確認、目前啟用的條件式模組、主要觸發與失效條件。不得另造調整後機率；解釋基準百分比是尚未校準的條件式可能性，不是報酬率或保證。
 6. 「三個可能劇本」：Bull／Base／Bear 各寫成一段可想像的市場故事，說明事情會按什麼順序發生、哪些訊號會確認、哪些訊號會推翻它。
 7. 「台股投資人應如何理解」：分開解釋加權指數、櫃買、主流人氣股、籌碼、融資壓力、事件反應與反彈歷史；明確指出大盤與個股機會可能不同。
 8. 「美股與韓股提供什麼線索」：說明兩者為何可能領先台股或提供交叉確認，不要只重複漲跌。
 9. 「接下來最值得盯的 10 件事」：依重要性排序。每項用白話名稱、目前狀態、為何重要、轉強／轉弱條件、影響的時間範圍。資料沒有門檻時，清楚標示為研究建議。
 10. 「如果只記得三件事」：用三個完整句子收束目前最可能、次可能與尾部風險，並說明何時需要更新報告。
-11. 「附錄：資料日期、品質與名詞」：每個來源一列，標示可用／降權／不可用、日期與原因；再列出文中必要名詞的白話解釋。技術細節放這裡，不要阻斷前面的故事。
+11. 「附錄：資料角色、日期、品質與名詞」：每個來源一列，先標示核心／條件式／僅供研究，再標示可用／降權／不可用、日期與原因；再列出文中必要名詞的白話解釋。技術細節放這裡，不要阻斷前面的故事。
 
 【白話寫作規則】
 - 使用繁體中文與 Markdown；完整內容應足以獨立成篇，正文以約 3,000–5,000 個中文字為目標，不含表格與附錄。
@@ -246,10 +314,12 @@ ${failed.length?`\n收集失敗、不得假裝已讀的頁面：${failed.join('�
 
 async function buildFullBundle(){
   if(bundleBuilding)return;
+  try{setBundleMessage('正在同步「我的網頁總覽」母清單…');await loadAnalysisCatalog(true)}catch(error){setBundleMessage(`無法同步網站母清單：${String(error?.message||error)}`,'error');return}
   const password=analysisEls.password.value||analysisSessionPassword;
   if(!password){setBundleMessage('請先輸入各研究頁的共用密碼。','error');analysisEls.password.focus();return}
+  const sourceCount=ANALYSIS_SOURCES.length+1;
   bundleBuilding=true;analysisEls.build.disabled=true;analysisEls.download.disabled=true;analysisEls.copyPrompt.disabled=true;analysisEls.copyAll.disabled=true;analysisEls.openChatGPT.disabled=true;
-  setBundleMessage('正在逐頁收集，請不要關閉這個視窗。');resetBundleSourceList();analysisEls.summary.className='collection-summary';analysisEls.summary.querySelector('span').textContent=`開始建立 · 0 / ${ANALYSIS_SOURCE_COUNT}`;
+  setBundleMessage('母清單已同步，正在逐頁收集；請不要關閉這個視窗。');resetBundleSourceList();analysisEls.summary.className='collection-summary';analysisEls.summary.querySelector('span').textContent=`開始建立 · 0 / ${sourceCount}`;
   const sources=[];
   try{
     const current=collectCurrentBundleSource();sources.push(current);renderBundleSourceItem({id:'market_path',title:'Market Path Engine'},'ok','完成');
@@ -259,16 +329,18 @@ async function buildFullBundle(){
       try{
         const result=await collectBundleSource(source,password);sources.push(result);renderBundleSourceItem(source,result.status,result.full_encrypted_payload_decrypted?'完整 payload':result.status==='ok'?'完整資料':'完成（可見資料）');
       }catch(error){
-        sources.push({id:source.id,title:source.title,url:new URL(source.path,location.origin).href,collected_at:new Date().toISOString(),status:'error',error:String(error?.message||error),visible_text:'',tables:[],structured_data:{variables:[],omitted:[],serialized_chars:0}});
+        sources.push({id:source.id,title:source.title,url:new URL(source.url,location.origin).href,inventory_key:source.inventory_key,role:source.role,role_label:source.role_label,usage:source.usage,role_note:source.role_note,collected_at:new Date().toISOString(),status:'error',error:String(error?.message||error),visible_text:'',tables:[],structured_data:{variables:[],omitted:[],serialized_chars:0}});
         renderBundleSourceItem(source,'error',String(error?.message||'失敗').slice(0,80));
       }
-      completed++;analysisEls.summary.querySelector('span').textContent=`正在建立 · ${completed} / ${ANALYSIS_SOURCE_COUNT}`;
+      completed++;analysisEls.summary.querySelector('span').textContent=`正在建立 · ${completed} / ${sourceCount}`;
     }
+    const inventorySites=(analysisCatalog?.sites||[]).map(site=>({inventory_key:site.inventory_key,id:site.id,title:site.title,url:site.url,status:site.status,role:site.market_path?.role,role_label:site.market_path?.role_label,usage:site.market_path?.usage,bundle:Boolean(site.market_path?.bundle),note:site.market_path?.note}));
     const bundle={
-      schema_version:'mpe-cross-site-analysis-v1',generated_at:new Date().toISOString(),generated_from:location.href,inventory_url:new URL('/github/',location.origin).href,
+      schema_version:'mpe-cross-site-analysis-v2',generated_at:new Date().toISOString(),generated_from:location.href,inventory_url:new URL('/github/',location.origin).href,catalog_url:ANALYSIS_CATALOG_URL,catalog_generated_at:analysisCatalog?.generated_at||null,catalog_fallback_used:Boolean(analysisCatalog?.fallback),
       privacy:'Password is never stored in this bundle. Collection happens locally in the browser; transfer occurs only when the user downloads or copies.',
-      instructions:'Use all sources together. Produce a shareable Traditional Chinese market report for non-specialists: answer first, then tell a coherent causal story in plain language; explain technical terms and every important number; separate observations, proxies and inference; move detailed data-quality review to an appendix. Respect source dates, quality labels and disclosures. Directory metadata is not a market signal.',
-      source_count_expected:ANALYSIS_SOURCE_COUNT,source_count_collected:sources.filter(source=>source.status!=='error').length,sources
+      instructions:'Use sources according to their role. Market Path is the heuristic base model. Core external sources are confirmation only; conditional modules activate only when their transmission chain is present; research-only sources never change direction, weights or probabilities. Do not mechanically add or average pages. Produce a shareable Traditional Chinese market report for non-specialists, separate observations, proxies and inference, and respect dates and quality labels. Directory metadata is not a market signal.',
+      weighting_policy:{market_path_base_model:'Only the six Market Path modules feed the current heuristic formula.',external_sites_direct_weight:false,core_signal:'confirmation_or_contradiction_only',conditional_module:'activate_only_when_triggered',research_only:'context_only',adjusted_probabilities:'do_not_invent_without_a_separate_calibrated_method'},
+      catalog_inventory:inventorySites,source_count_expected:sourceCount,source_count_collected:sources.filter(source=>source.status!=='error').length,sources
     };
     latestBundleJSON=JSON.stringify(bundle,null,2);
     const stamp=new Date().toISOString().replace(/[:.]/g,'-');latestBundleName=`market-path-full-analysis-bundle-${stamp}.json`;
@@ -276,7 +348,7 @@ async function buildFullBundle(){
     const bytes=new Blob([latestBundleJSON],{type:'application/json'}).size,errors=sources.filter(source=>source.status==='error').length;
     analysisEls.size.textContent=`完整資料 ${formatBundleBytes(bytes)} · 指令 ${latestPrompt.length.toLocaleString()} 字`;
     analysisEls.summary.className=`collection-summary ${errors?'error':'ok'}`;
-    analysisEls.summary.querySelector('span').textContent=errors?`完成，但有 ${errors} 個頁面未能收集；詳見下方狀態`:`完成 · ${ANALYSIS_SOURCE_COUNT} / ${ANALYSIS_SOURCE_COUNT} 份來源已收集`;
+    analysisEls.summary.querySelector('span').textContent=errors?`完成，但有 ${errors} 個頁面未能收集；詳見下方狀態`:`完成 · ${sourceCount} / ${sourceCount} 份來源已收集`;
     analysisEls.download.disabled=false;analysisEls.copyPrompt.disabled=false;analysisEls.copyAll.disabled=false;analysisEls.openChatGPT.disabled=false;
     setBundleMessage(errors?'資料包已建立；請留意紅色失敗項目，ChatGPT 指令會要求不得假裝已讀。':'資料包已建立。請先下載 JSON，再複製指令交給 ChatGPT。',errors?'error':'ok');
   }finally{
@@ -290,7 +362,11 @@ async function copyBundleText(text){
   try{await navigator.clipboard.writeText(text)}
   catch(_){const area=document.createElement('textarea');area.value=text;area.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(area);area.focus();area.select();const ok=document.execCommand('copy');area.remove();if(!ok)throw new Error('瀏覽器拒絕剪貼簿存取')}
 }
-function openAnalysisModal(){analysisEls.modal.hidden=false;document.body.style.overflow='hidden';resetBundleSourceList();if(analysisSessionPassword)analysisEls.password.placeholder='已沿用本次登入密碼，可直接建立';setTimeout(()=>analysisEls.build.focus(),0)}
+async function openAnalysisModal(){
+  analysisEls.modal.hidden=false;document.body.style.overflow='hidden';resetBundleSourceList();if(analysisSessionPassword)analysisEls.password.placeholder='已沿用本次登入密碼，可直接建立';
+  try{setBundleMessage('正在同步「我的網頁總覽」母清單…');await loadAnalysisCatalog();setBundleMessage('母清單已同步；建立時會再確認一次最新版本。','ok')}catch(error){setBundleMessage(`無法同步網站母清單：${String(error?.message||error)}`,'error')}
+  setTimeout(()=>analysisEls.build.focus(),0);
+}
 function closeAnalysisModal(){if(bundleBuilding){setBundleMessage('資料正在建立；完成前請先保留這個視窗。','error');return}analysisEls.modal.hidden=true;document.body.style.overflow='';analysisEls.open.focus()}
 
 analysisEls.open.addEventListener('click',openAnalysisModal);
@@ -305,3 +381,4 @@ analysisEls.copyAll.addEventListener('click',async()=>{try{await copyBundleText(
 analysisEls.openChatGPT.addEventListener('click',()=>{window.open('https://chatgpt.com/','_blank','noopener,noreferrer')});
 
 resetBundleSourceList();
+loadAnalysisCatalog().then(()=>setBundleMessage('網站母清單已同步。','ok')).catch(error=>setBundleMessage(`網站母清單尚未同步：${String(error?.message||error)}`,'error'));

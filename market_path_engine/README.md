@@ -22,16 +22,29 @@ Official FRED, Cboe and CFTC data are preferred. V1 uses official FRED market se
 
 The VIX curve in V1 is the official VIX9D/VIX/VIX3M index-tenor curve, not a full tradable futures strip. CTA, vol-control, Event Shock, Net Liquidity, regime and path probabilities are model proxies. Probabilities are heuristic priors and are not yet statistically calibrated.
 
-## Cross-site ChatGPT analysis bundle
+## Cross-site source roles and ChatGPT analysis bundle
 
-The dashboard action **「12 個網頁資料給 ChatGPT」** builds an analysis bundle locally in the browser. It combines the complete Market Path payload (one page) with the eleven published research pages listed under `/github/`, for twelve pages in total. For every page it records the visible research text, HTML tables and safely serializable page-level data objects when available. Collection status is shown page by page; a failed source is recorded as an error instead of being silently omitted.
+The dashboard does not maintain a fixed page count. It reads the machine-readable catalog generated from `kidd0368/github` `sites.json` at `https://kidd0368.github.io/github/catalog.json`, then combines every catalog-enabled published research page with the complete Market Path payload. The current catalog includes `ai-model-tracker`; newly discovered published sites default to `research_only` and enter the bundle automatically, so they are not silently missed or accidentally promoted into the model.
 
-The generated ChatGPT instruction is designed for a shareable general-audience report: it leads with an executive narrative, explains jargon and numbers in plain language, tells the cross-market causal story before presenting tables, and moves detailed source-quality review to an appendix.\n\nThe shared page password is held in memory only while the bundle is being built and is explicitly excluded from the export. The dashboard does not automatically transmit data to ChatGPT. The user downloads the complete JSON, copies the generated Traditional Chinese analysis instruction, then uploads and submits them manually. A copy-all option is also provided for smaller bundles, but JSON upload is the recommended path for large histories.
+The catalog separates three roles:
+
+- `core_signal`: cross-check or contradict the base path; external core pages do not directly change weights or probabilities.
+- `conditional_module`: enter the narrative only when their event definition or market transmission chain is active.
+- `research_only`: retain background, historical or stock-level evidence without changing market direction, weights or probabilities.
+
+Only the six Market Path modules feed the current heuristic formula. The cross-site bundle is a role-aware research context layer, not a page-voting or page-averaging model. For every collected page it records the visible research text, HTML tables and safely serializable page-level data objects when available. Collection status is shown page by page; a failed source is recorded as an error instead of being silently omitted. The daily workflow refreshes `site_catalog_snapshot.json`; if the deployed catalog is temporarily unavailable, the browser uses this last-known catalog and then tries the same `sites.json` mother list rather than a hard-coded array.
+
+The generated ChatGPT instruction is designed for a shareable general-audience report: it leads with an executive narrative, explains jargon and numbers in plain language, tells the cross-market causal story before presenting tables, and moves detailed source-quality review to an appendix. It preserves the Market Path probabilities as uncalibrated base priors and prohibits inventing mechanically adjusted probabilities from other pages.
+
+The shared page password is held in memory only while the bundle is being built and is explicitly excluded from the export. The dashboard does not automatically transmit data to ChatGPT. The user downloads the complete JSON, copies the generated Traditional Chinese analysis instruction, then uploads and submits them manually. A copy-all option is also provided for smaller bundles, but JSON upload is the recommended path for large histories.
 
 ## Run locally
 
 ```bash
 python market_path_engine/engine.py
+python market_path_engine/validate.py
+python market_path_engine/sync_catalog.py
+node --check market_path_engine/analysis_bundle.js
 ```
 
 The command updates:

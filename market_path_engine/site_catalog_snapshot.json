@@ -1,0 +1,497 @@
+{
+  "schema_version": "pages-hub-catalog-v1",
+  "generated_at": "2026-08-16T17:50:00+08:00",
+  "owner": "kidd0368",
+  "source": "kidd0368/github sites.json + live GitHub Pages scan",
+  "policy": {
+    "default_role": "research_only",
+    "new_published_sites_auto_bundle": true,
+    "external_sites_direct_weight": false,
+    "core_signal": "交叉確認或矛盾檢查，不自動改寫 Market Path heuristic 權重或機率。",
+    "conditional_module": "只有事件或主題的啟用條件成立時才進入敘事，不直接計權重。",
+    "research_only": "保留研究背景與個案證據，不直接計權重，也不得由個股工具反推大盤。"
+  },
+  "counts": {
+    "inventory": 15,
+    "published": 13,
+    "bundle": 12,
+    "roles": {
+      "core_signal": 5,
+      "conditional_module": 6,
+      "research_only": 4
+    }
+  },
+  "sites": [
+    {
+      "inventory_key": "kidd0368.github.io",
+      "id": "korea_deleveraging",
+      "title": "韓股去槓桿壓力儀表板",
+      "description": "追蹤韓國散戶的信用融資餘額、斷頭賣壓、預託金與槓桿 ETF 份額，用 0–100 的壓力指數判斷這一輪去槓桿走到第幾階段。每個交易日台北 17:43 自動抓 KOFIA 官方統計重算。",
+      "tags": [
+        "韓股",
+        "去槓桿",
+        "每日自動"
+      ],
+      "order": 10,
+      "url": "https://kidd0368.github.io/",
+      "repo_url": "https://github.com/kidd0368/kidd0368.github.io",
+      "updated_at": null,
+      "status": "online",
+      "locked": false,
+      "market_path": {
+        "role": "core_signal",
+        "role_label": "核心市場路徑訊號",
+        "usage": "confirmation_only",
+        "bundle": true,
+        "model_input": false,
+        "vars": [
+          "IND"
+        ],
+        "note": "用於區域槓桿壓力的交叉確認；不直接改寫 Market Path 權重或機率。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "kidd0368.github.io/taiwan-vol",
+      "id": "taiwan_volatility",
+      "title": "台股波動率監控",
+      "description": "市場溫度計：加權與櫃買的 20/60 日年化波動率、個股分歧度、強勢股熱度比、主流領導股健康度，合成「多空 × 穩定度」四象限定位，並自動比對歷史上最相似的日子看後續 60 天走勢。附三盞自動判定的轉弱預警燈。",
+      "tags": [
+        "台股",
+        "波動率",
+        "每日自動"
+      ],
+      "order": 12,
+      "url": "https://kidd0368.github.io/taiwan-vol/",
+      "repo_url": "https://github.com/kidd0368/kidd0368.github.io",
+      "updated_at": null,
+      "status": "online",
+      "locked": false,
+      "market_path": {
+        "role": "core_signal",
+        "role_label": "核心市場路徑訊號",
+        "usage": "confirmation_only",
+        "bundle": true,
+        "model_input": false,
+        "vars": [
+          "D",
+          "QMETA",
+          "CAP",
+          "PRE",
+          "ML"
+        ],
+        "note": "用於台股波動、分歧與市場狀態的核心交叉確認；不直接改寫 Market Path 權重或機率。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "kidd0368.github.io/margin-pressure",
+      "id": "margin_pressure",
+      "title": "個股融資賣壓風險雷達",
+      "description": "單檔個股的融資斷頭壓力推估：融資占流通在外股數、分 60/120/160 日三段期間推算新增融資部位的維持率、已低於 130% 的比例，以及股價再跌時各情境下會被斷頭的量與相對 20 日均量的倍數。網址加 ?stock=代號 可直接查指定個股。",
+      "tags": [
+        "台股",
+        "融資斷頭",
+        "個股工具"
+      ],
+      "order": 14,
+      "url": "https://kidd0368.github.io/margin-pressure/",
+      "repo_url": "https://github.com/kidd0368/kidd0368.github.io",
+      "updated_at": null,
+      "status": "online",
+      "locked": true,
+      "market_path": {
+        "role": "research_only",
+        "role_label": "僅供研究、不直接計權重",
+        "usage": "research_only",
+        "bundle": true,
+        "model_input": false,
+        "vars": [
+          "DATA"
+        ],
+        "note": "個股融資壓力研究工具；不得由單一個股結果推回大盤方向，也不直接計入路徑權重。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "kidd0368.github.io/chip-uptrend",
+      "id": "chip_uptrend",
+      "title": "籌碼上漲機會追蹤",
+      "description": "純籌碼面選股：軋空條件 × 法人不深套 × 融資無斷頭鏈。每天從全市場約 1900 檔剔除維持率低於 130% 與處置中個股，再用借券占股本、空方套牢幅度（護城河）、投信與外資 60 日持股增減及推估成本、融資維持率六個條件評分，列出完全符合的名單與 TOP30 進出變化。",
+      "tags": [
+        "台股",
+        "籌碼面",
+        "每日更新"
+      ],
+      "order": 15,
+      "url": "https://kidd0368.github.io/chip-uptrend/",
+      "repo_url": "https://github.com/kidd0368/kidd0368.github.io",
+      "updated_at": null,
+      "status": "online",
+      "locked": true,
+      "market_path": {
+        "role": "research_only",
+        "role_label": "僅供研究、不直接計權重",
+        "usage": "research_only",
+        "bundle": true,
+        "model_input": false,
+        "vars": [
+          "DATA",
+          "IND",
+          "STATE",
+          "REPORT",
+          "MODEL",
+          "RESULTS"
+        ],
+        "note": "純籌碼個股研究名單；可用來找機會與風險個案，但不由名單數量反推大盤或直接計權重。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "kidd0368.github.io/rebound-stats",
+      "id": "rebound_stats",
+      "title": "暴跌後長紅的歷史機率",
+      "description": "回答一個問題：大跌一段後出現一根大長紅，後面會不會繼續漲？以 2018 年起加權指數收盤資料定義訊號（前一日距 20 日高點跌逾 8%＋當日漲逾 3%），統計之後 5/10/20/60 天的報酬與再破底機率，並與「隨便一天買」「跌一樣深但沒長紅」兩組對照。",
+      "tags": [
+        "台股",
+        "歷史統計",
+        "型態研究"
+      ],
+      "order": 16,
+      "url": "https://kidd0368.github.io/rebound-stats/",
+      "repo_url": "https://github.com/kidd0368/kidd0368.github.io",
+      "updated_at": null,
+      "status": "online",
+      "locked": false,
+      "market_path": {
+        "role": "conditional_module",
+        "role_label": "條件式事件／主題模組",
+        "usage": "conditional_context",
+        "bundle": true,
+        "model_input": false,
+        "vars": [
+          "DATA",
+          "STATS",
+          "RESULTS"
+        ],
+        "note": "只在符合暴跌後長紅定義時啟用；歷史樣本用於條件式參考，不自動調整基準機率。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "kidd0368.github.io/crash-rebound-screen",
+      "id": "crash_rebound",
+      "title": "台股崩跌反彈候選研究頁",
+      "description": "大盤深跌後出現反彈訊號時，哪些股票通常彈得比較快？把反彈敏感度因子做成台股橫斷面排序，再疊上流動性、市值與反彈日漲幅的執行分層，產出 A／B 優先研究名單與可執行 shortlist。分數代表反彈敏感度，不是預測報酬，也不是隔日追價名單；處置股一律硬性排除且不遞補。",
+      "tags": [
+        "台股",
+        "事件研究",
+        "選股名單"
+      ],
+      "order": 18,
+      "url": "https://kidd0368.github.io/crash-rebound-screen/",
+      "repo_url": "https://github.com/kidd0368/kidd0368.github.io",
+      "updated_at": null,
+      "status": "online",
+      "locked": true,
+      "market_path": {
+        "role": "conditional_module",
+        "role_label": "條件式事件／主題模組",
+        "usage": "conditional_context",
+        "bundle": true,
+        "model_input": false,
+        "vars": [
+          "DATA",
+          "STATE",
+          "REPORT",
+          "MODEL",
+          "RESULTS"
+        ],
+        "note": "只在崩跌反彈事件成立時啟用的選股研究；不得當成指數預測或自動機率加權。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "ai-capex-tracker",
+      "id": "ai_capex",
+      "title": "AI 算力基建對帳戰情板",
+      "description": "把整個 AI 基建生態當一家公司做持續盡調：建置帳（蓋多少）、資金帳（撐多久）、變現帳（換回多少）三本帳每天互相對帳，找出擴張的瓶頸會卡在錢、晶片、電還是需求。含反推表、九宮格情境引擎與事件台帳。",
+      "tags": [
+        "AI capex",
+        "美股",
+        "每日自動"
+      ],
+      "order": 20,
+      "url": "https://kidd0368.github.io/ai-capex-tracker/",
+      "repo_url": "https://github.com/kidd0368/ai-capex-tracker",
+      "updated_at": null,
+      "status": "online",
+      "locked": false,
+      "market_path": {
+        "role": "conditional_module",
+        "role_label": "條件式事件／主題模組",
+        "usage": "conditional_context",
+        "bundle": true,
+        "model_input": false,
+        "vars": [
+          "DATA",
+          "STATE",
+          "REPORT",
+          "MODEL",
+          "EVENTS"
+        ],
+        "note": "AI 資本支出與算力供應鏈主題模組；只有在該主題成為市場主導因子時才放大討論，不直接計權重。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "kidd0368.github.io/fed-watch",
+      "id": "fed_watch",
+      "title": "FED 升降息機率儀表板",
+      "description": "三層合成追蹤未來四次 FOMC 升降息機率：Kalshi／Polymarket 市場定價＋五因子反應函數模型＋金十券商專家言論鷹鴿共識，附歷史軌跡與 Claude 每日推演。每日 4 次自動更新，密碼同本站。",
+      "tags": [
+        "美聯儲",
+        "利率",
+        "每日自動"
+      ],
+      "order": 25,
+      "url": "https://kidd0368.github.io/fed-watch/",
+      "repo_url": "https://github.com/kidd0368/kidd0368.github.io",
+      "updated_at": null,
+      "status": "online",
+      "locked": true,
+      "market_path": {
+        "role": "core_signal",
+        "role_label": "核心市場路徑訊號",
+        "usage": "confirmation_only",
+        "bundle": true,
+        "model_input": false,
+        "vars": [
+          "DATA",
+          "STATE",
+          "MEETINGS",
+          "PROBABILITIES",
+          "HISTORY",
+          "FACTORS",
+          "COMMENTARY"
+        ],
+        "note": "用於政策預期的核心交叉確認；市場定價、反應函數與專家言論須分開，且不直接改寫 Market Path 權重。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "iran-war",
+      "id": "iran_war",
+      "title": "中東戰事 × 市場傳導儀表",
+      "description": "四層架構追蹤中東戰區：戰線方向 → 荷姆茲/紅海咽喉點 → 油價與利率 → 風險資產，附危險度 1–5 分級與四情境推演。事件必須觸及市場傳導鏈才准入。資料機械更新、判讀由排程改寫。",
+      "tags": [
+        "地緣政治",
+        "油價",
+        "每日兩次"
+      ],
+      "order": 30,
+      "url": "https://kidd0368.github.io/iran-war/",
+      "repo_url": "https://github.com/kidd0368/iran-war",
+      "updated_at": null,
+      "status": "online",
+      "locked": false,
+      "market_path": {
+        "role": "conditional_module",
+        "role_label": "條件式事件／主題模組",
+        "usage": "conditional_context",
+        "bundle": true,
+        "model_input": false,
+        "vars": [
+          "DATA",
+          "STATE",
+          "REPORT",
+          "MODEL",
+          "EVENTS"
+        ],
+        "note": "地緣事件模組；只有在事件確實進入油價、利率、美元或風險資產傳導鏈時才啟用，不直接計權重。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "tw-event-pulse",
+      "id": "tw_event_pulse",
+      "title": "事件 × 台股主流人氣股反應監測",
+      "description": "全球重大利多利空發生時，台股「本波主流人氣股」相對大盤的反應，對照歷史同類事件的百分位給強／中／弱評級。含記憶制主流股名冊、反應分布圖與候選事件自動標記。",
+      "tags": [
+        "台股",
+        "事件研究",
+        "平日自動"
+      ],
+      "order": 40,
+      "url": "https://kidd0368.github.io/tw-event-pulse/",
+      "repo_url": "https://github.com/kidd0368/tw-event-pulse",
+      "updated_at": null,
+      "status": "online",
+      "locked": false,
+      "market_path": {
+        "role": "conditional_module",
+        "role_label": "條件式事件／主題模組",
+        "usage": "conditional_context",
+        "bundle": true,
+        "model_input": false,
+        "vars": [
+          "DATA",
+          "STATE",
+          "REPORT",
+          "MODEL",
+          "EVENTS"
+        ],
+        "note": "事件發生後用來檢查台股主流股反應；事件未觸發時不影響市場路徑。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "mainstream-index",
+      "id": "mainstream_index",
+      "title": "台股人氣主流股指數",
+      "description": "自製指數：排除台積電、金融、傳產、生技後，取近 120 個交易日日均成交金額前 100 名（市值 ≥ 100 億）等權編製，每月第一個交易日換股，用來看資金主流的真實強弱。",
+      "tags": [
+        "台股",
+        "自製指數"
+      ],
+      "order": 50,
+      "url": "https://kidd0368.github.io/mainstream-index/",
+      "repo_url": "https://github.com/kidd0368/mainstream-index",
+      "updated_at": null,
+      "status": "online",
+      "locked": false,
+      "market_path": {
+        "role": "core_signal",
+        "role_label": "核心市場路徑訊號",
+        "usage": "confirmation_only",
+        "bundle": true,
+        "model_input": false,
+        "vars": [
+          "DATA",
+          "STATE",
+          "INDEX_DATA",
+          "SERIES",
+          "CONSTITUENTS"
+        ],
+        "note": "用於台股主流人氣與市場寬度的核心交叉確認；不直接改寫 Market Path 權重或機率。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "market-discipline",
+      "id": "market_discipline",
+      "title": "美股投資紀律儀表板",
+      "description": "不預測、不發賣訊，只回答「今天的我被允許做什麼」。貪婪端只給 L0–L3 煞車（最重只到新資金暫停），恐慌端才是行動引擎（三級分批投入儲備現金）。每交易日早上自動抓 VIX／高收債利差／CNN／AAII 等重算。",
+      "tags": [
+        "美股",
+        "決策紀律",
+        "每日自動"
+      ],
+      "order": 60,
+      "url": null,
+      "repo_url": null,
+      "updated_at": null,
+      "status": "unpublished",
+      "locked": false,
+      "market_path": {
+        "role": "research_only",
+        "role_label": "僅供研究、不直接計權重",
+        "usage": "research_only",
+        "bundle": false,
+        "model_input": false,
+        "vars": [],
+        "note": "投資紀律工具且尚未發布為網頁；保留在母清單，但不進資料包或路徑權重。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "crisis-dashboard",
+      "id": "crisis_dashboard",
+      "title": "每日市場危機儀表板",
+      "description": "四層判斷框架：①骨頭有沒有斷（信用利差、VIX 期限結構）②Fed 會不會變敵人（通膨預期、油價、語氣）③恐慌有沒有到頂（VVIX、GEX、前端結構）④拋售多徹底（市場寬度）。每日產出含劇本機率與部署建議上限。",
+      "tags": [
+        "美股",
+        "風險框架",
+        "每日報告"
+      ],
+      "order": 70,
+      "url": null,
+      "repo_url": null,
+      "updated_at": null,
+      "status": "unpublished",
+      "locked": false,
+      "market_path": {
+        "role": "research_only",
+        "role_label": "僅供研究、不直接計權重",
+        "usage": "research_only",
+        "bundle": false,
+        "model_input": false,
+        "vars": [],
+        "note": "未發布的平行風險框架；避免和 Market Path 重複計算，保留研究參考但不進資料包或權重。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "kidd0368.github.io/market-path",
+      "id": "market_path",
+      "title": "Market Path 市場路徑引擎",
+      "description": "用金融條件、流動性、波動、部位、跨資產與事件衝擊六個核心模組，建立 Regime 與 1–5 日、1–4 週、1–3 月的條件式路徑；完整保留預測封存與成熟期驗證。機率是尚未校準的 heuristic prior，不使用 EPS 預估。",
+      "tags": [
+        "跨資產",
+        "市場路徑",
+        "每日自動"
+      ],
+      "order": 80,
+      "url": "https://kidd0368.github.io/market-path/",
+      "repo_url": "https://github.com/kidd0368/kidd0368.github.io",
+      "updated_at": null,
+      "status": "online",
+      "locked": true,
+      "market_path": {
+        "role": "core_signal",
+        "role_label": "核心市場路徑訊號",
+        "usage": "base_model",
+        "bundle": false,
+        "model_input": true,
+        "vars": [
+          "DATA"
+        ],
+        "note": "本頁六模組是 heuristic 基準模型的直接輸入；跨站資料只做分層脈絡與交叉確認。",
+        "configured": true
+      }
+    },
+    {
+      "inventory_key": "ai-model-tracker",
+      "id": "ai_model_tracker",
+      "title": "全球 AI 模型動態追蹤",
+      "description": "每日追蹤 ChatGPT、Claude 與全球主要大模型的產品、能力、價格與生態動向，把可確認事件與研究判讀分開，供 AI 產業趨勢與供應鏈主題研究使用。",
+      "tags": [
+        "AI 模型",
+        "產業主題",
+        "每日自動"
+      ],
+      "order": 90,
+      "url": "https://kidd0368.github.io/ai-model-tracker/",
+      "repo_url": "https://github.com/kidd0368/ai-model-tracker",
+      "updated_at": null,
+      "status": "online",
+      "locked": true,
+      "market_path": {
+        "role": "conditional_module",
+        "role_label": "條件式事件／主題模組",
+        "usage": "conditional_context",
+        "bundle": true,
+        "model_input": false,
+        "vars": [
+          "DATA",
+          "STATE",
+          "REPORT",
+          "MODEL",
+          "EVENTS"
+        ],
+        "note": "AI 產業主題模組；只有在模型事件透過需求、定價或資本支出影響市場時才啟用，不直接計權重。",
+        "configured": true
+      }
+    }
+  ]
+}
