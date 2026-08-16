@@ -156,7 +156,7 @@ footer{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line)
       <div class="analysis-steps">
         <div class="analysis-step"><b>1. 建立資料包</b>輸入共用密碼，逐頁解鎖並在本機整理。</div>
         <div class="analysis-step"><b>2. 下載＋複製</b>下載完整 JSON，再複製專用分析指令。</div>
-        <div class="analysis-step"><b>3. 交給 ChatGPT</b>上傳 JSON、貼上指令，即可產生報告。</div>
+        <div class="analysis-step"><b>3. 到 ChatGPT 上傳檔案</b>按下方「開啟 ChatGPT」，在 ChatGPT 對話框左下角按「＋／迴紋針」，選擇剛下載的 JSON；上傳完成後貼上分析指令並送出。</div>
       </div>
       <div class="analysis-password">
         <div><label for="bundlePassword">各研究頁的共用密碼（只在這次建立期間使用）</label><input id="bundlePassword" type="password" autocomplete="current-password" placeholder="若剛以密碼登入本頁，可直接建立"></div>
@@ -176,7 +176,7 @@ footer{display:flex;gap:20px;align-items:center;border-top:1px solid var(--line)
         <button class="primary-btn" id="downloadBundle" type="button" disabled>① 下載完整資料 JSON</button>
         <button class="secondary-btn" id="copyPrompt" type="button" disabled>② 複製分析指令</button>
         <button class="secondary-btn" id="copyAll" type="button" disabled>複製指令＋全部資料</button>
-        <button class="secondary-btn" id="openChatGPT" type="button" disabled>③ 開啟 ChatGPT ↗</button>
+        <button class="secondary-btn" id="openChatGPT" type="button" disabled>③ 開啟 ChatGPT（再上傳 JSON）↗</button>
       </div>
       <p class="analysis-message" id="analysisMessage" role="status" aria-live="polite"></p>
     </div>
@@ -266,6 +266,6 @@ const saved=localStorage.getItem('mpe-theme'); if(saved)document.documentElement
 $('#theme').addEventListener('click',()=>{const next=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=next;localStorage.setItem('mpe-theme',next)});
 init();
 </script>
-<script src="/market_path_engine/analysis_bundle.js?v=8"></script>
+<script src="/market_path_engine/analysis_bundle.js?v=9"></script>
 </body>
 </html>

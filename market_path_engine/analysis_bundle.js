@@ -350,7 +350,7 @@ async function buildFullBundle(){
     analysisEls.summary.className=`collection-summary ${errors?'error':'ok'}`;
     analysisEls.summary.querySelector('span').textContent=errors?`完成，但有 ${errors} 個頁面未能收集；詳見下方狀態`:`完成 · ${sourceCount} / ${sourceCount} 份來源已收集`;
     analysisEls.download.disabled=false;analysisEls.copyPrompt.disabled=false;analysisEls.copyAll.disabled=false;analysisEls.openChatGPT.disabled=false;
-    setBundleMessage(errors?'資料包已建立；請留意紅色失敗項目，ChatGPT 指令會要求不得假裝已讀。':'資料包已建立。請先下載 JSON，再複製指令交給 ChatGPT。',errors?'error':'ok');
+    setBundleMessage(errors?'資料包已建立；請留意紅色失敗項目，ChatGPT 指令會要求不得假裝已讀。':'資料包已建立。請先下載 JSON，再複製分析指令；最後開啟 ChatGPT，用對話框左下角「＋／迴紋針」上傳 JSON。',errors?'error':'ok');
   }finally{
     analysisEls.password.value='';analysisSessionPassword='';bundleBuilding=false;analysisEls.build.disabled=false;
   }
@@ -375,10 +375,10 @@ analysisEls.modal.addEventListener('click',event=>{if(event.target===analysisEls
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!analysisEls.modal.hidden)closeAnalysisModal()});
 analysisEls.build.addEventListener('click',buildFullBundle);
 analysisEls.password.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();buildFullBundle()}});
-analysisEls.download.addEventListener('click',()=>{if(!latestBundleJSON)return;downloadBundleText(latestBundleJSON,latestBundleName,'application/json;charset=utf-8');setBundleMessage(`已下載 ${latestBundleName}。接著複製分析指令。`,'ok')});
-analysisEls.copyPrompt.addEventListener('click',async()=>{try{await copyBundleText(latestPrompt);setBundleMessage('分析指令已複製。請在 ChatGPT 上傳 JSON 後貼上。','ok')}catch(error){setBundleMessage(String(error.message||error),'error')}});
+analysisEls.download.addEventListener('click',()=>{if(!latestBundleJSON)return;downloadBundleText(latestBundleJSON,latestBundleName,'application/json;charset=utf-8');setBundleMessage(`已下載 ${latestBundleName}。檔案會留在「下載」資料夾。下一步按②複製分析指令，再按③開啟 ChatGPT；在對話框左下角按「＋／迴紋針」上傳這個 JSON。`,'ok')});
+analysisEls.copyPrompt.addEventListener('click',async()=>{try{await copyBundleText(latestPrompt);setBundleMessage('分析指令已複製。下一步按③開啟 ChatGPT，在對話框左下角按「＋／迴紋針」上傳剛下載的 JSON，再貼上指令並送出。','ok')}catch(error){setBundleMessage(String(error.message||error),'error')}});
 analysisEls.copyAll.addEventListener('click',async()=>{try{await copyBundleText(`${latestPrompt}\n\n【完整資料 JSON】\n${latestBundleJSON}`);setBundleMessage('分析指令和全部資料已複製；若貼上時過大，請改用「下載 JSON＋複製分析指令」。','ok')}catch(error){setBundleMessage(`完整內容太大或無法複製：${String(error.message||error)}。請改下載 JSON。`,'error')}});
-analysisEls.openChatGPT.addEventListener('click',()=>{window.open('https://chatgpt.com/','_blank','noopener,noreferrer')});
+analysisEls.openChatGPT.addEventListener('click',()=>{setBundleMessage('ChatGPT 已在新分頁開啟。請按對話框左下角「＋／迴紋針」，從「下載」資料夾選取剛才的 JSON；上傳完成後貼上分析指令並送出。','ok');window.open('https://chatgpt.com/','_blank','noopener,noreferrer')});
 
 resetBundleSourceList();
 loadAnalysisCatalog().then(()=>setBundleMessage('網站母清單已同步。','ok')).catch(error=>setBundleMessage(`網站母清單尚未同步：${String(error?.message||error)}`,'error'));
