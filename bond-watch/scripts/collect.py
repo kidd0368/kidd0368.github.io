@@ -329,4 +329,8 @@ def main():
     y30 = next((c for c in snap["curve"] if c["label"] == "30Y"), {})
     log("done: asof=%s curve=%d 30Y=%.2f%% (20d %+.0fbp) pressure=%s events=%d"
         % (snap["asof"], len(snap["curve"]), y30.get("value", 0),
-           y30.get("chg", {}).get("20", 0), snap["pressure"]["s
+           y30.get("chg", {}).get("20", 0), snap["pressure"]["score"], len(store["events"])))
+
+
+if __name__ == "__main__":
+    main()
