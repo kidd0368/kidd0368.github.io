@@ -1,4 +1,4 @@
-name: FED 機率儀表板自動更新
+name: 利率與債市儀表板自動更新
 
 on:
   schedule:
@@ -48,11 +48,23 @@ jobs:
           PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
         run: python fed-watch/scripts/build_page.py
 
+      - name: 收集債市資料（完整殖利率曲線）
+        env:
+          PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          JIN10_MCP_TOKEN: ${{ secrets.JIN10_MCP_TOKEN }}
+        run: python bond-watch/scripts/collect.py
+
+      - name: 組裝債市頁（加密發布）
+        env:
+          PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
+        run: python bond-watch/scripts/build_page.py
+
       - name: 提交更新
         run: |
           git config user.name "fed-watch-bot"
           git config user.email "actions@github.com"
-          git add fed-watch/
+          git add fed-watch/ bond-watch/
           if git diff --cached --quiet; then
             echo "無變化，跳過提交"
           else
@@ -60,6 +72,7 @@ jobs:
             git pull --rebase origin main
             git push
           fi
+
 
 
 
