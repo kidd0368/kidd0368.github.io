@@ -1,0 +1,51 @@
+{
+  "_readme": "美債殖利率曲線與期限溢價追蹤。curve 是畫曲線用的期別（依 years 排序）；decomp 是拆解用的輔助序列。thresholds 供折現率壓力指數使用。",
+  "curve": [
+    {"id": "DGS1MO", "label": "1M", "years": 0.083},
+    {"id": "DGS3MO", "label": "3M", "years": 0.25},
+    {"id": "DGS6MO", "label": "6M", "years": 0.5},
+    {"id": "DGS1", "label": "1Y", "years": 1},
+    {"id": "DGS2", "label": "2Y", "years": 2},
+    {"id": "DGS3", "label": "3Y", "years": 3},
+    {"id": "DGS5", "label": "5Y", "years": 5},
+    {"id": "DGS7", "label": "7Y", "years": 7},
+    {"id": "DGS10", "label": "10Y", "years": 10},
+    {"id": "DGS20", "label": "20Y", "years": 20},
+    {"id": "DGS30", "label": "30Y", "years": 30}
+  ],
+  "decomp": {
+    "T5YIE": "5年通膨預期",
+    "T10YIE": "10年通膨預期",
+    "DFII5": "5年實質利率(TIPS)",
+    "DFII10": "10年實質利率(TIPS)",
+    "DFII30": "30年實質利率(TIPS)",
+    "THREEFYTP10": "10年期限溢價(ACM)",
+    "T10Y2Y": "2s10s 利差",
+    "T10Y3M": "3M10Y 利差",
+    "DFF": "有效聯邦基金利率"
+  },
+  "spreads": [
+    {"key": "2s10s", "long": "DGS10", "short": "DGS2", "label": "2s10s"},
+    {"key": "5s30s", "long": "DGS30", "short": "DGS5", "label": "5s30s"},
+    {"key": "3m10y", "long": "DGS10", "short": "DGS3MO", "label": "3M10Y"},
+    {"key": "10s30s", "long": "DGS30", "short": "DGS10", "label": "10s30s"}
+  ],
+  "history_days": 400,
+  "lookbacks": [5, 20, 60, 120],
+  "pressure": {
+    "_readme": "折現率壓力指數 0-100：長端實質利率、期限溢價、30年水位、20日動能四項加權。給 AI capex 等長天期成長股估值參考。",
+    "real30_lo": 1.5, "real30_hi": 3.2,
+    "tp_lo": -0.2, "tp_hi": 1.2,
+    "y30_lo": 3.8, "y30_hi": 5.4,
+    "mom_lo": -30, "mom_hi": 40,
+    "weights": {"real30": 0.35, "tp": 0.25, "y30": 0.25, "mom": 0.15}
+  },
+  "jin10_keywords": ["美债", "国债收益率", "财政部 回购", "美债 拍卖", "期限溢价", "贝森特", "美债 减持"],
+  "event_markers": [
+    "回购", "拍卖", "发债", "再融资", "季度再融资", "减持", "增持", "持仓",
+    "财政部", "贝森特", "赤字", "债务上限", "评级", "期限溢价", "收益率曲线",
+    "国债收益率", "30年期", "10年期", "TGA", "缩表", "QT"
+  ],
+  "max_events": 300,
+  "snapshot_keep": 1500
+}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>美債殖利率曲線與期限溢價（加密）</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0c1017;--card:#131a24;--ink:#f2f5f8;--muted:#9ba8b7;--line:#293545;--gold:#f6c453;--red:#ff5c78}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;background:radial-gradient(circle at 12% 12%,rgba(246,196,83,.13),transparent 30%),radial-gradient(circle at 88% 84%,rgba(57,198,190,.10),transparent 30%),var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif}
+    .card{width:min(470px,100%);padding:34px;background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 24px 70px rgba(0,0,0,.32)}
+    .mark{display:grid;place-items:center;width:58px;height:58px;border-radius:16px;background:linear-gradient(135deg,var(--gold),#ff9f43);color:#171006;font-size:21px;font-weight:950}
+    h1{font-size:26px;letter-spacing:-.025em;margin:22px 0 9px}p{margin:0;color:var(--muted);font-size:14px;line-height:1.75}label{display:block;margin:23px 0 8px;color:var(--muted);font-size:12px;font-weight:850}
+    .row{display:flex;gap:8px}input{flex:1;min-width:0;padding:13px 14px;border:1px solid var(--line);border-radius:11px;background:#0d131c;color:var(--ink);font:inherit}button{padding:11px 15px;border:0;border-radius:11px;background:var(--gold);color:#171006;font:inherit;font-weight:900;cursor:pointer}button:disabled{opacity:.6;cursor:wait}
+    .error{min-height:22px;margin-top:11px;color:var(--red);font-size:12px}.privacy{margin-top:17px;padding-top:15px;border-top:1px solid var(--line);font-size:11px}.noscript{color:var(--red);margin-top:12px}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="mark">債</div>
+    <h1>美債殖利率曲線與期限溢價</h1>
+    <p>完整殖利率曲線、實質利率與通膨預期拆解、期限溢價與折現率壓力追蹤。內容以 AES-256-GCM 加密保存，輸入頁面密碼後在本機解密。</p>
+    <form id="login">
+      <label for="password">頁面密碼</label>
+      <div class="row"><input id="password" type="password" autocomplete="current-password" autofocus required><button id="open" type="submit">開啟</button></div>
+      <div id="error" class="error" role="alert" aria-live="polite"></div>
+    </form>
+    <p class="privacy">密碼不會傳送至伺服器。這是公開網址上的瀏覽器端加密，不是 GitHub 帳號登入；請勿轉傳連結與密碼。</p>
+    <noscript><p class="noscript">瀏覽器必須啟用 JavaScript 才能解密。</p></noscript>
+  </main>
+  <script>
+  (()=>{
+    const form=document.getElementById("login"),input=document.getElementById("password"),button=document.getElementById("open"),error=document.getElementById("error");
+    const fromB64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+    async function decrypt(password){
+      const manifestResponse=await fetch("payload-manifest.json",{cache:"no-store"});
+      if(!manifestResponse.ok)throw new Error("load");
+      const manifest=await manifestResponse.json();
+      const parts=await Promise.all(manifest.files.map(async name=>{const response=await fetch(name,{cache:"no-store"});if(!response.ok)throw new Error("load");return response.text()}));
+      const box=JSON.parse(parts.join(""));
+      const material=await crypto.subtle.importKey("raw",new TextEncoder().encode(password),"PBKDF2",false,["deriveKey"]);
+      const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:fromB64(box.salt),iterations:box.iterations,hash:"SHA-256"},material,{name:"AES-GCM",length:256},false,["decrypt"]);
+      const plain=await crypto.subtle.decrypt({name:"AES-GCM",iv:fromB64(box.iv),tagLength:128},key,fromB64(box.ciphertext));
+      return new TextDecoder().decode(plain);
+    }
+    form.addEventListener("submit",async event=>{
+      event.preventDefault();button.disabled=true;input.disabled=true;error.textContent="正在解密…";
+      try{
+        const html=await decrypt(input.value);input.value="";document.open();document.write(html);document.close();
+      }catch(_){error.textContent="密碼不正確，或加密資料暫時無法載入。";button.disabled=false;input.disabled=false;input.focus();input.select()}
+    });
+  })();
+  </script>
+</body>
+</html>
