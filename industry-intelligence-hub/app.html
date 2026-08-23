@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="產業情報研究系統：ChatGPT 分析任務、結構化研究紀錄、產業分類連動與 GitHub 自動發布。">
+  <title>產業情報研究系統</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <section id="gate" aria-label="登入">
+    <div class="gate-card">
+      <div class="gate-mark">II</div>
+      <h1>產業情報研究系統</h1>
+      <p>研究任務、數值紀錄與產業分類連動</p>
+      <label for="gate-password">密碼</label>
+      <div class="gate-row">
+        <input id="gate-password" type="password" autocomplete="current-password" placeholder="輸入密碼">
+        <button class="btn btn-primary" id="gate-submit" type="button">進入</button>
+      </div>
+      <div class="gate-error" id="gate-error" role="alert"></div>
+      <div class="help">此頁採瀏覽器端驗證；原始付費報告不存放於 GitHub。</div>
+    </div>
+  </section>
+
+  <div id="app" class="app-shell hidden">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <div class="brand-mark">II</div>
+          <div>
+            <h1>產業情報研究系統</h1>
+            <small>Industry Intelligence Hub</small>
+          </div>
+        </div>
+        <div class="system-badges">
+          <span class="badge"><span class="dot" id="taxonomy-dot"></span>分類 <strong id="taxonomy-version">讀取中</strong></span>
+          <span class="badge"><span class="dot" id="records-dot"></span>紀錄 <strong id="record-count-top">—</strong></span>
+          <span class="badge"><span class="dot" id="sync-dot"></span>同步 <strong id="sync-state-top">檢查中</strong></span>
+        </div>
+        <button class="btn btn-small" id="logout-btn" type="button">登出</button>
+      </div>
+      <div class="nav-wrap">
+        <nav class="main-nav" aria-label="主要功能">
+          <button class="nav-btn active" data-view="overview" type="button">總覽</button>
+          <button class="nav-btn" data-view="task" type="button">建立分析任務</button>
+          <button class="nav-btn" data-view="records" type="button">研究紀錄</button>
+          <button class="nav-btn" data-view="taxonomy" type="button">產業分類</button>
+          <button class="nav-btn" data-view="validator" type="button">JSON 驗證</button>
+          <button class="nav-btn" data-view="system" type="button">系統狀態</button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="view active" id="view-overview">
+        <div class="view-head">
+          <div>
+            <h2>研究資料總覽</h2>
+            <p>分類網站與研究資料庫分開維護，透過穩定 ID、版本號與 GitHub 自動索引保持連動。</p>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary" data-go="task" type="button">＋ 建立新任務</button>
+            <button class="btn" id="refresh-all" type="button">重新同步</button>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="card stat-card">
+            <div class="stat-label">研究紀錄</div>
+            <div class="stat-value" id="stat-records">0</div>
+            <div class="stat-detail" id="stat-records-detail">等待第一筆資料</div>
+          </article>
+          <article class="card stat-card">
+            <div class="stat-label">產業節點</div>
+            <div class="stat-value" id="stat-nodes">—</div>
+            <div class="stat-detail">共用 taxonomy</div>
+          </article>
+          <article class="card stat-card">
+            <div class="stat-label">公司／實體</div>
+            <div class="stat-value" id="stat-entities">—</div>
+            <div class="stat-detail">含台灣與海外對手</div>
+          </article>
+          <article class="card stat-card">
+            <div class="stat-label">數值主張</div>
+            <div class="stat-value" id="stat-metrics">0</div>
+            <div class="stat-detail">產能、報價、利潤率等</div>
+          </article>
+          <article class="card stat-card">
+            <div class="stat-label">待審核</div>
+            <div class="stat-value" id="stat-review">0</div>
+            <div class="stat-detail">衝突或口徑不明資料</div>
+          </article>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="stack">
+            <article class="card card-pad">
+              <h3>工作閉環</h3>
+              <div class="flow-list">
+                <div class="flow-step"><span class="flow-no">01</span><b>網頁建立任務</b><span>讀取最新分類與資料契約</span></div>
+                <div class="flow-step"><span class="flow-no">02</span><b>附檔給 ChatGPT</b><span>PDF、圖片、試算表或文字</span></div>
+                <div class="flow-step"><span class="flow-no">03</span><b>分析＋結構化</b><span>文字擴張版與 JSON 同步完成</span></div>
+                <div class="flow-step"><span class="flow-no">04</span><b>直接寫入 GitHub</b><span>ChatGPT 呼叫 GitHub 工具提交</span></div>
+                <div class="flow-step"><span class="flow-no">05</span><b>自動重建頁面</b><span>Action 驗證、索引與發布</span></div>
+              </div>
+            </article>
+
+            <article class="card card-pad">
+              <div class="view-head" style="margin-bottom:12px">
+                <div>
+                  <h3>最近研究紀錄</h3>
+                  <p>點選紀錄可查看文字摘要、數值與來源資訊。</p>
+                </div>
+                <button class="btn btn-small" data-go="records" type="button">查看全部</button>
+              </div>
+              <div id="recent-records"></div>
+            </article>
+
+            <article class="card card-pad">
+              <h3>指標分布</h3>
+              <div id="metric-bars" class="bar-list"></div>
+            </article>
+          </div>
+
+          <div class="stack">
+            <article class="card card-pad">
+              <h3>連動狀態</h3>
+              <div class="status-list">
+                <div class="status-row">
+                  <div class="status-name">CPO 分類來源</div>
+                  <div class="status-value mono" id="status-taxonomy-source">/cpo-notes/data/taxonomy.json</div>
+                  <div class="status-state" id="status-taxonomy-state">讀取中</div>
+                </div>
+                <div class="status-row">
+                  <div class="status-name">分類版本</div>
+                  <div class="status-value mono" id="status-taxonomy-version">—</div>
+                  <div class="status-state" id="status-taxonomy-version-state">—</div>
+                </div>
+                <div class="status-row">
+                  <div class="status-name">研究索引</div>
+                  <div class="status-value mono">data/records.json</div>
+                  <div class="status-state" id="status-records-state">讀取中</div>
+                </div>
+                <div class="status-row">
+                  <div class="status-name">自動重建</div>
+                  <div class="status-value mono">GitHub Actions</div>
+                  <div class="status-state">已配置</div>
+                </div>
+              </div>
+            </article>
+
+            <article class="card card-pad">
+              <h3>資料原則</h3>
+              <div class="callout info">
+                每一筆數字同時保存「資訊日期」與「指標期間」，並區分實際值、公司展望、券商估計與模型推算。
+              </div>
+              <div class="section-divider"></div>
+              <p class="muted">分類名稱可以調整，但穩定的 <span class="mono">node_id</span> 不任意變更。節點拆分或合併時，舊資料保留原版本並進入 migration 流程。</p>
+            </article>
+
+            <article class="card card-pad">
+              <h3>第一版支援</h3>
+              <div id="supported-industries"><span class="tag info">CPO／光通訊</span></div>
+              <p class="muted">後續可加入 AI 伺服器、PCB／CCL、散熱、記憶體、半導體設備與 ASIC 等產業。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-task">
+        <div class="view-head">
+          <div>
+            <h2>建立 ChatGPT 分析任務</h2>
+            <p>檔案只在瀏覽器本機讀取檔名、大小與雜湊；網頁不會上傳附件。產生指令後，把同一批附件與指令貼到 ChatGPT。</p>
+          </div>
+          <div class="actions">
+            <button class="btn" id="reset-task" type="button">重設</button>
+            <button class="btn btn-primary" id="generate-prompt" type="button">產生分析指令</button>
+          </div>
+        </div>
+
+        <div class="split-grid">
+          <div class="stack">
+            <article class="card card-pad">
+              <h3>任務與來源</h3>
+              <div class="form-grid">
+                <div class="field span-8">
+                  <label for="task-id">任務 ID</label>
+                  <div class="inline-input">
+                    <input id="task-id" class="mono" readonly>
+                    <button class="btn" id="new-task-id" type="button">重新產生</button>
+                  </div>
+                </div>
+                <div class="field span-4">
+                  <label for="industry-select">產業</label>
+                  <select id="industry-select"></select>
+                </div>
+                <div class="field span-6">
+                  <label for="analysis-type">資料類型</label>
+                  <select id="analysis-type">
+                    <option value="broker_report">個股券商報告</option>
+                    <option value="earnings_call">法說／會後紀要</option>
+                    <option value="industry_report">產業報告</option>
+                    <option value="company_filing">公司公告／財報</option>
+                    <option value="image_screenshot">圖片／截圖</option>
+                    <option value="interview_notes">訪談／文字紀錄</option>
+                    <option value="news">新聞</option>
+                    <option value="multi_source">多來源綜合</option>
+                    <option value="other">其他</option>
+                  </select>
+                </div>
+                <div class="field span-6">
+                  <label for="confidentiality">機密性</label>
+                  <select id="confidentiality">
+                    <option value="private">私人研究資料</option>
+                    <option value="restricted">受限資料</option>
+                    <option value="public">公開資料</option>
+                    <option value="unknown">未判定</option>
+                  </select>
+                </div>
+                <div class="field span-8">
+                  <label for="source-title">本次研究主題／資料包名稱</label>
+                  <input id="source-title" placeholder="選擇附件後自動產生，也可自行修改">
+                  <div class="help">用來辨識日後的研究紀錄，不是要重抄每份報告標題。多份附件會依產業、公司與檔案數自動命名；若附件沒有共同研究問題，應分開建立任務。</div>
+                </div>
+                <div class="field span-4">
+                  <label for="publisher">共同發布者／主要券商</label>
+                  <input id="publisher" placeholder="多來源可留空，由 ChatGPT 逐份判定">
+                </div>
+                <div class="field span-4">
+                  <label for="published-date">共同發布日期</label>
+                  <input id="published-date" type="date">
+                  <div class="help">多來源日期不同時可留空。</div>
+                </div>
+                <div class="field span-4">
+                  <label for="received-date">取得日期</label>
+                  <input id="received-date" type="date">
+                </div>
+                <div class="field span-4">
+                  <label for="primary-entity">主要公司／實體</label>
+                  <input id="primary-entity" list="entity-options" placeholder="輸入公司名稱或代碼">
+                  <datalist id="entity-options"></datalist>
+                </div>
+                <div class="field span-12">
+                  <label for="dropbox-path">Dropbox 原始檔路徑</label>
+                  <input id="dropbox-path" class="mono" placeholder="/DT同步/...（只記錄路徑，不上傳原始檔）">
+                </div>
+                <div class="field span-12">
+                  <label for="research-focus">本次特別要回答的問題</label>
+                  <textarea id="research-focus" placeholder="例如：拆解 2027 年 CPO 設備營收貢獻、比對海外競爭者、驗證產能與 ASP 假設。"></textarea>
+                </div>
+              </div>
+            </article>
+
+            <article class="card card-pad">
+              <h3>附件清單</h3>
+              <div class="file-drop" id="file-drop">
+                <input id="file-input" type="file" multiple>
+                <strong>點擊選擇，或把檔案拖到這裡</strong>
+                <span>PDF、圖片、Excel、Word、文字皆可；本頁不會將檔案傳到伺服器。</span>
+              </div>
+              <div id="file-list" class="file-list"></div>
+              <div class="privacy-note"><span>✓</span><span>只計算檔名、大小、類型與 SHA-256。超過 100MB 的檔案只保留中繼資料，不在瀏覽器計算雜湊。</span></div>
+            </article>
+
+            <article class="card card-pad">
+              <h3>補充文字</h3>
+              <label for="pasted-text">直接貼入的消息、訪談或備註</label>
+              <textarea id="pasted-text" style="min-height:180px" placeholder="可留空；若有貼入文字，會被列入任務封包。"></textarea>
+              <div class="check-row" style="margin-top:12px">
+                <input id="direct-github" type="checkbox" checked>
+                <label for="direct-github" style="margin:0">要求 ChatGPT 完成後直接寫入 GitHub，並回報 commit SHA</label>
+              </div>
+            </article>
+          </div>
+
+          <article class="card card-pad">
+            <div class="view-head" style="margin-bottom:12px">
+              <div>
+                <h3>產生的指令</h3>
+                <p>指令包含最新分類版本、資料契約與 GitHub 寫入位置。</p>
+              </div>
+              <div class="actions">
+                <button class="btn btn-small" id="copy-prompt" type="button" disabled>複製</button>
+                <button class="btn btn-small" id="download-prompt" type="button" disabled>下載 TXT</button>
+                <button class="btn btn-small" id="download-packet" type="button" disabled>下載任務 JSON</button>
+              </div>
+            </div>
+            <textarea class="prompt-output" id="prompt-output" readonly placeholder="選擇附件後按「產生分析指令」；研究主題會自動命名。"></textarea>
+            <div id="prompt-meta" class="help"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-records">
+        <div class="view-head">
+          <div>
+            <h2>研究紀錄</h2>
+            <p>一個 ChatGPT 任務對應一份 JSON；網站索引由 GitHub Actions 自動重建。</p>
+          </div>
+          <button class="btn" id="refresh-records" type="button">重新載入</button>
+        </div>
+        <article class="card card-pad">
+          <div class="toolbar">
+            <input class="search" id="record-search" placeholder="搜尋標題、公司、代碼、摘要">
+            <select id="record-type-filter"><option value="">全部資料類型</option></select>
+            <select id="record-status-filter">
+              <option value="">全部狀態</option>
+              <option value="accepted">已接受</option>
+              <option value="review_required">待審核</option>
+              <option value="rejected">拒絕</option>
+            </select>
+          </div>
+          <div id="records-table"></div>
+        </article>
+      </section>
+
+      <section class="view" id="view-taxonomy">
+        <div class="view-head">
+          <div>
+            <h2>產業分類與公司節點</h2>
+            <p>此頁直接讀取 CPO 分類網站的機器可讀資料；遠端失敗時使用本系統內建快照。</p>
+          </div>
+          <button class="btn" id="refresh-taxonomy" type="button">重新同步分類</button>
+        </div>
+        <div class="taxonomy-layout">
+          <article class="card card-pad">
+            <div class="toolbar">
+              <input class="search" id="node-search" placeholder="搜尋節點或 node_id">
+            </div>
+            <div class="tree" id="taxonomy-tree"></div>
+          </article>
+          <article class="card card-pad node-detail" id="node-detail">
+            <h3>選擇一個產業節點</h3>
+            <p class="muted">查看節點 ID、上下游位置與所屬公司。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-validator">
+        <div class="view-head">
+          <div>
+            <h2>JSON 匯入驗證</h2>
+            <p>檢查必要欄位、task ID、分類節點、公司 ID、指標 ID、單位與證據引用。驗證不會把資料送到網路。</p>
+          </div>
+          <div class="actions">
+            <button class="btn" id="load-example" type="button">載入範例</button>
+            <button class="btn btn-primary" id="validate-json" type="button">執行驗證</button>
+          </div>
+        </div>
+        <div class="split-grid">
+          <article class="card card-pad">
+            <label for="json-input">分析 JSON</label>
+            <textarea id="json-input" class="mono" style="min-height:610px" placeholder="貼上 ChatGPT 產生的 JSON，或載入本機檔案。"></textarea>
+            <div class="actions" style="margin-top:10px">
+              <label class="btn" for="json-file" style="margin:0">載入本機 JSON</label>
+              <input id="json-file" type="file" accept=".json,application/json" class="hidden">
+              <button class="btn" id="download-validated" type="button" disabled>下載已驗證 JSON</button>
+            </div>
+          </article>
+          <article class="card card-pad">
+            <h3>驗證結果</h3>
+            <div id="validation-result" class="validation-output">
+              <div class="empty"><b>尚未驗證</b>貼入 JSON 後執行檢查。</div>
+            </div>
+            <div class="section-divider"></div>
+            <h3>解析預覽</h3>
+            <pre id="json-preview" class="json-preview">—</pre>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-system">
+        <div class="view-head">
+          <div>
+            <h2>系統狀態與資料邊界</h2>
+            <p>確認 GitHub 寫入位置、分類來源、Schema 與自動化路徑。</p>
+          </div>
+          <button class="btn" id="system-refresh" type="button">重新檢查</button>
+        </div>
+        <div class="dashboard-grid">
+          <div class="stack">
+            <article class="card card-pad">
+              <h3>GitHub 寫入契約</h3>
+              <pre class="code-block" id="github-contract">讀取中...</pre>
+            </article>
+            <article class="card card-pad">
+              <h3>資料分層</h3>
+              <div class="status-list">
+                <div class="status-row"><div class="status-name">原始檔</div><div class="status-value">Dropbox：PDF、圖片、試算表、訪談原文</div><div class="status-state"><span class="tag good">不進 GitHub</span></div></div>
+                <div class="status-row"><div class="status-name">分類主檔</div><div class="status-value mono">cpo-notes/data/taxonomy.json</div><div class="status-state"><span class="tag info">共用</span></div></div>
+                <div class="status-row"><div class="status-name">研究紀錄</div><div class="status-value mono">industry-intelligence-hub/data/records/...</div><div class="status-state"><span class="tag info">一任務一檔</span></div></div>
+                <div class="status-row"><div class="status-name">索引頁</div><div class="status-value mono">records.json / manifest.json</div><div class="status-state"><span class="tag good">Action 重建</span></div></div>
+              </div>
+            </article>
+            <article class="card card-pad">
+              <h3>安全邊界</h3>
+              <div class="callout warn">
+                GitHub Pages 是靜態公開內容。密碼閘門只降低誤入風險，不是伺服器端存取控制；付費報告原文、個人資料與 GitHub Token 不得寫入此儲存庫。
+              </div>
+            </article>
+          </div>
+          <div class="stack">
+            <article class="card card-pad">
+              <h3>即時檢查</h3>
+              <div id="system-checks" class="status-list"></div>
+            </article>
+            <article class="card card-pad">
+              <h3>版本資訊</h3>
+              <pre class="code-block" id="version-info">讀取中...</pre>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>產業情報研究系統 · 資料庫與產業分類分離、版本連動</span>
+      <span id="footer-updated">最後載入：—</span>
+    </footer>
+  </div>
+
+  <dialog id="record-dialog">
+    <div class="dialog-head">
+      <div>
+        <h3 id="dialog-title">研究紀錄</h3>
+        <div class="muted" id="dialog-subtitle"></div>
+      </div>
+      <button class="btn btn-small" id="dialog-close" type="button">關閉</button>
+    </div>
+    <div class="dialog-body" id="dialog-body"></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js" defer></script>
+</body>
+</html>
