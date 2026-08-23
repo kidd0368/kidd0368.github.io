@@ -5,7 +5,10 @@ on:
     branches: [main]
     paths:
       - "industry-intelligence-hub/data/records/**"
-      - "industry-intelligence-hub/scripts/rebuild_records.py"
+      - "industry-intelligence-hub/data/registry.json"
+      - "industry-intelligence-hub/scripts/**"
+      - "industry-intelligence-hub/completion-gate.js"
+      - "industry-intelligence-hub/app.html"
       - ".github/workflows/industry-intelligence-hub-rebuild.yml"
   workflow_dispatch:
 
@@ -25,8 +28,23 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Validate completion-gate source
+        run: |
+          node --check industry-intelligence-hub/completion-gate.js
+          python3 -m py_compile \
+            industry-intelligence-hub/scripts/enrich_completion_receipts.py \
+            industry-intelligence-hub/scripts/verify_completion_gate.py \
+            industry-intelligence-hub/scripts/install_completion_gate.py
+          grep -q 'completion-gate.js?v=1.0.0' industry-intelligence-hub/app.html
+
       - name: Rebuild record indexes
         run: python3 industry-intelligence-hub/scripts/rebuild_records.py
+
+      - name: Add cryptographic write receipts
+        run: python3 industry-intelligence-hub/scripts/enrich_completion_receipts.py
+
+      - name: Enforce GitHub completion gate
+        run: python3 industry-intelligence-hub/scripts/verify_completion_gate.py
 
       - name: Commit generated indexes
         run: |
@@ -44,5 +62,5 @@ jobs:
             industry-intelligence-hub/data/records.json \
             industry-intelligence-hub/data/changelog.json \
             industry-intelligence-hub/data/manifest.json
-          git commit -m "industry-intelligence: rebuild indexes"
+          git commit -m "industry-intelligence: rebuild verified indexes"
           git push
