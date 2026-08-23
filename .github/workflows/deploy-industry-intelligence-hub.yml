@@ -1,0 +1,54 @@
+name: Deploy Industry Intelligence Hub
+
+on:
+  push:
+    paths:
+      - '.github/workflows/deploy-industry-intelligence-hub.yml'
+      - 'deploy-payloads/industry-intelligence-hub/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-industry-intelligence-hub
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Decode and validate project
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat deploy-payloads/industry-intelligence-hub/part-* | base64 --decode > /tmp/industry-intelligence-hub.zip
+          rm -rf industry-intelligence-hub
+          unzip -q /tmp/industry-intelligence-hub.zip -d .
+          test -f industry-intelligence-hub/index.html
+          test -f industry-intelligence-hub/app.js
+          test -f industry-intelligence-hub/styles.css
+          python -m json.tool industry-intelligence-hub/data/registry.json >/dev/null
+          python -m json.tool industry-intelligence-hub/data/taxonomy.cpo.json >/dev/null
+          python -m json.tool industry-intelligence-hub/data/records.json >/dev/null
+          python -m json.tool industry-intelligence-hub/schemas/research-record.schema.json >/dev/null
+          node --check industry-intelligence-hub/app.js
+
+      - name: Commit deployed site
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'industry-intelligence-bot'
+          git config user.email 'actions@github.com'
+          git add industry-intelligence-hub
+          if git diff --cached --quiet; then
+            echo 'No deployment changes.'
+            exit 0
+          fi
+          git commit -m 'build: deploy industry intelligence hub v0.1.0'
+          git push
