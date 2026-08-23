@@ -1,11 +1,25 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-08-23T21:30:00+08:00",
+  "updated_at": "2026-08-24T07:42:00+08:00",
   "target_repository": "kidd0368/kidd0368.github.io",
   "base_path": "industry-intelligence-hub",
   "record_path_template": "industry-intelligence-hub/data/records/{yyyy}/{mm}/{task_id}.json",
   "aggregate_path": "industry-intelligence-hub/data/records.json",
   "schema_path": "industry-intelligence-hub/schemas/analysis-record.schema.json",
+  "completion_gate": {
+    "version": "1.0.0",
+    "branch": "main",
+    "manifest_path": "industry-intelligence-hub/data/manifest.json",
+    "required_receipt_status": "committed_and_indexed",
+    "required_checks": [
+      "record_exists_on_main",
+      "task_id_matches",
+      "commit_sha_exists",
+      "record_is_indexed",
+      "content_sha256_matches",
+      "manifest_has_no_invalid_entry"
+    ]
+  },
   "industries": [
     {
       "industry_id": "CPO",
