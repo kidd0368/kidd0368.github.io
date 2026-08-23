@@ -220,16 +220,18 @@
                   </select>
                 </div>
                 <div class="field span-8">
-                  <label for="source-title">來源標題 <span class="req">*</span></label>
-                  <input id="source-title" placeholder="例如：3167 大量 2026/08 法說會後">
+                  <label for="source-title">本次研究主題／資料包名稱</label>
+                  <input id="source-title" placeholder="選擇附件後自動產生，也可自行修改">
+                  <div class="help">用來辨識日後的研究紀錄，不是要重抄每份報告標題。多份附件會依產業、公司與檔案數自動命名；若附件沒有共同研究問題，應分開建立任務。</div>
                 </div>
                 <div class="field span-4">
-                  <label for="publisher">發布者／券商</label>
-                  <input id="publisher" placeholder="例如：公司、券商、媒體">
+                  <label for="publisher">共同發布者／主要券商</label>
+                  <input id="publisher" placeholder="多來源可留空，由 ChatGPT 逐份判定">
                 </div>
                 <div class="field span-4">
-                  <label for="published-date">發布日期</label>
+                  <label for="published-date">共同發布日期</label>
                   <input id="published-date" type="date">
+                  <div class="help">多來源日期不同時可留空。</div>
                 </div>
                 <div class="field span-4">
                   <label for="received-date">取得日期</label>
@@ -285,7 +287,7 @@
                 <button class="btn btn-small" id="download-packet" type="button" disabled>下載任務 JSON</button>
               </div>
             </div>
-            <textarea class="prompt-output" id="prompt-output" readonly placeholder="填寫來源並按「產生分析指令」。"></textarea>
+            <textarea class="prompt-output" id="prompt-output" readonly placeholder="選擇附件後按「產生分析指令」；研究主題會自動命名。"></textarea>
             <div id="prompt-meta" class="help"></div>
           </article>
         </div>
