@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-23T19:08:06+00:00",
+  "generated_at": "2026-08-23T23:47:45+00:00",
   "entries": [
     {
       "task_id": "TASK-20260823-235332-LK3H4",
@@ -9,7 +9,21 @@
       "record_path": "data/records/2026/08/TASK-20260823-235332-LK3H4.json",
       "title": "光通訊／CPO多來源綜合：聯鈞、新易盛、天孚通信與博通（科大訊飛附件越界）",
       "metric_count": 83,
-      "conflicts_found": 5
+      "conflicts_found": 5,
+      "write_receipt": {
+        "gate_version": "1.0.0",
+        "status": "committed_and_indexed",
+        "repository": "kidd0368/kidd0368.github.io",
+        "branch": "main",
+        "record_path": "industry-intelligence-hub/data/records/2026/08/TASK-20260823-235332-LK3H4.json",
+        "record_commit_sha": "fdacb20fa487c5356b824ca577acb4ca9a4982f2",
+        "record_blob_sha": "c039b4e153502451089118b010485b055afafb53",
+        "record_content_sha256": "d973dca77f7a0ed75c5a7e27522734362dc4f9925b3c0a1e611a7d6041107032",
+        "commit_message": "industry-intelligence: add TASK-20260823-235332-LK3H4",
+        "index_path": "industry-intelligence-hub/data/records.json",
+        "manifest_path": "industry-intelligence-hub/data/manifest.json",
+        "indexed_at": "2026-08-23T23:47:45+00:00"
+      }
     }
   ]
 }

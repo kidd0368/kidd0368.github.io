@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-23T19:08:06+00:00",
+  "generated_at": "2026-08-23T23:47:45+00:00",
   "status": "ready",
   "record_count": 1,
   "invalid_record_count": 0,
@@ -8,5 +8,9 @@
   "taxonomy_versions": {
     "CPO": "2026.08.23.1"
   },
-  "validation_errors": []
+  "validation_errors": [],
+  "completion_gate_version": "1.0.0",
+  "completed_record_count": 1,
+  "completion_receipt_error_count": 0,
+  "completion_receipt_errors": []
 }
