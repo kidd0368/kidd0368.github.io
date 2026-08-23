@@ -1,0 +1,48 @@
+name: Industry Intelligence Hub - rebuild indexes
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "industry-intelligence-hub/data/records/**"
+      - "industry-intelligence-hub/scripts/rebuild_records.py"
+      - ".github/workflows/industry-intelligence-hub-rebuild.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: industry-intelligence-hub-rebuild
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Rebuild record indexes
+        run: python3 industry-intelligence-hub/scripts/rebuild_records.py
+
+      - name: Commit generated indexes
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- \
+            industry-intelligence-hub/data/records.json \
+            industry-intelligence-hub/data/changelog.json \
+            industry-intelligence-hub/data/manifest.json; then
+            echo "No generated changes."
+            exit 0
+          fi
+          git config user.name "industry-intelligence-bot"
+          git config user.email "actions@github.com"
+          git add \
+            industry-intelligence-hub/data/records.json \
+            industry-intelligence-hub/data/changelog.json \
+            industry-intelligence-hub/data/manifest.json
+          git commit -m "industry-intelligence: rebuild indexes"
+          git push
