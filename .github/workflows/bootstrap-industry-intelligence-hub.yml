@@ -1,0 +1,52 @@
+name: Bootstrap Industry Intelligence Hub
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/bootstrap-industry-intelligence-hub.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bootstrap-industry-intelligence-hub
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore and verify application files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat bootstrap/industry-intelligence/part-*.txt | tr -d '\n\r ' | base64 --decode > /tmp/industry-intelligence-hub.tar.gz
+          echo "b788d4af959b1e08ccb267061c5e24bfc56c7ee783e752d4171efb6bae68dbb4  /tmp/industry-intelligence-hub.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/industry-intelligence-hub.tar.gz -C .
+          test -f industry-intelligence-hub/index.html
+          test -f industry-intelligence-hub/app.js
+          test -f industry-intelligence-hub/schemas/analysis-record.schema.json
+          python3 -m py_compile industry-intelligence-hub/scripts/rebuild_records.py
+          python3 industry-intelligence-hub/scripts/rebuild_records.py
+
+      - name: Commit application
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "industry-intelligence-bot"
+          git config user.email "actions@github.com"
+          git add industry-intelligence-hub
+          git rm -r bootstrap/industry-intelligence
+          if git diff --cached --quiet; then
+            echo "No application changes."
+            exit 0
+          fi
+          git commit -m "industry-intelligence: bootstrap research hub"
+          git push
