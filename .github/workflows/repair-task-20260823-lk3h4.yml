@@ -1,0 +1,93 @@
+name: One-shot repair TASK-20260823-235332-LK3H4
+
+on:
+  push:
+    branches:
+      - repair-task-20260823-lk3h4
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  write-record:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repair branch
+        uses: actions/checkout@v4
+        with:
+          ref: repair-task-20260823-lk3h4
+          fetch-depth: 0
+
+      - name: Materialize and validate exact record
+        shell: bash
+        run: |
+          set -euo pipefail
+          stage=".repair/TASK-20260823-235332-LK3H4"
+          cat "$stage"/part0.b64 "$stage"/part1.b64 "$stage"/part2.b64 "$stage"/part3.b64 \
+            | tr -d '\r\n' \
+            | base64 -d \
+            | gzip -dc > /tmp/TASK-20260823-235332-LK3H4.json
+
+          expected="d973dca77f7a0ed75c5a7e27522734362dc4f9925b3c0a1e611a7d6041107032"
+          actual="$(sha256sum /tmp/TASK-20260823-235332-LK3H4.json | awk '{print $1}')"
+          test "$actual" = "$expected"
+
+          python3 - <<'PY'
+          import json
+          p = "/tmp/TASK-20260823-235332-LK3H4.json"
+          with open(p, encoding="utf-8") as f:
+              d = json.load(f)
+          assert d["schema_version"] == "1.0.0"
+          assert d["task_id"] == "TASK-20260823-235332-LK3H4"
+          assert d["industry_id"] == "CPO"
+          assert d["taxonomy_version_used"] == "2026.08.23.1"
+          assert d["record_status"] == "review_required"
+          PY
+
+      - name: Commit only the record to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          target="industry-intelligence-hub/data/records/2026/08/TASK-20260823-235332-LK3H4.json"
+          expected="d973dca77f7a0ed75c5a7e27522734362dc4f9925b3c0a1e611a7d6041107032"
+
+          git fetch origin main
+          git checkout -B main origin/main
+
+          if test -e "$target"; then
+            actual="$(sha256sum "$target" | awk '{print $1}')"
+            if test "$actual" = "$expected"; then
+              echo "Record already exists with the exact expected content."
+              exit 0
+            fi
+            echo "Target already exists with different content; refusing to overwrite." >&2
+            exit 1
+          fi
+
+          mkdir -p "$(dirname "$target")"
+          cp /tmp/TASK-20260823-235332-LK3H4.json "$target"
+          git config user.name "industry-intelligence-bot"
+          git config user.email "actions@github.com"
+          git add "$target"
+          git commit -m "industry-intelligence: add TASK-20260823-235332-LK3H4"
+          git push origin HEAD:main
+
+      - name: Trigger aggregate rebuild
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail-with-body -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/kidd0368/kidd0368.github.io/actions/workflows/industry-intelligence-hub-rebuild.yml/dispatches \
+            -d '{"ref":"main"}'
+
+      - name: Delete temporary repair branch
+        if: success()
+        shell: bash
+        run: git push origin --delete repair-task-20260823-lk3h4
