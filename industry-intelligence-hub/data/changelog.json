@@ -1,13 +1,16 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-08-23T21:30:00+08:00",
-  "changes": [
+  "updated_at": "2026-08-23T21:00:00+08:00",
+  "entries": [
     {
-      "change_id": "INIT-20260823-001",
-      "changed_at": "2026-08-23T21:30:00+08:00",
-      "change_type": "system_initialized",
-      "task_id": null,
-      "summary": "建立產業情報研究系統第一版資料庫與 CPO 分類連動。"
+      "change_id": "CHG-20260823-BOOTSTRAP",
+      "timestamp": "2026-08-23T21:00:00+08:00",
+      "type": "bootstrap",
+      "summary": "建立產業情報中樞第一版、CPO 共用分類與 ChatGPT→GitHub 寫入契約。",
+      "affected_paths": [
+        "industry-intelligence-hub/",
+        "cpo-notes/data/taxonomy.json"
+      ]
     }
   ]
 }

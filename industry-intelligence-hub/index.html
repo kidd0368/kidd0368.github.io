@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<title>產業情報中樞｜Industry Intelligence Hub</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-mark">II</div>
+    <h1>產業情報中樞</h1>
+    <p>任務生成、ChatGPT 分析、結構化紀錄與產業分類連動。</p>
+    <div class="input-row">
+      <input id="passwordInput" type="password" autocomplete="current-password" placeholder="輸入密碼" aria-label="密碼">
+      <button id="loginBtn" class="btn primary">進入</button>
+    </div>
+    <div id="gateError" class="gate-error"></div>
+    <div class="small muted">本頁不在程式碼中保存明文密碼；資料仍不應視為企業級機密儲存。</div>
+  </div>
+</div>
+
+<div id="app" class="app-shell hidden">
+<header class="topbar">
+  <div class="brand"><div class="brand-mark">II</div><div><h1>產業情報中樞</h1><div class="sub">ChatGPT × GitHub × Dropbox research workflow</div></div></div>
+  <div class="status-strip">
+    <span id="taxonomyBadge" class="badge warn"><span class="dot"></span>分類載入中</span>
+    <span id="versionBadge" class="badge">v0.1.0</span>
+    <span id="syncBadge" class="badge"><span class="dot"></span>唯讀前端</span>
+  </div>
+</header>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="nav-title">WORKSPACE</div>
+    <button class="nav-btn active" data-view="overview"><span class="nav-icon">◫</span>總覽</button>
+    <button class="nav-btn" data-view="task"><span class="nav-icon">✦</span>建立分析任務</button>
+    <button class="nav-btn" data-view="import"><span class="nav-icon">⇩</span>匯入與驗證</button>
+    <button class="nav-btn" data-view="data"><span class="nav-icon">⌕</span>資料庫</button>
+    <button class="nav-btn" data-view="taxonomy"><span class="nav-icon">⌘</span>產業分類連動</button>
+    <button class="nav-btn" data-view="audit"><span class="nav-icon">≣</span>異動紀錄</button>
+    <div class="side-note">原始 PDF、圖片與報告留在 Dropbox；GitHub 僅保存結構化資料、索引與網頁。</div>
+  </aside>
+
+  <main class="main">
+    <section id="view-overview" class="view active">
+      <div class="page-head"><div><h2>研究工作台</h2><p>以同一套產業節點，把零散資訊累積成可比較的產能、價格、利潤率與供應鏈紀錄。</p></div><button class="btn" data-nav="task">＋ 新任務</button></div>
+      <div class="stat-grid">
+        <div class="card stat-card"><div class="stat-label">分類版本</div><div id="statTaxVersion" class="stat-value accent-gold">—</div><div class="stat-foot">遠端主檔優先，失敗時使用內建快照</div></div>
+        <div class="card stat-card"><div class="stat-label">產業節點</div><div id="statNodes" class="stat-value accent-cyan">—</div><div class="stat-foot">穩定 node_id，名稱與位置可更新</div></div>
+        <div class="card stat-card"><div class="stat-label">公司／機構</div><div id="statEntities" class="stat-value accent-green">—</div><div class="stat-foot">台灣與全球供應商、客戶及競爭者</div></div>
+        <div class="card stat-card"><div class="stat-label">正式研究紀錄</div><div id="statRecords" class="stat-value">0</div><div id="statReview" class="stat-foot">待審核 0 筆</div></div>
+      </div>
+      <div class="card"><h3>不用 OpenAI API 的閉環</h3><div class="flow">
+        <div class="flow-step"><span class="n">STEP 01</span><b>選檔／貼文字</b><p>檔案留在瀏覽器本機，不上傳 GitHub Pages。</p></div>
+        <div class="flow-step"><span class="n">STEP 02</span><b>產生任務指令</b><p>自動帶入最新 taxonomy 版本與分析欄位。</p></div>
+        <div class="flow-step"><span class="n">STEP 03</span><b>交給 ChatGPT</b><p>在對話中附檔並貼上完整任務。</p></div>
+        <div class="flow-step"><span class="n">STEP 04</span><b>分析＋JSON</b><p>同時形成文字擴張版與結構化紀錄。</p></div>
+        <div class="flow-step"><span class="n">STEP 05</span><b>直接寫 GitHub</b><p>ChatGPT 依指令提交 inbox、records 與 changelog。</p></div>
+        <div class="flow-step"><span class="n">STEP 06</span><b>網站連動</b><p>重新載入後顯示最新分類、比較與圖表。</p></div>
+      </div></div>
+      <div class="grid-2" style="margin-top:16px">
+        <div class="card"><h3>目前啟用產業</h3><div id="industryCards"></div></div>
+        <div class="card"><h3>資料治理原則</h3><div class="alert good"><b>保留來源與時間。</b> 每筆數值同時記錄資訊日期與指標期間。</div><div class="alert"><b>不直接覆蓋。</b> 新舊口徑不同時保留兩筆，並建立 superseded 或 conflict 關係。</div><div class="alert warn"><b>推導值分離。</b> 公式、輸入 claim_id 與假設必須可追溯。</div></div>
+      </div>
+    </section>
+
+    <section id="view-task" class="view">
+      <div class="page-head"><div><h2>建立分析任務</h2><p>選擇本機檔案、圖片或貼上文字，產生可直接交給 ChatGPT 的完整任務。</p></div><span id="taskIdBadge" class="badge mono">尚未建立</span></div>
+      <div class="split-panel">
+        <div class="card">
+          <h3>任務設定</h3>
+          <div class="form-grid">
+            <div class="field"><label>分析類型</label><select id="taskType"><option value="broker_report">個股／券商報告</option><option value="company_briefing">法說／公司訪談</option><option value="industry_report">產業報告</option><option value="image_note">圖片／截圖</option><option value="text_note">文字／會議紀錄</option><option value="multi_source">多來源整合</option></select></div>
+            <div class="field"><label>產業</label><select id="industrySelect"><option value="CPO">光通訊／CPO</option></select></div>
+            <div class="field"><label>主體公司</label><input id="companyInput" placeholder="例如：大量科技"></div>
+            <div class="field"><label>股票代碼／市場</label><input id="tickerInput" placeholder="例如：3167 / TW"></div>
+            <div class="field"><label>來源標題</label><input id="sourceTitle" placeholder="報告、法說或記事標題"></div>
+            <div class="field"><label>來源日期</label><input id="sourceDate" type="date"></div>
+            <div class="field full"><label>本次核心問題／特別要求</label><textarea id="objectiveInput" placeholder="例如：拆解 CPO OE die/package metrology 對 2027–2028 營收的可能貢獻，並與海外設備商比較。"></textarea></div>
+            <div class="field full"><label>貼上原始文字（可與附件並用）</label><textarea id="sourceText" placeholder="貼上訪談、會議紀錄、新聞或零散資訊。"></textarea></div>
+            <div class="field full"><label>選擇本機附件（只讀取檔名、大小與 SHA-256，不會由本頁上傳）</label><input id="fileInput" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.webp,.xlsx,.xls,.csv,.docx,.pptx,.txt,.md"></div>
+          </div>
+          <div id="fileList" class="file-list"></div>
+          <h4>固定分析模組</h4>
+          <div class="check-grid">
+            <label class="check"><input type="checkbox" class="moduleCheck" value="financials" checked><span>去年、今年、明年及更遠期的營收、稅後淨利、EPS</span></label>
+            <label class="check"><input type="checkbox" class="moduleCheck" value="assumptions" checked><span>價格、出貨、產能、稼動率、毛利率、客戶與技術假設</span></label>
+            <label class="check"><input type="checkbox" class="moduleCheck" value="segments" checked><span>各業務營收金額／比重與產品組合變化</span></label>
+            <label class="check"><input type="checkbox" class="moduleCheck" value="metrics" checked><span>產能、產值、報價、交期、良率與利潤率的結構化 claims</span></label>
+            <label class="check"><input type="checkbox" class="moduleCheck" value="global_peers" checked><span>台灣與海外競爭者、替代技術、客戶及供應商</span></label>
+            <label class="check"><input type="checkbox" class="moduleCheck" value="inflection" checked><span>營運轉折點、上中下游一致性與反證</span></label>
+            <label class="check"><input type="checkbox" class="moduleCheck" value="taxonomy" checked><span>發現新節點或錯置時提出 taxonomy_proposals</span></label>
+            <label class="check"><input type="checkbox" class="moduleCheck" value="github_write" checked><span>分析完成後直接寫入指定 GitHub 路徑並提交 commit</span></label>
+          </div>
+          <div class="actions"><button id="generateTaskBtn" class="btn primary">產生任務指令</button><button id="resetTaskBtn" class="btn">清除</button></div>
+        </div>
+        <div class="card">
+          <h3>可直接貼給 ChatGPT 的指令</h3>
+          <textarea id="promptOutput" class="prompt-box" placeholder="填完左側後按「產生任務指令」。"></textarea>
+          <div class="actions"><button id="copyPromptBtn" class="btn cyan" disabled>複製指令</button><button id="downloadPacketBtn" class="btn" disabled>下載任務 JSON</button></div>
+          <div id="promptMeta" class="small muted" style="margin-top:9px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-import" class="view">
+      <div class="page-head"><div><h2>匯入與驗證</h2><p>貼上 ChatGPT 產生的 JSON，在寫入正式 records 前檢查結構、單位、版本與衝突。</p></div></div>
+      <div class="split-panel">
+        <div class="card"><h3>JSON 輸入</h3><textarea id="jsonInput" class="prompt-box" placeholder="貼上完整研究 JSON"></textarea><div class="actions"><button id="validateBtn" class="btn primary">驗證</button><button id="formatJsonBtn" class="btn">格式化</button><button id="loadExampleBtn" class="btn">載入範例骨架</button></div></div>
+        <div class="card"><h3>驗證結果</h3><div id="validationSummary" class="alert">尚未驗證。</div><div id="validationList" class="validation-list"></div><div class="actions"><button id="downloadNormalizedBtn" class="btn" disabled>下載正規化 JSON</button><button id="copyCommitBtn" class="btn cyan" disabled>複製 GitHub 寫入指令</button></div></div>
+      </div>
+      <div class="card"><h3>正規化預覽</h3><div id="normalizedPreview" class="code-preview">—</div></div>
+    </section>
+
+    <section id="view-data" class="view">
+      <div class="page-head"><div><h2>研究資料庫</h2><p>查詢正式紀錄、數值 claims 與歷次預估修正。</p></div></div>
+      <div class="card">
+        <div class="search-bar"><input id="recordSearch" placeholder="搜尋公司、標題、指標或期間"><select id="metricFilter"><option value="">全部指標</option></select><select id="statusFilter"><option value="">全部狀態</option><option value="accepted">accepted</option><option value="review_required">review_required</option><option value="superseded">superseded</option></select><button id="refreshDataBtn" class="btn">重新載入</button></div>
+        <div id="recordTableWrap"></div>
+      </div>
+      <div class="card"><h3>選定指標趨勢</h3><svg id="metricChart" class="chart" viewBox="0 0 900 260" role="img" aria-label="指標趨勢圖"></svg></div>
+    </section>
+
+    <section id="view-taxonomy" class="view">
+      <div class="page-head"><div><h2>產業分類連動</h2><p>新系統優先讀取 cpo-notes 的機器可讀主檔；只要穩定 ID 不變，名稱與上下游位置更新會自動反映。</p></div><button id="refreshTaxonomyBtn" class="btn">同步最新分類</button></div>
+      <div class="grid-2">
+        <div class="card"><h3>節點樹</h3><div id="taxonomyTree" class="tree"></div></div>
+        <div class="card"><h3>公司與機構</h3><div id="taxonomyMeta" class="alert"></div><div id="entityCloud" class="entity-cloud"></div></div>
+      </div>
+      <div class="card"><h3>分類變更規則</h3><div class="table-wrap"><table><thead><tr><th>變更</th><th>自動處理</th><th>歷史資料</th></tr></thead><tbody><tr><td>節點改名</td><td>依相同 node_id 自動更新</td><td>不搬動 claim</td></tr><tr><td>節點移動</td><td>更新 parent_id 與顯示位置</td><td>仍引用同一 node_id</td></tr><tr><td>新增節點</td><td>下一次任務立即可選用</td><td>舊資料不受影響</td></tr><tr><td>拆分／合併</td><td>必須建立 migration</td><td>證據不足者進 review_required，不盲目搬移</td></tr></tbody></table></div></div>
+    </section>
+
+    <section id="view-audit" class="view">
+      <div class="page-head"><div><h2>異動紀錄</h2><p>記錄每次資料匯入、分類版本、衝突與 GitHub commit 對應。</p></div></div>
+      <div class="card"><div id="auditList"></div></div>
+    </section>
+  </main>
+</div>
+</div>
+<div id="toast" class="toast"></div>
+<script src="app.js" defer></script>
+</body>
+</html>
