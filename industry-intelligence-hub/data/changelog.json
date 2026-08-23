@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": "2026-08-23T21:30:00+08:00",
+  "changes": [
+    {
+      "change_id": "INIT-20260823-001",
+      "changed_at": "2026-08-23T21:30:00+08:00",
+      "change_type": "system_initialized",
+      "task_id": null,
+      "summary": "建立產業情報研究系統第一版資料庫與 CPO 分類連動。"
+    }
+  ]
+}
