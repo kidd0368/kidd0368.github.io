@@ -1,5 +1,15 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-23T14:41:02+00:00",
-  "entries": []
+  "generated_at": "2026-08-23T19:08:06+00:00",
+  "entries": [
+    {
+      "task_id": "TASK-20260823-235332-LK3H4",
+      "updated_at": "2026-08-23T16:22:39.697Z",
+      "record_status": "review_required",
+      "record_path": "data/records/2026/08/TASK-20260823-235332-LK3H4.json",
+      "title": "光通訊／CPO多來源綜合：聯鈞、新易盛、天孚通信與博通（科大訊飛附件越界）",
+      "metric_count": 83,
+      "conflicts_found": 5
+    }
+  ]
 }

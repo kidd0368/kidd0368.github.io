@@ -1,7 +1,151 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-23T14:41:02+00:00",
-  "valid_record_count": 0,
+  "generated_at": "2026-08-23T19:08:06+00:00",
+  "valid_record_count": 1,
   "invalid_record_count": 0,
-  "records": []
+  "records": [
+    {
+      "task_id": "TASK-20260823-235332-LK3H4",
+      "title": "光通訊／CPO多來源綜合：聯鈞、新易盛、天孚通信與博通（科大訊飛附件越界）",
+      "analysis_type": "broker_report",
+      "industry_id": "CPO",
+      "taxonomy_version_used": "2026.08.23.1",
+      "record_status": "review_required",
+      "created_at": "2026-08-23T15:55:36.675Z",
+      "updated_at": "2026-08-23T16:22:39.697Z",
+      "source": {
+        "source_id": "SRC-20260823-235332-LK3H4",
+        "source_type": "broker_report",
+        "title": "光通訊／CPO 多來源綜合：聯鈞、新易盛、天孚通信（6份）",
+        "publisher": null,
+        "published_date": null,
+        "received_date": "2026-08-23"
+      },
+      "executive_summary": "本資料包真正的研究主體不是附件清單表面所示的「聯鈞、中際旭創、科大訊飛、天孚通信、博通」，而是聯鈞、新易盛、天孚通信與博通四個CPO／AI光互連相關主體，另有一份科大訊飛附件越界。最清楚的近端營運轉折是聯鈞：AI Optics占比由2025年的32.7%升至2026年1–7月45.5%，COSA產能預計在2026年底與2027年底各倍增一次，券商估2026／2027年營收年增49.3%／59.8%，EPS年增73.1%／72.9%。新易盛的股權激勵門檻支持中長期高速成長，但該門檻不是財測；Morgan Stanley估值模型對2026、2027年仍高於隱含單年門檻，2028年則低於1500億元門檻約24.9%，顯示真正的高難度考核集中在2028年。天孚通信2Q26呈現營收不及預期、獲利超預期：EML晶片短缺壓抑有源件，無源件收入年增77.4%且毛利率71.9%，使2Q毛利率升至64.7%。博通報告提供AI ASIC與交換器需求的上游驗證；但FY26 AI收入560億美元以上是J.P. Morgan估計，不是博通正式指引。依博通已公布Q1/Q2實績及Q3指引，若要達560億美元，Q4需約208億美元、季增30%。",
+      "entities": [
+        {
+          "entity_id": "TW-3450",
+          "name": "聯鈞",
+          "ticker": "3450",
+          "reason_mentioned": "主要研究公司；COSA/COS封裝、AI Optics、ELSFP與功率半導體子公司構成營運轉折。"
+        },
+        {
+          "entity_id": "CN-300502",
+          "name": "新易盛",
+          "ticker": "300502",
+          "reason_mentioned": "兩份被錯標為中際旭創的報告實際研究主體；高速可插拔光模組與股權激勵門檻。"
+        },
+        {
+          "entity_id": "CN-300394",
+          "name": "天孚通信",
+          "ticker": "300394",
+          "reason_mentioned": "主要研究公司；有源／無源光元件、FAU、ELS與NVIDIA CPO供應鏈。"
+        },
+        {
+          "entity_id": "US-AVGO",
+          "name": "Broadcom",
+          "ticker": "AVGO",
+          "reason_mentioned": "第六份附件實際主體；客製AI ASIC、Tomahawk交換器及TPU路線提供上游需求驗證。"
+        },
+        {
+          "entity_id": "US-NVDA",
+          "name": "NVIDIA",
+          "ticker": "NVDA",
+          "reason_mentioned": "新易盛重要需求來源及CPO替代風險；官方確認Spectrum-X Ethernet Photonics量產與TFC角色。"
+        },
+        {
+          "entity_id": "CN-300308",
+          "name": "中際旭創",
+          "ticker": "300308",
+          "reason_mentioned": "檔名誤標對象及新易盛主要全球高速光模組同業；本資料包沒有真正的中際旭創正文報告。"
+        },
+        {
+          "entity_id": "CN-002281",
+          "name": "光迅科技",
+          "ticker": "002281",
+          "reason_mentioned": "新易盛與天孚通信在中國光模組／光元件市場的全球競爭交叉比對。"
+        },
+        {
+          "entity_id": "US-COHR",
+          "name": "Coherent",
+          "ticker": "COHR",
+          "reason_mentioned": "全球雷射、光元件、光模組與CPO生態主要可比公司；與新易盛、天孚通信產品部分重疊。"
+        },
+        {
+          "entity_id": "US-LITE",
+          "name": "Lumentum",
+          "ticker": "LITE",
+          "reason_mentioned": "全球EML/CW雷射、光元件與光模組主要可比公司；亦為CPO外置光源生態參與者。"
+        },
+        {
+          "entity_id": "US-AAOI",
+          "name": "Applied Optoelectronics",
+          "ticker": "AAOI",
+          "reason_mentioned": "資料中心高速光模組全球同業，用於新易盛競爭位置交叉比對。"
+        },
+        {
+          "entity_id": "US-MRVL",
+          "name": "Marvell",
+          "ticker": "MRVL",
+          "reason_mentioned": "J.P. Morgan報告列為博通客製ASIC／TPU attach與網通競爭者。"
+        },
+        {
+          "entity_id": "US-AMD",
+          "name": "AMD",
+          "ticker": "AMD",
+          "reason_mentioned": "報告稱被評估參與TPU attach ASIC；亦是AI加速器與系統架構競爭者。"
+        },
+        {
+          "entity_id": "US-META",
+          "name": "Meta",
+          "ticker": "META",
+          "reason_mentioned": "J.P. Morgan稱博通參與多個MTIA客製ASIC計畫；同時是CPO潛在採用者。"
+        },
+        {
+          "entity_id": "TW-2330",
+          "name": "台積電",
+          "ticker": "2330",
+          "reason_mentioned": "NVIDIA官方CPO量產生態的矽光子製造夥伴，提供產業上游交叉驗證。"
+        },
+        {
+          "entity_id": "TW-3711",
+          "name": "日月光投控",
+          "ticker": "3711",
+          "reason_mentioned": "NVIDIA官方列SPIL負責CPO晶片級封裝、組裝與測試；以日月光投控穩定ID記錄。"
+        },
+        {
+          "entity_id": "TW-2317",
+          "name": "鴻海",
+          "ticker": "2317",
+          "reason_mentioned": "NVIDIA官方列Foxconn負責Spectrum-X Photonics交換器系統組裝。"
+        },
+        {
+          "entity_id": "US-GLW",
+          "name": "Corning",
+          "ticker": "GLW",
+          "reason_mentioned": "全球光纖、連接與被動光學供應商，用於FAU／光纖耦合相鄰價值鏈比較；非本報告確認之具名交易對手。"
+        }
+      ],
+      "finding_count": 10,
+      "metric_count": 83,
+      "metric_ids": [
+        "CAPEX",
+        "EPS",
+        "GROSS_MARGIN",
+        "MASS_PRODUCTION_TIMING",
+        "NET_INCOME",
+        "NET_MARGIN",
+        "OPERATING_MARGIN",
+        "ORDER_VISIBILITY",
+        "REVENUE",
+        "REVENUE_GROWTH",
+        "SEGMENT_MIX",
+        "TECHNOLOGY_STATUS"
+      ],
+      "relationship_count": 13,
+      "evidence_count": 26,
+      "conflicts_found": 5,
+      "record_path": "data/records/2026/08/TASK-20260823-235332-LK3H4.json"
+    }
+  ]
 }
