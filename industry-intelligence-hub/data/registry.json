@@ -1,26 +1,20 @@
 {
   "schema_version": "1.0.0",
-  "app_version": "0.1.0",
-  "updated_at": "2026-08-23T21:00:00+08:00",
-  "app_name": "產業情報中樞",
-  "repository": "kidd0368/kidd0368.github.io",
+  "updated_at": "2026-08-23T21:30:00+08:00",
+  "target_repository": "kidd0368/kidd0368.github.io",
   "base_path": "industry-intelligence-hub",
-  "github_write_targets": {
-    "inbox_pattern": "industry-intelligence-hub/data/inbox/{task_id}.json",
-    "records": "industry-intelligence-hub/data/records.json",
-    "changelog": "industry-intelligence-hub/data/changelog.json",
-    "taxonomy_master_repository": "kidd0368/cpo-notes",
-    "taxonomy_master_path": "data/taxonomy.json"
-  },
+  "record_path_template": "industry-intelligence-hub/data/records/{yyyy}/{mm}/{task_id}.json",
+  "aggregate_path": "industry-intelligence-hub/data/records.json",
+  "schema_path": "industry-intelligence-hub/schemas/analysis-record.schema.json",
   "industries": [
     {
       "industry_id": "CPO",
       "name": "光通訊／CPO",
       "enabled": true,
-      "source_repository": "kidd0368/cpo-notes",
-      "source_page": "https://kidd0368.github.io/cpo-notes/",
-      "remote_url": "https://raw.githubusercontent.com/kidd0368/cpo-notes/main/data/taxonomy.json",
-      "fallback_url": "data/taxonomy.cpo.json"
+      "taxonomy_url": "/cpo-notes/data/taxonomy.json",
+      "version_url": "/cpo-notes/data/version.json",
+      "fallback_snapshot_url": "data/taxonomy.cpo.snapshot.json",
+      "source_repository": "kidd0368/cpo-notes"
     }
   ]
 }

@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "TASK-20260823-213000-DEMO",
+  "created_at": "2026-08-23T21:30:00+08:00",
+  "updated_at": "2026-08-23T21:30:00+08:00",
+  "analysis_type": "broker_report",
+  "industry_id": "CPO",
+  "taxonomy_version_used": "2026.08.23.1",
+  "record_status": "review_required",
+  "title": "範例：大量科技 CPO 量測設備研究",
+  "source": {
+    "source_id": "SRC-DEMO",
+    "source_type": "broker_report",
+    "title": "範例報告",
+    "publisher": "範例券商",
+    "published_date": "2026-08-23",
+    "received_date": "2026-08-23",
+    "dropbox_path": null,
+    "confidentiality": "private",
+    "files": [
+      {
+        "name": "example.pdf",
+        "size": null,
+        "sha256": null,
+        "mime_type": "application/pdf"
+      }
+    ]
+  },
+  "narrative": {
+    "executive_summary": "這是格式範例，不代表真實研究結論。",
+    "expanded_report": "完整文字分析放在此欄。",
+    "investment_implications": "",
+    "industry_cross_checks": ""
+  },
+  "findings": [],
+  "financials": [],
+  "operating_assumptions": [],
+  "segment_estimates": [],
+  "metric_claims": [],
+  "relationships": [],
+  "mentioned_entities": [
+    {
+      "entity_id": "TW-3167",
+      "name": "大量科技",
+      "ticker": "3167",
+      "country": "Taiwan",
+      "reason_mentioned": "研究主體",
+      "roles": [
+        "CPO量測設備"
+      ],
+      "node_ids": [
+        "CPO.TEST.METROLOGY"
+      ]
+    }
+  ],
+  "evidence": [],
+  "derived_metrics": [],
+  "validation": {
+    "schema_valid": true,
+    "taxonomy_ids_valid": true,
+    "units_checked": true,
+    "periods_checked": true,
+    "conflicts_found": 0,
+    "review_notes": [
+      "示範資料，請勿當作正式紀錄。"
+    ]
+  }
+}

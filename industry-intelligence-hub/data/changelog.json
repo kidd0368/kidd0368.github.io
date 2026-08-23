@@ -1,16 +1,5 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-08-23T21:00:00+08:00",
-  "entries": [
-    {
-      "change_id": "CHG-20260823-BOOTSTRAP",
-      "timestamp": "2026-08-23T21:00:00+08:00",
-      "type": "bootstrap",
-      "summary": "建立產業情報中樞第一版、CPO 共用分類與 ChatGPT→GitHub 寫入契約。",
-      "affected_paths": [
-        "industry-intelligence-hub/",
-        "cpo-notes/data/taxonomy.json"
-      ]
-    }
-  ]
+  "generated_at": "2026-08-23T14:39:53+00:00",
+  "entries": []
 }

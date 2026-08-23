@@ -1,36 +1,27 @@
-# 產業情報中樞（Industry Intelligence Hub）
+# 產業情報研究系統
 
-靜態 GitHub Pages 工作台，負責：
+這個目錄是獨立於 `cpo-notes` 的研究資料系統。`cpo-notes` 管理產業分類與上下游關係；本系統管理分析任務、結構化紀錄、數值時間序列與研究查詢。
 
-- 選取本機 PDF、Excel、圖片與貼上文字。
-- 依最新產業分類產生 ChatGPT 分析指令。
-- 要求 ChatGPT 同時輸出文字擴張版與結構化 JSON。
-- 在同一次對話中由 ChatGPT 直接寫入 GitHub。
-- 驗證 JSON 的 taxonomy 版本、日期、單位、來源、claim_id 與衝突狀態。
-- 顯示正式研究紀錄、產業節點、公司映射與異動日誌。
+## 核心資料流
 
-## 網址
+1. 網頁讀取 `/cpo-notes/data/taxonomy.json` 的最新分類。
+2. 網頁根據附件與分析類型產生 ChatGPT 指令。
+3. ChatGPT 完成文字擴張版與 JSON，直接寫入：
+   `industry-intelligence-hub/data/records/YYYY/MM/TASK-*.json`
+4. GitHub Actions 執行 `scripts/rebuild_records.py`，重建索引與網站資料。
+5. GitHub Pages 顯示最新紀錄。
 
-`https://kidd0368.github.io/industry-intelligence-hub/`
+## 資料邊界
 
-## 分類連動
+- 原始券商 PDF、圖片、訪談與付費資料只留在 Dropbox。
+- GitHub 僅保存結構化研究紀錄與來源識別資料。
+- 每筆數字保留資訊日期、指標期間、單位、事實類型、證據與信心。
+- 分類名稱可更新，`node_id` 應保持穩定；拆分或合併需使用 migration。
 
-主檔優先讀取：
+## 主要檔案
 
-`https://raw.githubusercontent.com/kidd0368/cpo-notes/main/data/taxonomy.json`
-
-若遠端讀取失敗，使用內建快照：
-
-`data/taxonomy.cpo.json`
-
-## 安全邊界
-
-GitHub Pages 是靜態公開託管。登入門僅是用戶端存取阻擋，不能取代真正的伺服器身分驗證。原始付費報告、私人訪談及 Dropbox 完整路徑不應提交到公開 repository；GitHub 僅保存可接受公開託管的結構化資料。
-
-## 資料檔
-
-- `data/registry.json`：應用程式、寫入路徑與產業來源。
-- `data/records.json`：正式研究紀錄。
-- `data/changelog.json`：異動日誌。
-- `data/inbox/`：每一任務的完整 JSON。
-- `schemas/research-record.schema.json`：研究紀錄 Schema。
+- `index.html`：靜態前端
+- `data/registry.json`：產業來源與 GitHub 寫入位置
+- `schemas/analysis-record.schema.json`：ChatGPT 回傳資料契約
+- `data/records/**/*.json`：一任務一檔
+- `scripts/rebuild_records.py`：自動重建索引

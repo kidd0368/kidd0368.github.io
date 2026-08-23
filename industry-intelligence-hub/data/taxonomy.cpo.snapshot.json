@@ -1,0 +1,1652 @@
+{
+  "schema_version": "1.0.0",
+  "industry_id": "CPO",
+  "industry_name": "光通訊／CPO",
+  "taxonomy_version": "2026.08.23.1",
+  "updated_at": "2026-08-23T21:30:00+08:00",
+  "source_repository": "kidd0368/cpo-notes",
+  "source_page": "https://kidd0368.github.io/cpo-notes/",
+  "source_note": "第一版機器可讀分類。名稱可以更新，但 node_id 應保持穩定；拆分或合併節點時必須新增 migrations。",
+  "nodes": [
+    {
+      "node_id": "CPO",
+      "name": "光通訊／CPO",
+      "parent_id": null,
+      "stage": "industry",
+      "order": 1
+    },
+    {
+      "node_id": "CPO.ARCH",
+      "name": "架構路線",
+      "parent_id": "CPO",
+      "stage": "architecture",
+      "order": 2
+    },
+    {
+      "node_id": "CPO.ARCH.PLUGGABLE",
+      "name": "可插拔光模組",
+      "parent_id": "CPO.ARCH",
+      "stage": "architecture",
+      "order": 3
+    },
+    {
+      "node_id": "CPO.ARCH.LPO",
+      "name": "LPO／LRO",
+      "parent_id": "CPO.ARCH",
+      "stage": "architecture",
+      "order": 4
+    },
+    {
+      "node_id": "CPO.ARCH.NPO",
+      "name": "NPO 近封裝光學",
+      "parent_id": "CPO.ARCH",
+      "stage": "architecture",
+      "order": 5
+    },
+    {
+      "node_id": "CPO.ARCH.CPO",
+      "name": "CPO 共封裝光學",
+      "parent_id": "CPO.ARCH",
+      "stage": "architecture",
+      "order": 6
+    },
+    {
+      "node_id": "CPO.UPSTREAM",
+      "name": "上游材料與晶圓",
+      "parent_id": "CPO",
+      "stage": "upstream",
+      "order": 7
+    },
+    {
+      "node_id": "CPO.UPSTREAM.INP",
+      "name": "InP 基板",
+      "parent_id": "CPO.UPSTREAM",
+      "stage": "upstream",
+      "order": 8
+    },
+    {
+      "node_id": "CPO.UPSTREAM.EPITAXY",
+      "name": "磊晶製造",
+      "parent_id": "CPO.UPSTREAM",
+      "stage": "upstream",
+      "order": 9
+    },
+    {
+      "node_id": "CPO.SOURCE",
+      "name": "雷射與外置光源",
+      "parent_id": "CPO",
+      "stage": "component",
+      "order": 10
+    },
+    {
+      "node_id": "CPO.SOURCE.LASER",
+      "name": "CW／DFB 雷射晶片",
+      "parent_id": "CPO.SOURCE",
+      "stage": "component",
+      "order": 11
+    },
+    {
+      "node_id": "CPO.SOURCE.ELS",
+      "name": "外置雷射光源 ELS／ELSFP",
+      "parent_id": "CPO.SOURCE",
+      "stage": "component",
+      "order": 12
+    },
+    {
+      "node_id": "CPO.CHIP",
+      "name": "光電晶片與調變",
+      "parent_id": "CPO",
+      "stage": "component",
+      "order": 13
+    },
+    {
+      "node_id": "CPO.CHIP.PIC",
+      "name": "PIC 矽光子晶片",
+      "parent_id": "CPO.CHIP",
+      "stage": "component",
+      "order": 14
+    },
+    {
+      "node_id": "CPO.CHIP.EIC",
+      "name": "EIC／Driver／TIA",
+      "parent_id": "CPO.CHIP",
+      "stage": "component",
+      "order": 15
+    },
+    {
+      "node_id": "CPO.CHIP.DSP",
+      "name": "光通訊 DSP",
+      "parent_id": "CPO.CHIP",
+      "stage": "component",
+      "order": 16
+    },
+    {
+      "node_id": "CPO.CHIP.MODULATOR",
+      "name": "高速光調變器",
+      "parent_id": "CPO.CHIP",
+      "stage": "component",
+      "order": 17
+    },
+    {
+      "node_id": "CPO.MODULE",
+      "name": "光引擎與光模組",
+      "parent_id": "CPO",
+      "stage": "module",
+      "order": 18
+    },
+    {
+      "node_id": "CPO.COUPLING",
+      "name": "FAU 與光纖耦合",
+      "parent_id": "CPO",
+      "stage": "module",
+      "order": 19
+    },
+    {
+      "node_id": "CPO.PACKAGING",
+      "name": "封裝與組裝",
+      "parent_id": "CPO",
+      "stage": "manufacturing",
+      "order": 20
+    },
+    {
+      "node_id": "CPO.PACKAGING.COUPLING",
+      "name": "耦光對位與組裝",
+      "parent_id": "CPO.PACKAGING",
+      "stage": "manufacturing",
+      "order": 21
+    },
+    {
+      "node_id": "CPO.PACKAGING.ADVANCED",
+      "name": "CPO 先進封裝",
+      "parent_id": "CPO.PACKAGING",
+      "stage": "manufacturing",
+      "order": 22
+    },
+    {
+      "node_id": "CPO.SYSTEM",
+      "name": "交換器與系統整合",
+      "parent_id": "CPO",
+      "stage": "system",
+      "order": 23
+    },
+    {
+      "node_id": "CPO.SYSTEM.SWITCH",
+      "name": "交換 ASIC／交換器",
+      "parent_id": "CPO.SYSTEM",
+      "stage": "system",
+      "order": 24
+    },
+    {
+      "node_id": "CPO.SYSTEM.POWER_COOLING",
+      "name": "電源與液冷配套",
+      "parent_id": "CPO.SYSTEM",
+      "stage": "system",
+      "order": 25
+    },
+    {
+      "node_id": "CPO.NPO",
+      "name": "NPO 插槽、載板與 PCB",
+      "parent_id": "CPO",
+      "stage": "module",
+      "order": 26
+    },
+    {
+      "node_id": "CPO.NPO.SOCKET",
+      "name": "NPO Socket／連接器",
+      "parent_id": "CPO.NPO",
+      "stage": "module",
+      "order": 27
+    },
+    {
+      "node_id": "CPO.NPO.SUBSTRATE",
+      "name": "NPO 模組載板",
+      "parent_id": "CPO.NPO",
+      "stage": "module",
+      "order": 28
+    },
+    {
+      "node_id": "CPO.NPO.PCB",
+      "name": "Switch-Tray PCB",
+      "parent_id": "CPO.NPO",
+      "stage": "system",
+      "order": 29
+    },
+    {
+      "node_id": "CPO.TEST",
+      "name": "測試、量測與檢查",
+      "parent_id": "CPO",
+      "stage": "test",
+      "order": 30
+    },
+    {
+      "node_id": "CPO.TEST.IN0",
+      "name": "Insertion 0 入料與晶圓級光學檢查",
+      "parent_id": "CPO.TEST",
+      "stage": "test",
+      "order": 31
+    },
+    {
+      "node_id": "CPO.TEST.IN1",
+      "name": "Insertion 1 PIC／EIC 晶圓測試",
+      "parent_id": "CPO.TEST",
+      "stage": "test",
+      "order": 32
+    },
+    {
+      "node_id": "CPO.TEST.IN2",
+      "name": "Insertion 2 EIC＋PIC 雙晶光電測試",
+      "parent_id": "CPO.TEST",
+      "stage": "test",
+      "order": 33
+    },
+    {
+      "node_id": "CPO.TEST.IN3",
+      "name": "Insertion 3 Die Level／KGOE 全檢",
+      "parent_id": "CPO.TEST",
+      "stage": "test",
+      "order": 34
+    },
+    {
+      "node_id": "CPO.TEST.IN4",
+      "name": "Insertion 4 ASIC＋OE 共封裝 FT",
+      "parent_id": "CPO.TEST",
+      "stage": "test",
+      "order": 35
+    },
+    {
+      "node_id": "CPO.TEST.IN5",
+      "name": "Insertion 5 系統級測試",
+      "parent_id": "CPO.TEST",
+      "stage": "test",
+      "order": 36
+    },
+    {
+      "node_id": "CPO.TEST.METROLOGY",
+      "name": "封裝量測、六面檢查與清潔",
+      "parent_id": "CPO.TEST",
+      "stage": "test",
+      "order": 37
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "TW-2330",
+      "name": "台積電",
+      "ticker": "2330",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-3081",
+      "name": "聯亞",
+      "ticker": "3081",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-2455",
+      "name": "全新",
+      "ticker": "2455",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-4971",
+      "name": "英特磊",
+      "ticker": "4971",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-4991",
+      "name": "環宇-KY",
+      "ticker": "4991",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-3105",
+      "name": "穩懋",
+      "ticker": "3105",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-3450",
+      "name": "聯鈞",
+      "ticker": "3450",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-4979",
+      "name": "華星光",
+      "ticker": "4979",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-4977",
+      "name": "眾達-KY",
+      "ticker": "4977",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-6442",
+      "name": "光聖",
+      "ticker": "6442",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-6451",
+      "name": "訊芯-KY",
+      "ticker": "6451",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-3363",
+      "name": "上詮",
+      "ticker": "3363",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-3163",
+      "name": "波若威",
+      "ticker": "3163",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-3008",
+      "name": "大立光",
+      "ticker": "3008",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-7928",
+      "name": "合聖",
+      "ticker": "7928",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-3504",
+      "name": "揚明光",
+      "ticker": "3504",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-3406",
+      "name": "玉晶光",
+      "ticker": "3406",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-2345",
+      "name": "智邦",
+      "ticker": "2345",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-2317",
+      "name": "鴻海",
+      "ticker": "2317",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-2308",
+      "name": "台達電",
+      "ticker": "2308",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-6669",
+      "name": "緯穎",
+      "ticker": "6669",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-3533",
+      "name": "嘉澤",
+      "ticker": "3533",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-6715",
+      "name": "嘉基",
+      "ticker": "6715",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-3037",
+      "name": "欣興",
+      "ticker": "3037",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-2313",
+      "name": "華通",
+      "ticker": "2313",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-6223",
+      "name": "旺矽",
+      "ticker": "6223",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-7728",
+      "name": "光焱科技",
+      "ticker": "7728",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-2360",
+      "name": "致茂",
+      "ticker": "2360",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-6640",
+      "name": "均華",
+      "ticker": "6640",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-6515",
+      "name": "穎崴",
+      "ticker": "6515",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-7769",
+      "name": "鴻勁",
+      "ticker": "7769",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-6257",
+      "name": "矽格",
+      "ticker": "6257",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-2449",
+      "name": "京元電子",
+      "ticker": "2449",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-3711",
+      "name": "日月光投控",
+      "ticker": "3711",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "TW-3167",
+      "name": "大量科技",
+      "ticker": "3167",
+      "country": "Taiwan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-NVDA",
+      "name": "NVIDIA",
+      "ticker": "NVDA",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-AVGO",
+      "name": "Broadcom",
+      "ticker": "AVGO",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-AMD",
+      "name": "AMD",
+      "ticker": "AMD",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-META",
+      "name": "Meta",
+      "ticker": "META",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-COHR",
+      "name": "Coherent",
+      "ticker": "COHR",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-LITE",
+      "name": "Lumentum",
+      "ticker": "LITE",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-MRVL",
+      "name": "Marvell",
+      "ticker": "MRVL",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-GLW",
+      "name": "Corning",
+      "ticker": "GLW",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-AAOI",
+      "name": "Applied Optoelectronics",
+      "ticker": "AAOI",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-JBL",
+      "name": "Jabil",
+      "ticker": "JBL",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-FORM",
+      "name": "FormFactor",
+      "ticker": "FORM",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-TER",
+      "name": "Teradyne",
+      "ticker": "TER",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-TEL",
+      "name": "TE Connectivity",
+      "ticker": "TEL",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-APH",
+      "name": "Amphenol",
+      "ticker": "APH",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "US-TTMI",
+      "name": "TTM Technologies",
+      "ticker": "TTMI",
+      "country": "United States",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "JP-6857",
+      "name": "Advantest",
+      "ticker": "6857",
+      "country": "Japan",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "FI-NOK",
+      "name": "Nokia",
+      "ticker": "NOK",
+      "country": "Finland",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "CN-300308",
+      "name": "中際旭創",
+      "ticker": "300308",
+      "country": "China",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "CN-300502",
+      "name": "新易盛",
+      "ticker": "300502",
+      "country": "China",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "CN-002281",
+      "name": "光迅科技",
+      "ticker": "002281",
+      "country": "China",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "CN-300394",
+      "name": "天孚通信",
+      "ticker": "300394",
+      "country": "China",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "CN-002938",
+      "name": "鵬鼎控股",
+      "ticker": "002938",
+      "country": "China",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "CN-300476",
+      "name": "勝宏科技",
+      "ticker": "300476",
+      "country": "China",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "CN-002463",
+      "name": "滬士電子",
+      "ticker": "002463",
+      "country": "China",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "KR-007660",
+      "name": "ISU Petasys",
+      "ticker": "007660",
+      "country": "South Korea",
+      "entity_type": "listed_company"
+    },
+    {
+      "entity_id": "PRIVATE-HYPERLIGHT",
+      "name": "HyperLight",
+      "ticker": "未上市",
+      "country": "United States",
+      "entity_type": "private_company"
+    },
+    {
+      "entity_id": "PRIVATE-AYAR",
+      "name": "Ayar Labs",
+      "ticker": "未上市",
+      "country": "United States",
+      "entity_type": "private_company"
+    },
+    {
+      "entity_id": "PRIVATE-NUBIS",
+      "name": "Nubis Communications",
+      "ticker": "未上市",
+      "country": "United States",
+      "entity_type": "private_company"
+    },
+    {
+      "entity_id": "PRIVATE-TERAMOUNT",
+      "name": "Teramount",
+      "ticker": "未上市",
+      "country": "Israel",
+      "entity_type": "private_company"
+    },
+    {
+      "entity_id": "PRIVATE-SAMTEC",
+      "name": "Samtec",
+      "ticker": "未上市",
+      "country": "United States",
+      "entity_type": "private_company"
+    },
+    {
+      "entity_id": "PRIVATE-MOLEX",
+      "name": "Molex",
+      "ticker": "未上市",
+      "country": "United States",
+      "entity_type": "private_company"
+    }
+  ],
+  "memberships": [
+    {
+      "entity_id": "TW-3081",
+      "node_id": "CPO.UPSTREAM.EPITAXY",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2455",
+      "node_id": "CPO.UPSTREAM.EPITAXY",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-4971",
+      "node_id": "CPO.UPSTREAM.EPITAXY",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-4991",
+      "node_id": "CPO.UPSTREAM.EPITAXY",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3105",
+      "node_id": "CPO.UPSTREAM.EPITAXY",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3081",
+      "node_id": "CPO.SOURCE.LASER",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-4979",
+      "node_id": "CPO.SOURCE.LASER",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-COHR",
+      "node_id": "CPO.SOURCE.LASER",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-LITE",
+      "node_id": "CPO.SOURCE.LASER",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3450",
+      "node_id": "CPO.SOURCE.ELS",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-4979",
+      "node_id": "CPO.SOURCE.ELS",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-4977",
+      "node_id": "CPO.SOURCE.ELS",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-COHR",
+      "node_id": "CPO.SOURCE.ELS",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-LITE",
+      "node_id": "CPO.SOURCE.ELS",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2330",
+      "node_id": "CPO.CHIP.PIC",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-NVDA",
+      "node_id": "CPO.CHIP.PIC",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-AVGO",
+      "node_id": "CPO.CHIP.PIC",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-MRVL",
+      "node_id": "CPO.CHIP.PIC",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "PRIVATE-AYAR",
+      "node_id": "CPO.CHIP.PIC",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-AVGO",
+      "node_id": "CPO.CHIP.EIC",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-MRVL",
+      "node_id": "CPO.CHIP.EIC",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-MRVL",
+      "node_id": "CPO.CHIP.DSP",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-AVGO",
+      "node_id": "CPO.CHIP.DSP",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "PRIVATE-HYPERLIGHT",
+      "node_id": "CPO.CHIP.MODULATOR",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-MRVL",
+      "node_id": "CPO.CHIP.MODULATOR",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "FI-NOK",
+      "node_id": "CPO.CHIP.MODULATOR",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-4979",
+      "node_id": "CPO.MODULE",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-4977",
+      "node_id": "CPO.MODULE",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6442",
+      "node_id": "CPO.MODULE",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6451",
+      "node_id": "CPO.MODULE",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "PRIVATE-NUBIS",
+      "node_id": "CPO.MODULE",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-AAOI",
+      "node_id": "CPO.MODULE",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "CN-300308",
+      "node_id": "CPO.MODULE",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "CN-300502",
+      "node_id": "CPO.MODULE",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "CN-002281",
+      "node_id": "CPO.MODULE",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "CN-300394",
+      "node_id": "CPO.MODULE",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3363",
+      "node_id": "CPO.COUPLING",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3163",
+      "node_id": "CPO.COUPLING",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3008",
+      "node_id": "CPO.COUPLING",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-7928",
+      "node_id": "CPO.COUPLING",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3504",
+      "node_id": "CPO.COUPLING",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3406",
+      "node_id": "CPO.COUPLING",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-GLW",
+      "node_id": "CPO.COUPLING",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "PRIVATE-TERAMOUNT",
+      "node_id": "CPO.COUPLING",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2330",
+      "node_id": "CPO.PACKAGING.ADVANCED",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3711",
+      "node_id": "CPO.PACKAGING.ADVANCED",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6451",
+      "node_id": "CPO.PACKAGING.ADVANCED",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-JBL",
+      "node_id": "CPO.PACKAGING.ADVANCED",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-NVDA",
+      "node_id": "CPO.SYSTEM.SWITCH",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-AVGO",
+      "node_id": "CPO.SYSTEM.SWITCH",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-AMD",
+      "node_id": "CPO.SYSTEM.SWITCH",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-META",
+      "node_id": "CPO.SYSTEM.SWITCH",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2345",
+      "node_id": "CPO.SYSTEM.SWITCH",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2317",
+      "node_id": "CPO.SYSTEM.SWITCH",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6669",
+      "node_id": "CPO.SYSTEM.SWITCH",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-JBL",
+      "node_id": "CPO.SYSTEM.SWITCH",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2308",
+      "node_id": "CPO.SYSTEM.POWER_COOLING",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2317",
+      "node_id": "CPO.SYSTEM.POWER_COOLING",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6669",
+      "node_id": "CPO.SYSTEM.POWER_COOLING",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3533",
+      "node_id": "CPO.NPO.SOCKET",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6715",
+      "node_id": "CPO.NPO.SOCKET",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "PRIVATE-SAMTEC",
+      "node_id": "CPO.NPO.SOCKET",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-TEL",
+      "node_id": "CPO.NPO.SOCKET",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "PRIVATE-MOLEX",
+      "node_id": "CPO.NPO.SOCKET",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-APH",
+      "node_id": "CPO.NPO.SOCKET",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "CN-002938",
+      "node_id": "CPO.NPO.SUBSTRATE",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3037",
+      "node_id": "CPO.NPO.SUBSTRATE",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "CN-300476",
+      "node_id": "CPO.NPO.PCB",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "CN-002463",
+      "node_id": "CPO.NPO.PCB",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "KR-007660",
+      "node_id": "CPO.NPO.PCB",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-TTMI",
+      "node_id": "CPO.NPO.PCB",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2313",
+      "node_id": "CPO.NPO.PCB",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3037",
+      "node_id": "CPO.NPO.PCB",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-7728",
+      "node_id": "CPO.TEST.IN0",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3167",
+      "node_id": "CPO.TEST.IN0",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6223",
+      "node_id": "CPO.TEST.IN1",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-7728",
+      "node_id": "CPO.TEST.IN1",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2360",
+      "node_id": "CPO.TEST.IN1",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6640",
+      "node_id": "CPO.TEST.IN1",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-FORM",
+      "node_id": "CPO.TEST.IN1",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "JP-6857",
+      "node_id": "CPO.TEST.IN1",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-TER",
+      "node_id": "CPO.TEST.IN1",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6223",
+      "node_id": "CPO.TEST.IN2",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6515",
+      "node_id": "CPO.TEST.IN2",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-7769",
+      "node_id": "CPO.TEST.IN2",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-TER",
+      "node_id": "CPO.TEST.IN2",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-FORM",
+      "node_id": "CPO.TEST.IN2",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2360",
+      "node_id": "CPO.TEST.IN3",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6223",
+      "node_id": "CPO.TEST.IN3",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6515",
+      "node_id": "CPO.TEST.IN3",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-7769",
+      "node_id": "CPO.TEST.IN3",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-TER",
+      "node_id": "CPO.TEST.IN3",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-7769",
+      "node_id": "CPO.TEST.IN4",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2360",
+      "node_id": "CPO.TEST.IN4",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6515",
+      "node_id": "CPO.TEST.IN4",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6257",
+      "node_id": "CPO.TEST.IN4",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2449",
+      "node_id": "CPO.TEST.IN4",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3711",
+      "node_id": "CPO.TEST.IN4",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-TER",
+      "node_id": "CPO.TEST.IN4",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "JP-6857",
+      "node_id": "CPO.TEST.IN4",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2345",
+      "node_id": "CPO.TEST.IN5",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2317",
+      "node_id": "CPO.TEST.IN5",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6669",
+      "node_id": "CPO.TEST.IN5",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3167",
+      "node_id": "CPO.TEST.METROLOGY",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-7728",
+      "node_id": "CPO.TEST.METROLOGY",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6640",
+      "node_id": "CPO.TEST.METROLOGY",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2360",
+      "node_id": "CPO.TEST.METROLOGY",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "PRIVATE-NUBIS",
+      "node_id": "CPO.ARCH.LPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "CN-300502",
+      "node_id": "CPO.ARCH.LPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "PRIVATE-NUBIS",
+      "node_id": "CPO.ARCH.NPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3533",
+      "node_id": "CPO.ARCH.NPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-6715",
+      "node_id": "CPO.ARCH.NPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "CN-002938",
+      "node_id": "CPO.ARCH.NPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-MRVL",
+      "node_id": "CPO.ARCH.NPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-NVDA",
+      "node_id": "CPO.ARCH.CPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-AVGO",
+      "node_id": "CPO.ARCH.CPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-2330",
+      "node_id": "CPO.ARCH.CPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-COHR",
+      "node_id": "CPO.ARCH.CPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "US-LITE",
+      "node_id": "CPO.ARCH.CPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    },
+    {
+      "entity_id": "TW-3363",
+      "node_id": "CPO.ARCH.CPO",
+      "relationship_type": "operates_in",
+      "confidence": 0.7
+    }
+  ],
+  "relationships": [],
+  "metric_catalog": [
+    {
+      "metric_id": "CAPACITY_NOMINAL",
+      "name": "名目產能",
+      "allowed_units": [
+        "wpm",
+        "units/month",
+        "units/year"
+      ]
+    },
+    {
+      "metric_id": "CAPACITY_EFFECTIVE",
+      "name": "有效產能",
+      "allowed_units": [
+        "wpm",
+        "units/month",
+        "units/year"
+      ]
+    },
+    {
+      "metric_id": "UTILIZATION",
+      "name": "產能利用率",
+      "allowed_units": [
+        "%"
+      ]
+    },
+    {
+      "metric_id": "SHIPMENT",
+      "name": "出貨量",
+      "allowed_units": [
+        "units",
+        "sets",
+        "modules",
+        "racks",
+        "wafers"
+      ]
+    },
+    {
+      "metric_id": "ASP",
+      "name": "平均售價／報價",
+      "allowed_units": [
+        "TWD",
+        "USD",
+        "TWD/unit",
+        "USD/unit"
+      ]
+    },
+    {
+      "metric_id": "PRICE_CHANGE",
+      "name": "報價變化",
+      "allowed_units": [
+        "%",
+        "ppt"
+      ]
+    },
+    {
+      "metric_id": "LEAD_TIME",
+      "name": "交期",
+      "allowed_units": [
+        "weeks",
+        "months"
+      ]
+    },
+    {
+      "metric_id": "YIELD",
+      "name": "良率",
+      "allowed_units": [
+        "%"
+      ]
+    },
+    {
+      "metric_id": "GROSS_MARGIN",
+      "name": "毛利率",
+      "allowed_units": [
+        "%",
+        "ppt"
+      ]
+    },
+    {
+      "metric_id": "OPERATING_MARGIN",
+      "name": "營業利益率",
+      "allowed_units": [
+        "%",
+        "ppt"
+      ]
+    },
+    {
+      "metric_id": "NET_MARGIN",
+      "name": "稅後淨利率",
+      "allowed_units": [
+        "%",
+        "ppt"
+      ]
+    },
+    {
+      "metric_id": "REVENUE",
+      "name": "營收",
+      "allowed_units": [
+        "TWD_mn",
+        "USD_mn",
+        "TWD_bn",
+        "USD_bn"
+      ]
+    },
+    {
+      "metric_id": "NET_INCOME",
+      "name": "稅後淨利",
+      "allowed_units": [
+        "TWD_mn",
+        "USD_mn"
+      ]
+    },
+    {
+      "metric_id": "EPS",
+      "name": "每股盈餘",
+      "allowed_units": [
+        "TWD/share",
+        "USD/share"
+      ]
+    },
+    {
+      "metric_id": "CAPEX",
+      "name": "資本支出",
+      "allowed_units": [
+        "TWD_mn",
+        "USD_mn"
+      ]
+    },
+    {
+      "metric_id": "MARKET_SHARE",
+      "name": "市占率",
+      "allowed_units": [
+        "%"
+      ]
+    },
+    {
+      "metric_id": "CUSTOMER_SHARE",
+      "name": "客戶占比",
+      "allowed_units": [
+        "%"
+      ]
+    },
+    {
+      "metric_id": "SEGMENT_MIX",
+      "name": "業務營收比重",
+      "allowed_units": [
+        "%"
+      ]
+    },
+    {
+      "metric_id": "ORDER_VISIBILITY",
+      "name": "訂單能見度",
+      "allowed_units": [
+        "quarter",
+        "month",
+        "year"
+      ]
+    },
+    {
+      "metric_id": "MASS_PRODUCTION_TIMING",
+      "name": "量產時程",
+      "allowed_units": [
+        "date",
+        "quarter",
+        "half",
+        "year"
+      ]
+    },
+    {
+      "metric_id": "TECHNOLOGY_STATUS",
+      "name": "技術／認證進度",
+      "allowed_units": [
+        "stage"
+      ]
+    },
+    {
+      "metric_id": "REVENUE_GROWTH",
+      "name": "營收成長",
+      "allowed_units": [
+        "%",
+        "x"
+      ]
+    },
+    {
+      "metric_id": "PROFIT_CONTRIBUTION",
+      "name": "營運貢獻推算",
+      "allowed_units": [
+        "TWD_mn",
+        "USD_mn",
+        "%"
+      ]
+    }
+  ],
+  "migrations": []
+}
