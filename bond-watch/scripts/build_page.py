@@ -232,6 +232,38 @@ def commentary_block(comm):
     return out
 
 
+def freshness_block(snap):
+    """各資料源最新資料日與落後天數——FRED 對公債殖利率有一個營業日的發布延遲。"""
+    today = dt.datetime.now(TPE).date()
+    items = []
+    cur = [c for c in snap["curve"] if c.get("date")]
+    if cur:
+        items.append(("殖利率曲線（11 個期別）", max(c["date"] for c in cur), "FRED／每交易日"))
+    for sid, label, cad in (("T10YIE", "通膨預期（breakeven）", "每交易日"),
+                            ("DFII30", "TIPS 實質利率", "每交易日"),
+                            ("THREEFYTP10", "期限溢價 ACM", "約每週")):
+        e = (snap.get("decomp") or {}).get(sid)
+        if e and e.get("date"):
+            items.append((label, e["date"], "FRED／" + cad))
+    rows = ""
+    for name, d, srcname in items:
+        try:
+            age = (today - dt.date.fromisoformat(d)).days
+        except Exception:
+            age = None
+        a = age or 0
+        col = "#39c6be" if a <= 3 else ("#f6c453" if a <= 8 else "#ff5c78")
+        rows += ('<tr><td>%s</td><td class="num">%s</td>'
+                 '<td class="num" style="color:%s">%s</td><td>%s</td></tr>'
+                 % (esc(name), esc(d), col,
+                    ("%d 天前" % age) if age is not None else "—", esc(srcname)))
+    note = ("公債殖利率由 FRED 於次一營業日發布，週末與美國假日不更新；"
+            "期限溢價（紐約聯準會 ACM）約每週更新一次，落後較多屬正常，非本頁停止運作。"
+            "本頁每日自動執行 4 次，每次抓的都是 FRED 當下最新可得資料。")
+    return ('<table><thead><tr><th>資料源</th><th>最新資料日</th><th>落後</th><th>來源／頻率</th></tr></thead>'
+            '<tbody>%s</tbody></table><p class="muted">%s</p>' % (rows, note))
+
+
 def main():
     password = os.environ.get("PAGE_PASSWORD", "").strip()
     if not password:
@@ -294,8 +326,9 @@ a{color:#7fb4ff}.muted{color:var(--muted);font-size:12px}
 footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
 </style></head><body><div class="wrap">
 <h1>美債殖利率曲線與期限溢價</h1>
-<p class="sub">資料日 {{ASOF}}｜更新 {{NOW}}（台北）｜10年期限溢價 {{TP}}</p>
+<p class="sub">FRED 最新資料日 {{ASOF}}｜頁面更新 {{NOW}}（台北）｜10年期限溢價 {{TP}}</p>
 <div class="hero">{{HERO}}<div class="sub" style="margin-left:auto;max-width:260px">數字為當前殖利率，下方為 20 個交易日變化。紅＝殖利率上升＝債價下跌。</div></div>
+<h2>資料新鮮度</h2><div class="card">{{FRESH}}</div>
 <h2>折現率壓力指數</h2><div class="card">{{PRESSURE}}</div>
 <h2>殖利率曲線</h2><div class="card">{{CURVE}}</div>
 <h2>關鍵利差</h2><div class="card">{{SPREADS}}</div>
@@ -323,6 +356,7 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:v
         "ASOF": snap.get("asof", ""), "NOW": now,
         "TP": ("%.2f%%" % tp["value"]) if tp.get("value") is not None else "—",
         "HERO": hero or '<p class="muted">等待資料…</p>',
+        "FRESH": freshness_block(snap),
         "PRESSURE": pressure_block(snap),
         "CURVE": curve_svg(snap, store),
         "SPREADS": spread_block(snap),
