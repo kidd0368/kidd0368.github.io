@@ -8,7 +8,9 @@ on:
       - "industry-intelligence-hub/data/registry.json"
       - "industry-intelligence-hub/scripts/**"
       - "industry-intelligence-hub/completion-gate.js"
+      - "industry-intelligence-hub/review-semantics.js"
       - "industry-intelligence-hub/app.html"
+      - "industry-intelligence-hub/prompts/**"
       - ".github/workflows/industry-intelligence-hub-rebuild.yml"
   workflow_dispatch:
 
@@ -28,17 +30,52 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate completion-gate source
+      - name: Install review-semantics browser layer
+        run: python3 industry-intelligence-hub/scripts/install_review_semantics.py
+
+      - name: Normalize actionable review semantics
+        run: python3 industry-intelligence-hub/scripts/normalize_review_semantics.py
+
+      - name: Validate source and review rules
         run: |
           node --check industry-intelligence-hub/completion-gate.js
+          node --check industry-intelligence-hub/review-semantics.js
           python3 -m py_compile \
             industry-intelligence-hub/scripts/enrich_completion_receipts.py \
-            industry-intelligence-hub/scripts/verify_completion_gate.py \
-            industry-intelligence-hub/scripts/install_completion_gate.py
+            industry-intelligence-hub/scripts/enrich_review_semantics.py \
+            industry-intelligence-hub/scripts/install_completion_gate.py \
+            industry-intelligence-hub/scripts/install_review_semantics.py \
+            industry-intelligence-hub/scripts/normalize_review_semantics.py \
+            industry-intelligence-hub/scripts/rebuild_records.py \
+            industry-intelligence-hub/scripts/test_review_semantics.py \
+            industry-intelligence-hub/scripts/verify_completion_gate.py
+          python3 industry-intelligence-hub/scripts/test_review_semantics.py
+          python3 -m json.tool industry-intelligence-hub/data/registry.json >/dev/null
           grep -q 'completion-gate.js?v=1.0.0' industry-intelligence-hub/app.html
+          grep -q 'review-semantics.js?v=1.0.0' industry-intelligence-hub/app.html
+
+      - name: Commit canonical review semantics before receipt generation
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- \
+            industry-intelligence-hub/app.html \
+            industry-intelligence-hub/data/records; then
+            echo "No record or app normalization changes."
+          else
+            git config user.name "industry-intelligence-bot"
+            git config user.email "actions@github.com"
+            git add \
+              industry-intelligence-hub/app.html \
+              industry-intelligence-hub/data/records
+            git commit -m "industry-intelligence: normalize review semantics"
+            git push
+          fi
 
       - name: Rebuild record indexes
         run: python3 industry-intelligence-hub/scripts/rebuild_records.py
+
+      - name: Add actionable review state to indexes
+        run: python3 industry-intelligence-hub/scripts/enrich_review_semantics.py
 
       - name: Add cryptographic write receipts
         run: python3 industry-intelligence-hub/scripts/enrich_completion_receipts.py
