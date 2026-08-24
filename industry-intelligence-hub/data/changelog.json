@@ -1,7 +1,30 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-23T23:47:45+00:00",
+  "generated_at": "2026-08-24T01:26:31+00:00",
   "entries": [
+    {
+      "task_id": "TASK-20260824-081915-PMVAY",
+      "updated_at": "2026-08-24T01:12:14.668Z",
+      "record_status": "review_required",
+      "record_path": "data/records/2026/08/TASK-20260824-081915-PMVAY.json",
+      "title": "中際旭創：2026H1、2027訂單能見度與NPO／CPO路線交叉驗證",
+      "metric_count": 58,
+      "conflicts_found": 3,
+      "write_receipt": {
+        "gate_version": "1.0.0",
+        "status": "committed_and_indexed",
+        "repository": "kidd0368/kidd0368.github.io",
+        "branch": "main",
+        "record_path": "industry-intelligence-hub/data/records/2026/08/TASK-20260824-081915-PMVAY.json",
+        "record_commit_sha": "75d1a35c282e8ed075395eebea3cd12475d82de2",
+        "record_blob_sha": "81ef53ea5eb167664b8fdae6072b536b43473ec0",
+        "record_content_sha256": "9b9e386def6afd46134a9df63e506b165cdc8b81014233b0e96c8a045e5893da",
+        "commit_message": "industry-intelligence: add TASK-20260824-081915-PMVAY",
+        "index_path": "industry-intelligence-hub/data/records.json",
+        "manifest_path": "industry-intelligence-hub/data/manifest.json",
+        "indexed_at": "2026-08-24T01:26:31+00:00"
+      }
+    },
     {
       "task_id": "TASK-20260823-235332-LK3H4",
       "updated_at": "2026-08-23T16:22:39.697Z",
@@ -22,7 +45,7 @@
         "commit_message": "industry-intelligence: add TASK-20260823-235332-LK3H4",
         "index_path": "industry-intelligence-hub/data/records.json",
         "manifest_path": "industry-intelligence-hub/data/manifest.json",
-        "indexed_at": "2026-08-23T23:47:45+00:00"
+        "indexed_at": "2026-08-24T01:26:31+00:00"
       }
     }
   ]

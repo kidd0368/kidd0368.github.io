@@ -1,9 +1,130 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-23T23:47:45+00:00",
-  "valid_record_count": 1,
+  "generated_at": "2026-08-24T01:26:31+00:00",
+  "valid_record_count": 2,
   "invalid_record_count": 0,
   "records": [
+    {
+      "task_id": "TASK-20260824-081915-PMVAY",
+      "title": "中際旭創：2026H1、2027訂單能見度與NPO／CPO路線交叉驗證",
+      "analysis_type": "broker_report",
+      "industry_id": "CPO",
+      "taxonomy_version_used": "2026.08.23.1",
+      "record_status": "review_required",
+      "created_at": "2026-08-24T00:54:40.885Z",
+      "updated_at": "2026-08-24T01:12:14.668Z",
+      "source": {
+        "source_id": "SRC-20260824-081915-PMVAY",
+        "source_type": "broker_report",
+        "title": "中際旭創",
+        "publisher": null,
+        "published_date": null,
+        "received_date": "2026-08-24"
+      },
+      "executive_summary": "官方財報確認中際旭創2026H1營收人民幣417.779億元、歸母淨利136.511億元、扣非歸母130.916億元、EPS 12.31元；以H1減Q1推算，Q2營收222.815億元、歸母79.166億元、扣非73.738億元，季增分別14.29%、38.05%、28.96%，合併毛利率46.42%。營運轉折由800G持續放量與1.6T爬坡共同驅動，而非單一產品替代。8月23日公司IR紀要稱主要客戶已給出2027指引與訂單，2.4T、NPO、XPO有望於2027H2量產、2028放大；但同份紀要明確聲明不構成盈利預測或業績指引，且招股書揭露主要客戶通常沒有長期採購承諾，因此不能把2027訂單視為不可撤銷backlog。現金轉換是核心風險：H1營業現金流僅為歸母淨利13.18%，Q2推算為淨流出15.679億元；應收、存貨及長期預付材料同步上升。",
+      "entities": [
+        {
+          "entity_id": "CN-300308",
+          "name": "中際旭創",
+          "ticker": "300308/3308",
+          "reason_mentioned": "主要研究對象；高速光模組及下一代光互連供應商。"
+        },
+        {
+          "entity_id": "CN-300502",
+          "name": "新易盛",
+          "ticker": "300502",
+          "reason_mentioned": "800G／1.6T可插拔光模組全球直接競爭者。"
+        },
+        {
+          "entity_id": "CN-002281",
+          "name": "光迅科技",
+          "ticker": "002281",
+          "reason_mentioned": "提供1.6T DR8產品的中國直接競爭者。"
+        },
+        {
+          "entity_id": "US-COHR",
+          "name": "Coherent",
+          "ticker": "COHR",
+          "reason_mentioned": "全球高速收發器及光元件競爭者。"
+        },
+        {
+          "entity_id": "US-LITE",
+          "name": "Lumentum",
+          "ticker": "LITE",
+          "reason_mentioned": "併購Cloud Light後成為高速數通模組及上游光元件競爭者。"
+        },
+        {
+          "entity_id": "US-AAOI",
+          "name": "Applied Optoelectronics",
+          "ticker": "AAOI",
+          "reason_mentioned": "披露首筆1.6T量產訂單的直接模組競爭者。"
+        },
+        {
+          "entity_id": "US-AVGO",
+          "name": "Broadcom",
+          "ticker": "AVGO",
+          "reason_mentioned": "3nm 200G/lane DSP、交換ASIC與CPO平台供應者；可能同時是上游與架構替代者，未確認直接供貨中際。"
+        },
+        {
+          "entity_id": "US-MRVL",
+          "name": "Marvell",
+          "ticker": "MRVL",
+          "reason_mentioned": "1.6T 3nm DSP及互連平台供應者；未確認直接供貨中際。"
+        },
+        {
+          "entity_id": "US-NVDA",
+          "name": "NVIDIA",
+          "ticker": "NVDA",
+          "reason_mentioned": "下游AI平台與CPO交換系統業者；其production公告用來交叉驗證CPO時程，不代表已披露為中際客戶。"
+        },
+        {
+          "entity_id": "US-META",
+          "name": "Meta",
+          "ticker": "META",
+          "reason_mentioned": "全球CSP／AI基礎設施需求端例子；附件未披露為直接客戶。"
+        }
+      ],
+      "finding_count": 11,
+      "metric_count": 58,
+      "metric_ids": [
+        "CAPACITY_NOMINAL",
+        "CAPEX",
+        "CUSTOMER_SHARE",
+        "EPS",
+        "GROSS_MARGIN",
+        "MARKET_SHARE",
+        "MASS_PRODUCTION_TIMING",
+        "NET_INCOME",
+        "NET_MARGIN",
+        "OPERATING_MARGIN",
+        "ORDER_VISIBILITY",
+        "PROFIT_CONTRIBUTION",
+        "REVENUE",
+        "REVENUE_GROWTH",
+        "SEGMENT_MIX",
+        "SHIPMENT",
+        "TECHNOLOGY_STATUS",
+        "UTILIZATION"
+      ],
+      "relationship_count": 7,
+      "evidence_count": 52,
+      "conflicts_found": 3,
+      "record_path": "data/records/2026/08/TASK-20260824-081915-PMVAY.json",
+      "write_receipt": {
+        "gate_version": "1.0.0",
+        "status": "committed_and_indexed",
+        "repository": "kidd0368/kidd0368.github.io",
+        "branch": "main",
+        "record_path": "industry-intelligence-hub/data/records/2026/08/TASK-20260824-081915-PMVAY.json",
+        "record_commit_sha": "75d1a35c282e8ed075395eebea3cd12475d82de2",
+        "record_blob_sha": "81ef53ea5eb167664b8fdae6072b536b43473ec0",
+        "record_content_sha256": "9b9e386def6afd46134a9df63e506b165cdc8b81014233b0e96c8a045e5893da",
+        "commit_message": "industry-intelligence: add TASK-20260824-081915-PMVAY",
+        "index_path": "industry-intelligence-hub/data/records.json",
+        "manifest_path": "industry-intelligence-hub/data/manifest.json",
+        "indexed_at": "2026-08-24T01:26:31+00:00"
+      }
+    },
     {
       "task_id": "TASK-20260823-235332-LK3H4",
       "title": "光通訊／CPO多來源綜合：聯鈞、新易盛、天孚通信與博通（科大訊飛附件越界）",
@@ -158,7 +279,7 @@
         "commit_message": "industry-intelligence: add TASK-20260823-235332-LK3H4",
         "index_path": "industry-intelligence-hub/data/records.json",
         "manifest_path": "industry-intelligence-hub/data/manifest.json",
-        "indexed_at": "2026-08-23T23:47:45+00:00"
+        "indexed_at": "2026-08-24T01:26:31+00:00"
       }
     }
   ]
