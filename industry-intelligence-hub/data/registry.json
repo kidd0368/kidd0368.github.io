@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": "2026-08-24T07:42:00+08:00",
+  "updated_at": "2026-08-24T11:10:00+08:00",
   "target_repository": "kidd0368/kidd0368.github.io",
   "base_path": "industry-intelligence-hub",
   "record_path_template": "industry-intelligence-hub/data/records/{yyyy}/{mm}/{task_id}.json",
@@ -19,6 +19,13 @@
       "content_sha256_matches",
       "manifest_has_no_invalid_entry"
     ]
+  },
+  "review_semantics": {
+    "version": "1.0.0",
+    "review_required_rule": "open review_items with requires_user_action=true only",
+    "filename_is_metadata_only": true,
+    "different_source_dates_are_notes_by_default": true,
+    "accepted_may_have_important_notes": true
   },
   "industries": [
     {
