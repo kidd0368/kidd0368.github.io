@@ -1,21 +1,21 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-24T01:31:00+00:00",
+  "generated_at": "2026-08-24T03:31:27+00:00",
   "valid_record_count": 2,
   "invalid_record_count": 0,
   "records": [
     {
       "task_id": "TASK-20260824-081915-PMVAY",
       "title": "中際旭創：2026H1、2027訂單能見度與NPO／CPO路線交叉驗證",
-      "analysis_type": "broker_report",
+      "analysis_type": "interview_notes",
       "industry_id": "CPO",
       "taxonomy_version_used": "2026.08.23.1",
-      "record_status": "review_required",
+      "record_status": "accepted",
       "created_at": "2026-08-24T00:54:40.885Z",
       "updated_at": "2026-08-24T01:30:12.411Z",
       "source": {
         "source_id": "SRC-20260824-081915-PMVAY",
-        "source_type": "broker_report",
+        "source_type": "interview_notes",
         "title": "中際旭創",
         "publisher": null,
         "published_date": null,
@@ -108,21 +108,29 @@
       ],
       "relationship_count": 7,
       "evidence_count": 52,
-      "conflicts_found": 3,
+      "conflicts_found": 0,
       "record_path": "data/records/2026/08/TASK-20260824-081915-PMVAY.json",
+      "review_semantics_version": "1.0.0",
+      "user_action_required_count": 0,
+      "important_note_count": 0,
+      "source_note_count": 3,
+      "display_status": {
+        "code": "completed",
+        "label": "已完成"
+      },
       "write_receipt": {
         "gate_version": "1.0.0",
         "status": "committed_and_indexed",
         "repository": "kidd0368/kidd0368.github.io",
         "branch": "main",
         "record_path": "industry-intelligence-hub/data/records/2026/08/TASK-20260824-081915-PMVAY.json",
-        "record_commit_sha": "272f051cec17b90cca709079ca710c1a23e60c39",
-        "record_blob_sha": "ff4786c628c6b5220e9297ab49fcc86828e9fa59",
-        "record_content_sha256": "46ca5a983bd1b3669a65153a7ac0f9f998b71c3e2971ea12ec3817786ae82a40",
-        "commit_message": "industry-intelligence: add TASK-20260824-081915-PMVAY",
+        "record_commit_sha": "f258e41e9a0f82ad8f5be977eee495f914e4dd12",
+        "record_blob_sha": "b03af4d16fa4246a526c692fc7bfe16bf0df6b56",
+        "record_content_sha256": "482134b86d59891ce5bf04e83db4e17d27455a4b8e175b636dcd19aa12372dc5",
+        "commit_message": "industry-intelligence: normalize review semantics",
         "index_path": "industry-intelligence-hub/data/records.json",
         "manifest_path": "industry-intelligence-hub/data/manifest.json",
-        "indexed_at": "2026-08-24T01:31:00+00:00"
+        "indexed_at": "2026-08-24T03:31:27+00:00"
       }
     },
     {
@@ -131,7 +139,7 @@
       "analysis_type": "broker_report",
       "industry_id": "CPO",
       "taxonomy_version_used": "2026.08.23.1",
-      "record_status": "review_required",
+      "record_status": "accepted",
       "created_at": "2026-08-23T15:55:36.675Z",
       "updated_at": "2026-08-23T16:22:39.697Z",
       "source": {
@@ -265,21 +273,29 @@
       ],
       "relationship_count": 13,
       "evidence_count": 26,
-      "conflicts_found": 5,
+      "conflicts_found": 0,
       "record_path": "data/records/2026/08/TASK-20260823-235332-LK3H4.json",
+      "review_semantics_version": "1.0.0",
+      "user_action_required_count": 0,
+      "important_note_count": 1,
+      "source_note_count": 4,
+      "display_status": {
+        "code": "completed_with_notes",
+        "label": "已完成 · 1項重要註記"
+      },
       "write_receipt": {
         "gate_version": "1.0.0",
         "status": "committed_and_indexed",
         "repository": "kidd0368/kidd0368.github.io",
         "branch": "main",
         "record_path": "industry-intelligence-hub/data/records/2026/08/TASK-20260823-235332-LK3H4.json",
-        "record_commit_sha": "fdacb20fa487c5356b824ca577acb4ca9a4982f2",
-        "record_blob_sha": "c039b4e153502451089118b010485b055afafb53",
-        "record_content_sha256": "d973dca77f7a0ed75c5a7e27522734362dc4f9925b3c0a1e611a7d6041107032",
-        "commit_message": "industry-intelligence: add TASK-20260823-235332-LK3H4",
+        "record_commit_sha": "f258e41e9a0f82ad8f5be977eee495f914e4dd12",
+        "record_blob_sha": "2066eace06dd991cc483ba35b1b92ea848d15f8f",
+        "record_content_sha256": "66b2fd9a286f93c71962f96f0b867ed0d06a1c3079428a35fb5af30d95728ca3",
+        "commit_message": "industry-intelligence: normalize review semantics",
         "index_path": "industry-intelligence-hub/data/records.json",
         "manifest_path": "industry-intelligence-hub/data/manifest.json",
-        "indexed_at": "2026-08-24T01:31:00+00:00"
+        "indexed_at": "2026-08-24T03:31:27+00:00"
       }
     }
   ]
