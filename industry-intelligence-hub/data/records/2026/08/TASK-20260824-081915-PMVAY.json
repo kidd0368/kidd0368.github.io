@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "task_id": "TASK-20260824-081915-PMVAY",
   "created_at": "2026-08-24T00:54:40.885Z",
-  "updated_at": "2026-08-24T01:12:14.668Z",
+  "updated_at": "2026-08-24T01:30:12.411Z",
   "analysis_type": "broker_report",
   "industry_id": "CPO",
   "industry_name": "光通訊／CPO",
@@ -205,7 +205,10 @@
     {"claim_id":"CALC-IN-013","label":"2026Q1末其他非流動資產","value":143.82153667,"unit":"CNY_mn","reference_period":"2026Q1_end","fact_type":"disclosed_actual","evidence_ids":["EV-OFFICIAL-Q1-BS-CF"]},
     {"claim_id":"CALC-IN-014","label":"2026H1末其他非流動資產","value":1784.10972121,"unit":"CNY_mn","reference_period":"2026H1_end","fact_type":"disclosed_actual","evidence_ids":["EV-OFFICIAL-H1-BS-CF"]},
     {"claim_id":"CALC-IN-015","label":"H股全球發售估計淨募資","value":52891,"unit":"HKD_mn","reference_period":"2026-07-30","fact_type":"disclosed_actual","evidence_ids":["EV-OFFICIAL-HSHARE"]},
-    {"claim_id":"CALC-IN-016","label":"2026H1資本承擔","value":8804.103,"unit":"CNY_mn","reference_period":"2026H1_end","fact_type":"disclosed_actual","evidence_ids":["EV-OFFICIAL-HK-COMMITMENTS"]}
+    {"claim_id":"CALC-IN-016","label":"2026H1資本承擔","value":8804.103,"unit":"CNY_mn","reference_period":"2026H1_end","fact_type":"disclosed_actual","evidence_ids":["EV-OFFICIAL-HK-COMMITMENTS"]},
+    {"claim_id":"CALC-IN-017","label":"2026H1光通信收發模組營業成本","value":22088.75538203,"unit":"CNY_mn","reference_period":"2026H1","fact_type":"disclosed_actual","evidence_ids":["EV-OFFICIAL-H1-SEGMENT"]},
+    {"claim_id":"CALC-IN-018","label":"2025H1光通信收發模組營收","value":14431.74140473,"unit":"CNY_mn","reference_period":"2025H1","fact_type":"disclosed_actual","evidence_ids":["EV-OFFICIAL-H1-SEGMENT"]},
+    {"claim_id":"CALC-IN-019","label":"2025H1合併營收","value":14789.0748378,"unit":"CNY_mn","reference_period":"2025H1","fact_type":"disclosed_actual","evidence_ids":["EV-OFFICIAL-H1-FIN"]}
   ],
   "industry_estimates": [
     {"industry_claim_id":"IND-EST-001","description":"AI光模組市場規模","reference_period":"2025","value":16.5,"unit":"USD_bn","fact_type":"industry_estimate","confidence":0.72,"evidence_ids":["EV-INDUSTRY-TRENDFORCE"],"notes":"TrendForce估計，非公司營收。"},
@@ -231,7 +234,7 @@
     {"evidence_id":"EV-OFFICIAL-Q1-BS-CF","source_id":"EXT-CNINFO-2026Q1","locator":"2026年第一季度報告PDF第7至8頁及第12頁","excerpt":"應收帳款9,535,572,287.39元；存貨15,672,078,021.87元；其他非流動資產143,821,536.67元；購建長期資產支付現金1,929,199,282.88元。","context":null,"supports":["CLAIM-FIN-010","CALC-IN-009","CALC-IN-011","CALC-IN-013"]},
     {"evidence_id":"EV-OFFICIAL-H1-FIN","source_id":"EXT-CNINFO-2026H1","locator":"2026年半年度報告PDF第8頁，主要會計數據","excerpt":"營業收入41,777,861,795.03元；歸母淨利13,651,149,693.27元；扣非13,091,597,476.79元；OCF1,799,674,832.02元；基本EPS12.31元。","context":"未經審計。","supports":["CLAIM-FIN-011","CLAIM-FIN-012","CLAIM-FIN-013","CLAIM-FIN-014","CALC-IN-008"]},
     {"evidence_id":"EV-OFFICIAL-H1-PL","source_id":"EXT-CNINFO-2026H1","locator":"2026年半年度報告PDF第56頁，合併利潤表","excerpt":"營業成本22,454,688,140.44元；營業利潤17,231,320,005.52元。","context":null,"supports":["CALC-IN-003","CALC-IN-005","CLAIM-MET-022","CLAIM-MET-023","CLAIM-MET-029","CLAIM-MET-030"]},
-    {"evidence_id":"EV-OFFICIAL-H1-SEGMENT","source_id":"EXT-CNINFO-2026H1","locator":"2026年半年度報告PDF第26至27頁，產品與海外銷售表","excerpt":"光通信收發模組收入41,355,212,182.06元、成本22,088,755,382.03元、毛利率46.59%；海外銷售收入39,598,693,916.48元。","context":null,"supports":["CLAIM-MET-042","CLAIM-MET-043","CLAIM-MET-044","CLAIM-MET-045","CLAIM-MET-046","SEG-2026H1-MODULE-REV","SEG-2026H1-OVERSEAS-REV"]},
+    {"evidence_id":"EV-OFFICIAL-H1-SEGMENT","source_id":"EXT-CNINFO-2026H1","locator":"2026年半年度報告PDF第21及26至27頁，產品與海外銷售表","excerpt":"2026H1光通信收發模組收入41,355,212,182.06元、成本22,088,755,382.03元、毛利率46.59%；2025H1模組收入14,431,741,404.73元；2026H1海外銷售收入39,598,693,916.48元。","context":null,"supports":["CLAIM-MET-042","CLAIM-MET-043","CLAIM-MET-044","CLAIM-MET-045","CLAIM-MET-046","SEG-2026H1-MODULE-REV","SEG-2026H1-OVERSEAS-REV","CALC-IN-017","CALC-IN-018","DER-024","DER-026","DER-027"]},
     {"evidence_id":"EV-OFFICIAL-H1-CAPACITY","source_id":"EXT-CNINFO-2026H1","locator":"2026年半年度報告PDF第21頁，生產經營表","excerpt":"光通信收發模組產能2,215萬只、產量1,886萬只、銷量1,899萬只，營業收入41,355,212,182.06元，毛利率46.59%。","context":"半年全產品口徑。","supports":["CLAIM-MET-035","CLAIM-MET-036","CLAIM-MET-037","CLAIM-MET-038"]},
     {"evidence_id":"EV-OFFICIAL-H1-BS-CF","source_id":"EXT-CNINFO-2026H1","locator":"2026年半年度報告PDF第51至52、60、128頁","excerpt":"應收帳款15,000,893,993.58元；存貨19,825,909,263.51元；其他非流動資產1,784,109,721.21元，其中長期預付材料1,605,456,503.58元。","context":null,"supports":["CALC-IN-010","CALC-IN-012","CALC-IN-014","FIND-005"]},
     {"evidence_id":"EV-OFFICIAL-H1-CAPEX","source_id":"EXT-CNINFO-2026H1","locator":"2026年半年度報告PDF第60頁，合併現金流量表","excerpt":"購建固定資產、無形資產和其他長期資產支付的現金4,802,161,195.37元。","context":null,"supports":["CLAIM-FIN-015","CLAIM-FIN-019","FIND-008"]},
@@ -290,7 +293,11 @@
     {"derived_id":"DER-020","name":"2026H1營業現金流／歸母淨利","formula":"CALC-IN-008 / CLAIM-FIN-012 * 100","result":13.1833,"unit":"%","input_claim_ids":["CALC-IN-008","CLAIM-FIN-012"],"assumptions":["現金流與損益同為H1累計"],"sensitivity":null},
     {"derived_id":"DER-021","name":"2026Q2非經常性歸母淨利差額","formula":"CLAIM-FIN-017 - CLAIM-FIN-018","result":542.79903043,"unit":"CNY_mn","input_claim_ids":["CLAIM-FIN-017","CLAIM-FIN-018"],"assumptions":["歸母減扣非歸母","不把全部差額歸因單一投資"],"sensitivity":null},
     {"derived_id":"DER-022","name":"H股淨募資美元換算","formula":"CALC-IN-015 / 7.8","result":6778.33333333,"unit":"USD_mn","input_claim_ids":["CALC-IN-015"],"assumptions":["假設HKD/USD=7.8","以淨募資而非總募資","未行使超額配售權"],"sensitivity":{"HKD_per_USD_7.75":6824.64516129,"HKD_per_USD_7.85":6737.70700637}},
-    {"derived_id":"DER-023","name":"FY2025光模組營收比重","formula":"CLAIM-MET-039 / CLAIM-FIN-001 * 100","result":97.9513,"unit":"%","input_claim_ids":["CLAIM-MET-039","CLAIM-FIN-001"],"assumptions":["產品收入與合併收入口徑一致"],"sensitivity":null}
+    {"derived_id":"DER-023","name":"FY2025光模組營收比重","formula":"CLAIM-MET-039 / CLAIM-FIN-001 * 100","result":97.9513,"unit":"%","input_claim_ids":["CLAIM-MET-039","CLAIM-FIN-001"],"assumptions":["產品收入與合併收入口徑一致"],"sensitivity":null},
+    {"derived_id":"DER-024","name":"2026H1光通信收發模組毛利額","formula":"CLAIM-MET-042 - CALC-IN-017","result":19266.45680003,"unit":"CNY_mn","input_claim_ids":["CLAIM-MET-042","CALC-IN-017"],"assumptions":["產品收入與產品成本口徑一致","此為毛利額，不是營業利益或淨利"],"sensitivity":null},
+    {"derived_id":"DER-025","name":"2026H1合併毛利額","formula":"CLAIM-FIN-011 - CALC-IN-003","result":19323.17365459,"unit":"CNY_mn","input_claim_ids":["CLAIM-FIN-011","CALC-IN-003"],"assumptions":["合併營收與營業成本口徑一致"],"sensitivity":null},
+    {"derived_id":"DER-026","name":"2026H1光模組毛利額占合併毛利","formula":"DER-024 / DER-025 * 100","result":99.7065,"unit":"%","input_claim_ids":["CLAIM-MET-042","CALC-IN-017","CLAIM-FIN-011","CALC-IN-003"],"assumptions":["以產品表毛利額除合併毛利額","無法由此推算產品淨利貢獻"],"sensitivity":{"rounding":"約99.71%"}},
+    {"derived_id":"DER-027","name":"光模組收入占2026H1合併營收年增額","formula":"(CLAIM-MET-042 - CALC-IN-018) / (CLAIM-FIN-011 - CALC-IN-019) * 100","result":99.758,"unit":"%","input_claim_ids":["CLAIM-MET-042","CALC-IN-018","CLAIM-FIN-011","CALC-IN-019"],"assumptions":["2025H1與2026H1分類口徑一致","僅代表收入增量歸因，不代表800G或1.6T單一產品貢獻"],"sensitivity":{"rounding":"約99.76%"}}
   ],
   "financial_gaps": [
     {"reference_period":"FY2026","revenue":null,"net_income":null,"eps":null,"reason":"來源僅披露2026H1實際與方向性管理層陳述，沒有完整年度財測。"},
@@ -346,7 +353,7 @@
     "numeric_claim_count_definition": "financials與metric_claims中value為number的筆數，加上segment_estimates與industry_estimates中value為number的筆數；不重複計入derived_metrics與calculation_inputs。",
     "numeric_claim_count": 63,
     "qualitative_metric_claim_count": 6,
-    "derived_metric_count": 23,
+    "derived_metric_count": 27,
     "evidence_count": 52,
     "conflict_count": 3,
     "taxonomy_change_proposal_count": 5
