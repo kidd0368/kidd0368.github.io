@@ -1,6 +1,13 @@
 name: 利率與債市儀表板自動更新
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "fed-watch/config.json"
+      - "fed-watch/index.html"
+      - "fed-watch/scripts/**"
+      - ".github/workflows/fed-watch.yml"
   schedule:
     - cron: "23 1,7,13,19 * * *"   # UTC 01:23/07:23/13:23/19:23 = 台北 09:23/15:23/21:23/03:23
   workflow_dispatch: {}
@@ -25,6 +32,9 @@ jobs:
 
       - name: 安裝依賴
         run: pip install requests cryptography
+
+      - name: 驗證四情境分類規則
+        run: python fed-watch/scripts/test_scenarios.py -v
 
       - name: 收集資料（Kalshi／Polymarket／FRED／金十）
         env:

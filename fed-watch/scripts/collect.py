@@ -103,7 +103,8 @@ def fetch_polymarket():
             best = None
             for ev in events:
                 t = ((ev.get("title") or "") + " " + (ev.get("slug") or "")).lower()
-                if "fed" in t and m["pm_month"] in t and (m["pm_year"] in t or True):
+                # 年份必須同時吻合；否則未來會議可能誤配到同月份、不同年度的事件。
+                if "fed" in t and m["pm_month"] in t and m["pm_year"] in t:
                     best = ev
                     if m["pm_year"] in t:
                         break
@@ -192,6 +193,17 @@ def fetch_fred():
                 m["chg20d"] = round(rows[-1][1] - rows[-21][1], 3)
             if "chg60d" in calc and len(rows) >= 45:
                 m["chg60d"] = round((rows[-1][1] / rows[-45][1] - 1) * 100, 1)  # 日資料約45筆=60個日曆天
+            if "ma4" in calc and len(rows) >= 4:
+                m["ma4"] = round(sum(v for _d, v in rows[-4:]) / 4.0, 1)
+            if "ma4chg4" in calc and len(rows) >= 8:
+                recent = sum(v for _d, v in rows[-4:]) / 4.0
+                prior = sum(v for _d, v in rows[-8:-4]) / 4.0
+                if prior:
+                    m["ma4chg4"] = round((recent / prior - 1) * 100, 1)
+            if "chg4p" in calc and len(rows) >= 5:
+                m["chg4p"] = round(rows[-1][1] - rows[-5][1], 3)
+            if "chg1p" in calc and len(rows) >= 2:
+                m["chg1p"] = round(rows[-1][1] - rows[-2][1], 2)
             macro[sid] = m
             time.sleep(0.4)
         except Exception as e:

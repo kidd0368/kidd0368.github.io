@@ -1,5 +1,5 @@
 {
-  "_readme": "FED 升降息機率儀表板設定。meetings 每次 FOMC 過後要往前滾動（刪掉已開完的、補下一場）。weights 是三層合成權重。",
+  "_readme": "聯準會政策錯誤雷達設定。meetings 每次 FOMC 過後要往前滾動（刪掉已開完的、補下一場）。weights 是原有三層機率合成權重；scenario_rules 是尚未回測的研究門檻，只用於情境分類，不改寫原有機率模型。",
   "current_target": {
     "low": 3.5,
     "high": 3.75,
@@ -128,7 +128,7 @@
       ]
     },
     "T10YIE": {
-      "name": "10年通膨預期",
+      "name": "10年損益兩平通膨率（市場代理）",
       "freq": "d",
       "calc": [
         "level",
@@ -150,6 +150,70 @@
         "level",
         "chg20d"
       ]
+    },
+    "ICSA": {
+      "name": "初次申請失業救濟人數",
+      "freq": "w",
+      "calc": [
+        "level",
+        "ma4",
+        "ma4chg4"
+      ]
+    },
+    "BAMLH0A0HYM2": {
+      "name": "美國高收益債選擇權調整利差",
+      "freq": "d",
+      "calc": [
+        "level",
+        "chg20d"
+      ]
+    },
+    "NFCI": {
+      "name": "芝加哥聯準銀行全國金融狀況指數",
+      "freq": "w",
+      "calc": [
+        "level",
+        "chg4p"
+      ]
+    },
+    "DRTSCILM": {
+      "name": "銀行收緊大型與中型企業放款標準淨比例",
+      "freq": "q",
+      "calc": [
+        "level",
+        "chg1p"
+      ]
+    }
+  },
+  "scenario_rules": {
+    "_readme": "以下都是待回測的研究門檻，不是 Fed 規則、交易訊號或已核准的投資門檻。",
+    "inflation_expectations": {
+      "anchored_max": 2.5,
+      "warning_level": 2.55,
+      "warning_20d_change": 0.15,
+      "deanchor_20d_change": 0.2
+    },
+    "realized_inflation": {
+      "core_pce_hot": 3.0,
+      "core_cpi_3m_hot": 3.0
+    },
+    "labor": {
+      "payroll_3m_weak_k": 75.0,
+      "payroll_3m_resilient_k": 150.0,
+      "unemployment_3m_warning_pp": 0.2,
+      "claims_4w_rise_pct": 10.0
+    },
+    "credit": {
+      "high_yield_warning": 4.0,
+      "high_yield_stress": 5.0,
+      "nfci_tight": 0.0,
+      "sloos_tightening": 20.0
+    },
+    "market": {
+      "hike_meaningful": 0.3,
+      "hike_base_case": 0.5,
+      "later_hike_cycle": 0.35,
+      "market_model_gap": 0.15
     }
   },
   "jin10_keywords": [

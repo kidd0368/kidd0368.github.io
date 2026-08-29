@@ -2,3 +2,7 @@
 /out/
 __pycache__/
 *.pyc
+fed-watch/**/*.tmp
+fed-watch/**/*.bak
+fed-watch/decrypted*
+fed-watch/plaintext*
