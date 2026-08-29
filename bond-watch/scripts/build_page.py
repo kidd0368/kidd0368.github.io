@@ -13,8 +13,17 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fwcrypto
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(BASE)
+SHARED_SCRIPTS = os.path.join(ROOT, ".github", "scripts")
+sys.path.insert(0, SHARED_SCRIPTS)
+import cross_watch as CW
+
 CFG = json.load(open(os.path.join(BASE, "config.json"), encoding="utf-8"))
 STORE_PATH = os.path.join(BASE, "data", "store.enc")
+SUMMARY_PATH = os.environ.get(
+    "CROSS_WATCH_SUMMARY_PATH",
+    os.path.join(ROOT, ".github", "data", "cross_watch.enc"),
+)
 TPE = dt.timezone(dt.timedelta(hours=8))
 W = 860
 
@@ -273,6 +282,10 @@ def main():
     if not snaps:
         sys.exit("no snapshots; run collect.py first")
     snap = snaps[-1]
+    summary = CW.validate_summary(fwcrypto.load_store(SUMMARY_PATH, password))
+    linkage = summary["linkage"]
+    if summary.get("bond_snapshot_ts") != snap.get("ts"):
+        sys.exit("cross-watch summary does not match latest bond snapshot")
 
     y30 = next((c for c in snap["curve"] if c["label"] == "30Y"), {})
     y10 = next((c for c in snap["curve"] if c["label"] == "10Y"), {})
@@ -302,6 +315,7 @@ h1{font-size:26px;margin:0 0 4px}h2{font-size:19px;margin:34px 0 12px;color:var(
 .hb{text-align:center}.hp{display:block;font-size:32px;font-weight:900}.hp em{font-size:15px;font-style:normal}
 .hl{color:var(--muted);font-size:12px}
 .card{margin:12px 0;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.cross-watch{margin:14px 0 0;padding:18px;background:linear-gradient(135deg,rgba(127,180,255,.09),transparent 44%),var(--card);border:1px solid var(--line);border-left:5px solid #7fb4ff;border-radius:16px}.cross-watch.risk{border-left-color:#ff5c78}.cross-watch.warn{border-left-color:#ffac63}.cross-watch.watch{border-left-color:var(--gold)}.cross-watch.ok{border-left-color:#39c6be}.cross-watch.muted{border-left-color:var(--muted)}.cross-top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.cross-kicker{margin:0;color:#7fb4ff;font-size:11px;font-weight:900;letter-spacing:.08em}.cross-top h3{margin:4px 0;font-size:22px}.cross-stage{margin:0;color:#d8e3ea}.watch-switch{display:flex;gap:7px;flex:none}.watch-switch a{padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;font-weight:800;text-decoration:none}.watch-switch a.current{color:#171006;background:var(--gold);border-color:var(--gold)}.cross-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:14px}.cross-grid>div{padding:12px;background:#0d131c;border:1px solid var(--line);border-radius:11px}.cross-grid span{display:block;color:var(--muted);font-size:11px}.cross-grid b{display:block;margin:3px 0;font-size:14px}.cross-grid p{margin:0;color:#c4ced8;font-size:12px}.cross-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}.cross-cols h4{margin:0 0 5px;color:var(--gold)}.cross-cols ul{margin:0;padding-left:19px}.cross-cols li{margin:6px 0;color:#d2d9e0;font-size:12px}.cross-foot{margin:12px 0 0;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
 svg{width:100%;height:auto;background:#0d131c;border-radius:10px;margin-bottom:8px}
 table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}
 .num{text-align:right;white-space:nowrap}
@@ -324,9 +338,11 @@ article{padding:12px 14px;margin:10px 0;background:#0d131c;border:1px solid var(
 article h4{margin:0 0 6px;color:var(--gold)}
 a{color:#7fb4ff}.muted{color:var(--muted);font-size:12px}
 footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+@media(max-width:700px){.cross-top{display:block}.watch-switch{margin-top:12px}.cross-grid,.cross-cols{grid-template-columns:1fr}.wrap{padding-inline:13px}}
 </style></head><body><div class="wrap">
 <h1>美債殖利率曲線與期限溢價</h1>
 <p class="sub">FRED 最新資料日 {{ASOF}}｜頁面更新 {{NOW}}（台北）｜10年期限溢價 {{TP}}</p>
+<section id="cross-watch"><h2 style="margin-top:22px">政策 × 債市聯動判讀</h2>{{LINKAGE}}</section>
 <div class="hero">{{HERO}}<div class="sub" style="margin-left:auto;max-width:260px">數字為當前殖利率，下方為 20 個交易日變化。紅＝殖利率上升＝債價下跌。</div></div>
 <h2>資料新鮮度</h2><div class="card">{{FRESH}}</div>
 <h2>折現率壓力指數</h2><div class="card">{{PRESSURE}}</div>
@@ -342,18 +358,19 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:v
 <p><b>為什麼要拆解？</b>名目殖利率 ≈ 實質利率 + 通膨預期。長端上升若來自通膨預期，代表通膨風險，Fed 可能需要更鷹；若來自實質利率與期限溢價（財政赤字、供給、外資減持），則是市場自己在收緊金融條件，反而降低 Fed 出手的必要性。兩者對政策路徑的意涵相反，混為一談會判斷錯誤。</p>
 <p><b>折現率壓力指數</b>衡量長天期現金流的估值逆風，可與 AI 算力基建對帳戰情板對照閱讀。</p>
 <p>本頁為個人研究工具，非投資建議。快訊原文版權屬金十數據，僅供本人研究使用，請勿轉傳。</p></div>
-<footer>bond-watch｜每日自動更新｜姊妹頁：FED 升降息機率儀表板、AI 算力基建對帳戰情板</footer>
+<footer>bond-watch｜每日自動更新｜共同判讀：<a href="../fed-watch/">聯準會政策錯誤雷達</a></footer>
 </div></body></html>"""
 
     tpnote = ""
     if tp.get("value") is not None:
         c20 = tp.get("chg", {}).get("20")
-        tpnote = ('<p class="muted">期限溢價是投資人持有長債所要求的額外補償，與 Fed 政策預期無關。'
+        tpnote = ('<p class="muted">期限溢價是投資人持有長債所要求的額外補償，不等同於純粹的 Fed 政策預期。'
                   '現值 %.2f%%，20 日變化 %s。上升代表市場對財政赤字、發債供給或外資需求的疑慮加深。</p>'
                   % (tp["value"], bp(c20)))
 
     rep = {
         "ASOF": snap.get("asof", ""), "NOW": now,
+        "LINKAGE": CW.render_card(linkage, "bond"),
         "TP": ("%.2f%%" % tp["value"]) if tp.get("value") is not None else "—",
         "HERO": hero or '<p class="muted">等待資料…</p>',
         "FRESH": freshness_block(snap),
@@ -371,7 +388,7 @@ footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);color:v
         page = page.replace("{{" + k + "}}", v)
 
     fwcrypto.write_encrypted_page(page, password, BASE)
-    print("[bond] page written: %d chars, pressure=%s" % (len(page), (snap.get("pressure") or {}).get("score")))
+    print("[bond] encrypted bond page written: %d chars" % len(page))
 
 
 if __name__ == "__main__":

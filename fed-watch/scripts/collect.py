@@ -69,7 +69,7 @@ def fetch_kalshi():
                 out[m["key"]] = n
             time.sleep(0.5)
         except Exception as e:
-            log("kalshi", m["key"], "failed:", repr(e))
+            log("kalshi", m["key"], "failed:", type(e).__name__)
     return out
 
 
@@ -128,7 +128,7 @@ def fetch_polymarket():
             if n:
                 out[m["key"]] = n
     except Exception as e:
-        log("polymarket failed:", repr(e))
+        log("polymarket failed:", type(e).__name__)
     return out
 
 
@@ -207,7 +207,7 @@ def fetch_fred():
             macro[sid] = m
             time.sleep(0.4)
         except Exception as e:
-            log("fred", sid, "failed:", repr(e))
+            log("fred", sid, "failed:", type(e).__name__)
     if hist:
         macro["_history"] = hist
     return macro
@@ -291,11 +291,8 @@ def fetch_jin10(existing_ids):
     quotes = []
     try:
         cli = Jin10MCP(token)
-        init_res = cli.start()
-        log("jin10 init:", json.dumps(init_res, ensure_ascii=False)[:250] if init_res else "None")
+        cli.start()
         tools = cli.tool_names()
-        if tools:
-            log("jin10 tools:", list(tools)[:12])
         search = "search_flash" if "search_flash" in tools else ("list_flash" if "list_flash" in tools else None)
         props = {}
         if search:
@@ -304,9 +301,9 @@ def fetch_jin10(existing_ids):
             # tools/list 拿不到就按官方文件盲呼叫
             log("jin10: tools/list empty, fallback to blind search_flash")
             search = "search_flash"
+        log("jin10: connected; selected approved search tool", search)
         kw_param = next((p for p in ("keyword", "query", "q", "search", "keywords") if p in props), "keyword")
         markers = CFG["institution_markers"]
-        first_kw = True
         for kw in CFG["jin10_keywords"]:
             args = {kw_param: kw}
             if props:
@@ -317,12 +314,6 @@ def fetch_jin10(existing_ids):
             # 盲呼叫模式：金十 search_flash 只收 keyword，不加其他參數
             payload = cli.call(search, args)
             items = _flash_items(payload)
-            if first_kw:
-                if items:
-                    log("jin10 sample item:", json.dumps(items[0], ensure_ascii=False)[:300])
-                else:
-                    log("jin10 raw payload:", json.dumps(payload, ensure_ascii=False)[:350])
-            first_kw = False
             for it in items:
                 text = (it.get("content") or "") + (it.get("title") or "")
                 qid = str(it.get("id", ""))
@@ -346,7 +337,7 @@ def fetch_jin10(existing_ids):
                     existing_ids.add(qid)
             time.sleep(0.8)
     except Exception as e:
-        log("jin10 failed:", repr(e))
+        log("jin10 failed:", type(e).__name__)
     log("jin10: %d new quotes" % len(quotes))
     return quotes
 

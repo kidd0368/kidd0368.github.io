@@ -14,8 +14,17 @@ import fwcrypto
 import model as M
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.dirname(BASE)
+SHARED_SCRIPTS = os.path.join(ROOT, ".github", "scripts")
+sys.path.insert(0, SHARED_SCRIPTS)
+import cross_watch as CW
+
 CFG = json.load(open(os.path.join(BASE, "config.json"), encoding="utf-8"))
 STORE_PATH = os.path.join(BASE, "data", "store.enc")
+SUMMARY_PATH = os.environ.get(
+    "CROSS_WATCH_SUMMARY_PATH",
+    os.path.join(ROOT, ".github", "data", "cross_watch.enc"),
+)
 BUCKETS = CFG["buckets"]
 BL = CFG["bucket_labels"]
 COL = {"cut50p": "#1fa89f", "cut25": "#39c6be", "hold": "#f6c453", "hike25": "#ff5c78", "hike50p": "#e03a5a"}
@@ -551,18 +560,19 @@ def main():
     mid = (tgt["low"] + tgt["high"]) / 2
     snap = store["snapshots"][-1]
 
-    market = M.market_layer(snap, meetings)
-    mdl = M.model_layer(store["macro"], meetings, mid)
-    expert = M.expert_layer(store["quotes"], meetings,
-                            CFG["expert_lookback_days"], CFG["expert_min_quotes"])
-    blended = M.blend(market, mdl, expert, meetings, CFG["weights"])
-    features = M.scenario_features(store["macro"], market, mdl, expert, meetings,
-                                   CFG["scenario_rules"])
-    scenario = M.classify_policy_scenario(features, CFG["scenario_rules"])
-    snap["model"] = {"hawk_score": mdl["hawk_score"], "dists": mdl["dists"]}
-    snap["blend"] = blended
-    snap["scenario"] = scenario
-    fwcrypto.save_store(STORE_PATH, store, password)
+    analysis = snap.get("analysis") or {}
+    if analysis.get("schema_version") != 1:
+        sys.exit("cross-watch analysis missing; run .github/scripts/build_cross_watch.py first")
+    market = analysis["market"]
+    mdl = analysis["model"]
+    expert = analysis["expert"]
+    blended = analysis["blend"]
+    scenario = analysis["scenario"]
+    features = scenario["features"]
+    summary = CW.validate_summary(fwcrypto.load_store(SUMMARY_PATH, password))
+    if summary["summary_id"] != snap.get("cross_watch_summary_id"):
+        sys.exit("cross-watch summary does not match latest fed snapshot")
+    linkage = summary["linkage"]
 
     nxt = meetings[0]
     nb = blended.get(nxt["key"], {})
@@ -589,6 +599,7 @@ nav{display:flex;gap:8px;overflow:auto;margin-top:16px;padding-bottom:4px}nav a{
 .decision{display:grid;grid-template-columns:minmax(260px,.82fr) 1.5fr;gap:18px;margin:20px 0 0;padding:20px;border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:18px;background:linear-gradient(135deg,rgba(119,174,247,.08),transparent 44%),var(--surface)}.decision.risk{border-left-color:var(--red)}.decision.warn{border-left-color:var(--orange)}.decision.ok{border-left-color:var(--teal)}.decision h2{margin:5px 0 4px;font-size:28px}.stage{margin:0;font-weight:850;color:var(--gold)}
 .decision-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.decision-grid div{padding:13px;background:rgba(7,13,20,.5);border:1px solid var(--line);border-radius:12px}.decision-grid span,.decision-grid small{display:block;color:var(--muted);font-size:11px}.decision-grid b{display:block;margin:3px 0;font-size:15px}
 .card{margin:12px 0;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:14px}.confirm{border-left:4px solid var(--teal)}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}.matrix{display:grid;grid-template-columns:1fr 1fr;gap:12px}.scenario-cell{padding:16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:14px}.scenario-cell.active{border-color:var(--gold);box-shadow:0 0 0 2px rgba(242,195,91,.13)}.scenario-cell span{color:var(--muted);font-size:11px}.scenario-cell h3{margin-top:5px;color:var(--gold)}.scenario-cell p{margin:0;color:#c6d2da;font-size:13px}.read-list,.change-list{margin:8px 0 0;padding-left:20px}.read-list li,.change-list li{margin:8px 0}.change-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 28px}.change-list li{padding-left:3px}
+.cross-watch{margin:14px 0 0;padding:18px;background:linear-gradient(135deg,rgba(119,174,247,.09),transparent 44%),var(--surface);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:16px}.cross-watch.risk{border-left-color:var(--red)}.cross-watch.warn{border-left-color:var(--orange)}.cross-watch.watch{border-left-color:var(--gold)}.cross-watch.ok{border-left-color:var(--teal)}.cross-watch.muted{border-left-color:var(--muted)}.cross-top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.cross-kicker{margin:0;color:var(--blue);font-size:11px;font-weight:900;letter-spacing:.08em}.cross-top h3{margin:4px 0;font-size:22px}.cross-stage{margin:0;color:#d8e3ea}.watch-switch{display:flex;gap:7px;flex:none}.watch-switch a{padding:7px 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:12px;font-weight:800;text-decoration:none}.watch-switch a.current{color:#091018;background:var(--gold);border-color:var(--gold)}.cross-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:14px}.cross-grid>div{padding:12px;background:rgba(7,13,20,.52);border:1px solid var(--line);border-radius:11px}.cross-grid span{display:block;color:var(--muted);font-size:11px}.cross-grid b{display:block;margin:3px 0;font-size:14px}.cross-grid p{margin:0;color:#b9c8d2;font-size:12px}.cross-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}.cross-cols h4{margin:0 0 5px;color:var(--gold)}.cross-cols ul{margin:0;padding-left:19px}.cross-cols li{margin:6px 0;color:#cbd7df;font-size:12px}.cross-foot{margin:12px 0 0;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:11px}
 .probability-strip{display:flex;gap:24px;flex-wrap:wrap;align-items:center;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:14px}.hbucket{text-align:center;min-width:64px}.hpct{display:block;font-size:31px;font-weight:900}.hlab{color:var(--muted);font-size:11px}.probability-note{margin-left:auto;max-width:360px;color:var(--muted);font-size:13px}
 .chead{display:flex;align-items:baseline;gap:12px;margin-bottom:10px}.days{color:var(--muted);font-size:12px}.verdict{margin-left:auto;font-weight:900}.lrow{display:flex;align-items:center;gap:10px;margin:7px 0}.lname{width:92px;font-size:13px;color:var(--muted)}.lname em{display:block;font-size:10px;font-style:normal;opacity:.75}.track{flex:1;display:flex;height:24px;border-radius:6px;overflow:hidden;background:#0a121b}.track.empty{align-items:center;padding-left:10px;color:var(--muted);font-size:12px}.seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:850;color:#10131a;min-width:0}
 svg{width:100%;height:auto;background:#0a121b;border-radius:10px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;font-size:12.5px}th,td{padding:10px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{position:sticky;top:0;background:#101a25;color:#cbd7df}.num{text-align:right;white-space:nowrap}.evidence{min-width:1040px}.fbar{width:34%}.fmid{position:relative;height:12px;background:#0a121b;border-radius:6px}.fmid:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line)}.fseg{position:absolute;top:0;bottom:0;border-radius:6px}.fseg.right{left:50%}.fseg.left{right:50%}
@@ -596,12 +607,13 @@ details{margin:10px 0;background:var(--surface);border:1px solid var(--line);bor
 .quotes{list-style:none;margin:0;padding:0}.quotes li{padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}.quotes time{color:var(--muted);margin-right:8px;font-size:12px}.qt{margin-right:6px}.chip{display:inline-block;min-width:30px;text-align:center;margin-right:8px;padding:1px 7px;border-radius:20px;font-size:11px;font-weight:800}.chip.hawk{background:#3a1520;color:var(--red)}.chip.dove{background:#0f2f2d;color:var(--teal)}.chip.neu{background:#2a2a1a;color:var(--gold)}.chip.un{background:#20293a;color:var(--muted)}.tally .h{color:var(--red)}.tally .d{color:var(--teal)}
 article:not(.scenario-cell){padding:12px 14px;margin:10px 0;background:#0a121b;border:1px solid var(--line);border-radius:10px}article h4{margin:0 0 6px;color:var(--gold)}a{color:var(--blue)}.meth{font-size:13px;color:var(--muted)}.meth b{color:var(--ink)}.callout{padding:12px 14px;border-left:4px solid var(--gold);background:rgba(242,195,91,.08);color:#dce5eb;font-size:13px}
 footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
-@media(max-width:760px){.decision{grid-template-columns:1fr}.decision-grid,.matrix,.two-col,.change-list{grid-template-columns:1fr}.wrap{padding-inline:13px}.lrow{align-items:flex-start}.lname{width:72px}.probability-note{margin-left:0}.chead{flex-wrap:wrap}.verdict{margin-left:0;width:100%}}
+@media(max-width:760px){.decision{grid-template-columns:1fr}.decision-grid,.matrix,.two-col,.change-list,.cross-grid,.cross-cols{grid-template-columns:1fr}.cross-top{display:block}.watch-switch{margin-top:12px}.wrap{padding-inline:13px}.lrow{align-items:flex-start}.lname{width:72px}.probability-note{margin-left:0}.chead{flex-wrap:wrap}.verdict{margin-left:0;width:100%}}
 </style></head><body><div class="wrap">
 <header class="site-head"><p class="eyebrow">研究路徑 02｜持續追蹤</p><h1>聯準會政策錯誤雷達</h1>
 <p class="sub">研究問題：通膨預期仍穩定時轉鷹，究竟只是一次預防性升息，還是政策錯誤的起點？｜現行目標區間 <b>{{TLOW}}%–{{THIGH}}%</b>｜更新 {{NOW}}（台北）</p>
-<nav><a href="#status">目前判斷</a><a href="#changes">本次變化</a><a href="#matrix">四情境</a><a href="#evidence">核心證據</a><a href="#pricing">市場定價</a><a href="#transmission">台美股傳導</a><a href="#analysis">每日推演</a><a href="#history">歷史</a><a href="#sources">來源</a></nav></header>
+<nav><a href="#status">目前判斷</a><a href="#cross-watch">政策×債市</a><a href="#changes">本次變化</a><a href="#matrix">四情境</a><a href="#evidence">核心證據</a><a href="#pricing">市場定價</a><a href="#transmission">台美股傳導</a><a href="#analysis">每日推演</a><a href="#history">歷史</a><a href="#sources">來源</a></nav></header>
 {{SCENARIO}}
+<section id="cross-watch"><h2>政策 × 債市聯動判讀</h2>{{LINKAGE}}</section>
 <section id="changes"><h2>這次更新改變了什麼</h2><div class="card">{{CHANGES}}</div></section>
 <section id="matrix"><h2>四種互斥情境：先判斷經濟，再看市場交易了多少</h2>{{MATRIX}}{{CONFLICTS}}</section>
 <section id="evidence"><h2>核心證據與下一個驗證門檻</h2>
@@ -629,6 +641,7 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:v
         "TLOW": "%.2f" % tgt["low"], "THIGH": "%.2f" % tgt["high"],
         "NLABEL": nxt["label"], "NOW": now_tpe,
         "SCENARIO": scenario_summary_html(scenario, nxt["label"]),
+        "LINKAGE": CW.render_card(linkage, "fed"),
         "CHANGES": what_changed_html(store, meetings, market, mdl, scenario),
         "MATRIX": scenario_matrix_html(scenario["key"]),
         "CONFLICTS": conflict_and_falsifier_html(scenario),
@@ -651,8 +664,7 @@ footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:v
         page = page.replace("{{" + k + "}}", v)
 
     fwcrypto.write_encrypted_page(page, password, BASE)
-    print("[build] page written: %d chars, scenario=%s, blend(next)=%s"
-          % (len(page), scenario["key"], json.dumps(nb)))
+    print("[build] encrypted policy page written: %d chars" % len(page))
 
 
 if __name__ == "__main__":

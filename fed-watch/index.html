@@ -13,7 +13,7 @@
     .mark{display:grid;place-items:center;width:58px;height:58px;border-radius:16px;background:linear-gradient(135deg,var(--gold),#ff9f43);color:#171006;font-size:21px;font-weight:950}
     h1{font-size:26px;letter-spacing:-.025em;margin:22px 0 9px}p{margin:0;color:var(--muted);font-size:14px;line-height:1.75}label{display:block;margin:23px 0 8px;color:var(--muted);font-size:12px;font-weight:850}
     .row{display:flex;gap:8px}input{flex:1;min-width:0;padding:13px 14px;border:1px solid var(--line);border-radius:11px;background:#0d131c;color:var(--ink);font:inherit}button{padding:11px 15px;border:0;border-radius:11px;background:var(--gold);color:#171006;font:inherit;font-weight:900;cursor:pointer}button:disabled{opacity:.6;cursor:wait}
-    .error{min-height:22px;margin-top:11px;color:var(--red);font-size:12px}.privacy{margin-top:17px;padding-top:15px;border-top:1px solid var(--line);font-size:11px}.noscript{color:var(--red);margin-top:12px}
+    .error{min-height:22px;margin-top:11px;color:var(--red);font-size:12px}.error a,.sister a{color:var(--gold)}.sister{margin-top:9px;font-size:12px}.privacy{margin-top:17px;padding-top:15px;border-top:1px solid var(--line);font-size:11px}.noscript{color:var(--red);margin-top:12px}
   </style>
 </head>
 <body>
@@ -26,6 +26,7 @@
       <div class="row"><input id="password" type="password" autocomplete="current-password" autofocus required><button id="open" type="submit">開啟</button></div>
       <div id="error" class="error" role="alert" aria-live="polite"></div>
     </form>
+    <p class="sister">姊妹頁：<a href="../bond-watch/">美債殖利率曲線與期限溢價</a></p>
     <p class="privacy">密碼不會傳送至伺服器。這是公開網址上的瀏覽器端加密，不是 GitHub 帳號登入；請勿轉傳連結與密碼。</p>
     <noscript><p class="noscript">瀏覽器必須啟用 JavaScript 才能解密。</p></noscript>
   </main>
@@ -45,7 +46,12 @@
       return new TextDecoder().decode(plain);
     }
     form.addEventListener("submit",async event=>{
-      event.preventDefault();button.disabled=true;input.disabled=true;error.textContent="正在解密…";
+      event.preventDefault();
+      if(location.protocol==="file:"){
+        error.innerHTML='你開的是本機檔案，瀏覽器無法載入加密資料。請改用 <a href="https://kidd0368.github.io/fed-watch/">正式網站</a>。';
+        return;
+      }
+      button.disabled=true;input.disabled=true;error.textContent="正在解密…";
       try{
         const html=await decrypt(input.value);input.value="";document.open();document.write(html);document.close();
       }catch(_){error.textContent="密碼不正確，或加密資料暫時無法載入。";button.disabled=false;input.disabled=false;input.focus();input.select()}

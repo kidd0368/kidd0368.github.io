@@ -6,3 +6,8 @@ fed-watch/**/*.tmp
 fed-watch/**/*.bak
 fed-watch/decrypted*
 fed-watch/plaintext*
+bond-watch/**/*.tmp
+bond-watch/**/*.bak
+bond-watch/decrypted*
+bond-watch/plaintext*
+.github/data/*.tmp

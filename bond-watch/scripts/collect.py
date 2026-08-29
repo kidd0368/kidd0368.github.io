@@ -71,7 +71,7 @@ def collect_fred():
             latest[sid] = rows[-1]
             time.sleep(0.25)
         except Exception as e:
-            log(sid, "failed:", repr(e))
+            log(sid, "failed:", type(e).__name__)
     return series, latest
 
 
@@ -86,6 +86,59 @@ def value_on_or_before(rows, target):
     return best
 
 
+def change_bp_on_aligned_date(rows, current_date, current_value, trading_days):
+    """用共同曆日對齊近似交易日回看，避免週頻序列把 20 筆誤當成 20 日。"""
+    try:
+        current = dt.date.fromisoformat(current_date)
+    except Exception:
+        return None
+    calendar_days = max(1, round(trading_days * 7 / 5))
+    target = (current - dt.timedelta(days=calendar_days)).isoformat()
+    previous = value_on_or_before(rows, target)
+    return round((current_value - previous) * 100, 1) if previous is not None else None
+
+
+def aligned_change_block(series, fields, lookbacks):
+    """讓不同頻率序列使用同一個截至日與同一個回看窗。
+
+    fields: [(series_id, output_key), ...]
+    """
+    rows_by_key = {}
+    for series_id, output_key in fields:
+        rows = series.get(series_id)
+        if not rows:
+            return None
+        rows_by_key[output_key] = rows
+
+    common_date = min(rows[-1][0] for rows in rows_by_key.values())
+    current_values = {
+        key: value_on_or_before(rows, common_date)
+        for key, rows in rows_by_key.items()
+    }
+    if any(value is None for value in current_values.values()):
+        return None
+
+    changes = {}
+    for lookback in lookbacks:
+        row = {}
+        for key, rows in rows_by_key.items():
+            change = change_bp_on_aligned_date(
+                rows, common_date, current_values[key], lookback,
+            )
+            if change is None:
+                row = {}
+                break
+            row[key] = change
+        if row:
+            changes[str(lookback)] = row
+
+    return {
+        "date": common_date,
+        "values": current_values,
+        "chg": changes,
+    }
+
+
 def build_snapshot(series):
     """組出當日曲線、利差、拆解、各回看期變化。"""
     curve, asof = [], None
@@ -98,8 +151,9 @@ def build_snapshot(series):
         item = {"label": c["label"], "years": c["years"], "id": c["id"],
                 "value": v, "date": d, "chg": {}}
         for k in CFG["lookbacks"]:
-            if len(rows) > k:
-                item["chg"][str(k)] = round((v - rows[-1 - k][1]) * 100, 1)  # bp
+            change = change_bp_on_aligned_date(rows, d, v, k)
+            if change is not None:
+                item["chg"][str(k)] = change
         curve.append(item)
 
     decomp = {}
@@ -110,8 +164,9 @@ def build_snapshot(series):
         d, v = rows[-1]
         e = {"name": name, "value": v, "date": d, "chg": {}}
         for k in CFG["lookbacks"]:
-            if len(rows) > k:
-                e["chg"][str(k)] = round((v - rows[-1 - k][1]) * 100, 1)
+            change = change_bp_on_aligned_date(rows, d, v, k)
+            if change is not None:
+                e["chg"][str(k)] = change
         decomp[sid] = e
 
     spreads = {}
@@ -119,15 +174,40 @@ def build_snapshot(series):
         lo, sh = series.get(sp["long"]), series.get(sp["short"])
         if not lo or not sh:
             continue
-        v = round((lo[-1][1] - sh[-1][1]) * 100, 1)
+        common_date = min(lo[-1][0], sh[-1][0])
+        lo_now = value_on_or_before(lo, common_date)
+        sh_now = value_on_or_before(sh, common_date)
+        if lo_now is None or sh_now is None:
+            continue
+        v = round((lo_now - sh_now) * 100, 1)
         e = {"label": sp["label"], "bp": v, "chg": {}}
         for k in CFG["lookbacks"]:
-            if len(lo) > k and len(sh) > k:
-                prev = (lo[-1 - k][1] - sh[-1 - k][1]) * 100
-                e["chg"][str(k)] = round(v - prev, 1)
+            target = (dt.date.fromisoformat(common_date) -
+                      dt.timedelta(days=max(1, round(k * 7 / 5)))).isoformat()
+            lo_prev = value_on_or_before(lo, target)
+            sh_prev = value_on_or_before(sh, target)
+            if lo_prev is not None and sh_prev is not None:
+                e["chg"][str(k)] = round(v - (lo_prev - sh_prev) * 100, 1)
         spreads[sp["key"]] = e
 
-    return {"asof": asof, "curve": curve, "decomp": decomp, "spreads": spreads}
+    aligned = {}
+    term_premium_curve = aligned_change_block(
+        series,
+        (("DGS2", "y2_bp"),
+         ("DGS10", "y10_bp"),
+         ("THREEFYTP10", "term_premium10_bp")),
+        CFG["lookbacks"],
+    )
+    if term_premium_curve:
+        aligned["term_premium_curve"] = term_premium_curve
+
+    return {
+        "asof": asof,
+        "curve": curve,
+        "decomp": decomp,
+        "spreads": spreads,
+        "aligned": aligned,
+    }
 
 
 def pressure_index(snap):
@@ -294,7 +374,7 @@ def collect_events(existing_ids):
                     existing_ids.add(qid)
             time.sleep(0.7)
     except Exception as e:
-        log("jin10 failed:", repr(e))
+        log("jin10 failed:", type(e).__name__)
     log("jin10: %d new events" % len(out))
     return out
 
@@ -312,9 +392,13 @@ def main():
     series, latest = collect_fred()
     if not series:
         sys.exit("no FRED data collected")
-    store["series"] = series
+    # 單一 FRED 序列暫時失敗時保留上一批資料；後續新鮮度檢查會明確標示過期，
+    # 不讓部分成功的下載把完整舊資料整包抹掉。
+    merged_series = dict(store.get("series") or {})
+    merged_series.update(series)
+    store["series"] = merged_series
 
-    snap = build_snapshot(series)
+    snap = build_snapshot(merged_series)
     snap["ts"] = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     snap["pressure"] = pressure_index(snap)
     snap["decomposition"] = decomposition(snap)
@@ -326,10 +410,8 @@ def main():
     store["events"] = sorted(store["events"], key=lambda e: e.get("time", ""))[-CFG["max_events"]:]
 
     fwcrypto.save_store(STORE_PATH, store, password)
-    y30 = next((c for c in snap["curve"] if c["label"] == "30Y"), {})
-    log("done: asof=%s curve=%d 30Y=%.2f%% (20d %+.0fbp) pressure=%s events=%d"
-        % (snap["asof"], len(snap["curve"]), y30.get("value", 0),
-           y30.get("chg", {}).get("20", 0), snap["pressure"]["score"], len(store["events"])))
+    log("done: asof=%s curve=%d events=%d"
+        % (snap["asof"], len(snap["curve"]), len(store["events"])))
 
 
 if __name__ == "__main__":

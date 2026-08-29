@@ -29,7 +29,7 @@ def main():
             box = json.load(f)
         ann = json.loads(fwcrypto.decrypt_from_box(box, password))
     except Exception as e:
-        print("[merge] annotations unreadable, skip:", repr(e))
+        print("[merge] annotations unreadable, skip:", type(e).__name__)
         return
 
     store = fwcrypto.load_store(STORE, password)

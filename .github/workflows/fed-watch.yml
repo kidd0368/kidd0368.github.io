@@ -7,6 +7,14 @@ on:
       - "fed-watch/config.json"
       - "fed-watch/index.html"
       - "fed-watch/scripts/**"
+      - "bond-watch/config.json"
+      - "bond-watch/index.html"
+      - "bond-watch/scripts/**"
+      - ".github/scripts/cross_watch.py"
+      - ".github/scripts/build_cross_watch.py"
+      - ".github/scripts/test_cross_watch.py"
+      - ".github/scripts/validate_cross_build.py"
+      - ".github/requirements-actions.txt"
       - ".github/workflows/fed-watch.yml"
   schedule:
     - cron: "23 1,7,13,19 * * *"   # UTC 01:23/07:23/13:23/19:23 = 台北 09:23/15:23/21:23/03:23
@@ -24,17 +32,22 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: "3.12"
 
       - name: 安裝依賴
-        run: pip install requests cryptography
+        run: pip install --require-hashes --only-binary=:all: -r .github/requirements-actions.txt
 
       - name: 驗證四情境分類規則
         run: python fed-watch/scripts/test_scenarios.py -v
+
+      - name: 驗證政策與債市聯動規則
+        run: |
+          python .github/scripts/test_cross_watch.py -v
+          python bond-watch/scripts/test_collect_math.py -v
 
       - name: 收集資料（Kalshi／Polymarket／FRED／金十）
         env:
@@ -53,11 +66,6 @@ jobs:
           PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
         run: python fed-watch/scripts/merge_annotations.py
 
-      - name: 跑模型並組頁（加密發布）
-        env:
-          PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
-        run: python fed-watch/scripts/build_page.py
-
       - name: 收集債市資料（完整殖利率曲線）
         env:
           PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
@@ -65,22 +73,43 @@ jobs:
           JIN10_MCP_TOKEN: ${{ secrets.JIN10_MCP_TOKEN }}
         run: python bond-watch/scripts/collect.py
 
+      - name: 產生政策與債市共同摘要（加密）
+        env:
+          PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
+        run: python .github/scripts/build_cross_watch.py
+
+      - name: 跑模型並組政策頁（加密發布）
+        env:
+          PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
+        run: python fed-watch/scripts/build_page.py
+
       - name: 組裝債市頁（加密發布）
         env:
           PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
         run: python bond-watch/scripts/build_page.py
 
+      - name: 驗證兩頁使用同一份共同摘要
+        env:
+          PAGE_PASSWORD: ${{ secrets.PAGE_PASSWORD }}
+        run: python .github/scripts/validate_cross_build.py
+
       - name: 提交更新
         run: |
           git config user.name "fed-watch-bot"
           git config user.email "actions@github.com"
-          git add fed-watch/ bond-watch/
+          git add -A -- fed-watch/data fed-watch/payload-manifest.json \
+            ':(glob)fed-watch/payload.enc.*' bond-watch/data bond-watch/payload-manifest.json \
+            ':(glob)bond-watch/payload.enc.*' .github/data/cross_watch.enc
           if git diff --cached --quiet; then
             echo "無變化，跳過提交"
           else
+            git fetch origin main
+            if [ "$(git rev-parse origin/main)" != "$GITHUB_SHA" ]; then
+              echo "main 已有較新版本；本輪不提交，交由較新的 workflow 重新建置"
+              exit 0
+            fi
             git commit -m "fed-watch 自動更新 $(date -u +'%Y-%m-%d %H:%M')"
-            git pull --rebase origin main
-            git push
+            git push origin HEAD:main
           fi
 
 

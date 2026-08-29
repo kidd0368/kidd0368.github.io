@@ -109,7 +109,7 @@ def main():
         try:
             tk = tickers_for(m["kalshi_event"])
         except Exception as e:
-            log(key, "markets failed:", repr(e))
+            log(key, "markets failed:", type(e).__name__)
             continue
         by_day = {}
         for ticker, bucket in tk.items():
@@ -117,7 +117,7 @@ def main():
                 for day, px in candles(ticker, start_ts, end_ts).items():
                     by_day.setdefault(day, {})[bucket] = px
             except Exception as e:
-                log(key, ticker, "candles failed:", repr(e))
+                log(key, ticker, "candles failed:", type(e).__name__)
             time.sleep(0.35)
         series = []
         for day in sorted(by_day):
