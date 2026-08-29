@@ -39,7 +39,7 @@ jobs:
           python-version: "3.12"
 
       - name: 安裝依賴
-        run: pip install --require-hashes --only-binary=:all: -r .github/requirements-actions.txt
+        run: "pip install --require-hashes --only-binary=:all: -r .github/requirements-actions.txt"
 
       - name: 驗證四情境分類規則
         run: python fed-watch/scripts/test_scenarios.py -v
