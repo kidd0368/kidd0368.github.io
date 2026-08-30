@@ -1,9 +1,149 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-24T03:31:27+00:00",
-  "valid_record_count": 2,
+  "generated_at": "2026-08-30T16:19:02+00:00",
+  "valid_record_count": 3,
   "invalid_record_count": 0,
   "records": [
+    {
+      "task_id": "TASK-20260830-235331-9GWNZ",
+      "title": "Taiwan Electronic Components: Optical solution for AI connectivity - Largan and Genius",
+      "analysis_type": "broker_report",
+      "industry_id": "CPO",
+      "taxonomy_version_used": "2026.08.23.1",
+      "record_status": "accepted",
+      "created_at": "2026-08-30T15:55:48.873Z",
+      "updated_at": "2026-08-30T16:17:12.265Z",
+      "source": {
+        "source_id": "SRC-20260830-235331-9GWNZ",
+        "source_type": "broker_report",
+        "title": "Taiwan Electronic Components： Optical solution for AI connectivity; raise TP for Largan, upgrade Genius to Buy",
+        "publisher": "Citi Research",
+        "published_date": "2026-08-28",
+        "received_date": "2026-08-30"
+      },
+      "executive_summary": "核心結論：本報告不是單純的手機鏡頭景氣回升，而是把大立光與玉晶光重新定位為 AI 光互連零組件供應商。大立光機會在 Fiber Array＋PMLA，官方管理層公開目標與 3Q26 試產線、最快 2027 年中貢獻大致一致；玉晶光雖有 MT Ferrule 等官方產品能力，但 Citi 所述完整 expanded-beam connector、1H27 出貨與美系客戶仍未公開確認。\n\n財務轉折：大立光 2025A-2028E 營收由 NT$61.1bn 增至 NT$156.8bn、EPS 由 159.4 增至 341.9，但毛利率/營益率由 50.4%/38.5% 降至 46.9%/33.5%，顯示高成長伴隨 mix 或 ramp 稀釋。玉晶光同期間營收僅由 NT$25.0bn 增至 NT$28.7bn、EPS 由 32.8 增至 44.0，主要靠毛利率/營益率升至 35.4%/22.0。\n\n最重要的反向檢查：玉晶光 2027 connector 若占營收 15%，而全年營收只增 5.3%，則舊業務在假設 2026 尚無 connector 貢獻下隱含約年減 10.5%；新業務更像抵銷舊業務壓力。大立光則相反，扣除 10% CPO mix 後非 CPO 營收仍需大增，代表 Citi 估計不只押 CPO。\n\n證據姿態：2025 實際財務已由官方年報驗證；Largan 官方網站確認 PMLA 與 Fiber Array，公開管理層說法支持試產/量產方向；GSEO 官方只確認 Prism、Micro Lens Array、Metalens、V-Groove、MT Ferrule 等元件能力。客戶身分、量產良率、有效產能、capex、segment margin、30m/50m FAU 需求與玉晶光 1H27 時程仍未獲官方驗證。",
+      "entities": [
+        {
+          "entity_id": "TW-3008",
+          "name": "大立光／Largan Precision",
+          "ticker": "3008",
+          "reason_mentioned": "報告主要研究對象；Fiber Array＋PMLA 與手機鏡頭供應商；PALM 為券商報告疑似誤植。"
+        },
+        {
+          "entity_id": "TW-3406",
+          "name": "玉晶光／Genius Electronic Optical",
+          "ticker": "3406",
+          "reason_mentioned": "報告主要研究對象；lens-based optical connector/ferrule 與手機鏡頭供應商。"
+        },
+        {
+          "entity_id": "US-NVDA",
+          "name": "NVIDIA",
+          "ticker": "NVDA",
+          "reason_mentioned": "外部驗證的 CPO 系統端採用者與生態系統整合者。"
+        },
+        {
+          "entity_id": "US-AVGO",
+          "name": "Broadcom",
+          "ticker": "AVGO",
+          "reason_mentioned": "外部驗證的 CPO 平台與交換器供應商。"
+        },
+        {
+          "entity_id": "US-MRVL",
+          "name": "Marvell",
+          "ticker": "MRVL",
+          "reason_mentioned": "外部驗證的 CPO/XPU 光引擎架構供應商與產業需求參照。"
+        },
+        {
+          "entity_id": "TW-2330",
+          "name": "台積電／TSMC",
+          "ticker": "2330",
+          "reason_mentioned": "NVIDIA 公開 CPO/矽光子生態系統合作夥伴。"
+        },
+        {
+          "entity_id": "US-COHR",
+          "name": "Coherent",
+          "ticker": "COHR",
+          "reason_mentioned": "NVIDIA 公開光子生態系統合作夥伴及全球光通訊供應商。"
+        },
+        {
+          "entity_id": "US-LITE",
+          "name": "Lumentum",
+          "ticker": "LITE",
+          "reason_mentioned": "NVIDIA 公開光子生態系統合作夥伴及雷射供應商。"
+        },
+        {
+          "entity_id": "US-GLW",
+          "name": "Corning",
+          "ticker": "GLW",
+          "reason_mentioned": "NVIDIA 生態系統夥伴；並以 PRIZM TMT expanded-beam ferrule 形成玉晶光潛在全球競爭基準。"
+        },
+        {
+          "entity_id": "TW-2317",
+          "name": "鴻海／Foxconn",
+          "ticker": "2317",
+          "reason_mentioned": "NVIDIA 公開生態系統夥伴；Broadcom 亦揭露 FIT 的 CPO socket/laser-source connector 里程碑。"
+        },
+        {
+          "entity_id": "US-META",
+          "name": "Meta",
+          "ticker": "META",
+          "reason_mentioned": "Broadcom 公開 CPO 運行驗證的 hyperscale 使用者參照；不是本報告所指客戶的確認。"
+        },
+        {
+          "entity_id": "PRIVATE-SAMTEC",
+          "name": "Samtec",
+          "ticker": "未上市",
+          "reason_mentioned": "taxonomy 已列 NPO/connector 供應商，用作連接器競爭版圖參照。"
+        },
+        {
+          "entity_id": "PRIVATE-MOLEX",
+          "name": "Molex",
+          "ticker": "未上市",
+          "reason_mentioned": "SENKO/3M expanded-beam connector 合作方及全球連接器競爭者。"
+        }
+      ],
+      "finding_count": 10,
+      "metric_count": 71,
+      "metric_ids": [
+        "CUSTOMER_SHARE",
+        "EPS",
+        "GROSS_MARGIN",
+        "MARKET_SHARE",
+        "MASS_PRODUCTION_TIMING",
+        "NET_INCOME",
+        "NET_MARGIN",
+        "OPERATING_MARGIN",
+        "REVENUE",
+        "SEGMENT_MIX",
+        "SHIPMENT"
+      ],
+      "relationship_count": 6,
+      "evidence_count": 37,
+      "conflicts_found": 0,
+      "record_path": "data/records/2026/08/TASK-20260830-235331-9GWNZ.json",
+      "review_semantics_version": "1.0.0",
+      "user_action_required_count": 0,
+      "important_note_count": 0,
+      "source_note_count": 0,
+      "display_status": {
+        "code": "completed",
+        "label": "已完成"
+      },
+      "write_receipt": {
+        "gate_version": "1.0.0",
+        "status": "committed_and_indexed",
+        "repository": "kidd0368/kidd0368.github.io",
+        "branch": "main",
+        "record_path": "industry-intelligence-hub/data/records/2026/08/TASK-20260830-235331-9GWNZ.json",
+        "record_commit_sha": "0fc232b9ab1927b53f949f808b002d4e1ff16a5d",
+        "record_blob_sha": "4411e0083d37660fb8080f917aa0884a3b9a44c0",
+        "record_content_sha256": "c3b53ea65fe52c4081d9aa5cdef6cf6407e67cce5f56b7618d338b26fedf9692",
+        "commit_message": "industry-intelligence: normalize review semantics",
+        "index_path": "industry-intelligence-hub/data/records.json",
+        "manifest_path": "industry-intelligence-hub/data/manifest.json",
+        "indexed_at": "2026-08-30T16:19:02+00:00"
+      }
+    },
     {
       "task_id": "TASK-20260824-081915-PMVAY",
       "title": "中際旭創：2026H1、2027訂單能見度與NPO／CPO路線交叉驗證",
@@ -130,7 +270,7 @@
         "commit_message": "industry-intelligence: normalize review semantics",
         "index_path": "industry-intelligence-hub/data/records.json",
         "manifest_path": "industry-intelligence-hub/data/manifest.json",
-        "indexed_at": "2026-08-24T03:31:27+00:00"
+        "indexed_at": "2026-08-30T16:19:02+00:00"
       }
     },
     {
@@ -295,7 +435,7 @@
         "commit_message": "industry-intelligence: normalize review semantics",
         "index_path": "industry-intelligence-hub/data/records.json",
         "manifest_path": "industry-intelligence-hub/data/manifest.json",
-        "indexed_at": "2026-08-24T03:31:27+00:00"
+        "indexed_at": "2026-08-30T16:19:02+00:00"
       }
     }
   ]

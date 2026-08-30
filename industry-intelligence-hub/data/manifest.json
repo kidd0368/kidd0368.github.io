@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-24T03:31:27+00:00",
+  "generated_at": "2026-08-30T16:19:02+00:00",
   "status": "ready",
-  "record_count": 2,
+  "record_count": 3,
   "invalid_record_count": 0,
-  "latest_record_at": "2026-08-24T01:30:12.411Z",
+  "latest_record_at": "2026-08-30T16:17:12.265Z",
   "taxonomy_versions": {
     "CPO": "2026.08.23.1"
   },
@@ -13,7 +13,7 @@
   "user_action_required_record_count": 0,
   "completed_with_important_notes_count": 1,
   "completion_gate_version": "1.0.0",
-  "completed_record_count": 2,
+  "completed_record_count": 3,
   "completion_receipt_error_count": 0,
   "completion_receipt_errors": []
 }
