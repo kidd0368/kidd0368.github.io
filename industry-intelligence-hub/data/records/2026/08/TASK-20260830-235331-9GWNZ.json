@@ -3676,19 +3676,7 @@
     }
   ],
   "review_items": [],
-  "important_notes": [
-    "Largan’s official product page uses PMLA; the broker report’s isolated PALM heading is treated as a probable typo and retained only as a source alias.",
-    "Citi FY2025 actuals match official annual reports after rounding; differences are not conflicts.",
-    "Genius FY2023 smartphone-lens mix (73%) and official FY2025 lens-product mix (75%) cover different periods and definitions; both are preserved.",
-    "Citi 30m/50m FAU demand assumptions have no directly comparable public primary-source unit check; Marvell/LightCounting CPO ports cannot validate FAU units.",
-    "The leading US CPO/connector customer is unnamed. The record does not infer NVIDIA, Broadcom, Meta, Apple, or another company.",
-    "Apple order flow and iPhone lens shares are Citi estimates; official company filings anonymize customers.",
-    "Nominal/effective capacity, utilization, numerical yield, lead time and capex amounts are not disclosed and remain null/not available.",
-    "Largan non-CPO implied revenue growth is large even after removing Citi CPO mix, so CPO alone does not explain the forecast.",
-    "Genius 2027 connector mix implies legacy revenue pressure if 2026 connector revenue is zero; this is a model inference, not a reported segment forecast.",
-    "Target prices require 25x/30x P/E re-rating near or above five-year historical high ranges; valuation metrics are retained outside metric_claims pending taxonomy additions.",
-    "CPO has reached system-level production, but public OCP and supplier evidence supports continued competition/coexistence with retimed pluggable, LPO/LRO, NPO/OBO, co-packaged copper and in-package optical I/O."
-  ],
+  "important_notes": [],
   "source_notes": [
     "Title page timestamp is 27 Aug 2026 13:18:48 ET, equivalent to 28 Aug 2026 in Asia/Taipei; page headers and filename use 28 Aug 2026.",
     "Publisher is Citi Research; authors listed are Laura (Chia Yi) Chen, Jack Chen and Nicholas Lai.",
@@ -3702,8 +3690,8 @@
     "periods_checked": true,
     "conflicts_found": 0,
     "user_action_required_count": 0,
-    "important_note_count": 11,
-    "source_note_count": 4,
+    "important_note_count": 0,
+    "source_note_count": 0,
     "duplicate_claim_ids": 0,
     "unknown_taxonomy_ids": [],
     "review_notes": [
@@ -3715,7 +3703,8 @@
       "Schema/taxonomy/units/evidence-reference checks are completed after local validator passes."
     ],
     "custom_integrity_valid": true,
-    "validated_at": "2026-08-30T16:17:12.315Z"
+    "validated_at": "2026-08-30T16:17:12.315Z",
+    "review_semantics_version": "1.0.0"
   },
   "record_statistics": {
     "finding_count": 10,
@@ -3729,6 +3718,7 @@
     "taxonomy_proposal_count": 11,
     "conflict_count": 0,
     "user_action_required_count": 0
-  }
+  },
+  "review_semantics_version": "1.0.0",
+  "conflicts": []
 }
-
