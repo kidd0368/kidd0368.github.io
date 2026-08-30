@@ -1,0 +1,3734 @@
+{
+  "schema_version": "1.0.0",
+  "task_id": "TASK-20260830-235331-9GWNZ",
+  "created_at": "2026-08-30T15:55:48.873Z",
+  "updated_at": "2026-08-30T16:17:12.265Z",
+  "analysis_type": "broker_report",
+  "industry_id": "CPO",
+  "taxonomy_version_used": "2026.08.23.1",
+  "record_status": "accepted",
+  "title": "Taiwan Electronic Components: Optical solution for AI connectivity - Largan and Genius",
+  "source": {
+    "source_id": "SRC-20260830-235331-9GWNZ",
+    "source_type": "broker_report",
+    "title": "Taiwan Electronic Components： Optical solution for AI connectivity; raise TP for Largan, upgrade Genius to Buy",
+    "bundle_type": "single_source",
+    "publisher": "Citi Research",
+    "authors": [
+      "Laura (Chia Yi) Chen",
+      "Jack Chen",
+      "Nicholas Lai"
+    ],
+    "published_date": "2026-08-28",
+    "published_at_original": "2026-08-27T13:18:48-04:00",
+    "published_at_taipei": "2026-08-28T01:18:48+08:00",
+    "received_date": "2026-08-30",
+    "dropbox_path": null,
+    "confidentiality": "private",
+    "files": [
+      {
+        "name": "Taiwan Electronic Components： Optical solution for AI connectivity; raise TP for Largan, upgrade Genius to Buy_1150828_Citi.pdf",
+        "size": 2553989,
+        "mime_type": "application/pdf",
+        "last_modified": "2026-08-28T07:26:44.000Z",
+        "sha256": "953c44978b5f21ddc81dfb99f82cc224d50dc2a3c307cb33251435fbbfabea9e"
+      }
+    ],
+    "external_sources": [
+      {
+        "source_id": "EXT-LARGAN-AR2025",
+        "source_name": "Largan Precision 2025 Annual Report",
+        "source_type": "company_filing",
+        "publisher": "Largan Precision Co., Ltd.",
+        "published_date": "2026-04-20",
+        "accessed_date": "2026-08-31",
+        "url": "https://www.largan.com.tw/en/tool-download/page_en_size/file/204/2025%20Company%20Annual%20Report?note=",
+        "reliability_tier": 1,
+        "period_covered": "FY2025",
+        "notes": "Official annual report; Chinese version prevails if translations differ."
+      },
+      {
+        "source_id": "EXT-GSEO-AR2025",
+        "source_name": "Genius Electronic Optical 2025 Annual Report",
+        "source_type": "company_filing",
+        "publisher": "Genius Electronic Optical Co., Ltd.",
+        "published_date": "2026-05-04",
+        "accessed_date": "2026-08-31",
+        "url": "https://www.gseo.com/uploads/shareholdersmeetingfiles/6a02d49271259.pdf",
+        "reliability_tier": 1,
+        "period_covered": "FY2025",
+        "notes": "Official annual report in Chinese."
+      },
+      {
+        "source_id": "EXT-LARGAN-CPO-PRODUCT",
+        "source_name": "Largan Products and Services - CPO Solutions",
+        "source_type": "company_website",
+        "publisher": "Largan Precision Co., Ltd.",
+        "published_date": null,
+        "accessed_date": "2026-08-31",
+        "url": "https://www.largan.com.tw/en/product",
+        "reliability_tier": 2,
+        "period_covered": "current website",
+        "notes": "Confirms product categories, not customer qualification, shipment volume, revenue, or timing."
+      },
+      {
+        "source_id": "EXT-GSEO-ABOUT",
+        "source_name": "GSEO Co-Packaged Optics Product Capabilities",
+        "source_type": "company_website",
+        "publisher": "Genius Electronic Optical Co., Ltd.",
+        "published_date": null,
+        "accessed_date": "2026-08-31",
+        "url": "https://www.gseo.com/products/co-packaged-optics",
+        "reliability_tier": 2,
+        "period_covered": "current website",
+        "notes": "Confirms Prism, Micro Lens Array, Metalens, V-Groove and MT Ferrule capabilities, but not a complete expanded-beam connector, customer or shipment timing."
+      },
+      {
+        "source_id": "EXT-NVIDIA-CPO-2025",
+        "source_name": "NVIDIA Announces Spectrum-X Photonics CPO Networking Switches",
+        "source_type": "company_press_release",
+        "publisher": "NVIDIA",
+        "published_date": "2025-03-18",
+        "accessed_date": "2026-08-31",
+        "url": "https://investor.nvidia.com/news/press-release-details/2025/NVIDIA-Announces-Spectrum-X-Photonics-Co-Packaged-Optics-Networking-Switches-to-Scale-AI-Factories-to-Millions-of-GPUs/default.aspx",
+        "reliability_tier": 2,
+        "period_covered": "2025-2026 roadmap",
+        "notes": "Primary source for NVIDIA product roadmap and publicly named ecosystem; company performance claims are issuer claims."
+      },
+      {
+        "source_id": "EXT-BROADCOM-CPO-2025",
+        "source_name": "Broadcom Announces Third-Generation CPO Technology",
+        "source_type": "company_press_release",
+        "publisher": "Broadcom",
+        "published_date": "2025-05-15",
+        "accessed_date": "2026-08-31",
+        "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-announces-third-generation-co-packaged-optics-cpo",
+        "reliability_tier": 2,
+        "period_covered": "2025 CPO platform",
+        "notes": "Primary source for Broadcom CPO product generation and disclosed ecosystem milestones."
+      },
+      {
+        "source_id": "EXT-CORNING-PRIZM-2026",
+        "source_name": "Corning Expands AI Data Center Connectivity Portfolio with PRIZM TMT",
+        "source_type": "company_press_release",
+        "publisher": "Corning",
+        "published_date": "2026-03-11",
+        "accessed_date": "2026-08-31",
+        "url": "https://investor.corning.com/news-and-events/news/news-details/2026/Corning-Expands-AI-Data-Center-Connectivity-Portfolio-with-PRIZM-TMT-Technology/default.aspx",
+        "reliability_tier": 2,
+        "period_covered": "2026 product launch",
+        "notes": "Primary competitor/technology evidence for expanded-beam ferrules."
+      },
+      {
+        "source_id": "EXT-USCONEC-PRIZM-2026",
+        "source_name": "US Conec, Corning, Fujikura and Sumitomo Electric Multi-Source PRIZM TMT Framework",
+        "source_type": "company_press_release",
+        "publisher": "US Conec",
+        "published_date": "2026-03-11",
+        "accessed_date": "2026-08-31",
+        "url": "https://www.usconec.com/media/h4zopm3k/us-conec-corning-fujikura-and-sumitomo-electric-joint-press-release_3-11-2026_final.pdf",
+        "reliability_tier": 2,
+        "period_covered": "2026 product ecosystem",
+        "notes": "Primary evidence for a global expanded-beam ferrule multi-source ecosystem."
+      },
+      {
+        "source_id": "EXT-SENKO-EBO-2025",
+        "source_name": "SENKO, 3M and Molex Expanded Beam Optical Connector Collaboration",
+        "source_type": "company_press_release",
+        "publisher": "SENKO Advanced Components",
+        "published_date": "2025-03-28",
+        "accessed_date": "2026-08-31",
+        "url": "https://www.senko.com/senko-3m-and-molex-collaborate-to-advance-high-performance-fiber-optic-connectivity-with-mpo-ez-way-connector-featuring-3m-expanded-beam-optical-technology/",
+        "reliability_tier": 2,
+        "period_covered": "2025 product collaboration",
+        "notes": "Primary evidence for another scaled expanded-beam connector ecosystem."
+      },
+      {
+        "source_id": "EXT-MARVELL-CPO-2025",
+        "source_name": "Marvell CPO Architecture for Custom AI Accelerators",
+        "source_type": "company_press_release",
+        "publisher": "Marvell",
+        "published_date": "2025-01-06",
+        "accessed_date": "2026-08-31",
+        "url": "https://www.marvell.com/company/newsroom/marvell-co-packaged-optics-architecture-custom-ai-accelerators.html",
+        "reliability_tier": 2,
+        "period_covered": "2025 architecture and third-party market forecast",
+        "notes": "Contains a quoted LightCounting CPO-port forecast; ports are not directly comparable with Citi FAU units."
+      },
+      {
+        "source_id": "EXT-LARGAN-IR-20260709",
+        "source_name": "Largan 2Q26 Investor Conference Management Remarks",
+        "source_type": "news_report",
+        "publisher": "Central News Agency",
+        "published_date": "2026-07-09",
+        "accessed_date": "2026-08-31",
+        "url": "https://www.cna.com.tw/news/afe/202607090314.aspx",
+        "reliability_tier": 2,
+        "period_covered": "2026-2027 management target",
+        "notes": "Direct management remarks reported by CNA: FA sample in July, pilot line by end-3Q26, earliest contribution around mid-2027; one production-oriented customer, others POC. Customer identity and country were not disclosed."
+      },
+      {
+        "source_id": "EXT-GSEO-IR-20260707",
+        "source_name": "GSEO June 2026 Revenue and New Product Management Remarks",
+        "source_type": "news_report",
+        "publisher": "Central News Agency / CTS",
+        "published_date": "2026-07-07",
+        "accessed_date": "2026-08-31",
+        "url": "https://news.cts.com.tw/cna/money/202607/202607073052703.html",
+        "reliability_tier": 3,
+        "period_covered": "2026 product qualification status",
+        "notes": "Management said the May sample had no further customer response as of 7 July and expected another one to two months; this does not confirm Citi’s 1H27 shipment estimate."
+      },
+      {
+        "source_id": "EXT-NVIDIA-CPO-2026",
+        "source_name": "NVIDIA Vera Rubin Ramps Into Full Production",
+        "source_type": "company_press_release",
+        "publisher": "NVIDIA",
+        "published_date": "2026-05-31",
+        "accessed_date": "2026-08-31",
+        "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Vera-Rubin-Ramps-Into-Full-Production-to-Power-Agentic-AI-Factories-Worldwide/default.aspx",
+        "reliability_tier": 2,
+        "period_covered": "2026 production status",
+        "notes": "Issuer evidence that Spectrum-X Ethernet Photonics CPO switches entered production; not evidence for Largan or GSEO qualification."
+      },
+      {
+        "source_id": "EXT-OCP-INTERCONNECT-2023",
+        "source_name": "OCP Interconnect for Large-Scale AI Clusters Webinar",
+        "source_type": "industry_organization",
+        "publisher": "Open Compute Project",
+        "published_date": "2023-09-14",
+        "accessed_date": "2026-08-31",
+        "url": "https://www.opencompute.org/events/past-events/ocp-educational-webinar-interconnect-for-large-scale-ai-clusters",
+        "reliability_tier": 2,
+        "period_covered": "architecture alternatives",
+        "notes": "Industry evidence that hyperscaler preferences differ between CPO and pluggable approaches."
+      },
+      {
+        "source_id": "EXT-COHERENT-LPO-2024",
+        "source_name": "Coherent FY2024 Q3 Shareholder Letter",
+        "source_type": "company_filing",
+        "publisher": "Coherent Corp.",
+        "published_date": "2024-05-06",
+        "accessed_date": "2026-08-31",
+        "url": "https://www.coherent.com/content/dam/coherent/site/en/documents/investors/sec-filings/2024/may-6/shareholder-letter-fy24-q3-vf2.pdf",
+        "reliability_tier": 2,
+        "period_covered": "LPO/CPO adoption view",
+        "notes": "Issuer view that LPO can retain pluggability and a multi-vendor ecosystem while reducing power and cost, potentially delaying CPO adoption."
+      },
+      {
+        "source_id": "EXT-TE-EXPANDED-BEAM",
+        "source_name": "Choosing Expanded Beam and Physical Contact Fiber-Optic Solutions",
+        "source_type": "company_website",
+        "publisher": "TE Connectivity",
+        "published_date": null,
+        "accessed_date": "2026-08-31",
+        "url": "https://www.te.com/en/products/fiber-optics/intersection/choosing-rfo-solutions.html",
+        "reliability_tier": 2,
+        "period_covered": "current technology guide",
+        "notes": "Vendor-authored comparison: expanded beam improves resistance to dust, misalignment and wear, while physical contact can retain insertion/return-loss, wavelength-range and cost advantages."
+      }
+    ]
+  },
+  "narrative": {
+    "executive_summary": "核心結論：本報告不是單純的手機鏡頭景氣回升，而是把大立光與玉晶光重新定位為 AI 光互連零組件供應商。大立光機會在 Fiber Array＋PMLA，官方管理層公開目標與 3Q26 試產線、最快 2027 年中貢獻大致一致；玉晶光雖有 MT Ferrule 等官方產品能力，但 Citi 所述完整 expanded-beam connector、1H27 出貨與美系客戶仍未公開確認。\n\n財務轉折：大立光 2025A-2028E 營收由 NT$61.1bn 增至 NT$156.8bn、EPS 由 159.4 增至 341.9，但毛利率/營益率由 50.4%/38.5% 降至 46.9%/33.5%，顯示高成長伴隨 mix 或 ramp 稀釋。玉晶光同期間營收僅由 NT$25.0bn 增至 NT$28.7bn、EPS 由 32.8 增至 44.0，主要靠毛利率/營益率升至 35.4%/22.0。\n\n最重要的反向檢查：玉晶光 2027 connector 若占營收 15%，而全年營收只增 5.3%，則舊業務在假設 2026 尚無 connector 貢獻下隱含約年減 10.5%；新業務更像抵銷舊業務壓力。大立光則相反，扣除 10% CPO mix 後非 CPO 營收仍需大增，代表 Citi 估計不只押 CPO。\n\n證據姿態：2025 實際財務已由官方年報驗證；Largan 官方網站確認 PMLA 與 Fiber Array，公開管理層說法支持試產/量產方向；GSEO 官方只確認 Prism、Micro Lens Array、Metalens、V-Groove、MT Ferrule 等元件能力。客戶身分、量產良率、有效產能、capex、segment margin、30m/50m FAU 需求與玉晶光 1H27 時程仍未獲官方驗證。",
+    "expanded_report": "一、營運轉折與投資邏輯\n大立光：Citi 維持 Buy、TP 由 NT$6,125 調升至 NT$8,500，以 30x 2027/28E 平均 EPS 評價。技術路線是高密度 multi-layer Fiber Array 加 PMLA；官方網站只證實產品類別，多層結構、鍍膜與 pin-hole 等細節仍屬券商/供應鏈說法。報告假設 3Q26 pilot line ready、2H27 最早量產，公開管理層目標大致相符；但 2027/28 出貨 3.0m/12.5m units、營收占比約 10%/20%仍是 Citi 模型。\n玉晶光：Citi 由 Sell 升 Buy、TP 由 NT$405 調升至 NT$1,050，以 25x 2027/28E 平均 EPS 評價。券商方案是 ferrule＋lens reflection/collimation 的 expanded-beam connector，目的是降低 dust/scratch 對 insertion loss/return loss 的敏感度。官方只證實 MT Ferrule 等元件能力；Citi 假設的 1H27 出貨、2027/28 營收占比 15%/>20%與美系合作方未公開確認。\n\n二、年度財務（NT$mn，EPS 為 NT$/share）\n| 公司 | 年度 | 營收 | 稅後淨利 | EPS | 毛利率 | 營益率 | 淨利率 |\n|---|---:|---:|---:|---:|---:|---:|---:|\n| 大立光 | 2025A | 61,148 | 21,275 | 159.4 | 50.4% | 38.5% | 34.8% |\n| 大立光 | 2026E | 62,461 | 22,444 | 168.2 | 49.2% | 37.4% | 35.9% |\n| 大立光 | 2027E | 95,009 | 30,213 | 226.4 | 48.6% | 35.1% | 31.8% |\n| 大立光 | 2028E | 156,848 | 45,639 | 341.9 | 46.9% | 33.5% | 29.1% |\n| 玉晶光 | 2025A | 24,989 | 3,702 | 32.8 | 32.5% | 19.1% | 14.8% |\n| 玉晶光 | 2026E | 24,673 | 3,931 | 34.9 | 34.2% | 20.0% | 15.9% |\n| 玉晶光 | 2027E | 25,972 | 4,407 | 39.1 | 35.1% | 21.5% | 17.0% |\n| 玉晶光 | 2028E | 28,687 | 4,960 | 44.0 | 35.4% | 22.0% | 17.3% |\n\n三、業務 mix 與客戶\n大立光官方 2025 mix 為 optical components 99.48%、other 0.52%，但並未把 CPO 單獨列示；Citi 描述 phone-camera lenses 超過 80%。官方年報揭露前四大匿名客戶占 30%/15%/13%/11%，不能把任何代碼推定為 Apple。玉晶光官方 2025 lens products/other 為 75%/25%；報告另引用 2023 smartphone lens/other 73%/27%，期間與定義不同。\n\n四、產業鏈與競爭\n系統端：NVIDIA、Broadcom、Marvell 都已公開 CPO 產品，NVIDIA 2026 年並稱 Spectrum-X Ethernet Photonics 已進入生產，證明光靠近 switch/XPU 已非概念。上游/生態系統：TSMC、Coherent、Lumentum、Corning、Foxconn、SENKO 等已被 NVIDIA 公開點名。expanded-beam connector/ferrule 的全球競爭者包括 US Conec/Corning/Fujikura/Sumitomo Electric 的 PRIZM TMT，以及 SENKO/3M/Molex 與 TE Connectivity；TE 亦指出 physical-contact 在 loss、波長與成本仍可能較優。因此玉晶光必須靠 qualification、loss performance、良率與成本證明，而非概念獨占。架構上，retimed pluggable、LPO/LRO、NPO/OBO、CPO、co-packaged copper、in-package optical I/O 與短距離 DAC/AEC 可依距離、可維修性、功耗、成本與客戶偏好並存。\n\n五、可驗證推算與風險\n大立光 CPO 營收推算為 2027E 約 NT$9.50bn、2028E 約 NT$31.37bn；除以 3.0m/12.5m units 得隱含每單位收入約 NT$3,167/2,510，這只是產品組合收入，不是報價。以合併營益率做代理，CPO 營業利益約 NT$3.33bn/10.51bn，但 25%-45% segment margin 敏感度很大。玉晶光 connector 營收約 NT$3.90bn、2028E 至少 NT$5.74bn；用合併營益率做代理約 NT$0.84bn/至少 1.26bn。所有 segment profit 都是 model_inference，非公司或 Citi 揭露。\n主要 falsifiers：客戶 qualification 延後、2H27/1H27 時程失守、FAU/connector mix 低於 10%/15%、良率與 insertion/return loss 不達標、iPhone 需求或份額下滑、CPO 被 pluggable/LPO/NPO/copper 延後替代，以及 25x/30x 評價回落。",
+    "investment_implications": "投資姿態：報告對技術方向的論證比對個別公司商業化證據更扎實。大立光較像 2027H2 後的高彈性、但預估中同時夾帶非 CPO 高成長；玉晶光較早有催化，但 2027 舊業務隱含下滑，需把 connector 當成抵銷項觀察。\n\n估值不是只靠 EPS：大立光 30x、玉晶光 25x 都仰賴再評價。沒有具名客戶、有效產能、良率、segment margin 與 capex 回報前，適合列為 watchlist/wait for proof，而非把券商 TP 當成已驗證內含價值。",
+    "industry_cross_checks": "已驗證：NVIDIA/Broadcom/Marvell 的 CPO 路線與 NVIDIA 2026 系統端生產說法；Corning/US Conec/SENKO 的 expanded-beam ferrule/connector；Largan 官方 PMLA/FAU 產品及管理層試產方向；GSEO 官方 MT Ferrule 等 CPO 元件能力；兩家公司 FY2025 財務。\n\n未驗證：具名 CPO 客戶、Largan 3m/12.5m 出貨、30m/50m FAU demand、Genius 1H27 出貨與 15%/>20% mix、量產良率、有效產能、capex、segment margin、Apple allocation 與 iPhone lens shares。\n\n反證／口徑警告：OCP、Coherent 與 TE 證據顯示 CPO、pluggable/LPO 及 physical-contact/expanded-beam 各有取捨；Marvell 引用的 2029 CPO ports 與 Citi FAU units 不可直接相比；GSEO 2025 lens-product mix 與 Citi 2023 smartphone-lens mix 亦不可直接視為同一定義。"
+  },
+  "findings": [
+    {
+      "finding_id": "FND-001",
+      "title": "兩家公司機會不同：大立光較偏 FAU/PMLA，玉晶光較偏 expanded-beam connector",
+      "detail": "大立光官方與管理層公開說法支持 PMLA/FA、3Q26 試產線及最快 2027 年中貢獻；玉晶光官方只證實 MT ferrule 等元件能力，Citi 的完整 expanded-beam connector、1H27 出貨及美系客戶仍未獲公開確認。",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.74,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P3-LARGAN-CPO",
+        "EV-BR-P4-GENIUS-CONNECTOR",
+        "EV-EXT-LARGAN-IR",
+        "EV-EXT-GSEO-IR"
+      ],
+      "node_ids": [
+        "CPO.COUPLING"
+      ],
+      "entity_ids": [
+        "TW-3008",
+        "TW-3406"
+      ]
+    },
+    {
+      "finding_id": "FND-002",
+      "title": "大立光預估高成長伴隨利潤率稀釋",
+      "detail": "Citi 預估大立光營收由 2025 年 NT$61,148mn 增至 2028 年 NT$156,848mn，但毛利率由 50.4% 降至 46.9%、營益率由 38.5% 降至 33.5%。",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.67,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "node_ids": [
+        "CPO"
+      ],
+      "entity_ids": [
+        "TW-3008"
+      ]
+    },
+    {
+      "finding_id": "FND-003",
+      "title": "大立光 CPO mix 無法單獨解釋整體營收跳升",
+      "detail": "用 Citi 的 10%/20% CPO 營收比重回推，2027/2028 非 CPO 營收仍約 NT$85.5bn/125.5bn，代表預估也內含非常強的既有或其他新業務成長。",
+      "fact_type": "model_inference",
+      "confidence": 0.58,
+      "evidence_ids": [
+        "EV-BR-P3-LARGAN-CPO",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "node_ids": [
+        "CPO.COUPLING"
+      ],
+      "entity_ids": [
+        "TW-3008"
+      ]
+    },
+    {
+      "finding_id": "FND-004",
+      "title": "玉晶光新業務占比與總營收增幅之間存在可解讀的舊業務壓力",
+      "detail": "若 2027 年 connector 占營收 15% 且 2026 年尚無貢獻，則 2027 年舊業務隱含約 NT$22.1bn、年減約 10.5%；新業務是抵銷而非純加成。",
+      "fact_type": "model_inference",
+      "confidence": 0.56,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "node_ids": [
+        "CPO.COUPLING"
+      ],
+      "entity_ids": [
+        "TW-3406"
+      ]
+    },
+    {
+      "finding_id": "FND-005",
+      "title": "玉晶光的核心財務論點是 mix 改善而非短期營收爆發",
+      "detail": "2025-2028 年營收僅由 NT$24,989mn 增至 NT$28,687mn，但毛利率由 32.5% 升至 35.4%、營益率由 19.1% 升至 22.0%。",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.66,
+      "evidence_ids": [
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "node_ids": [
+        "CPO"
+      ],
+      "entity_ids": [
+        "TW-3406"
+      ]
+    },
+    {
+      "finding_id": "FND-006",
+      "title": "2025 實際值已獲官方年報交叉驗證",
+      "detail": "Citi 對大立光與玉晶光 2025 年營收、母公司淨利與 EPS 的數字均與官方年報一致，差異僅為報告以 NT$mn 或一位小數四捨五入。",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-EXT-LARGAN-AR25",
+        "EV-EXT-GSEO-AR25"
+      ],
+      "node_ids": [
+        "CPO"
+      ],
+      "entity_ids": [
+        "TW-3008",
+        "TW-3406"
+      ]
+    },
+    {
+      "finding_id": "FND-007",
+      "title": "expanded-beam 方向獲全球產品路線支持，但玉晶光特定方案仍未被官方驗證",
+      "detail": "Corning/US Conec/SENKO 等已公開 debris-insensitive、非接觸式 expanded-beam ferrule；TE 也指出 physical-contact 方案在 loss、波長與成本仍可能較優。市場痛點成立，不等於玉晶光客戶、規格、良率或時程已獲驗證。",
+      "fact_type": "qualitative_claim",
+      "confidence": 0.92,
+      "evidence_ids": [
+        "EV-EXT-CORNING-PRIZM",
+        "EV-EXT-USCONEC-PRIZM",
+        "EV-EXT-SENKO-EBO",
+        "EV-EXT-TE-TRADEOFF",
+        "EV-EXT-GSEO-ABOUT",
+        "EV-EXT-GSEO-IR"
+      ],
+      "node_ids": [
+        "CPO.COUPLING"
+      ],
+      "entity_ids": [
+        "TW-3406",
+        "US-GLW",
+        "PRIVATE-MOLEX"
+      ]
+    },
+    {
+      "finding_id": "FND-008",
+      "title": "CPO 已有系統端商轉驗證，但不是 pluggable/LPO 的單一路徑替代",
+      "detail": "NVIDIA、Broadcom、Marvell 均已公開 CPO 產品，NVIDIA 2026 年稱 Spectrum-X Ethernet Photonics 已進入生產；OCP 與 Coherent 同時支持 pluggable/LPO 並存。Citi 的 30m/50m FAU 仍無同口徑公開驗證，CPO ports 不能直接互證 FAU units。",
+      "fact_type": "industry_estimate",
+      "confidence": 0.88,
+      "evidence_ids": [
+        "EV-EXT-NVIDIA-CPO",
+        "EV-EXT-NVIDIA-CPO-PRODUCTION",
+        "EV-EXT-BROADCOM-CPO",
+        "EV-EXT-MARVELL-CPO",
+        "EV-EXT-OCP-COEXISTENCE",
+        "EV-EXT-COHERENT-LPO",
+        "EV-BR-P3-LARGAN-CPO"
+      ],
+      "node_ids": [
+        "CPO.ARCH.CPO",
+        "CPO.COUPLING"
+      ],
+      "entity_ids": [
+        "US-NVDA",
+        "US-AVGO",
+        "US-MRVL"
+      ]
+    },
+    {
+      "finding_id": "FND-009",
+      "title": "目標價包含明顯再評價假設",
+      "detail": "Citi 對大立光採 30x 2027/28 平均 EPS、對玉晶光採 25x；兩者都高於或接近近五年區間高端，股價上行依賴 CPO 證據轉強與 multiple expansion。",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.72,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-GENIUS-TP",
+        "EV-BR-P12-GENIUS-BULLBEAR",
+        "EV-BR-P13-LARGAN-BULLBEAR"
+      ],
+      "node_ids": [
+        "CPO"
+      ],
+      "entity_ids": [
+        "TW-3008",
+        "TW-3406"
+      ]
+    },
+    {
+      "finding_id": "FND-010",
+      "title": "主要失效條件可觀察但尚缺量化門檻",
+      "detail": "關鍵風險包括手機需求/份額、規格升級、CPO 認證與量產、學習曲線與良率；報告未給數值化 kill criteria、capex 回收或有效產能。",
+      "fact_type": "qualitative_claim",
+      "confidence": 0.9,
+      "evidence_ids": [
+        "EV-BR-P14-DESCRIPTIONS",
+        "EV-BR-P15-RISKS"
+      ],
+      "node_ids": [
+        "CPO"
+      ],
+      "entity_ids": [
+        "TW-3008",
+        "TW-3406"
+      ]
+    }
+  ],
+  "financials": [
+    {
+      "claim_id": "CLM-TW-3008-FY2025A-REVENUE",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "REVENUE",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 61148,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS",
+        "EV-EXT-LARGAN-AR25"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi table rounded to the displayed unit and cross-checked to the official annual report; not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2025A-NET_INCOME",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "NET_INCOME",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 21275,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS",
+        "EV-EXT-LARGAN-AR25"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi table rounded to the displayed unit and cross-checked to the official annual report; not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2025A-EPS",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "EPS",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 159.4,
+      "currency": "TWD",
+      "unit": "TWD/share",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS",
+        "EV-EXT-LARGAN-AR25"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi table rounded to the displayed unit and cross-checked to the official annual report; not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2025A-GROSS_MARGIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "GROSS_MARGIN",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 50.4,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS",
+        "EV-EXT-LARGAN-AR25"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi table rounded to the displayed unit and cross-checked to the official annual report; not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2025A-OPERATING_MARGIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "OPERATING_MARGIN",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 38.5,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS",
+        "EV-EXT-LARGAN-AR25"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi table rounded to the displayed unit and cross-checked to the official annual report; not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2025A-NET_MARGIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "NET_MARGIN",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 34.8,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS",
+        "EV-EXT-LARGAN-AR25"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi table rounded to the displayed unit and cross-checked to the official annual report; not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2026E-REVENUE",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "REVENUE",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2026E",
+      "value_type": "point",
+      "value": 62461,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2026E-NET_INCOME",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "NET_INCOME",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2026E",
+      "value_type": "point",
+      "value": 22444,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2026E-EPS",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "EPS",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2026E",
+      "value_type": "point",
+      "value": 168.2,
+      "currency": "TWD",
+      "unit": "TWD/share",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2026E-GROSS_MARGIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "GROSS_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2026E",
+      "value_type": "point",
+      "value": 49.2,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2026E-OPERATING_MARGIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "OPERATING_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2026E",
+      "value_type": "point",
+      "value": 37.4,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2026E-NET_MARGIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "NET_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2026E",
+      "value_type": "point",
+      "value": 35.9,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2027E-REVENUE",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "REVENUE",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 95009,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2027E-NET_INCOME",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "NET_INCOME",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 30213,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2027E-EPS",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "EPS",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 226.4,
+      "currency": "TWD",
+      "unit": "TWD/share",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2027E-GROSS_MARGIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "GROSS_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 48.6,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2027E-OPERATING_MARGIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "OPERATING_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 35.1,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2027E-NET_MARGIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "NET_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 31.8,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2028E-REVENUE",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "REVENUE",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 156848,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.54,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2028E-NET_INCOME",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "NET_INCOME",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 45639,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.54,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2028E-EPS",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "EPS",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 341.9,
+      "currency": "TWD",
+      "unit": "TWD/share",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.54,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2028E-GROSS_MARGIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "GROSS_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 46.9,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.54,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2028E-OPERATING_MARGIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "OPERATING_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 33.5,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.54,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2028E-NET_MARGIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "NET_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 29.1,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.54,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P8-LARGAN-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2025A-REVENUE",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "REVENUE",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 24989,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-BR-P10-GENIUS-FS",
+        "EV-EXT-GSEO-AR25"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi table rounded to the displayed unit and cross-checked to the official annual report; not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2025A-NET_INCOME",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "NET_INCOME",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 3702,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-BR-P10-GENIUS-FS",
+        "EV-EXT-GSEO-AR25"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi table rounded to the displayed unit and cross-checked to the official annual report; not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2025A-EPS",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "EPS",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 32.8,
+      "currency": "TWD",
+      "unit": "TWD/share",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-BR-P10-GENIUS-FS",
+        "EV-EXT-GSEO-AR25"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi table rounded to the displayed unit and cross-checked to the official annual report; not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2025A-GROSS_MARGIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "GROSS_MARGIN",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 32.5,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-BR-P10-GENIUS-FS",
+        "EV-EXT-GSEO-AR25"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi table rounded to the displayed unit and cross-checked to the official annual report; not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2025A-OPERATING_MARGIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "OPERATING_MARGIN",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 19.1,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-BR-P10-GENIUS-FS",
+        "EV-EXT-GSEO-AR25"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi table rounded to the displayed unit and cross-checked to the official annual report; not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2025A-NET_MARGIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "NET_MARGIN",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 14.8,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-BR-P10-GENIUS-FS",
+        "EV-EXT-GSEO-AR25"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi table rounded to the displayed unit and cross-checked to the official annual report; not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2026E-REVENUE",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "REVENUE",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2026E",
+      "value_type": "point",
+      "value": 24673,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2026E-NET_INCOME",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "NET_INCOME",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2026E",
+      "value_type": "point",
+      "value": 3931,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2026E-EPS",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "EPS",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2026E",
+      "value_type": "point",
+      "value": 34.9,
+      "currency": "TWD",
+      "unit": "TWD/share",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2026E-GROSS_MARGIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "GROSS_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2026E",
+      "value_type": "point",
+      "value": 34.2,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2026E-OPERATING_MARGIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "OPERATING_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2026E",
+      "value_type": "point",
+      "value": 20,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2026E-NET_MARGIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "NET_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2026E",
+      "value_type": "point",
+      "value": 15.9,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2027E-REVENUE",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "REVENUE",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 25972,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2027E-NET_INCOME",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "NET_INCOME",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 4407,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2027E-EPS",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "EPS",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 39.1,
+      "currency": "TWD",
+      "unit": "TWD/share",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2027E-GROSS_MARGIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "GROSS_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 35.1,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2027E-OPERATING_MARGIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "OPERATING_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 21.5,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2027E-NET_MARGIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "NET_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 17,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2028E-REVENUE",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "REVENUE",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 28687,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.54,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2028E-NET_INCOME",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "NET_INCOME",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 4960,
+      "currency": "TWD",
+      "unit": "TWD_mn",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.54,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2028E-EPS",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "EPS",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 44,
+      "currency": "TWD",
+      "unit": "TWD/share",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.54,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2028E-GROSS_MARGIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "GROSS_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 35.4,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.54,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2028E-OPERATING_MARGIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "OPERATING_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 22,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.54,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2028E-NET_MARGIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "NET_MARGIN",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 17.3,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.54,
+      "evidence_ids": [
+        "EV-BR-P9-GENIUS-REV",
+        "EV-BR-P10-GENIUS-FS"
+      ],
+      "scope": "consolidated_company",
+      "notes": "Citi consolidated-company estimate; not a disclosed company forecast and not CPO-segment-only."
+    }
+  ],
+  "operating_assumptions": [
+    {
+      "assumption_id": "ASM-001",
+      "category": "industry",
+      "description": "Citi expects AI interconnects to progress from 400G/800G toward 1.6T/3.2T and from pluggable optics toward linear, near-packaged and co-packaged optics; public evidence supports CPO commercialization but also supports continued architectural coexistence.",
+      "reference_period": "2026-2028",
+      "fact_type": "industry_estimate",
+      "confidence": 0.72,
+      "evidence_ids": [
+        "EV-BR-P3-ARCH",
+        "EV-EXT-NVIDIA-CPO",
+        "EV-EXT-NVIDIA-CPO-PRODUCTION",
+        "EV-EXT-BROADCOM-CPO",
+        "EV-EXT-OCP-COEXISTENCE",
+        "EV-EXT-COHERENT-LPO"
+      ]
+    },
+    {
+      "assumption_id": "ASM-002",
+      "category": "new_technology",
+      "description": "Largan is positioned in Fiber Array plus PMLA; the broker’s isolated PALM spelling is treated as a probable typo. Multi-layer alignment and compact laser-routing details remain broker claims.",
+      "reference_period": "2026-2028",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.68,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P3-LARGAN-CPO",
+        "EV-EXT-LARGAN-CPO-PRODUCT"
+      ]
+    },
+    {
+      "assumption_id": "ASM-003",
+      "category": "capacity",
+      "description": "Largan reportedly plans further land/capacity expansion, but the report gives no nominal capacity, effective capacity, utilization, or capex amount.",
+      "reference_period": "2026 onward",
+      "fact_type": "qualitative_claim",
+      "confidence": 0.55,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P7-LARGAN-REV"
+      ]
+    },
+    {
+      "assumption_id": "ASM-004",
+      "category": "yield",
+      "description": "Largan is assumed to have higher yield than competitors, but neither the report nor official sources disclose a numerical yield.",
+      "reference_period": "2026 onward",
+      "fact_type": "qualitative_claim",
+      "confidence": 0.42,
+      "evidence_ids": [
+        "EV-BR-P14-DESCRIPTIONS",
+        "EV-BR-P15-RISKS"
+      ]
+    },
+    {
+      "assumption_id": "ASM-005",
+      "category": "new_customer",
+      "description": "Citi describes a US customer/engagement for Largan and a leading US company for Genius, but neither is named; no customer identity is inferred.",
+      "reference_period": "2026-2027",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.36,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P4-GENIUS-CONNECTOR"
+      ]
+    },
+    {
+      "assumption_id": "ASM-006",
+      "category": "new_product",
+      "description": "Genius is assumed to commercialize a lens-based expanded-beam optical connector/ferrule using reflection and collimation to reduce particle sensitivity.",
+      "reference_period": "2027 onward",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.52,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P4-GENIUS-CONNECTOR",
+        "EV-EXT-CORNING-PRIZM",
+        "EV-EXT-USCONEC-PRIZM"
+      ]
+    },
+    {
+      "assumption_id": "ASM-007",
+      "category": "capacity",
+      "description": "Genius is assumed to leverage existing plastic-lens, coating and scaled automation capacity; no numerical capacity or utilization is disclosed.",
+      "reference_period": "2027 onward",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.48,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P4-GENIUS-CONNECTOR"
+      ]
+    },
+    {
+      "assumption_id": "ASM-008",
+      "category": "price",
+      "description": "Citi expects smartphone-lens ASP to be stable with upside from variable aperture and a possible mechanical shutter; no ASP amount is disclosed.",
+      "reference_period": "2027",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.48,
+      "evidence_ids": [
+        "EV-BR-P5-LENS-SHARE"
+      ]
+    },
+    {
+      "assumption_id": "ASM-009",
+      "category": "customer_mix",
+      "description": "Citi attributes resilient lens demand to Apple order flow, but official annual reports anonymize customers; Apple exposure and allocation remain broker estimates.",
+      "reference_period": "2026-2027",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.48,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-EXT-LARGAN-CUSTOMERS"
+      ]
+    },
+    {
+      "assumption_id": "ASM-010",
+      "category": "market_share",
+      "description": "Citi expects Largan to retain leadership in the most advanced phone lenses and Genius to gain focal-lens share; official sources do not validate the cited iPhone lens percentages.",
+      "reference_period": "2026-2027",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.42,
+      "evidence_ids": [
+        "EV-BR-P5-LENS-SHARE"
+      ]
+    },
+    {
+      "assumption_id": "ASM-011",
+      "category": "gross_margin",
+      "description": "Largan consolidated gross margin is estimated to fall from 50.4% in 2025 to 46.9% in 2028 despite rapid revenue growth.",
+      "reference_period": "FY2025A-FY2028E",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.67,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS"
+      ]
+    },
+    {
+      "assumption_id": "ASM-012",
+      "category": "operating_margin",
+      "description": "Largan consolidated operating margin is estimated to fall from 38.5% in 2025 to 33.5% in 2028, implying mix/ramp costs alongside scale.",
+      "reference_period": "FY2025A-FY2028E",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.63,
+      "evidence_ids": [
+        "EV-BR-P8-LARGAN-FS"
+      ]
+    },
+    {
+      "assumption_id": "ASM-013",
+      "category": "gross_margin",
+      "description": "Genius consolidated gross margin is estimated to rise from 32.5% in 2025 to 35.4% in 2028.",
+      "reference_period": "FY2025A-FY2028E",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.63,
+      "evidence_ids": [
+        "EV-BR-P10-GENIUS-FS"
+      ]
+    },
+    {
+      "assumption_id": "ASM-014",
+      "category": "operating_margin",
+      "description": "Genius consolidated operating margin is estimated to rise from 19.1% in 2025 to 22.0% in 2028.",
+      "reference_period": "FY2025A-FY2028E",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.61,
+      "evidence_ids": [
+        "EV-BR-P10-GENIUS-FS"
+      ]
+    },
+    {
+      "assumption_id": "ASM-015",
+      "category": "lead_time",
+      "description": "No numerical customer lead time is disclosed for either company.",
+      "reference_period": null,
+      "fact_type": "qualitative_claim",
+      "confidence": 1,
+      "evidence_ids": [
+        "EV-BR-P3-LARGAN-CPO",
+        "EV-BR-P4-GENIUS-CONNECTOR"
+      ]
+    },
+    {
+      "assumption_id": "ASM-016",
+      "category": "capex",
+      "description": "The report mentions land/capacity expansion but discloses no capex amount, funding source, or return-on-invested-capacity evidence.",
+      "reference_period": "2026 onward",
+      "fact_type": "qualitative_claim",
+      "confidence": 0.92,
+      "evidence_ids": [
+        "EV-BR-P7-LARGAN-REV"
+      ]
+    },
+    {
+      "assumption_id": "ASM-017",
+      "category": "industry",
+      "description": "Expanded-beam ferrules are already a multi-vendor global field involving US Conec, Corning, Fujikura, Sumitomo Electric, SENKO, 3M, Molex and TE Connectivity; Genius is therefore entering a competitive category, not an uncontested market.",
+      "reference_period": "2025-2026",
+      "fact_type": "qualitative_claim",
+      "confidence": 0.92,
+      "evidence_ids": [
+        "EV-EXT-CORNING-PRIZM",
+        "EV-EXT-USCONEC-PRIZM",
+        "EV-EXT-SENKO-EBO",
+        "EV-EXT-TE-TRADEOFF"
+      ]
+    },
+    {
+      "assumption_id": "ASM-018",
+      "category": "industry",
+      "description": "Retimed pluggable, LPO/LRO, NPO/OBO, CPO, co-packaged copper and in-package optical I/O can coexist by reach, serviceability, power, cost and customer architecture; CPO adoption timing is not deterministic.",
+      "reference_period": "2025-2028",
+      "fact_type": "qualitative_claim",
+      "confidence": 0.92,
+      "evidence_ids": [
+        "EV-BR-P3-ARCH",
+        "EV-EXT-BROADCOM-CPO",
+        "EV-EXT-MARVELL-CPO",
+        "EV-EXT-OCP-COEXISTENCE",
+        "EV-EXT-COHERENT-LPO"
+      ]
+    }
+  ],
+  "segment_estimates": [
+    {
+      "segment_id": "SEG-TW-3008-FY2025-OPTICAL",
+      "segment_name": "Optical components",
+      "node_id": "CPO",
+      "reference_period": "FY2025A",
+      "value_type": "revenue_mix",
+      "value": 99.48,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-EXT-LARGAN-SEGMENT"
+      ]
+    },
+    {
+      "segment_id": "SEG-TW-3008-FY2025-OTHER",
+      "segment_name": "Other",
+      "node_id": null,
+      "reference_period": "FY2025A",
+      "value_type": "revenue_mix",
+      "value": 0.52,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-EXT-LARGAN-SEGMENT"
+      ]
+    },
+    {
+      "segment_id": "SEG-TW-3008-PHONE-CAMERA-MIN",
+      "segment_name": "Phone camera lenses",
+      "node_id": null,
+      "reference_period": "Report description; period unspecified",
+      "value_type": "revenue_mix",
+      "value": {
+        "minimum": 80,
+        "qualifier": "greater_than"
+      },
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.5,
+      "evidence_ids": [
+        "EV-BR-P14-DESCRIPTIONS"
+      ]
+    },
+    {
+      "segment_id": "SEG-TW-3008-FY2027-CPO",
+      "segment_name": "AI data-center optical/CPO opportunity",
+      "node_id": "CPO.COUPLING",
+      "reference_period": "FY2027E",
+      "value_type": "revenue_mix",
+      "value": 10,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.52,
+      "evidence_ids": [
+        "EV-BR-P3-LARGAN-CPO"
+      ]
+    },
+    {
+      "segment_id": "SEG-TW-3008-FY2028-CPO",
+      "segment_name": "AI data-center optical/CPO opportunity",
+      "node_id": "CPO.COUPLING",
+      "reference_period": "FY2028E",
+      "value_type": "revenue_mix",
+      "value": 20,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.42,
+      "evidence_ids": [
+        "EV-BR-P3-LARGAN-CPO"
+      ]
+    },
+    {
+      "segment_id": "SEG-TW-3406-FY2023-SMARTPHONE",
+      "segment_name": "Smartphone lens",
+      "node_id": null,
+      "reference_period": "FY2023A",
+      "value_type": "revenue_mix",
+      "value": 73,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.7,
+      "evidence_ids": [
+        "EV-BR-P14-DESCRIPTIONS"
+      ]
+    },
+    {
+      "segment_id": "SEG-TW-3406-FY2023-OTHER",
+      "segment_name": "Other",
+      "node_id": null,
+      "reference_period": "FY2023A",
+      "value_type": "revenue_mix",
+      "value": 27,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.7,
+      "evidence_ids": [
+        "EV-BR-P14-DESCRIPTIONS"
+      ]
+    },
+    {
+      "segment_id": "SEG-TW-3406-FY2025-LENS",
+      "segment_name": "Lens products",
+      "node_id": null,
+      "reference_period": "FY2025A",
+      "value_type": "revenue_mix",
+      "value": 75,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-EXT-GSEO-SEGMENT"
+      ]
+    },
+    {
+      "segment_id": "SEG-TW-3406-FY2025-OTHER",
+      "segment_name": "Other",
+      "node_id": null,
+      "reference_period": "FY2025A",
+      "value_type": "revenue_mix",
+      "value": 25,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.99,
+      "evidence_ids": [
+        "EV-EXT-GSEO-SEGMENT"
+      ]
+    },
+    {
+      "segment_id": "SEG-TW-3406-FY2027-CONNECTOR",
+      "segment_name": "Optical connector and ferrule",
+      "node_id": "CPO.COUPLING",
+      "reference_period": "FY2027E",
+      "value_type": "revenue_mix",
+      "value": 15,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.52,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE"
+      ]
+    },
+    {
+      "segment_id": "SEG-TW-3406-FY2028-CONNECTOR",
+      "segment_name": "Optical connector and ferrule",
+      "node_id": "CPO.COUPLING",
+      "reference_period": "FY2028E",
+      "value_type": "revenue_mix",
+      "value": {
+        "minimum": 20,
+        "qualifier": "greater_than"
+      },
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.42,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE"
+      ]
+    }
+  ],
+  "metric_claims": [
+    {
+      "claim_id": "CLM-TW-3008-FY2027-FAU-MARKET-DEMAND",
+      "entity_id": "TW-3008",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "SHIPMENT",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 30000000,
+      "currency": null,
+      "unit": "units",
+      "fact_type": "industry_estimate",
+      "confidence": 0.52,
+      "evidence_ids": [
+        "EV-BR-P3-LARGAN-CPO"
+      ],
+      "notes": "Citi assumption for total FAU market demand; associated with Largan opportunity analysis, not Largan shipment."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2027-FAU-MARKET-SHARE",
+      "entity_id": "TW-3008",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "MARKET_SHARE",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 10,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.52,
+      "evidence_ids": [
+        "EV-BR-P3-LARGAN-CPO"
+      ],
+      "notes": null
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2027-FAU-SHIPMENT",
+      "entity_id": "TW-3008",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "SHIPMENT",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 3000000,
+      "currency": null,
+      "unit": "units",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.52,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P3-LARGAN-CPO"
+      ],
+      "notes": null
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2027-CPO-MIX",
+      "entity_id": "TW-3008",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "SEGMENT_MIX",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 10,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.52,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P3-LARGAN-CPO"
+      ],
+      "notes": "Approximate share of total company revenue."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2028-FAU-MARKET-DEMAND",
+      "entity_id": "TW-3008",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "SHIPMENT",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 50000000,
+      "currency": null,
+      "unit": "units",
+      "fact_type": "industry_estimate",
+      "confidence": 0.42,
+      "evidence_ids": [
+        "EV-BR-P3-LARGAN-CPO"
+      ],
+      "notes": "Citi assumption for total FAU market demand; associated with Largan opportunity analysis, not Largan shipment."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2028-FAU-MARKET-SHARE",
+      "entity_id": "TW-3008",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "MARKET_SHARE",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 25,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.42,
+      "evidence_ids": [
+        "EV-BR-P3-LARGAN-CPO"
+      ],
+      "notes": null
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2028-FAU-SHIPMENT",
+      "entity_id": "TW-3008",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "SHIPMENT",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 12500000,
+      "currency": null,
+      "unit": "units",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.42,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P3-LARGAN-CPO"
+      ],
+      "notes": null
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2028-CPO-MIX",
+      "entity_id": "TW-3008",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "SEGMENT_MIX",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "point",
+      "value": 20,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.42,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P3-LARGAN-CPO"
+      ],
+      "notes": "Approximate share of total company revenue."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2027-CONNECTOR-MIX",
+      "entity_id": "TW-3406",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "SEGMENT_MIX",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2027E",
+      "value_type": "point",
+      "value": 15,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.52,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE"
+      ],
+      "notes": "Optical connector/ferrule share of total company revenue."
+    },
+    {
+      "claim_id": "CLM-TW-3406-FY2028-CONNECTOR-MIX-MIN",
+      "entity_id": "TW-3406",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "SEGMENT_MIX",
+      "as_of_date": "2026-08-28",
+      "reference_period": "FY2028E",
+      "value_type": "minimum",
+      "value": 20,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.42,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE"
+      ],
+      "notes": "Citi states over 20%; 20% is used only as a minimum bound."
+    },
+    {
+      "claim_id": "CLM-TW-3008-IPHONE-WIDE-SHARE-MIN",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "MARKET_SHARE",
+      "as_of_date": "2026-08-28",
+      "reference_period": "2026 estimate",
+      "value_type": "minimum",
+      "value": 50,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.45,
+      "evidence_ids": [
+        "EV-BR-P5-LENS-SHARE"
+      ],
+      "notes": "Citi estimate; smartphone-lens market, not CPO."
+    },
+    {
+      "claim_id": "CLM-TW-3008-IPHONE-ULTRAWIDE-SHARE",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "MARKET_SHARE",
+      "as_of_date": "2026-08-28",
+      "reference_period": "2026 estimate",
+      "value_type": "point",
+      "value": 30,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.45,
+      "evidence_ids": [
+        "EV-BR-P5-LENS-SHARE"
+      ],
+      "notes": "Citi estimate; smartphone-lens market, not CPO."
+    },
+    {
+      "claim_id": "CLM-TW-3406-IPHONE-WIDE-SHARE-RANGE",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "MARKET_SHARE",
+      "as_of_date": "2026-08-28",
+      "reference_period": "2026 estimate",
+      "value_type": "range",
+      "value": {
+        "low": 20,
+        "high": 30
+      },
+      "value_low": 20,
+      "value_high": 30,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.42,
+      "evidence_ids": [
+        "EV-BR-P5-LENS-SHARE"
+      ],
+      "notes": "Citi estimate; smartphone-lens market, not CPO."
+    },
+    {
+      "claim_id": "CLM-TW-3406-IPHONE-ULTRAWIDE-SHARE-RANGE",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "MARKET_SHARE",
+      "as_of_date": "2026-08-28",
+      "reference_period": "2026 estimate",
+      "value_type": "range",
+      "value": {
+        "low": 20,
+        "high": 30
+      },
+      "value_low": 20,
+      "value_high": 30,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.42,
+      "evidence_ids": [
+        "EV-BR-P5-LENS-SHARE"
+      ],
+      "notes": "Citi estimate; smartphone-lens market, not CPO."
+    },
+    {
+      "claim_id": "CLM-TW-3008-PILOT-LINE-TIMING",
+      "entity_id": "TW-3008",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "MASS_PRODUCTION_TIMING",
+      "as_of_date": "2026-08-28",
+      "reference_period": "2026",
+      "value_type": "date",
+      "value": "3Q2026",
+      "currency": null,
+      "unit": "quarter",
+      "fact_type": "management_guidance",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-BR-P3-LARGAN-CPO",
+        "EV-EXT-LARGAN-IR"
+      ],
+      "notes": "Pilot-run line readiness, not mass production; independently aligned with public management remarks."
+    },
+    {
+      "claim_id": "CLM-TW-3008-MASS-PRODUCTION-TIMING",
+      "entity_id": "TW-3008",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "MASS_PRODUCTION_TIMING",
+      "as_of_date": "2026-08-28",
+      "reference_period": "2027",
+      "value_type": "date",
+      "value": "2H2027",
+      "currency": null,
+      "unit": "half",
+      "fact_type": "management_guidance",
+      "confidence": 0.72,
+      "evidence_ids": [
+        "EV-BR-P3-LARGAN-CPO",
+        "EV-EXT-LARGAN-IR"
+      ],
+      "notes": "Earliest expected mass-volume production; public management language was earliest contribution around mid-2027, so exact timing remains execution-dependent."
+    },
+    {
+      "claim_id": "CLM-TW-3406-SHIPMENT-START-TIMING",
+      "entity_id": "TW-3406",
+      "node_id": "CPO.COUPLING",
+      "metric_id": "MASS_PRODUCTION_TIMING",
+      "as_of_date": "2026-08-28",
+      "reference_period": "2027",
+      "value_type": "date",
+      "value": "1H2027",
+      "currency": null,
+      "unit": "half",
+      "fact_type": "analyst_estimate",
+      "confidence": 0.42,
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P4-GENIUS-CONNECTOR",
+        "EV-EXT-GSEO-IR"
+      ],
+      "notes": "Citi expected initial shipment window; public management remarks as of 7 July 2026 did not yet confirm customer acceptance."
+    },
+    {
+      "claim_id": "CLM-TW-3008-TW-PRECISION-OPTICS-MARKET-SHARE-2025",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "MARKET_SHARE",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 45.29,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-EXT-GSEO-MARKET-SHARE"
+      ],
+      "notes": null,
+      "scope": "Taiwan precision optical components market, not CPO market"
+    },
+    {
+      "claim_id": "CLM-TW-3406-TW-PRECISION-OPTICS-MARKET-SHARE-2025",
+      "entity_id": "TW-3406",
+      "node_id": "CPO",
+      "metric_id": "MARKET_SHARE",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 18.51,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.82,
+      "evidence_ids": [
+        "EV-EXT-GSEO-MARKET-SHARE"
+      ],
+      "notes": null,
+      "scope": "Taiwan precision optical components market, not CPO market"
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2025-CUST1-SHARE",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "CUSTOMER_SHARE",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 30,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.92,
+      "evidence_ids": [
+        "EV-EXT-LARGAN-CUSTOMERS"
+      ],
+      "notes": "Official annual report anonymized customer rank 1; do not infer identity or equate it with Apple."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2025-CUST2-SHARE",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "CUSTOMER_SHARE",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 15,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.92,
+      "evidence_ids": [
+        "EV-EXT-LARGAN-CUSTOMERS"
+      ],
+      "notes": "Official annual report anonymized customer rank 2; do not infer identity or equate it with Apple."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2025-CUST3-SHARE",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "CUSTOMER_SHARE",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 13,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.92,
+      "evidence_ids": [
+        "EV-EXT-LARGAN-CUSTOMERS"
+      ],
+      "notes": "Official annual report anonymized customer rank 3; do not infer identity or equate it with Apple."
+    },
+    {
+      "claim_id": "CLM-TW-3008-FY2025-CUST4-SHARE",
+      "entity_id": "TW-3008",
+      "node_id": "CPO",
+      "metric_id": "CUSTOMER_SHARE",
+      "as_of_date": "2025-12-31",
+      "reference_period": "FY2025A",
+      "value_type": "point",
+      "value": 11,
+      "currency": null,
+      "unit": "%",
+      "fact_type": "disclosed_actual",
+      "confidence": 0.92,
+      "evidence_ids": [
+        "EV-EXT-LARGAN-CUSTOMERS"
+      ],
+      "notes": "Official annual report anonymized customer rank 4; do not infer identity or equate it with Apple."
+    }
+  ],
+  "valuation_summary": [
+    {
+      "entity_id": "TW-3008",
+      "report_price_twd": 6915,
+      "report_market_cap_twd_mn": 904470,
+      "rating": "Buy maintained",
+      "target_price_twd": 8500,
+      "prior_target_price_twd": 6125,
+      "target_basis": "30x average FY2027E/FY2028E EPS",
+      "bull_twd": 9000,
+      "base_twd": 8500,
+      "bear_twd": 5600,
+      "evidence_ids": [
+        "EV-BR-P2-DATA-SUMMARY",
+        "EV-BR-P7-LARGAN-REV",
+        "EV-BR-P13-LARGAN-BULLBEAR"
+      ]
+    },
+    {
+      "entity_id": "TW-3406",
+      "report_price_twd": 834,
+      "report_market_cap_twd_mn": 94028,
+      "rating": "Buy upgraded from Sell",
+      "target_price_twd": 1050,
+      "prior_target_price_twd": 405,
+      "target_basis": "25x average FY2027E/FY2028E EPS",
+      "bull_twd": 1200,
+      "base_twd": 1050,
+      "bear_twd": 600,
+      "evidence_ids": [
+        "EV-BR-P2-DATA-SUMMARY",
+        "EV-BR-P8-GENIUS-TP",
+        "EV-BR-P12-GENIUS-BULLBEAR"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationship_id": "REL-TW3008-TW3406-COMPETITOR",
+      "from_entity_id": "TW-3008",
+      "to_entity_id": "TW-3406",
+      "relationship_type": "competitor",
+      "node_id": null,
+      "valid_from": "2025-01-01",
+      "valid_to": null,
+      "confidence": 0.88,
+      "evidence_ids": [
+        "EV-EXT-GSEO-MARKET-SHARE"
+      ],
+      "notes": "Direct competitors in Taiwan precision optical components/smartphone lenses; not proof they compete for the same CPO design."
+    },
+    {
+      "relationship_id": "REL-NVDA-TSMC-PARTNER",
+      "from_entity_id": "US-NVDA",
+      "to_entity_id": "TW-2330",
+      "relationship_type": "partner",
+      "node_id": "CPO.ARCH.CPO",
+      "valid_from": "2025-03-18",
+      "valid_to": null,
+      "confidence": 0.95,
+      "evidence_ids": [
+        "EV-EXT-NVIDIA-ECOSYSTEM"
+      ],
+      "notes": "Publicly named NVIDIA silicon-photonics ecosystem partner."
+    },
+    {
+      "relationship_id": "REL-NVDA-COHR-PARTNER",
+      "from_entity_id": "US-NVDA",
+      "to_entity_id": "US-COHR",
+      "relationship_type": "partner",
+      "node_id": "CPO.ARCH.CPO",
+      "valid_from": "2025-03-18",
+      "valid_to": null,
+      "confidence": 0.95,
+      "evidence_ids": [
+        "EV-EXT-NVIDIA-ECOSYSTEM"
+      ],
+      "notes": "Publicly named NVIDIA silicon-photonics ecosystem partner."
+    },
+    {
+      "relationship_id": "REL-NVDA-GLW-PARTNER",
+      "from_entity_id": "US-NVDA",
+      "to_entity_id": "US-GLW",
+      "relationship_type": "partner",
+      "node_id": "CPO.ARCH.CPO",
+      "valid_from": "2025-03-18",
+      "valid_to": null,
+      "confidence": 0.95,
+      "evidence_ids": [
+        "EV-EXT-NVIDIA-ECOSYSTEM"
+      ],
+      "notes": "Publicly named NVIDIA silicon-photonics ecosystem partner."
+    },
+    {
+      "relationship_id": "REL-NVDA-LITE-PARTNER",
+      "from_entity_id": "US-NVDA",
+      "to_entity_id": "US-LITE",
+      "relationship_type": "partner",
+      "node_id": "CPO.ARCH.CPO",
+      "valid_from": "2025-03-18",
+      "valid_to": null,
+      "confidence": 0.95,
+      "evidence_ids": [
+        "EV-EXT-NVIDIA-ECOSYSTEM"
+      ],
+      "notes": "Publicly named NVIDIA silicon-photonics ecosystem partner."
+    },
+    {
+      "relationship_id": "REL-NVDA-FOXCONN-PARTNER",
+      "from_entity_id": "US-NVDA",
+      "to_entity_id": "TW-2317",
+      "relationship_type": "partner",
+      "node_id": "CPO.ARCH.CPO",
+      "valid_from": "2025-03-18",
+      "valid_to": null,
+      "confidence": 0.86,
+      "evidence_ids": [
+        "EV-EXT-NVIDIA-ECOSYSTEM"
+      ],
+      "notes": "NVIDIA names Foxconn; taxonomy maps the group to Hon Hai/Foxconn (TW-2317)."
+    }
+  ],
+  "mentioned_entities": [
+    {
+      "entity_id": "TW-3008",
+      "name": "大立光／Largan Precision",
+      "ticker": "3008",
+      "country": "Taiwan",
+      "reason_mentioned": "報告主要研究對象；Fiber Array＋PMLA 與手機鏡頭供應商；PALM 為券商報告疑似誤植。",
+      "roles": [
+        "primary_subject",
+        "FAU_coupling",
+        "smartphone_lens_supplier"
+      ],
+      "node_ids": [
+        "CPO.COUPLING"
+      ]
+    },
+    {
+      "entity_id": "TW-3406",
+      "name": "玉晶光／Genius Electronic Optical",
+      "ticker": "3406",
+      "country": "Taiwan",
+      "reason_mentioned": "報告主要研究對象；lens-based optical connector/ferrule 與手機鏡頭供應商。",
+      "roles": [
+        "primary_subject",
+        "optical_connector",
+        "smartphone_lens_supplier"
+      ],
+      "node_ids": [
+        "CPO.COUPLING"
+      ]
+    },
+    {
+      "entity_id": "US-NVDA",
+      "name": "NVIDIA",
+      "ticker": "NVDA",
+      "country": "United States",
+      "reason_mentioned": "外部驗證的 CPO 系統端採用者與生態系統整合者。",
+      "roles": [
+        "system_platform",
+        "demand_driver"
+      ],
+      "node_ids": [
+        "CPO.ARCH.CPO",
+        "CPO.SYSTEM.SWITCH"
+      ]
+    },
+    {
+      "entity_id": "US-AVGO",
+      "name": "Broadcom",
+      "ticker": "AVGO",
+      "country": "United States",
+      "reason_mentioned": "外部驗證的 CPO 平台與交換器供應商。",
+      "roles": [
+        "system_platform",
+        "CPO_competitor"
+      ],
+      "node_ids": [
+        "CPO.ARCH.CPO",
+        "CPO.SYSTEM.SWITCH"
+      ]
+    },
+    {
+      "entity_id": "US-MRVL",
+      "name": "Marvell",
+      "ticker": "MRVL",
+      "country": "United States",
+      "reason_mentioned": "外部驗證的 CPO/XPU 光引擎架構供應商與產業需求參照。",
+      "roles": [
+        "CPO_platform",
+        "silicon_photonics"
+      ],
+      "node_ids": [
+        "CPO.CHIP.PIC",
+        "CPO.ARCH.NPO"
+      ]
+    },
+    {
+      "entity_id": "TW-2330",
+      "name": "台積電／TSMC",
+      "ticker": "2330",
+      "country": "Taiwan",
+      "reason_mentioned": "NVIDIA 公開 CPO/矽光子生態系統合作夥伴。",
+      "roles": [
+        "foundry",
+        "advanced_packaging_partner"
+      ],
+      "node_ids": [
+        "CPO.CHIP.PIC",
+        "CPO.PACKAGING.ADVANCED"
+      ]
+    },
+    {
+      "entity_id": "US-COHR",
+      "name": "Coherent",
+      "ticker": "COHR",
+      "country": "United States",
+      "reason_mentioned": "NVIDIA 公開光子生態系統合作夥伴及全球光通訊供應商。",
+      "roles": [
+        "laser_supplier",
+        "optics_partner"
+      ],
+      "node_ids": [
+        "CPO.SOURCE.LASER",
+        "CPO.SOURCE.ELS"
+      ]
+    },
+    {
+      "entity_id": "US-LITE",
+      "name": "Lumentum",
+      "ticker": "LITE",
+      "country": "United States",
+      "reason_mentioned": "NVIDIA 公開光子生態系統合作夥伴及雷射供應商。",
+      "roles": [
+        "laser_supplier",
+        "optics_partner"
+      ],
+      "node_ids": [
+        "CPO.SOURCE.LASER",
+        "CPO.SOURCE.ELS"
+      ]
+    },
+    {
+      "entity_id": "US-GLW",
+      "name": "Corning",
+      "ticker": "GLW",
+      "country": "United States",
+      "reason_mentioned": "NVIDIA 生態系統夥伴；並以 PRIZM TMT expanded-beam ferrule 形成玉晶光潛在全球競爭基準。",
+      "roles": [
+        "fiber_connectivity",
+        "expanded_beam_competitor"
+      ],
+      "node_ids": [
+        "CPO.COUPLING"
+      ]
+    },
+    {
+      "entity_id": "TW-2317",
+      "name": "鴻海／Foxconn",
+      "ticker": "2317",
+      "country": "Taiwan",
+      "reason_mentioned": "NVIDIA 公開生態系統夥伴；Broadcom 亦揭露 FIT 的 CPO socket/laser-source connector 里程碑。",
+      "roles": [
+        "system_manufacturer",
+        "connector_ecosystem"
+      ],
+      "node_ids": [
+        "CPO.SYSTEM.SWITCH"
+      ]
+    },
+    {
+      "entity_id": "US-META",
+      "name": "Meta",
+      "ticker": "META",
+      "country": "United States",
+      "reason_mentioned": "Broadcom 公開 CPO 運行驗證的 hyperscale 使用者參照；不是本報告所指客戶的確認。",
+      "roles": [
+        "hyperscaler",
+        "end_user_reference"
+      ],
+      "node_ids": [
+        "CPO.SYSTEM.SWITCH"
+      ]
+    },
+    {
+      "entity_id": "PRIVATE-SAMTEC",
+      "name": "Samtec",
+      "ticker": "未上市",
+      "country": "United States",
+      "reason_mentioned": "taxonomy 已列 NPO/connector 供應商，用作連接器競爭版圖參照。",
+      "roles": [
+        "connector_supplier"
+      ],
+      "node_ids": [
+        "CPO.NPO.SOCKET"
+      ]
+    },
+    {
+      "entity_id": "PRIVATE-MOLEX",
+      "name": "Molex",
+      "ticker": "未上市",
+      "country": "United States",
+      "reason_mentioned": "SENKO/3M expanded-beam connector 合作方及全球連接器競爭者。",
+      "roles": [
+        "connector_supplier",
+        "expanded_beam_ecosystem"
+      ],
+      "node_ids": [
+        "CPO.NPO.SOCKET"
+      ]
+    }
+  ],
+  "unmapped_entities": [
+    {
+      "name": "Apple",
+      "country": "United States",
+      "proposed_entity_id": "US-AAPL",
+      "status": "taxonomy_proposal_only",
+      "reason": "Citi attributes resilient smartphone-lens demand and share allocation to Apple; official filings anonymize customers."
+    },
+    {
+      "name": "US Conec",
+      "country": "United States",
+      "proposed_entity_id": "PRIVATE-USCONEC",
+      "status": "taxonomy_proposal_only",
+      "reason": "Global expanded-beam ferrule technology owner/competitor benchmark."
+    },
+    {
+      "name": "SENKO Advanced Components",
+      "country": "United States",
+      "proposed_entity_id": "PRIVATE-SENKO",
+      "status": "taxonomy_proposal_only",
+      "reason": "Global optical connector and expanded-beam competitor benchmark."
+    },
+    {
+      "name": "3M",
+      "country": "United States",
+      "proposed_entity_id": "US-MMM",
+      "status": "taxonomy_proposal_only",
+      "reason": "Expanded Beam Optical ferrule technology provider in SENKO/Molex ecosystem."
+    },
+    {
+      "name": "Fujikura",
+      "country": "Japan",
+      "proposed_entity_id": "JP-5803",
+      "status": "taxonomy_proposal_only",
+      "reason": "PRIZM TMT multi-source expanded-beam ecosystem participant."
+    },
+    {
+      "name": "Sumitomo Electric Industries",
+      "country": "Japan",
+      "proposed_entity_id": "JP-5802",
+      "status": "taxonomy_proposal_only",
+      "reason": "PRIZM TMT multi-source expanded-beam ecosystem participant."
+    },
+    {
+      "name": "TE Connectivity",
+      "country": "Switzerland",
+      "proposed_entity_id": "US-TEL",
+      "status": "taxonomy_proposal_only",
+      "reason": "MXC expanded-beam optical connector supplier and competitor benchmark."
+    },
+    {
+      "name": "leading US company/customer",
+      "country": "United States",
+      "proposed_entity_id": null,
+      "status": "unidentified_do_not_infer",
+      "reason": "Citi does not name the CPO/connector customer; no relationship is asserted."
+    }
+  ],
+  "competitive_landscape": {
+    "CPO_platform_and_system": [
+      {
+        "names": [
+          "NVIDIA"
+        ],
+        "role": "Spectrum-X/Quantum-X photonics switches and CPO system platform; Spectrum-X Ethernet Photonics reported in production in 2026",
+        "source_ids": [
+          "EXT-NVIDIA-CPO-2025",
+          "EXT-NVIDIA-CPO-2026"
+        ]
+      },
+      {
+        "names": [
+          "Broadcom"
+        ],
+        "role": "Tomahawk CPO switch/platform and 200G/lane CPO",
+        "source_ids": [
+          "EXT-BROADCOM-CPO-2025"
+        ]
+      },
+      {
+        "names": [
+          "Marvell"
+        ],
+        "role": "3D silicon-photonics engine and CPO architecture for custom XPUs",
+        "source_ids": [
+          "EXT-MARVELL-CPO-2025"
+        ]
+      }
+    ],
+    "expanded_beam_connector_and_ferrule": [
+      {
+        "names": [
+          "US Conec",
+          "Corning",
+          "Fujikura",
+          "Sumitomo Electric"
+        ],
+        "role": "PRIZM TMT multi-source expanded-beam ferrule/MMC ecosystem",
+        "source_ids": [
+          "EXT-USCONEC-PRIZM-2026",
+          "EXT-CORNING-PRIZM-2026"
+        ]
+      },
+      {
+        "names": [
+          "SENKO",
+          "3M",
+          "Molex"
+        ],
+        "role": "MPO expanded-beam connector ecosystem",
+        "source_ids": [
+          "EXT-SENKO-EBO-2025"
+        ]
+      },
+      {
+        "names": [
+          "TE Connectivity"
+        ],
+        "role": "Expanded-beam versus physical-contact design trade-off and connector benchmark",
+        "source_ids": [
+          "EXT-TE-EXPANDED-BEAM"
+        ],
+        "note": "Entity is not in the current taxonomy."
+      }
+    ],
+    "publicly_named_CPO_ecosystem": [
+      "TSMC",
+      "Coherent",
+      "Corning",
+      "Foxconn",
+      "Lumentum",
+      "SENKO",
+      "Browave",
+      "Fabrinet",
+      "Sumitomo Electric"
+    ],
+    "substitutes": [
+      "Physical-contact MPO/MT ferrules",
+      "Retimed pluggable optical modules",
+      "Linear pluggable optics (LPO/LRO)",
+      "Near-packaged/on-board optics (NPO/OBO)",
+      "Co-packaged copper and in-package optical I/O",
+      "Short-reach copper DAC/AEC where reach and power budgets permit"
+    ],
+    "customer_and_supplier_limits": "The broker report names Apple for smartphone-lens demand but does not name the CPO customers. Official annual reports anonymize major customers and suppliers, so no customer identity or supplier relationship is inferred."
+  },
+  "evidence": [
+    {
+      "evidence_id": "EV-BR-P1-CITITAKE",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.1, Citi’s Take",
+      "excerpt": "Largan would benefit most from fiber array and PMLA; Genius from optical connector for fiber.",
+      "context": "Broker thesis and timing; original wording shortened.",
+      "supports": [
+        "FND-001",
+        "ASM-002",
+        "ASM-005",
+        "ASM-006",
+        "ASM-007",
+        "CLM-TW-3008-FY2027-FAU-SHIPMENT",
+        "CLM-TW-3008-FY2028-FAU-SHIPMENT",
+        "CLM-TW-3008-FY2027-CPO-MIX",
+        "CLM-TW-3008-FY2028-CPO-MIX",
+        "CLM-TW-3406-FY2027-CONNECTOR-MIX",
+        "CLM-TW-3406-FY2028-CONNECTOR-MIX-MIN"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P2-DATA-SUMMARY",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.2, Data Summary",
+      "excerpt": "Report prices: Genius NT$834; Largan NT$6,915. New targets: NT$1,050 and NT$8,500.",
+      "context": "Market data as of 27 Aug 2026 13:30 local display.",
+      "supports": [
+        "FND-009"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P3-ARCH",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.3, New opportunity in Lens-Based Optical Connectivity",
+      "excerpt": "Network speeds move from 400G and 800G toward 1.6T, 3.2T and beyond.",
+      "context": "Citi industry framing.",
+      "supports": [
+        "ASM-001",
+        "ASM-018",
+        "FND-008"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P3-LARGAN-CPO",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.3, Largan - Fiber Array + PALM",
+      "excerpt": "Pilot line ready in 3Q26; mass volume production in 2H27 at the earliest.",
+      "context": "Citi forecast; page title spells PALM while other pages use PMLA.",
+      "supports": [
+        "FND-001",
+        "FND-003",
+        "FND-008",
+        "ASM-002",
+        "CLM-TW-3008-PILOT-LINE-TIMING",
+        "CLM-TW-3008-MASS-PRODUCTION-TIMING",
+        "CLM-TW-3008-FY2027-FAU-MARKET-DEMAND",
+        "CLM-TW-3008-FY2027-FAU-MARKET-SHARE",
+        "CLM-TW-3008-FY2027-FAU-SHIPMENT",
+        "CLM-TW-3008-FY2027-CPO-MIX",
+        "CLM-TW-3008-FY2028-FAU-MARKET-DEMAND",
+        "CLM-TW-3008-FY2028-FAU-MARKET-SHARE",
+        "CLM-TW-3008-FY2028-FAU-SHIPMENT",
+        "CLM-TW-3008-FY2028-CPO-MIX",
+        "SEG-TW-3008-FY2027-CPO",
+        "SEG-TW-3008-FY2028-CPO"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P4-GENIUS-CONNECTOR",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.4, Genius - Lens-base connector for Fiber",
+      "excerpt": "Solution combines ferrule with lens reflection collimation technology to expand the light path.",
+      "context": "Broker technical description; not independently confirmed for Genius.",
+      "supports": [
+        "FND-001",
+        "FND-007",
+        "ASM-005",
+        "ASM-006",
+        "ASM-007",
+        "CLM-TW-3406-SHIPMENT-START-TIMING"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P5-LENS-SHARE",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.5, Smartphone lens",
+      "excerpt": "Largan: over 50% wide and 30% ultra-wide; Genius: 20-30% wide and ultra-wide.",
+      "context": "Citi market-share estimates; official sources do not validate customer allocation.",
+      "supports": [
+        "ASM-008",
+        "ASM-010",
+        "CLM-TW-3008-IPHONE-WIDE-SHARE-MIN",
+        "CLM-TW-3008-IPHONE-ULTRAWIDE-SHARE",
+        "CLM-TW-3406-IPHONE-WIDE-SHARE-RANGE",
+        "CLM-TW-3406-IPHONE-ULTRAWIDE-SHARE-RANGE"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P7-LARGAN-REV",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.7, Figures 6-8",
+      "excerpt": "Raises 2027/28 earnings forecast 5%/25%; target NT$8,500 based on 30x average EPS.",
+      "context": "Citi estimate revision and valuation.",
+      "supports": [
+        "FND-002",
+        "FND-009",
+        "ASM-003",
+        "ASM-016",
+        "CLM-TW-3008-FY2026E-REVENUE",
+        "CLM-TW-3008-FY2026E-NET_INCOME",
+        "CLM-TW-3008-FY2026E-EPS",
+        "CLM-TW-3008-FY2026E-GROSS_MARGIN",
+        "CLM-TW-3008-FY2026E-OPERATING_MARGIN",
+        "CLM-TW-3008-FY2026E-NET_MARGIN",
+        "CLM-TW-3008-FY2027E-REVENUE",
+        "CLM-TW-3008-FY2027E-NET_INCOME",
+        "CLM-TW-3008-FY2027E-EPS",
+        "CLM-TW-3008-FY2027E-GROSS_MARGIN",
+        "CLM-TW-3008-FY2027E-OPERATING_MARGIN",
+        "CLM-TW-3008-FY2027E-NET_MARGIN",
+        "CLM-TW-3008-FY2028E-REVENUE",
+        "CLM-TW-3008-FY2028E-NET_INCOME",
+        "CLM-TW-3008-FY2028E-EPS",
+        "CLM-TW-3008-FY2028E-GROSS_MARGIN",
+        "CLM-TW-3008-FY2028E-OPERATING_MARGIN",
+        "CLM-TW-3008-FY2028E-NET_MARGIN"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P8-LARGAN-FS",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.8, Figure 9 - Largan Forecast Summary",
+      "excerpt": "FY2025A-2028E sales: 61,148 / 62,461 / 95,009 / 156,848 NT$mn.",
+      "context": "Forecast summary table visually verified.",
+      "supports": [
+        "FND-002",
+        "FND-003",
+        "ASM-011",
+        "ASM-012",
+        "CLM-TW-3008-FY2025A-REVENUE",
+        "CLM-TW-3008-FY2025A-NET_INCOME",
+        "CLM-TW-3008-FY2025A-EPS",
+        "CLM-TW-3008-FY2025A-GROSS_MARGIN",
+        "CLM-TW-3008-FY2025A-OPERATING_MARGIN",
+        "CLM-TW-3008-FY2025A-NET_MARGIN",
+        "CLM-TW-3008-FY2026E-REVENUE",
+        "CLM-TW-3008-FY2026E-NET_INCOME",
+        "CLM-TW-3008-FY2026E-EPS",
+        "CLM-TW-3008-FY2026E-GROSS_MARGIN",
+        "CLM-TW-3008-FY2026E-OPERATING_MARGIN",
+        "CLM-TW-3008-FY2026E-NET_MARGIN",
+        "CLM-TW-3008-FY2027E-REVENUE",
+        "CLM-TW-3008-FY2027E-NET_INCOME",
+        "CLM-TW-3008-FY2027E-EPS",
+        "CLM-TW-3008-FY2027E-GROSS_MARGIN",
+        "CLM-TW-3008-FY2027E-OPERATING_MARGIN",
+        "CLM-TW-3008-FY2027E-NET_MARGIN",
+        "CLM-TW-3008-FY2028E-REVENUE",
+        "CLM-TW-3008-FY2028E-NET_INCOME",
+        "CLM-TW-3008-FY2028E-EPS",
+        "CLM-TW-3008-FY2028E-GROSS_MARGIN",
+        "CLM-TW-3008-FY2028E-OPERATING_MARGIN",
+        "CLM-TW-3008-FY2028E-NET_MARGIN"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P8-GENIUS-TP",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.8, Genius - Upgrade to Buy",
+      "excerpt": "Target NT$1,050 based on 25x average 2027/2028E EPS.",
+      "context": "Citi rating/valuation.",
+      "supports": [
+        "FND-009"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P9-GENIUS-REV",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.9, Figures 10-12",
+      "excerpt": "Raises 2026/27 earnings forecast by 8%/14%; introduces 2028 estimates.",
+      "context": "Citi estimate revision.",
+      "supports": [
+        "FND-005",
+        "CLM-TW-3406-FY2026E-REVENUE",
+        "CLM-TW-3406-FY2026E-NET_INCOME",
+        "CLM-TW-3406-FY2026E-EPS",
+        "CLM-TW-3406-FY2026E-GROSS_MARGIN",
+        "CLM-TW-3406-FY2026E-OPERATING_MARGIN",
+        "CLM-TW-3406-FY2026E-NET_MARGIN",
+        "CLM-TW-3406-FY2027E-REVENUE",
+        "CLM-TW-3406-FY2027E-NET_INCOME",
+        "CLM-TW-3406-FY2027E-EPS",
+        "CLM-TW-3406-FY2027E-GROSS_MARGIN",
+        "CLM-TW-3406-FY2027E-OPERATING_MARGIN",
+        "CLM-TW-3406-FY2027E-NET_MARGIN",
+        "CLM-TW-3406-FY2028E-REVENUE",
+        "CLM-TW-3406-FY2028E-NET_INCOME",
+        "CLM-TW-3406-FY2028E-EPS",
+        "CLM-TW-3406-FY2028E-GROSS_MARGIN",
+        "CLM-TW-3406-FY2028E-OPERATING_MARGIN",
+        "CLM-TW-3406-FY2028E-NET_MARGIN"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P10-GENIUS-FS",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.10, Figure 13 - Genius Forecast Summary",
+      "excerpt": "FY2025A-2028E sales: 24,989 / 24,673 / 25,972 / 28,687 NT$mn.",
+      "context": "Forecast summary table visually verified.",
+      "supports": [
+        "FND-004",
+        "FND-005",
+        "ASM-013",
+        "ASM-014",
+        "CLM-TW-3406-FY2025A-REVENUE",
+        "CLM-TW-3406-FY2025A-NET_INCOME",
+        "CLM-TW-3406-FY2025A-EPS",
+        "CLM-TW-3406-FY2025A-GROSS_MARGIN",
+        "CLM-TW-3406-FY2025A-OPERATING_MARGIN",
+        "CLM-TW-3406-FY2025A-NET_MARGIN",
+        "CLM-TW-3406-FY2026E-REVENUE",
+        "CLM-TW-3406-FY2026E-NET_INCOME",
+        "CLM-TW-3406-FY2026E-EPS",
+        "CLM-TW-3406-FY2026E-GROSS_MARGIN",
+        "CLM-TW-3406-FY2026E-OPERATING_MARGIN",
+        "CLM-TW-3406-FY2026E-NET_MARGIN",
+        "CLM-TW-3406-FY2027E-REVENUE",
+        "CLM-TW-3406-FY2027E-NET_INCOME",
+        "CLM-TW-3406-FY2027E-EPS",
+        "CLM-TW-3406-FY2027E-GROSS_MARGIN",
+        "CLM-TW-3406-FY2027E-OPERATING_MARGIN",
+        "CLM-TW-3406-FY2027E-NET_MARGIN",
+        "CLM-TW-3406-FY2028E-REVENUE",
+        "CLM-TW-3406-FY2028E-NET_INCOME",
+        "CLM-TW-3406-FY2028E-EPS",
+        "CLM-TW-3406-FY2028E-GROSS_MARGIN",
+        "CLM-TW-3406-FY2028E-OPERATING_MARGIN",
+        "CLM-TW-3406-FY2028E-NET_MARGIN"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P11-STV",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.11, Short-Term Views",
+      "excerpt": "Genius optical connector and Largan resilient sales/CPO developments support 90-day upside views.",
+      "context": "Citi thematic short-term view.",
+      "supports": [
+        "FND-001"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P12-GENIUS-BULLBEAR",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.12, Bull/Bear Genius",
+      "excerpt": "Bull/base/bear values: NT$1,200 / NT$1,050 / NT$600.",
+      "context": "Scenario chart visually verified.",
+      "supports": [
+        "FND-009"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P13-LARGAN-BULLBEAR",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.13, Bull/Bear Largan",
+      "excerpt": "Bull/base/bear values: NT$9,000 / NT$8,500 / NT$5,600.",
+      "context": "Scenario chart visually verified.",
+      "supports": [
+        "FND-009"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P14-DESCRIPTIONS",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.14, Company descriptions and investment strategy",
+      "excerpt": "Genius 2023 mix: 73% smartphone lens; Largan phone camera lenses exceed 80% of revenue.",
+      "context": "Citi company descriptions; periods differ.",
+      "supports": [
+        "FND-010",
+        "ASM-004",
+        "SEG-TW-3008-PHONE-CAMERA-MIN",
+        "SEG-TW-3406-FY2023-SMARTPHONE",
+        "SEG-TW-3406-FY2023-OTHER"
+      ]
+    },
+    {
+      "evidence_id": "EV-BR-P15-RISKS",
+      "source_id": "SRC-20260830-235331-9GWNZ",
+      "locator": "PDF p.15, Largan risks",
+      "excerpt": "Risks include weaker demand, slower yield ramp, slower specification migration and slower CPO development.",
+      "context": "Citi risk factors.",
+      "supports": [
+        "FND-010",
+        "ASM-004"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-LARGAN-AR25",
+      "source_id": "EXT-LARGAN-AR2025",
+      "locator": "Annual report p.1 and p.92",
+      "excerpt": "2025 revenue NT$61,147,888 thousand; after-tax profit NT$21,275,407 thousand; EPS NT$159.41.",
+      "context": "Official actuals; Citi rounds to 61,148 / 21,275 / 159.4.",
+      "supports": [
+        "FND-006",
+        "CLM-TW-3008-FY2025A-REVENUE",
+        "CLM-TW-3008-FY2025A-NET_INCOME",
+        "CLM-TW-3008-FY2025A-EPS",
+        "CLM-TW-3008-FY2025A-GROSS_MARGIN",
+        "CLM-TW-3008-FY2025A-OPERATING_MARGIN",
+        "CLM-TW-3008-FY2025A-NET_MARGIN"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-GSEO-AR25",
+      "source_id": "EXT-GSEO-AR2025",
+      "locator": "Annual report pp.1 and 61",
+      "excerpt": "2025 revenue NT$24,988,810 thousand; owner net income NT$3,702,142 thousand; EPS NT$32.84.",
+      "context": "Official actuals; Citi rounds to 24,989 / 3,702 / 32.8.",
+      "supports": [
+        "FND-006",
+        "CLM-TW-3406-FY2025A-REVENUE",
+        "CLM-TW-3406-FY2025A-NET_INCOME",
+        "CLM-TW-3406-FY2025A-EPS",
+        "CLM-TW-3406-FY2025A-GROSS_MARGIN",
+        "CLM-TW-3406-FY2025A-OPERATING_MARGIN",
+        "CLM-TW-3406-FY2025A-NET_MARGIN"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-LARGAN-SEGMENT",
+      "source_id": "EXT-LARGAN-AR2025",
+      "locator": "Annual report p.61",
+      "excerpt": "2025 optical components were NT$60,828,323 thousand, 99.48% of revenue.",
+      "context": "Official broad product category; does not isolate phone lenses or CPO.",
+      "supports": [
+        "SEG-TW-3008-FY2025-OPTICAL",
+        "SEG-TW-3008-FY2025-OTHER"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-GSEO-SEGMENT",
+      "source_id": "EXT-GSEO-AR2025",
+      "locator": "Annual report p.47",
+      "excerpt": "2025 lens products were NT$18,656,340 thousand, 75% of revenue; other was 25%.",
+      "context": "Official product mix.",
+      "supports": [
+        "SEG-TW-3406-FY2025-LENS",
+        "SEG-TW-3406-FY2025-OTHER"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-GSEO-MARKET-SHARE",
+      "source_id": "EXT-GSEO-AR2025",
+      "locator": "Annual report p.53",
+      "excerpt": "Taiwan precision optics share: Largan 45.29%; Genius 18.51%.",
+      "context": "PIDA/MOPS-based broader market, not CPO share.",
+      "supports": [
+        "REL-TW3008-TW3406-COMPETITOR",
+        "CLM-TW-3008-TW-PRECISION-OPTICS-MARKET-SHARE-2025",
+        "CLM-TW-3406-TW-PRECISION-OPTICS-MARKET-SHARE-2025"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-LARGAN-CUSTOMERS",
+      "source_id": "EXT-LARGAN-AR2025",
+      "locator": "Annual report p.72",
+      "excerpt": "Top four anonymized customers were 30%, 15%, 13% and 11% of 2025 sales.",
+      "context": "Names are coded; do not infer Apple or any CPO customer.",
+      "supports": [
+        "ASM-009",
+        "CLM-TW-3008-FY2025-CUST1-SHARE",
+        "CLM-TW-3008-FY2025-CUST2-SHARE",
+        "CLM-TW-3008-FY2025-CUST3-SHARE",
+        "CLM-TW-3008-FY2025-CUST4-SHARE"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-LARGAN-CPO-PRODUCT",
+      "source_id": "EXT-LARGAN-CPO-PRODUCT",
+      "locator": "Products and Services, CPO Solutions",
+      "excerpt": "CPO Solutions: PMLA and Fiber Array (1D & 2D).",
+      "context": "Official product existence only.",
+      "supports": [
+        "ASM-002"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-GSEO-ABOUT",
+      "source_id": "EXT-GSEO-ABOUT",
+      "locator": "Co-Packaged Optics product page",
+      "excerpt": "Product capabilities include Prism, Micro Lens Array, Metalens, V-Groove and MT Ferrule.",
+      "context": "Official component capabilities; a complete expanded-beam connector, named customer and shipment timing remain unverified.",
+      "supports": [
+        "FND-007"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-NVIDIA-CPO",
+      "source_id": "EXT-NVIDIA-CPO-2025",
+      "locator": "NVIDIA press release, 18 Mar 2025",
+      "excerpt": "Spectrum-X and Quantum-X silicon-photonics switches target AI factories and 1.6 Tb/s per port.",
+      "context": "Issuer claim and roadmap evidence.",
+      "supports": [
+        "ASM-001",
+        "FND-008"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-NVIDIA-ECOSYSTEM",
+      "source_id": "EXT-NVIDIA-CPO-2025",
+      "locator": "NVIDIA press release, ecosystem section",
+      "excerpt": "Named partners include TSMC, Coherent, Corning, Foxconn, Lumentum and SENKO.",
+      "context": "Public ecosystem relationships; not proof of Largan/Genius involvement.",
+      "supports": [
+        "REL-NVDA-TSMC-PARTNER",
+        "REL-NVDA-COHR-PARTNER",
+        "REL-NVDA-GLW-PARTNER",
+        "REL-NVDA-LITE-PARTNER",
+        "REL-NVDA-FOXCONN-PARTNER"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-BROADCOM-CPO",
+      "source_id": "EXT-BROADCOM-CPO-2025",
+      "locator": "Broadcom press release, 15 May 2025",
+      "excerpt": "Broadcom launched its third-generation 200G/lane CPO product line.",
+      "context": "Issuer roadmap; supports system adoption direction.",
+      "supports": [
+        "ASM-001",
+        "ASM-018",
+        "FND-008"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-CORNING-PRIZM",
+      "source_id": "EXT-CORNING-PRIZM-2026",
+      "locator": "Corning press release, 11 Mar 2026",
+      "excerpt": "Precision-aligned microlenses enable contactless transmission and greater contamination resistance.",
+      "context": "Technology/competitor benchmark.",
+      "supports": [
+        "FND-007",
+        "ASM-006",
+        "ASM-017"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-USCONEC-PRIZM",
+      "source_id": "EXT-USCONEC-PRIZM-2026",
+      "locator": "Joint press release, 11 Mar 2026",
+      "excerpt": "PRIZM TMT uses passive fiber-to-lens alignment and debris-insensitive expanded beam.",
+      "context": "Technology and multi-source competitor evidence.",
+      "supports": [
+        "FND-007",
+        "ASM-006",
+        "ASM-017"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-SENKO-EBO",
+      "source_id": "EXT-SENKO-EBO-2025",
+      "locator": "SENKO press release, 28 Mar 2025",
+      "excerpt": "MPO EZ-WAY integrates a non-contact, lensed 3M Expanded Beam Optical ferrule.",
+      "context": "Scaled competing connector ecosystem.",
+      "supports": [
+        "FND-007",
+        "ASM-017"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-MARVELL-CPO",
+      "source_id": "EXT-MARVELL-CPO-2025",
+      "locator": "Marvell press release, 6 Jan 2025",
+      "excerpt": "LightCounting forecast over 18 million CPO ports by 2029.",
+      "context": "Third-party forecast quoted by issuer; port and FAU unit scopes are not comparable.",
+      "supports": [
+        "FND-008",
+        "ASM-018"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-LARGAN-IR",
+      "source_id": "EXT-LARGAN-IR-20260709",
+      "locator": "CNA report, 9 Jul 2026, management remarks",
+      "excerpt": "FA sample in July; pilot line targeted by end-3Q26 and contribution at the earliest around mid-2027.",
+      "context": "Public management target, not a guaranteed customer qualification or revenue outcome; customer name and country were not disclosed.",
+      "supports": [
+        "FND-001",
+        "CLM-TW-3008-PILOT-LINE-TIMING",
+        "CLM-TW-3008-MASS-PRODUCTION-TIMING"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-GSEO-IR",
+      "source_id": "EXT-GSEO-IR-20260707",
+      "locator": "CNA/CTS report, 7 Jul 2026, management remarks",
+      "excerpt": "The May sample had not received further customer feedback; management expected another one to two months.",
+      "context": "Public status check that does not confirm Citi’s later 1H27 shipment estimate.",
+      "supports": [
+        "FND-001",
+        "FND-007",
+        "CLM-TW-3406-SHIPMENT-START-TIMING"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-NVIDIA-CPO-PRODUCTION",
+      "source_id": "EXT-NVIDIA-CPO-2026",
+      "locator": "NVIDIA press release, 31 May 2026",
+      "excerpt": "Spectrum-X Ethernet Photonics switches entered production.",
+      "context": "Issuer production-status evidence for system-level CPO; not evidence of Largan or GSEO content.",
+      "supports": [
+        "ASM-001",
+        "FND-008"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-OCP-COEXISTENCE",
+      "source_id": "EXT-OCP-INTERCONNECT-2023",
+      "locator": "OCP educational webinar, 14 Sep 2023",
+      "excerpt": "Hyperscaler preferences differ between co-packaged and pluggable optical approaches.",
+      "context": "Industry architecture evidence against assuming a single deterministic migration path.",
+      "supports": [
+        "ASM-001",
+        "ASM-018",
+        "FND-008"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-COHERENT-LPO",
+      "source_id": "EXT-COHERENT-LPO-2024",
+      "locator": "FY24 Q3 shareholder letter, 6 May 2024",
+      "excerpt": "LPO retains pluggability and a multi-vendor ecosystem while reducing power and cost, which may delay CPO.",
+      "context": "Issuer view and substitute-architecture evidence.",
+      "supports": [
+        "ASM-001",
+        "ASM-018",
+        "FND-008"
+      ]
+    },
+    {
+      "evidence_id": "EV-EXT-TE-TRADEOFF",
+      "source_id": "EXT-TE-EXPANDED-BEAM",
+      "locator": "TE technical guide, expanded beam versus physical contact",
+      "excerpt": "Expanded beam improves dust, misalignment and wear tolerance; physical contact can retain loss, wavelength and cost advantages.",
+      "context": "Vendor-authored technology trade-off, not proof of any GSEO design.",
+      "supports": [
+        "FND-007",
+        "ASM-017"
+      ]
+    }
+  ],
+  "derived_metrics": [
+    {
+      "derived_id": "DRV-LARGAN-2027-CPO-REVENUE",
+      "name": "大立光 2027E CPO 營收推算",
+      "formula": "95,009 TWD_mn × 10%",
+      "result": 9500.9,
+      "unit": "TWD_mn",
+      "input_claim_ids": [
+        "CLM-TW-3008-FY2027E-REVENUE",
+        "CLM-TW-3008-FY2027-CPO-MIX"
+      ],
+      "assumptions": [
+        "Citi 的 c10% 直接套用於 FY2027E 合併營收。"
+      ],
+      "sensitivity": {
+        "cpo_mix_8pct": 7600.72,
+        "cpo_mix_12pct": 11401.08
+      }
+    },
+    {
+      "derived_id": "DRV-LARGAN-2028-CPO-REVENUE",
+      "name": "大立光 2028E CPO 營收推算",
+      "formula": "156,848 TWD_mn × 20%",
+      "result": 31369.6,
+      "unit": "TWD_mn",
+      "input_claim_ids": [
+        "CLM-TW-3008-FY2028E-REVENUE",
+        "CLM-TW-3008-FY2028-CPO-MIX"
+      ],
+      "assumptions": [
+        "Citi 的 c20% 直接套用於 FY2028E 合併營收。"
+      ],
+      "sensitivity": {
+        "cpo_mix_15pct": 23527.2,
+        "cpo_mix_25pct": 39212
+      }
+    },
+    {
+      "derived_id": "DRV-LARGAN-2027-IMPLIED-REVENUE-PER-UNIT",
+      "name": "大立光 2027E 隱含每出貨單位營收",
+      "formula": "(95,009 TWD_mn × 10%) ÷ 3,000,000 units",
+      "result": 3166.97,
+      "unit": "TWD/unit",
+      "input_claim_ids": [
+        "CLM-TW-3008-FY2027E-REVENUE",
+        "CLM-TW-3008-FY2027-CPO-MIX",
+        "CLM-TW-3008-FY2027-FAU-SHIPMENT"
+      ],
+      "assumptions": [
+        "僅為收入/出貨量的混合值，可能包含 Fiber Array、PMLA 與產品 mix，不等同報價或 ASP。"
+      ],
+      "sensitivity": {
+        "shipment_minus_20pct": 3958.71,
+        "shipment_plus_20pct": 2639.14
+      }
+    },
+    {
+      "derived_id": "DRV-LARGAN-2028-IMPLIED-REVENUE-PER-UNIT",
+      "name": "大立光 2028E 隱含每出貨單位營收",
+      "formula": "(156,848 TWD_mn × 20%) ÷ 12,500,000 units",
+      "result": 2509.57,
+      "unit": "TWD/unit",
+      "input_claim_ids": [
+        "CLM-TW-3008-FY2028E-REVENUE",
+        "CLM-TW-3008-FY2028-CPO-MIX",
+        "CLM-TW-3008-FY2028-FAU-SHIPMENT"
+      ],
+      "assumptions": [
+        "僅為收入/出貨量的混合值，不等同報價或 ASP。"
+      ],
+      "sensitivity": {
+        "shipment_minus_20pct": 3136.96,
+        "shipment_plus_20pct": 2091.31
+      }
+    },
+    {
+      "derived_id": "DRV-LARGAN-2027-CPO-OP-PROFIT-PROXY",
+      "name": "大立光 2027E CPO 營業利益代理值",
+      "formula": "95,009 TWD_mn × 10% × 35.1%",
+      "result": 3334.82,
+      "unit": "TWD_mn",
+      "input_claim_ids": [
+        "CLM-TW-3008-FY2027E-REVENUE",
+        "CLM-TW-3008-FY2027-CPO-MIX",
+        "CLM-TW-3008-FY2027E-OPERATING_MARGIN"
+      ],
+      "assumptions": [
+        "以合併營益率代替未揭露的 CPO segment margin；ramp 早期可能顯著不同。"
+      ],
+      "sensitivity": {
+        "segment_margin_25pct": 2375.23,
+        "segment_margin_45pct": 4275.41
+      }
+    },
+    {
+      "derived_id": "DRV-LARGAN-2028-CPO-OP-PROFIT-PROXY",
+      "name": "大立光 2028E CPO 營業利益代理值",
+      "formula": "156,848 TWD_mn × 20% × 33.5%",
+      "result": 10508.82,
+      "unit": "TWD_mn",
+      "input_claim_ids": [
+        "CLM-TW-3008-FY2028E-REVENUE",
+        "CLM-TW-3008-FY2028-CPO-MIX",
+        "CLM-TW-3008-FY2028E-OPERATING_MARGIN"
+      ],
+      "assumptions": [
+        "以合併營益率代替未揭露的 CPO segment margin。"
+      ],
+      "sensitivity": {
+        "segment_margin_25pct": 7842.4,
+        "segment_margin_45pct": 14116.32
+      }
+    },
+    {
+      "derived_id": "DRV-GENIUS-2027-CONNECTOR-REVENUE",
+      "name": "玉晶光 2027E connector 營收推算",
+      "formula": "25,972 TWD_mn × 15%",
+      "result": 3895.8,
+      "unit": "TWD_mn",
+      "input_claim_ids": [
+        "CLM-TW-3406-FY2027E-REVENUE",
+        "CLM-TW-3406-FY2027-CONNECTOR-MIX"
+      ],
+      "assumptions": [
+        "Citi 的 15% 直接套用於 FY2027E 合併營收。"
+      ],
+      "sensitivity": {
+        "mix_10pct": 2597.2,
+        "mix_20pct": 5194.4
+      }
+    },
+    {
+      "derived_id": "DRV-GENIUS-2028-CONNECTOR-REVENUE-MIN",
+      "name": "玉晶光 2028E connector 最低營收推算",
+      "formula": "28,687 TWD_mn × 20%",
+      "result": 5737.4,
+      "unit": "TWD_mn",
+      "input_claim_ids": [
+        "CLM-TW-3406-FY2028E-REVENUE",
+        "CLM-TW-3406-FY2028-CONNECTOR-MIX-MIN"
+      ],
+      "assumptions": [
+        "報告寫 over 20%；20% 僅作下限。"
+      ],
+      "sensitivity": {
+        "mix_25pct": 7171.75,
+        "mix_30pct": 8606.1
+      }
+    },
+    {
+      "derived_id": "DRV-GENIUS-2027-LEGACY-REVENUE",
+      "name": "玉晶光 2027E 舊業務隱含營收",
+      "formula": "25,972 TWD_mn × (1 − 15%)",
+      "result": {
+        "legacy_revenue_twd_mn": 22076.2,
+        "change_vs_2026_total_twd_mn": -2596.8,
+        "change_vs_2026_total_pct": -10.52
+      },
+      "unit": "TWD_mn and %",
+      "input_claim_ids": [
+        "CLM-TW-3406-FY2026E-REVENUE",
+        "CLM-TW-3406-FY2027E-REVENUE",
+        "CLM-TW-3406-FY2027-CONNECTOR-MIX"
+      ],
+      "assumptions": [
+        "假設 2026 connector 貢獻為零且 2026 全部營收可視為舊業務；若 2026 已有貢獻，衰退幅度會縮小。"
+      ],
+      "sensitivity": {
+        "connector_mix_10pct_legacy_change_pct": -5.27,
+        "connector_mix_20pct_legacy_change_pct": -15.79
+      }
+    },
+    {
+      "derived_id": "DRV-GENIUS-2027-CONNECTOR-OP-PROFIT-PROXY",
+      "name": "玉晶光 2027E connector 營業利益代理值",
+      "formula": "25,972 TWD_mn × 15% × 21.5%",
+      "result": 837.6,
+      "unit": "TWD_mn",
+      "input_claim_ids": [
+        "CLM-TW-3406-FY2027E-REVENUE",
+        "CLM-TW-3406-FY2027-CONNECTOR-MIX",
+        "CLM-TW-3406-FY2027E-OPERATING_MARGIN"
+      ],
+      "assumptions": [
+        "以合併營益率代替未揭露的 connector margin。"
+      ],
+      "sensitivity": {
+        "segment_margin_15pct": 584.37,
+        "segment_margin_30pct": 1168.74
+      }
+    },
+    {
+      "derived_id": "DRV-GENIUS-2028-CONNECTOR-OP-PROFIT-PROXY-MIN",
+      "name": "玉晶光 2028E connector 最低營業利益代理值",
+      "formula": "28,687 TWD_mn × 20% × 22.0%",
+      "result": 1262.23,
+      "unit": "TWD_mn",
+      "input_claim_ids": [
+        "CLM-TW-3406-FY2028E-REVENUE",
+        "CLM-TW-3406-FY2028-CONNECTOR-MIX-MIN",
+        "CLM-TW-3406-FY2028E-OPERATING_MARGIN"
+      ],
+      "assumptions": [
+        "20% 為營收占比下限；以合併營益率代替未揭露的 connector margin。"
+      ],
+      "sensitivity": {
+        "segment_margin_15pct": 860.61,
+        "segment_margin_30pct": 1721.22
+      }
+    },
+    {
+      "derived_id": "DRV-LARGAN-2027-LEGACY-REVENUE",
+      "name": "大立光 2027E 非 CPO 隱含營收",
+      "formula": "95,009 TWD_mn × (1 − 10%)",
+      "result": {
+        "legacy_revenue_twd_mn": 85508.1,
+        "growth_vs_2026_total_pct": 36.9
+      },
+      "unit": "TWD_mn and %",
+      "input_claim_ids": [
+        "CLM-TW-3008-FY2026E-REVENUE",
+        "CLM-TW-3008-FY2027E-REVENUE",
+        "CLM-TW-3008-FY2027-CPO-MIX"
+      ],
+      "assumptions": [
+        "假設 2026 CPO 貢獻可忽略；結果顯示 Citi 預估中另有大量非 CPO 成長。"
+      ],
+      "sensitivity": {
+        "cpo_mix_15pct_legacy_growth_pct": 29.3,
+        "cpo_mix_20pct_legacy_growth_pct": 21.7
+      }
+    },
+    {
+      "derived_id": "DRV-LARGAN-2027-SHIPMENT-CHECK",
+      "name": "大立光 2027E 出貨假設內部一致性",
+      "formula": "30,000,000 market units × 10% share",
+      "result": 3000000,
+      "unit": "units",
+      "input_claim_ids": [
+        "CLM-TW-3008-FY2027-FAU-MARKET-DEMAND",
+        "CLM-TW-3008-FY2027-FAU-MARKET-SHARE",
+        "CLM-TW-3008-FY2027-FAU-SHIPMENT"
+      ],
+      "assumptions": [
+        "檢查報告內部算術，不代表外部需求已驗證。"
+      ],
+      "sensitivity": {
+        "share_5pct": 1500000,
+        "share_15pct": 4500000
+      }
+    },
+    {
+      "derived_id": "DRV-LARGAN-2028-SHIPMENT-CHECK",
+      "name": "大立光 2028E 出貨假設內部一致性",
+      "formula": "50,000,000 market units × 25% share",
+      "result": 12500000,
+      "unit": "units",
+      "input_claim_ids": [
+        "CLM-TW-3008-FY2028-FAU-MARKET-DEMAND",
+        "CLM-TW-3008-FY2028-FAU-MARKET-SHARE",
+        "CLM-TW-3008-FY2028-FAU-SHIPMENT"
+      ],
+      "assumptions": [
+        "檢查報告內部算術，不代表外部需求已驗證。"
+      ],
+      "sensitivity": {
+        "share_15pct": 7500000,
+        "share_35pct": 17500000
+      }
+    }
+  ],
+  "taxonomy_change_proposals": [
+    {
+      "proposal_id": "TCP-001",
+      "proposal_type": "add_node",
+      "target_collection": "nodes",
+      "parent_id": "CPO.COUPLING",
+      "proposed_id": "CPO.COUPLING.FIBER_ARRAY",
+      "name": "Fiber Array／FAU",
+      "aliases": [
+        "fiber array",
+        "FAU"
+      ],
+      "rationale": "Current taxonomy only has aggregate CPO.COUPLING.",
+      "evidence_ids": [
+        "EV-BR-P3-LARGAN-CPO"
+      ],
+      "status": "proposed",
+      "existing_fallback_id": "CPO.COUPLING"
+    },
+    {
+      "proposal_id": "TCP-002",
+      "proposal_type": "add_node",
+      "target_collection": "nodes",
+      "parent_id": "CPO.COUPLING",
+      "proposed_id": "CPO.COUPLING.PMLA",
+      "name": "PMLA／micro-lens array",
+      "aliases": [
+        "PMLA",
+        "PALM (probable broker typo)",
+        "prism micro-lens array"
+      ],
+      "rationale": "Official Largan product terminology is PMLA; preserve the broker’s isolated PALM spelling only as a source typo alias.",
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P3-LARGAN-CPO",
+        "EV-EXT-LARGAN-CPO-PRODUCT"
+      ],
+      "status": "proposed",
+      "existing_fallback_id": "CPO.COUPLING"
+    },
+    {
+      "proposal_id": "TCP-003",
+      "proposal_type": "add_node",
+      "target_collection": "nodes",
+      "parent_id": "CPO.COUPLING",
+      "proposed_id": "CPO.COUPLING.OPTICAL_CONNECTOR",
+      "name": "Lens-based／expanded-beam optical connector",
+      "aliases": [
+        "expanded beam connector",
+        "lens-based connector"
+      ],
+      "rationale": "Different product economics and competitor set from FAU.",
+      "evidence_ids": [
+        "EV-BR-P4-GENIUS-CONNECTOR",
+        "EV-EXT-CORNING-PRIZM"
+      ],
+      "status": "proposed",
+      "existing_fallback_id": "CPO.COUPLING"
+    },
+    {
+      "proposal_id": "TCP-004",
+      "proposal_type": "add_node",
+      "target_collection": "nodes",
+      "parent_id": "CPO.COUPLING",
+      "proposed_id": "CPO.COUPLING.FERRULE",
+      "name": "Optical ferrule",
+      "aliases": [
+        "ferrule",
+        "lensed ferrule"
+      ],
+      "rationale": "Ferrule is repeatedly decision-relevant and lacks a stable node.",
+      "evidence_ids": [
+        "EV-BR-P4-GENIUS-CONNECTOR",
+        "EV-EXT-USCONEC-PRIZM"
+      ],
+      "status": "proposed",
+      "existing_fallback_id": "CPO.COUPLING"
+    },
+    {
+      "proposal_id": "TCP-005",
+      "proposal_type": "add_metric",
+      "target_collection": "metric_catalog",
+      "proposed_id": "TARGET_PRICE",
+      "name": "TARGET_PRICE",
+      "allowed_units": [
+        "TWD/share",
+        "USD/share"
+      ],
+      "rationale": "Required to structure valuation fields now kept outside metric_claims.",
+      "evidence_ids": [
+        "EV-BR-P2-DATA-SUMMARY"
+      ],
+      "status": "proposed"
+    },
+    {
+      "proposal_id": "TCP-006",
+      "proposal_type": "add_metric",
+      "target_collection": "metric_catalog",
+      "proposed_id": "SHARE_PRICE",
+      "name": "SHARE_PRICE",
+      "allowed_units": [
+        "TWD/share",
+        "USD/share"
+      ],
+      "rationale": "Required to structure valuation fields now kept outside metric_claims.",
+      "evidence_ids": [
+        "EV-BR-P2-DATA-SUMMARY"
+      ],
+      "status": "proposed"
+    },
+    {
+      "proposal_id": "TCP-007",
+      "proposal_type": "add_metric",
+      "target_collection": "metric_catalog",
+      "proposed_id": "PE_MULTIPLE",
+      "name": "PE_MULTIPLE",
+      "allowed_units": [
+        "x"
+      ],
+      "rationale": "Required to structure valuation fields now kept outside metric_claims.",
+      "evidence_ids": [
+        "EV-BR-P2-DATA-SUMMARY"
+      ],
+      "status": "proposed"
+    },
+    {
+      "proposal_id": "TCP-008",
+      "proposal_type": "add_metric",
+      "target_collection": "metric_catalog",
+      "proposed_id": "MARKET_CAP",
+      "name": "MARKET_CAP",
+      "allowed_units": [
+        "TWD_mn",
+        "USD_mn",
+        "TWD_bn",
+        "USD_bn"
+      ],
+      "rationale": "Required to structure valuation fields now kept outside metric_claims.",
+      "evidence_ids": [
+        "EV-BR-P2-DATA-SUMMARY"
+      ],
+      "status": "proposed"
+    },
+    {
+      "proposal_id": "TCP-009",
+      "proposal_type": "add_metric",
+      "target_collection": "metric_catalog",
+      "proposed_id": "EXPECTED_SHARE_PRICE_RETURN",
+      "name": "EXPECTED_SHARE_PRICE_RETURN",
+      "allowed_units": [
+        "%"
+      ],
+      "rationale": "Required to structure valuation fields now kept outside metric_claims.",
+      "evidence_ids": [
+        "EV-BR-P2-DATA-SUMMARY"
+      ],
+      "status": "proposed"
+    },
+    {
+      "proposal_id": "TCP-010",
+      "proposal_type": "add_metric",
+      "target_collection": "metric_catalog",
+      "proposed_id": "INVESTMENT_RATING",
+      "name": "INVESTMENT_RATING",
+      "allowed_units": [
+        "rating"
+      ],
+      "rationale": "Required to structure valuation fields now kept outside metric_claims.",
+      "evidence_ids": [
+        "EV-BR-P2-DATA-SUMMARY"
+      ],
+      "status": "proposed"
+    },
+    {
+      "proposal_id": "TCP-011",
+      "proposal_type": "add_entity",
+      "target_collection": "entities",
+      "proposed_id": "US-AAPL",
+      "name": "Apple",
+      "country": "United States",
+      "entity_type": "listed_company",
+      "ticker": "AAPL",
+      "rationale": "Material broker-claimed smartphone-lens customer/end-demand driver absent from taxonomy.",
+      "evidence_ids": [
+        "EV-BR-P1-CITITAKE",
+        "EV-BR-P5-LENS-SHARE"
+      ],
+      "status": "proposed"
+    }
+  ],
+  "review_items": [],
+  "important_notes": [
+    "Largan’s official product page uses PMLA; the broker report’s isolated PALM heading is treated as a probable typo and retained only as a source alias.",
+    "Citi FY2025 actuals match official annual reports after rounding; differences are not conflicts.",
+    "Genius FY2023 smartphone-lens mix (73%) and official FY2025 lens-product mix (75%) cover different periods and definitions; both are preserved.",
+    "Citi 30m/50m FAU demand assumptions have no directly comparable public primary-source unit check; Marvell/LightCounting CPO ports cannot validate FAU units.",
+    "The leading US CPO/connector customer is unnamed. The record does not infer NVIDIA, Broadcom, Meta, Apple, or another company.",
+    "Apple order flow and iPhone lens shares are Citi estimates; official company filings anonymize customers.",
+    "Nominal/effective capacity, utilization, numerical yield, lead time and capex amounts are not disclosed and remain null/not available.",
+    "Largan non-CPO implied revenue growth is large even after removing Citi CPO mix, so CPO alone does not explain the forecast.",
+    "Genius 2027 connector mix implies legacy revenue pressure if 2026 connector revenue is zero; this is a model inference, not a reported segment forecast.",
+    "Target prices require 25x/30x P/E re-rating near or above five-year historical high ranges; valuation metrics are retained outside metric_claims pending taxonomy additions.",
+    "CPO has reached system-level production, but public OCP and supplier evidence supports continued competition/coexistence with retimed pluggable, LPO/LRO, NPO/OBO, co-packaged copper and in-package optical I/O."
+  ],
+  "source_notes": [
+    "Title page timestamp is 27 Aug 2026 13:18:48 ET, equivalent to 28 Aug 2026 in Asia/Taipei; page headers and filename use 28 Aug 2026.",
+    "Publisher is Citi Research; authors listed are Laura (Chia Yi) Chen, Jack Chen and Nicholas Lai.",
+    "Local SHA-256 verification matches the task packet exactly: 953c44978b5f21ddc81dfb99f82cc224d50dc2a3c307cb33251435fbbfabea9e.",
+    "The private broker PDF is not uploaded; only metadata, short evidence excerpts and analysis are written."
+  ],
+  "validation": {
+    "schema_valid": true,
+    "taxonomy_ids_valid": true,
+    "units_checked": true,
+    "periods_checked": true,
+    "conflicts_found": 0,
+    "user_action_required_count": 0,
+    "important_note_count": 11,
+    "source_note_count": 4,
+    "duplicate_claim_ids": 0,
+    "unknown_taxonomy_ids": [],
+    "review_notes": [
+      "No unresolved issue requires user choice; record_status must therefore be accepted.",
+      "Citi and official FY2025 figures reconcile after rounding.",
+      "Unverified broker estimates are preserved with lower confidence rather than promoted to fact.",
+      "Proposed taxonomy IDs are not used in formal claim/entity/node fields.",
+      "Raw PDF and paid-report full text are excluded from the GitHub record.",
+      "Schema/taxonomy/units/evidence-reference checks are completed after local validator passes."
+    ],
+    "custom_integrity_valid": true,
+    "validated_at": "2026-08-30T16:17:12.315Z"
+  },
+  "record_statistics": {
+    "finding_count": 10,
+    "financial_claim_count": 48,
+    "metric_claim_count": 23,
+    "segment_estimate_count": 11,
+    "derived_metric_count": 14,
+    "structured_numeric_record_count": 96,
+    "evidence_count": 37,
+    "relationship_count": 6,
+    "taxonomy_proposal_count": 11,
+    "conflict_count": 0,
+    "user_action_required_count": 0
+  }
+}
+
