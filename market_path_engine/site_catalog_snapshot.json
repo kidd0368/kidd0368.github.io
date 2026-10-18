@@ -12,13 +12,13 @@
     "research_only": "保留研究背景與個案證據，不直接計權重，也不得由個股工具反推大盤。"
   },
   "counts": {
-    "inventory": 15,
-    "published": 13,
-    "bundle": 10,
+    "inventory": 14,
+    "published": 12,
+    "bundle": 9,
     "roles": {
       "core_signal": 5,
       "conditional_module": 6,
-      "research_only": 4
+      "research_only": 3
     }
   },
   "sites": [
@@ -110,40 +110,6 @@
           "DATA"
         ],
         "note": "個股融資壓力研究工具；不得由單一個股結果推回大盤方向，也不直接計入路徑權重。",
-        "configured": true
-      }
-    },
-    {
-      "inventory_key": "kidd0368.github.io/chip-uptrend",
-      "id": "chip_uptrend",
-      "title": "籌碼上漲機會追蹤",
-      "description": "純籌碼面選股：軋空條件 × 法人不深套 × 融資無斷頭鏈。每天從全市場約 1900 檔剔除維持率低於 130% 與處置中個股，再用借券占股本、空方套牢幅度（護城河）、投信與外資 60 日持股增減及推估成本、融資維持率六個條件評分，列出完全符合的名單與 TOP30 進出變化。",
-      "tags": [
-        "台股",
-        "籌碼面",
-        "每日更新"
-      ],
-      "order": 15,
-      "url": "https://kidd0368.github.io/chip-uptrend/",
-      "repo_url": "https://github.com/kidd0368/kidd0368.github.io",
-      "updated_at": null,
-      "status": "online",
-      "locked": true,
-      "market_path": {
-        "role": "research_only",
-        "role_label": "僅供研究、不直接計權重",
-        "usage": "research_only",
-        "bundle": true,
-        "model_input": false,
-        "vars": [
-          "DATA",
-          "IND",
-          "STATE",
-          "REPORT",
-          "MODEL",
-          "RESULTS"
-        ],
-        "note": "純籌碼個股研究名單；可用來找機會與風險個案，但不由名單數量反推大盤或直接計權重。",
         "configured": true
       }
     },
