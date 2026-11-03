@@ -8,6 +8,21 @@ import { createApp, decryptPayload } from '../server.mjs';
 import { hostFrontend } from '../frontend.mjs';
 
 const password = 'synthetic-test-password';
+
+test('Windows launcher has CRLF and ASCII commands for every system code page', async () => {
+  const bytes = await readFile(new URL('../start.cmd', import.meta.url));
+  assert.ok(bytes.every(value => value < 128), 'CMD launcher must contain only ASCII bytes');
+  const text = bytes.toString('ascii');
+  assert.ok(text.includes('\r\n'), 'CMD launcher must use Windows newlines');
+  assert.ok(!text.replaceAll('\r\n', '').includes('\n'), 'CMD launcher must not contain lone LF');
+  assert.match(text, /cd \/d "%~dp0"/);
+  assert.match(text, /node\.exe "%~dp0server\.mjs"/);
+  assert.doesNotMatch(text, /chcp/);
+  for (const target of text.matchAll(/^if .* goto ([a-z_]+)\r?$/gm)) {
+    assert.ok(text.includes(`\r\n:${target[1]}\r\n`), `Missing jump label: ${target[1]}`);
+  }
+});
+
 const sample = {
   asOf: '20260814',
   stockColumns: ['code', 'name', 'current_price'],
