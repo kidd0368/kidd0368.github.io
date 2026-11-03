@@ -139,7 +139,7 @@ export async function createApp(options = {}) {
           sessions.delete(token); res.setHeader('Set-Cookie', cookie('', 0));
           return send(res, 401, { error: '請先登入。' });
         }
-        if (path === '/api/input-status') return send(res, 200, await readInputStatus(inputDirectory, session.asOf));
+        if (path === '/api/input-status') return send(res, 200, await readInputStatus(inputDirectory, session.asOf, { targetDate: url.searchParams.get('target') || undefined }));
         return send(res, 200, session.data);
       }
       return send(res, 404, { error: '找不到頁面。' });

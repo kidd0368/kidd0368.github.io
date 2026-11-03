@@ -74,6 +74,10 @@ test('authenticated data survives refresh; logout revokes the server session', a
   const inputStatus = await request('/api/input-status', { headers: { Cookie } });
   assert.equal(inputStatus.status, 200);
   assert.equal((await inputStatus.json()).analysisDate, sample.asOf);
+  const targeted = await request('/api/input-status?target=20261030', { headers: { Cookie } });
+  assert.equal(targeted.status, 200);
+  assert.equal((await targeted.json()).targetDate, '20261030');
+  assert.equal((await request('/api/input-status?target=invalid', { headers: { Cookie } })).status, 400);
   for (let i = 0; i < 2; i++) {
     const response = await request('/api/data', { headers: { Cookie } });
     assert.equal(response.status, 200); assert.deepEqual(await response.json(), sample);

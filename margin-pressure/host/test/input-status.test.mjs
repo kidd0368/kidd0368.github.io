@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { readInputStatus } from '../input-status.mjs';
+import { readInputStatus, taipeiCalendarDate } from '../input-status.mjs';
 
 async function inputFixture(t) {
   const root = await mkdtemp(join(tmpdir(), 'margin-inputs-'));
@@ -79,4 +79,66 @@ test('missing source directory is distinguished from a verified missing workbook
   const status = await readInputStatus(join(root, 'not-here'), '20260814');
   assert.equal(status.available, false);
   assert.match(status.summary, /找不到來源資料夾/);
+});
+
+test('per-file warning names the lagging workbook and the exact target filename', async t => {
+  const { root, file } = await inputFixture(t);
+  await file('chatgpt 計算融資維持率 20261030.xlsx');
+  for (const prefix of ['融資融券', '個股日k線']) await file(`${prefix} 20261103.xlsx`);
+  const status = await readInputStatus(root, '20260814', { targetDate: '20261103' });
+  assert.deepEqual(status.files.map(file => file.freshness.code), ['outdated', 'at_target', 'at_target']);
+  assert.equal(status.counts.outdated, 1);
+  assert.equal(status.files[0].expectedTargetName, 'chatgpt 計算融資維持率 20261103.xlsx');
+  assert.match(status.files[0].action, /重新匯出/);
+  assert.match(status.alert, /chatgpt 計算融資維持率（目前檔名 2026\/10\/30）/);
+  assert.match(status.alert, /目標 2026\/11\/03/);
+  assert.equal(status.tone, 'danger');
+});
+
+test('three equally stale filenames are all overdue even when their dates agree', async t => {
+  const { root, file } = await inputFixture(t);
+  for (const prefix of ['chatgpt 計算融資維持率', '融資融券', '個股日k線']) await file(`${prefix} 20261030.xlsx`);
+  const status = await readInputStatus(root, '20261030', { targetDate: '20261103' });
+  assert.equal(status.counts.outdated, 3);
+  assert.ok(status.files.every(file => file.freshness.label === '尚未更新'));
+});
+
+test('current filenames do not hide an outdated website or imply verified workbook content', async t => {
+  const { root, file } = await inputFixture(t);
+  for (const prefix of ['chatgpt 計算融資維持率', '融資融券', '個股日k線']) await file(`${prefix} 20261103.xlsx`);
+  const status = await readInputStatus(root, '20260814', { targetDate: '20261103' });
+  assert.equal(status.counts.at_target, 3);
+  assert.equal(status.website.code, 'outdated');
+  assert.match(status.website.label, /2026\/08\/14/);
+  assert.match(status.alert, /網站數據尚未套用/);
+  assert.ok(status.files.every(file => file.freshness.contentVerified === false));
+});
+
+test('matching website and filenames still retain the content-check boundary', async t => {
+  const { root, file } = await inputFixture(t);
+  for (const prefix of ['chatgpt 計算融資維持率', '融資融券', '個股日k線']) await file(`${prefix} 20261103.xlsx`);
+  await file('gpt 維持率追蹤/備份/融資維持率 20260728.xlsx');
+  const status = await readInputStatus(root, '20261103', { targetDate: '20261103' });
+  assert.equal(status.website.code, 'at_target');
+  assert.equal(status.tone, 'info');
+  assert.match(status.alert, /檔內交易日與欄位仍須/);
+});
+
+test('future-dated and missing filenames are not shown as current', async t => {
+  const { root, file } = await inputFixture(t);
+  await file('chatgpt 計算融資維持率 20261104.xlsx');
+  const status = await readInputStatus(root, '20260814', { targetDate: '20261103' });
+  assert.equal(status.files[0].freshness.code, 'future');
+  assert.equal(status.files[1].freshness.code, 'missing');
+  assert.equal(status.counts.at_target, 0);
+});
+
+test('invalid target dates are rejected and the default day follows Taipei midnight', async t => {
+  const { root } = await inputFixture(t);
+  await assert.rejects(readInputStatus(root, '20260814', { targetDate: '20260230' }), error => error.status === 400);
+  assert.equal(taipeiCalendarDate(new Date('2026-11-03T15:59:59Z')), '20261103');
+  assert.equal(taipeiCalendarDate(new Date('2026-11-03T16:00:00Z')), '20261104');
+  const status = await readInputStatus(root, '20260814', { now: new Date('2026-11-03T15:00:00Z') });
+  assert.equal(status.targetDate, '20261103');
+  assert.equal(status.targetSource, 'taipei_today');
 });

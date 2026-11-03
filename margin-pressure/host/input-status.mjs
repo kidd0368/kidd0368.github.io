@@ -20,7 +20,11 @@ async function entries(directory) {
   }
 }
 
-export async function readInputStatus(directory, analysisDate) {
+export async function readInputStatus(directory, analysisDate, options = {}) {
+  const targetDate = options.targetDate || taipeiCalendarDate(options.now || new Date());
+  if (typeof targetDate !== 'string' || !/^\d{8}$/.test(targetDate) || !validDate(targetDate)) {
+    const error = new Error('Invalid target date'); error.status = 400; throw error;
+  }
   const root = resolve(directory);
   const legacy = join(root, 'gpt 維持率追蹤');
   const locations = [root, legacy];
@@ -54,5 +58,46 @@ export async function readInputStatus(directory, analysisDate) {
   else if (dates[0] > String(analysisDate)) summary = '已找到較新的 Excel 檔名；網站仍須完成重算、AI判讀與資料套用。';
   else if (dates[0] < String(analysisDate)) summary = '來源檔名日期早於網站資料日，請核對實際選用的檔案。';
   else summary = '來源檔名日期與網站資料日相同；仍請以檔內最新完整交易日核對。';
-  return { analysisDate: String(analysisDate), sourceDirectory: root, checkedAt: new Date().toISOString(), available: listings.some(item => item.available), files, anchor, summary, dateBasis: 'filename_only' };
+  const available = listings.some(item => item.available);
+  const displayDate = value => `${value.slice(0, 4)}/${value.slice(4, 6)}/${value.slice(6, 8)}`;
+  for (const file of files) {
+    let code, label;
+    if (!available) { code = 'unavailable'; label = '無法檢查'; }
+    else if (!file.latest) { code = 'missing'; label = '缺少檔案'; }
+    else if (file.latest.date < targetDate) { code = 'outdated'; label = '尚未更新'; }
+    else if (file.duplicate) { code = 'duplicate'; label = '同日重複，需確認'; }
+    else if (file.latest.date > targetDate) { code = 'future'; label = '檔名超過目標，需核對'; }
+    else { code = 'at_target'; label = '檔名已到目標'; }
+    file.freshness = { code, label, targetDate, contentVerified: false };
+    file.expectedTargetName = file.expectedName.replace('YYYYMMDD', targetDate);
+    file.action = code === 'outdated' || code === 'missing'
+      ? `請重新匯出 ${file.expectedTargetName}，並確認檔內最新完整交易日。`
+      : code === 'at_target' ? '檔名日期符合；Excel內容仍須由原本重算流程檢核。'
+      : code === 'future' ? '請核對目標資料日及檔內最新完整交易日。'
+      : code === 'duplicate' ? '同一資料夾同日請只保留一份應使用的檔案。'
+      : '請核對來源資料夾是否存在或可讀取。';
+  }
+  const counts = Object.fromEntries(['outdated', 'missing', 'at_target', 'future', 'duplicate', 'unavailable'].map(code => [code, files.filter(file => file.freshness.code === code).length]));
+  const websiteCode = String(analysisDate) < targetDate ? 'outdated' : String(analysisDate) > targetDate ? 'ahead' : 'at_target';
+  const website = {
+    code: websiteCode,
+    label: websiteCode === 'outdated'
+      ? `網站資料仍為 ${displayDate(String(analysisDate))}，尚未套用到目標 ${displayDate(targetDate)}。`
+      : websiteCode === 'ahead' ? `網站資料日 ${displayDate(String(analysisDate))} 晚於目前選定的目標日。`
+      : `網站資料日已達目標 ${displayDate(targetDate)}。`
+  };
+  const overdue = files.filter(file => ['outdated', 'missing'].includes(file.freshness.code));
+  let alert;
+  if (!available) alert = summary;
+  else if (overdue.length) alert = `目標 ${displayDate(targetDate)}：${overdue.map(file => file.expectedName.replace(' YYYYMMDD.xlsx', '') + (file.latest ? `（目前檔名 ${displayDate(file.latest.date)}）` : '（缺檔）')).join('、')} 尚未更新。`;
+  else if (counts.future || counts.duplicate) alert = '來源檔名超過目標日或有重複檔，請逐項核對；目前不標示為已更新。';
+  else if (websiteCode === 'outdated') alert = `三份 Excel 的檔名都已達 ${displayDate(targetDate)}，但網站數據尚未套用重算結果。`;
+  else alert = `三份 Excel 的檔名都已達 ${displayDate(targetDate)}；檔內交易日與欄位仍須由原本重算流程檢核。`;
+  const tone = !available || overdue.length || websiteCode === 'outdated' || !anchor.found ? 'danger' : counts.future || counts.duplicate ? 'warning' : 'info';
+  return { analysisDate: String(analysisDate), sourceDirectory: root, checkedAt: new Date().toISOString(), available, files, anchor, summary, dateBasis: 'filename_only', targetDate, targetSource: options.targetDate ? 'selected' : 'taipei_today', counts, website, alert, tone };
+}
+
+export function taipeiCalendarDate(now = new Date()) {
+  const parts = new Intl.DateTimeFormat('en', { timeZone: 'Asia/Taipei', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(now);
+  return ['year', 'month', 'day'].map(type => parts.find(part => part.type === type).value).join('');
 }

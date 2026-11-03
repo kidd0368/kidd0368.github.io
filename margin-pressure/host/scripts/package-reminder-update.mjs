@@ -6,13 +6,14 @@ import { createHash } from 'node:crypto';
 
 const here = fileURLToPath(new URL('../', import.meta.url));
 const output = resolve(process.argv[2] || resolve(here, 'reminder-update'));
-const original = {
-  'server.mjs': 'd3fa461bf38367a434f6ea581e99c94441b366fe4968fcb3dbf3ad6ef90cff31',
-  'frontend.mjs': '297fcf718053481ff95ae839fe45465d52741e33331c57b45c4307c77933b36b'
+const compatible = {
+  'server.mjs': ['d3fa461bf38367a434f6ea581e99c94441b366fe4968fcb3dbf3ad6ef90cff31', 'ab77a91743c1e68129ca593e6bed829cf0623a3a9106fa5cf5afcc15f8a04b6e'],
+  'frontend.mjs': ['297fcf718053481ff95ae839fe45465d52741e33331c57b45c4307c77933b36b', 'a8f9afc167adcac6d73622e427deea5dc527b7c898cef8a33b57a2f06ee3bcc2'],
+  'input-status.mjs': ['c9e2ee7f78140a9a0a8a381a7184043c591bd9e9b2ae498cf61bd8c5b5a6a229']
 };
 const files = await Promise.all(['server.mjs', 'frontend.mjs', 'input-status.mjs'].map(async name => {
   const bytes = await readFile(resolve(here, name));
-  return { name, originalHash: original[name] || null, updatedHash: createHash('sha256').update(bytes).digest('hex'), content: bytes.toString('base64') };
+  return { name, previousHashes: compatible[name], allowMissing: name === 'input-status.mjs', updatedHash: createHash('sha256').update(bytes).digest('hex'), content: bytes.toString('base64') };
 }));
 const installer = `import {readFile,writeFile,copyFile,rename,unlink} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
@@ -28,7 +29,7 @@ try {
     let before=null;
     try{before=await readFile(target)}catch(error){if(error.code!=='ENOENT')throw error}
     if(before&&digest(before)===file.updatedHash)continue;
-    if(file.originalHash?(!before||digest(before)!==file.originalHash):before!==null){
+    if(before?!file.previousHashes.includes(digest(before)):!file.allowMissing){
       throw new Error('Unexpected existing file: '+file.name+'. No files changed.');
     }
     const bytes=Buffer.from(file.content,'base64');
@@ -52,8 +53,8 @@ try {
   console.error('Update failed: '+error.message);process.exitCode=1;
 }
 `;
-const launcher = ['@echo off', 'setlocal EnableExtensions DisableDelayedExpansion', 'cd /d "%~dp0"', 'where node.exe >nul 2>&1', 'if errorlevel 1 goto missing_node', 'node.exe "%~dp0apply-excel-reminder.mjs"', 'set "radar_update_exit=%errorlevel%"', 'pause', 'exit /b %radar_update_exit%', ':missing_node', 'echo Install Node.js 22 or newer, then run this file again.', 'pause', 'exit /b 1', ''].join('\r\n');
+const launcher = ['@echo off', 'setlocal EnableExtensions DisableDelayedExpansion', 'cd /d "%~dp0"', 'where node.exe >nul 2>&1', 'if errorlevel 1 goto missing_node', 'node.exe "%~dp0apply-excel-reminder-v2.mjs"', 'set "radar_update_exit=%errorlevel%"', 'pause', 'exit /b %radar_update_exit%', ':missing_node', 'echo Install Node.js 22 or newer, then run this file again.', 'pause', 'exit /b 1', ''].join('\r\n');
 await mkdir(output, { recursive: true });
-await writeFile(resolve(output, 'apply-excel-reminder.mjs'), installer);
-await writeFile(resolve(output, 'install-excel-reminder.cmd'), launcher, 'ascii');
+await writeFile(resolve(output, 'apply-excel-reminder-v2.mjs'), installer);
+await writeFile(resolve(output, 'install-excel-reminder-v2.cmd'), launcher, 'ascii');
 console.log(`Created offline update files in ${output}`);
