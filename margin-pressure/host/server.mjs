@@ -6,6 +6,7 @@ import { createDecipheriv, createHash, pbkdf2, randomBytes } from 'node:crypto';
 import { promisify } from 'node:util';
 import { hostFrontend } from './frontend.mjs';
 import { readInputStatus } from './input-status.mjs';
+import { createDataSource, dataSourceInfo } from './data-source.mjs';
 
 const deriveKey = promisify(pbkdf2);
 const here = fileURLToPath(new URL('.', import.meta.url));
@@ -40,10 +41,15 @@ export async function createApp(options = {}) {
   const secureCookie = publicOrigin.startsWith('https://');
   const sessionTtl = options.sessionTtl ?? TTL;
   const inputDirectory = resolve(options.inputDirectory || process.env.INPUT_DIRECTORY || resolve(here, '../../../機率分布預測'));
-  const encryptedText = await readFile(dataFile, 'utf8');
-  if (encryptedText.length > 32 * 1024 * 1024) throw new Error('資料檔超過 32 MB。');
-  const encrypted = JSON.parse(encryptedText);
-  const html = hostFrontend(await readFile(templateFile, 'utf8'));
+  const template = await readFile(templateFile, 'utf8');
+  const templateDate = template.match(/資料日期：(\d{8})/)?.[1] || null;
+  const sourceReader = createDataSource({ fallbackFile: dataFile, fallbackDate: templateDate,
+    readyDirectory: options.readyBuildDirectory || process.env.READY_BUILD_DIRECTORY || resolve(inputDirectory, 'gpt 維持率追蹤/融資雷達本機版'),
+    enabled: Boolean(options.readyBuildDirectory || process.env.READY_BUILD_DIRECTORY || (!options.dataFile && !process.env.DATA_FILE)),
+    checkIntervalMs: options.sourceCheckIntervalMs ?? 1000 });
+  await sourceReader.read();
+  const html = hostFrontend(template);
+  const renderHtml = source => html.replace(/資料日期：\d{8}/, `資料日期：${source.asOf || templateDate || ''}`).replace(/payload [0-9a-f]{64}/, `payload ${source.hash}`);
   const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)]
     .map(match => `'sha256-${createHash('sha256').update(match[1]).digest('base64')}'`).join(' ');
   const sessions = new Map();
@@ -95,7 +101,7 @@ export async function createApp(options = {}) {
       if (req.method === 'GET' && ['/margin-pressure', '/margin-pressure/'].includes(path)) {
         res.writeHead(302, { Location: `/${url.search}` }); return res.end();
       }
-      if (req.method === 'GET' && path === '/') return send(res, 200, html, 'text/html; charset=utf-8');
+      if (req.method === 'GET' && path === '/') return send(res, 200, renderHtml(await sourceReader.read()), 'text/html; charset=utf-8');
       if (req.method === 'POST' && path === '/api/login') {
         if (!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type'] || '')) return send(res, 415, { error: '請使用 JSON 登入。' });
         cleanup();
@@ -114,16 +120,19 @@ export async function createApp(options = {}) {
         const input = await body(req);
         if (!input || typeof input.password !== 'string') return send(res, 400, { error: '請輸入密碼。' });
         if (activeDecryptions >= 4) return send(res, 503, { error: '登入忙碌中，請稍後重試。' });
+        const loginSource = await sourceReader.read();
         activeDecryptions++;
         let data;
-        try { data = await decryptPayload(encrypted, input.password); }
+        try { data = await decryptPayload(loginSource.encrypted, input.password); }
         catch { return send(res, 401, { error: '密碼不正確，或資料檔無法解鎖。' }); }
         finally { activeDecryptions--; input.password = ''; }
+        const decoded = JSON.parse(data.toString('utf8'));
+        if (loginSource.receipt && (decoded.asOf !== loginSource.receipt.as_of || decoded.stocks.length !== loginSource.receipt.stock_count || decoded.editorial?.data_date !== decoded.asOf)) return send(res, 500, { error: '分析資料日期、筆數或判讀與建置紀錄不一致，尚未套用。' });
         const oldToken = sessionToken(req);
         if (oldToken) sessions.delete(oldToken);
         if (sessions.size >= 20) sessions.delete(sessions.keys().next().value);
         const token = randomBytes(32).toString('hex');
-        sessions.set(token, { data, asOf: JSON.parse(data.toString('utf8')).asOf, expires: Date.now() + sessionTtl });
+        sessions.set(token, { data, asOf: decoded.asOf, sourceHash: loginSource.hash, expires: Date.now() + sessionTtl });
         res.setHeader('Set-Cookie', cookie(token, Math.ceil(sessionTtl / 1000)));
         return send(res, 204);
       }
@@ -139,7 +148,17 @@ export async function createApp(options = {}) {
           sessions.delete(token); res.setHeader('Set-Cookie', cookie('', 0));
           return send(res, 401, { error: '請先登入。' });
         }
-        if (path === '/api/input-status') return send(res, 200, await readInputStatus(inputDirectory, session.asOf, { targetDate: url.searchParams.get('target') || undefined }));
+        const source = await sourceReader.read();
+        if (session.sourceHash !== source.hash) {
+          sessions.delete(token); res.setHeader('Set-Cookie', cookie('', 0));
+          return send(res, 401, { code: 'data_updated', error: '分析資料已更新，請重新登入以讀取新版本。' });
+        }
+        if (path === '/api/input-status') {
+          const status = await readInputStatus(inputDirectory, session.asOf, { targetDate: url.searchParams.get('target') || undefined });
+          status.dataSource = dataSourceInfo(source);
+          if (source.warning) { status.tone = 'danger'; status.alert = source.warning + status.alert; }
+          return send(res, 200, status);
+        }
         return send(res, 200, session.data);
       }
       return send(res, 404, { error: '找不到頁面。' });

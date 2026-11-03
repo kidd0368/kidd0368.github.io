@@ -4,14 +4,17 @@ import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { readInputStatus, taipeiCalendarDate } from '../input-status.mjs';
+import { workbook } from './xlsx-fixture.mjs';
+import { inspectXlsxDates } from '../xlsx-dates.mjs';
 
 async function inputFixture(t) {
   const root = await mkdtemp(join(tmpdir(), 'margin-inputs-'));
   t.after(() => rm(root, { recursive: true, force: true }));
-  async function file(name) {
+  async function file(name, contentDate, options = {}) {
     const parts = name.split('/'); parts.pop();
     await mkdir(join(root, ...parts), { recursive: true });
-    await writeFile(join(root, name), 'fixture-name-check-only');
+    const kind = name.includes('chatgpt') ? 'history' : name.includes('融資融券') ? 'margin' : 'prices';
+    await writeFile(join(root, name), workbook(kind, contentDate || name.match(/\d{8}/)?.[0], options));
   }
   return { root, file };
 }
@@ -31,7 +34,7 @@ test('newer primary workbook wins over stale legacy workbook, including repeated
   assert.match(status.summary, /檔名日期不同/);
   assert.equal(status.anchor.found, true);
   assert.equal(status.anchor.dataDate, '20260727');
-  assert.equal(status.dateBasis, 'filename_only');
+  assert.equal(status.dateBasis, 'worksheet_headers');
 });
 
 test('same day selects primary folder; a newer legacy workbook still wins', async t => {
@@ -90,7 +93,7 @@ test('per-file warning names the lagging workbook and the exact target filename'
   assert.equal(status.counts.outdated, 1);
   assert.equal(status.files[0].expectedTargetName, 'chatgpt 計算融資維持率 20261103.xlsx');
   assert.match(status.files[0].action, /重新匯出/);
-  assert.match(status.alert, /chatgpt 計算融資維持率（目前檔名 2026\/10\/30）/);
+  assert.match(status.alert, /chatgpt 計算融資維持率（檔內 2026\/10\/30；檔名 2026\/10\/30）/);
   assert.match(status.alert, /目標 2026\/11\/03/);
   assert.equal(status.tone, 'danger');
 });
@@ -121,7 +124,7 @@ test('matching website and filenames still retain the content-check boundary', a
   const status = await readInputStatus(root, '20261103', { targetDate: '20261103' });
   assert.equal(status.website.code, 'at_target');
   assert.equal(status.tone, 'info');
-  assert.match(status.alert, /檔內交易日與欄位仍須/);
+  assert.match(status.alert, /個股數值與欄位完整性仍須/);
 });
 
 test('future-dated and missing filenames are not shown as current', async t => {
@@ -141,4 +144,40 @@ test('invalid target dates are rejected and the default day follows Taipei midni
   const status = await readInputStatus(root, '20260814', { now: new Date('2026-11-03T15:00:00Z') });
   assert.equal(status.targetDate, '20261103');
   assert.equal(status.targetSource, 'taipei_today');
+});
+
+test('renaming a stale workbook does not make its content current', async t => {
+  const { root, file } = await inputFixture(t);
+  await file('chatgpt 計算融資維持率 20261103.xlsx', '20261030');
+  for (const prefix of ['融資融券', '個股日k線']) await file(`${prefix} 20261103.xlsx`);
+  const status = await readInputStatus(root, '20261030', { targetDate: '20261103' });
+  assert.equal(status.files[0].latest.date, '20261103');
+  assert.equal(status.files[0].inspection.lastDate, '20261030');
+  assert.equal(status.files[0].freshness.code, 'outdated');
+  assert.match(status.files[0].action, /只改檔名不會/);
+  assert.match(status.alert, /檔內 2026\/10\/30；檔名 2026\/11\/03/);
+});
+
+test('unreadable or inconsistent date headers are never shown as updated', async t => {
+  const { root, file } = await inputFixture(t);
+  const name = 'chatgpt 計算融資維持率 20261103.xlsx';
+  await file(name, '20261103', { mismatch: '資買' });
+  let result = await inspectXlsxDates(join(root, name), 'history');
+  assert.equal(result.code, 'unknown'); assert.match(result.note, /不一致/);
+  await file(name, '20261103', { omit: '資買' });
+  result = await inspectXlsxDates(join(root, name), 'history');
+  assert.equal(result.code, 'unknown');
+  await writeFile(join(root, name), 'unfinished sync');
+  const status = await readInputStatus(root, '20261103', { targetDate: '20261103' });
+  assert.equal(status.files[0].freshness.code, 'unknown');
+  assert.equal(status.counts.at_target, 0);
+});
+
+test('header cache notices replacement of an existing workbook', async t => {
+  const { root, file } = await inputFixture(t);
+  const name = '個股日k線 20261103.xlsx';
+  await file(name, '20261030');
+  assert.equal((await inspectXlsxDates(join(root, name), 'prices')).lastDate, '20261030');
+  await file(name, '20261103');
+  assert.equal((await inspectXlsxDates(join(root, name), 'prices')).lastDate, '20261103');
 });

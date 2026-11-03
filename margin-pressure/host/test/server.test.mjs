@@ -1,11 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, writeFile, rm, readFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, rm, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { randomBytes, pbkdf2Sync, createCipheriv, createHash } from 'node:crypto';
 import { createApp, decryptPayload } from '../server.mjs';
 import { hostFrontend } from '../frontend.mjs';
+import { createDataSource } from '../data-source.mjs';
 
 const password = 'synthetic-test-password';
 
@@ -155,4 +156,58 @@ test('host adaptation preserves the stock model and hashes the delivered script'
   const hash = createHash('sha256').update(script).digest('base64');
   assert.ok(response.headers.get('content-security-policy').includes(`'sha256-${hash}'`));
   new Function(script); // Syntax check only; browser runtime is checked separately.
+});
+
+async function readyFixture(t) {
+  const dir = await mkdtemp(join(tmpdir(), 'margin-ready-'));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const ready = join(dir, 'ready'); await mkdir(join(ready, 'site'), { recursive: true });
+  const fallbackFile = join(dir, 'payload.enc'); await writeFile(fallbackFile, JSON.stringify(encrypt(sample)));
+  async function build(date, options = {}) {
+    const data = { ...sample, asOf: date, editorial: { data_date: options.editorialDate || date } };
+    const bytes = Buffer.from(JSON.stringify(encrypt(data)));
+    await writeFile(join(ready, 'site/payload.enc'), bytes);
+    await writeFile(join(ready, 'build-info.json'), JSON.stringify({ mode: 'local', as_of: options.receiptDate || date, stock_count: options.count || 1, payload_sha256: options.hash || createHash('sha256').update(bytes).digest('hex') }));
+    return data;
+  }
+  return { dir, ready, fallbackFile, build };
+}
+
+test('completed local analysis is selected by verified receipt; failed sync and regressions keep last data', async t => {
+  const { ready, fallbackFile, build } = await readyFixture(t);
+  const reader = createDataSource({ fallbackFile, fallbackDate: sample.asOf, readyDirectory: ready, checkIntervalMs: 0 });
+  assert.equal((await reader.read()).kind, 'bundled');
+  await build('20261030');
+  const current = await reader.read(); assert.equal(current.asOf, '20261030'); assert.equal(current.kind, 'completed_local');
+  await writeFile(join(ready, 'site/payload.enc'), '{}');
+  let retained = await reader.read(); assert.equal(retained.hash, current.hash); assert.match(retained.warning, /尚未通過驗證/);
+  await build('20260821');
+  retained = await reader.read(); assert.equal(retained.asOf, '20261030'); assert.match(retained.warning, /較舊/);
+  await rm(join(ready, 'build-info.json'));
+  assert.equal((await reader.read()).hash, current.hash);
+});
+
+test('new completed analysis changes real API data and footer; old sessions require login again', async t => {
+  const { ready, build } = await readyFixture(t);
+  const october = await build('20261030');
+  const { request, login } = await fixture(t, { readyBuildDirectory: ready, sourceCheckIntervalMs: 0 });
+  const cookie = (await login()).headers.get('set-cookie').split(';')[0];
+  assert.deepEqual(await (await request('/api/data', { headers: { Cookie: cookie } })).json(), october);
+  assert.match(await (await request('/')).text(), /資料日期：20261030/);
+  const status = await (await request('/api/input-status', { headers: { Cookie: cookie } })).json();
+  assert.equal(status.dataSource.kind, 'completed_local'); assert.equal(status.analysisDate, '20261030');
+  const november = await build('20261103');
+  const stale = await request('/api/data', { headers: { Cookie: cookie } });
+  assert.equal(stale.status, 401); assert.equal((await stale.json()).code, 'data_updated');
+  const newCookie = (await login()).headers.get('set-cookie').split(';')[0];
+  assert.deepEqual(await (await request('/api/data', { headers: { Cookie: newCookie } })).json(), november);
+});
+
+test('hash-valid payload still rejects mismatched analysis date, stock count or AI judgment date', async t => {
+  const { ready, build } = await readyFixture(t);
+  const { login } = await fixture(t, { readyBuildDirectory: ready, sourceCheckIntervalMs: 0 });
+  for (const options of [{ receiptDate: '20261103' }, { count: 2 }, { editorialDate: '20260814' }]) {
+    await build('20261030', options);
+    assert.equal((await login()).status, 500);
+  }
 });

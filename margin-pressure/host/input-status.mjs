@@ -1,5 +1,6 @@
 import { readdir } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
+import { inspectXlsxDates } from './xlsx-dates.mjs';
 
 const definitions = [
   { id: 'history', pattern: /^chatgpt\s+計算融資維持率\s+(\d{8})\.xlsx$/i, name: 'chatgpt 計算融資維持率 YYYYMMDD.xlsx', purpose: '近180個交易日的股價、成交量／金額、融資買進／賣出／現金償還／餘額；保留原 CMoney 匯出格式與固定基準日。' },
@@ -61,23 +62,27 @@ export async function readInputStatus(directory, analysisDate, options = {}) {
   const available = listings.some(item => item.available);
   const displayDate = value => `${value.slice(0, 4)}/${value.slice(4, 6)}/${value.slice(6, 8)}`;
   for (const file of files) {
+    file.inspection = file.latest ? await inspectXlsxDates(file.latest.path, file.id) : null;
+    const headerDate = file.inspection?.lastDate;
     let code, label;
     if (!available) { code = 'unavailable'; label = '無法檢查'; }
     else if (!file.latest) { code = 'missing'; label = '缺少檔案'; }
-    else if (file.latest.date < targetDate) { code = 'outdated'; label = '尚未更新'; }
+    else if ((headerDate || file.latest.date) < targetDate) { code = 'outdated'; label = '尚未更新'; }
     else if (file.duplicate) { code = 'duplicate'; label = '同日重複，需確認'; }
-    else if (file.latest.date > targetDate) { code = 'future'; label = '檔名超過目標，需核對'; }
-    else { code = 'at_target'; label = '檔名已到目標'; }
+    else if (!headerDate) { code = 'unknown'; label = '檔內日期待確認'; }
+    else if (headerDate > targetDate) { code = 'future'; label = '檔內日期超過目標，需核對'; }
+    else { code = 'at_target'; label = '日期表頭已到目標'; }
     file.freshness = { code, label, targetDate, contentVerified: false };
     file.expectedTargetName = file.expectedName.replace('YYYYMMDD', targetDate);
     file.action = code === 'outdated' || code === 'missing'
-      ? `請重新匯出 ${file.expectedTargetName}，並確認檔內最新完整交易日。`
-      : code === 'at_target' ? '檔名日期符合；Excel內容仍須由原本重算流程檢核。'
+      ? `${headerDate ? '檔內日期只有 '+displayDate(headerDate)+'。' : ''}請重新匯出 ${file.expectedTargetName}，並確認檔內最新完整交易日；只改檔名不會更新資料。`
+      : code === 'at_target' ? '必要工作表日期表頭符合；個股數值完整性仍須由原本重算流程檢核。'
       : code === 'future' ? '請核對目標資料日及檔內最新完整交易日。'
       : code === 'duplicate' ? '同一資料夾同日請只保留一份應使用的檔案。'
+      : code === 'unknown' ? file.inspection.note
       : '請核對來源資料夾是否存在或可讀取。';
   }
-  const counts = Object.fromEntries(['outdated', 'missing', 'at_target', 'future', 'duplicate', 'unavailable'].map(code => [code, files.filter(file => file.freshness.code === code).length]));
+  const counts = Object.fromEntries(['outdated', 'missing', 'at_target', 'future', 'duplicate', 'unavailable', 'unknown'].map(code => [code, files.filter(file => file.freshness.code === code).length]));
   const websiteCode = String(analysisDate) < targetDate ? 'outdated' : String(analysisDate) > targetDate ? 'ahead' : 'at_target';
   const website = {
     code: websiteCode,
@@ -89,12 +94,13 @@ export async function readInputStatus(directory, analysisDate, options = {}) {
   const overdue = files.filter(file => ['outdated', 'missing'].includes(file.freshness.code));
   let alert;
   if (!available) alert = summary;
-  else if (overdue.length) alert = `目標 ${displayDate(targetDate)}：${overdue.map(file => file.expectedName.replace(' YYYYMMDD.xlsx', '') + (file.latest ? `（目前檔名 ${displayDate(file.latest.date)}）` : '（缺檔）')).join('、')} 尚未更新。`;
+  else if (overdue.length) alert = `目標 ${displayDate(targetDate)}：${overdue.map(file => file.expectedName.replace(' YYYYMMDD.xlsx', '') + (file.latest ? `（檔內 ${file.inspection?.lastDate ? displayDate(file.inspection.lastDate) : '待確認'}；檔名 ${displayDate(file.latest.date)}）` : '（缺檔）')).join('、')} 尚未更新。`;
+  else if (counts.unknown) alert = '部分Excel無法確認檔內日期，請查看逐檔原因；尚未視為已更新。';
   else if (counts.future || counts.duplicate) alert = '來源檔名超過目標日或有重複檔，請逐項核對；目前不標示為已更新。';
-  else if (websiteCode === 'outdated') alert = `三份 Excel 的檔名都已達 ${displayDate(targetDate)}，但網站數據尚未套用重算結果。`;
-  else alert = `三份 Excel 的檔名都已達 ${displayDate(targetDate)}；檔內交易日與欄位仍須由原本重算流程檢核。`;
-  const tone = !available || overdue.length || websiteCode === 'outdated' || !anchor.found ? 'danger' : counts.future || counts.duplicate ? 'warning' : 'info';
-  return { analysisDate: String(analysisDate), sourceDirectory: root, checkedAt: new Date().toISOString(), available, files, anchor, summary, dateBasis: 'filename_only', targetDate, targetSource: options.targetDate ? 'selected' : 'taipei_today', counts, website, alert, tone };
+  else if (websiteCode === 'outdated') alert = `三份 Excel 的日期表頭都已達 ${displayDate(targetDate)}，但網站數據尚未套用重算結果。`;
+  else alert = `三份 Excel 的日期表頭都已達 ${displayDate(targetDate)}；個股數值與欄位完整性仍須由原本重算流程檢核。`;
+  const tone = !available || overdue.length || websiteCode === 'outdated' || !anchor.found ? 'danger' : counts.future || counts.duplicate || counts.unknown ? 'warning' : 'info';
+  return { analysisDate: String(analysisDate), sourceDirectory: root, checkedAt: new Date().toISOString(), available, files, anchor, summary, dateBasis: 'worksheet_headers', targetDate, targetSource: options.targetDate ? 'selected' : 'taipei_today', counts, website, alert, tone };
 }
 
 export function taipeiCalendarDate(now = new Date()) {
