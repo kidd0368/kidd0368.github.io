@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import { createDecipheriv, createHash, pbkdf2, randomBytes } from 'node:crypto';
 import { promisify } from 'node:util';
 import { hostFrontend } from './frontend.mjs';
+import { readInputStatus } from './input-status.mjs';
 
 const deriveKey = promisify(pbkdf2);
 const here = fileURLToPath(new URL('.', import.meta.url));
@@ -38,6 +39,7 @@ export async function createApp(options = {}) {
   const publicOrigin = publicOriginValue ? new URL(publicOriginValue).origin : '';
   const secureCookie = publicOrigin.startsWith('https://');
   const sessionTtl = options.sessionTtl ?? TTL;
+  const inputDirectory = resolve(options.inputDirectory || process.env.INPUT_DIRECTORY || resolve(here, '../../../機率分布預測'));
   const encryptedText = await readFile(dataFile, 'utf8');
   if (encryptedText.length > 32 * 1024 * 1024) throw new Error('資料檔超過 32 MB。');
   const encrypted = JSON.parse(encryptedText);
@@ -121,7 +123,7 @@ export async function createApp(options = {}) {
         if (oldToken) sessions.delete(oldToken);
         if (sessions.size >= 20) sessions.delete(sessions.keys().next().value);
         const token = randomBytes(32).toString('hex');
-        sessions.set(token, { data, expires: Date.now() + sessionTtl });
+        sessions.set(token, { data, asOf: JSON.parse(data.toString('utf8')).asOf, expires: Date.now() + sessionTtl });
         res.setHeader('Set-Cookie', cookie(token, Math.ceil(sessionTtl / 1000)));
         return send(res, 204);
       }
@@ -130,13 +132,14 @@ export async function createApp(options = {}) {
         res.setHeader('Set-Cookie', cookie('', 0));
         return send(res, 204);
       }
-      if (req.method === 'GET' && path === '/api/data') {
+      if (req.method === 'GET' && ['/api/data', '/api/input-status'].includes(path)) {
         const token = sessionToken(req);
         const session = sessions.get(token);
         if (!session || session.expires <= Date.now()) {
           sessions.delete(token); res.setHeader('Set-Cookie', cookie('', 0));
           return send(res, 401, { error: '請先登入。' });
         }
+        if (path === '/api/input-status') return send(res, 200, await readInputStatus(inputDirectory, session.asOf));
         return send(res, 200, session.data);
       }
       return send(res, 404, { error: '找不到頁面。' });

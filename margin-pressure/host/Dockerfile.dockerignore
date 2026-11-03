@@ -5,3 +5,4 @@
 !host/package.json
 !host/server.mjs
 !host/frontend.mjs
+!host/input-status.mjs

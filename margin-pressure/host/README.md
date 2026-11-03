@@ -63,6 +63,20 @@ radar.example.com {
 
 ## 資料更新
 
+頁面上方會列出每日應更新的三份 Excel，以及本機最新找到的檔名與匯出日：
+
+| 檔案 | 用途 |
+|---|---|
+| `chatgpt 計算融資維持率 YYYYMMDD.xlsx` | 近180個交易日的價量、融資買賣與現償資料 |
+| `融資融券 YYYYMMDD.xlsx` | 長期融資餘額、歷史回溯 |
+| `個股日k線 YYYYMMDD.xlsx` | 長期價格與成交成本 |
+
+三份皆可存於 `Dropbox/DT同步/cmoney/機率分布預測`；專用 `chatgpt 計算融資維持率` 檔也支援 `gpt 維持率追蹤` 第一層。先按檔名日期選最新檔，同日優先主資料夾。同一資料夾同日重複檔會另列提示。永久保留 `gpt 維持率追蹤/備份/融資維持率 20260728.xlsx`，其內2026/07/27最後可用維持率作為固定基準，不需每日更新。
+
+此面板只掃描指定資料夾內的檔名，不讀取或上傳 Excel 內容；檔名匯出日不等於已驗證的最新交易日。主機的實際資料日仍以登入後的加密分析資料為準。檔名日期不同或較網站資料日新時，頁面會提示核對來源與重算流程。
+
+預設依專案所在位置尋找同一 `cmoney` 目錄下的 `機率分布預測`。若安裝位置不同，設定 `INPUT_DIRECTORY` 為該資料夾的絕對路徑。Docker 若需要掃描宿主機 Excel，須另以唯讀方式掛載來源資料夾並設定容器內的 `INPUT_DIRECTORY`；不掛載也可照常查看分析。
+
 目前隨網站保存的資料日期為 **2026-08-14**。主機版沒有新增行情來源，也不會自動產生最新融資數據；原專案的資料更新方式為手動更新。
 
 取得相同格式的新 `payload.enc` 後，替換 `margin-pressure/payload.enc` 並重新啟動主機。若新版資料需要更新前端欄位，也一併更新原本的 `margin-pressure/index.html`。
@@ -84,10 +98,11 @@ docker compose -f margin-pressure/host/compose.yaml up -d --force-recreate
 | `PUBLIC_ORIGIN` | 空白 | HTTPS 公開網址，例如 `https://radar.example.com` |
 | `DATA_FILE` | `margin-pressure/payload.enc` | Node 讀取的加密資料位置，建議使用絕對路徑 |
 | `TEMPLATE_FILE` | `margin-pressure/index.html` | Node 讀取的原版頁面位置 |
+| `INPUT_DIRECTORY` | 同一 `cmoney` 下的 `機率分布預測` | 更新提醒面板掃描的 Excel 來源資料夾 |
 | `BIND_ADDRESS` | `127.0.0.1` | Docker 對外綁定的網路位址 |
 | `MARGIN_DATA_FILE` | `../payload.enc` | Compose 掛載資料檔的位置，相對於 `host/` 資料夾 |
 
-主機版只提供 `/`、`/api/login`、`/api/data`、`/api/logout`、`/healthz`，不會公開資料檔、程式碼或目錄。錯誤登入每個來源 15 分鐘最多嘗試 10 次（成功登入也計入），最多保留 20 個登入狀態。反向代理後的來源以代理位址計算，適用私人使用。
+主機版提供 `/`、`/api/login`、`/api/data`、`/api/input-status`、`/api/logout`、`/healthz`，不會公開資料檔、程式碼或目錄。錯誤登入每個來源 15 分鐘最多嘗試 10 次（成功登入也計入），最多保留 20 個登入狀態。反向代理後的來源以代理位址計算，適用私人使用。
 
 ## 驗證
 

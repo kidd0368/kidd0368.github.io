@@ -63,6 +63,7 @@ test('original AES-GCM format decrypts; wrong passwords and tampering fail', asy
 test('authenticated data survives refresh; logout revokes the server session', async t => {
   const { request, login } = await fixture(t);
   assert.equal((await request('/api/data')).status, 401);
+  assert.equal((await request('/api/input-status')).status, 401);
   assert.equal((await login('incorrect')).status, 401);
   assert.equal((await request('/api/data', { headers: { Cookie: 'mp_session=forged' } })).status, 401);
   const authenticated = await login();
@@ -70,6 +71,9 @@ test('authenticated data survives refresh; logout revokes the server session', a
   const setCookie = authenticated.headers.get('set-cookie');
   assert.match(setCookie, /HttpOnly/); assert.match(setCookie, /SameSite=Strict/);
   const Cookie = setCookie.split(';')[0];
+  const inputStatus = await request('/api/input-status', { headers: { Cookie } });
+  assert.equal(inputStatus.status, 200);
+  assert.equal((await inputStatus.json()).analysisDate, sample.asOf);
   for (let i = 0; i < 2; i++) {
     const response = await request('/api/data', { headers: { Cookie } });
     assert.equal(response.status, 200); assert.deepEqual(await response.json(), sample);
@@ -78,6 +82,7 @@ test('authenticated data survives refresh; logout revokes the server session', a
   const logout = await request('/api/logout', { method: 'POST', headers: { Cookie } });
   assert.equal(logout.status, 204); assert.match(logout.headers.get('set-cookie'), /Max-Age=0/);
   assert.equal((await request('/api/data', { headers: { Cookie } })).status, 401);
+  assert.equal((await request('/api/input-status', { headers: { Cookie } })).status, 401);
 });
 
 test('old session token is revoked on login rotation', async t => {
@@ -135,6 +140,8 @@ test('host adaptation preserves the stock model and hashes the delivered script'
   assert.equal(adapted.slice(adapted.indexOf('    function init(){')), original.slice(original.indexOf('    function init(){')));
   assert.doesNotMatch(adapted, /crypto\.subtle|fetch\("payload\.enc"/);
   assert.match(adapted, /id="logout"/);
+  assert.match(adapted, /id="excelFiles"/);
+  assert.match(adapted, /fetch\('\/api\/input-status'/);
   assert.throws(() => hostFrontend('<html></html>'), /登入區段/);
   const { request } = await fixture(t);
   const response = await request('/?stock=2492');

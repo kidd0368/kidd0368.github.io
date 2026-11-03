@@ -1,0 +1,59 @@
+// Produce a small offline updater for the already-installed Windows host.
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
+
+const here = fileURLToPath(new URL('../', import.meta.url));
+const output = resolve(process.argv[2] || resolve(here, 'reminder-update'));
+const original = {
+  'server.mjs': 'd3fa461bf38367a434f6ea581e99c94441b366fe4968fcb3dbf3ad6ef90cff31',
+  'frontend.mjs': '297fcf718053481ff95ae839fe45465d52741e33331c57b45c4307c77933b36b'
+};
+const files = await Promise.all(['server.mjs', 'frontend.mjs', 'input-status.mjs'].map(async name => {
+  const bytes = await readFile(resolve(here, name));
+  return { name, originalHash: original[name] || null, updatedHash: createHash('sha256').update(bytes).digest('hex'), content: bytes.toString('base64') };
+}));
+const installer = `import {readFile,writeFile,copyFile,rename,unlink} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+import {join} from 'node:path';
+const root=fileURLToPath(new URL('.',import.meta.url));
+const files=${JSON.stringify(files)};
+const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
+const pending=[];
+try {
+  for(const file of files){
+    const target=join(root,file.name);
+    let before=null;
+    try{before=await readFile(target)}catch(error){if(error.code!=='ENOENT')throw error}
+    if(before&&digest(before)===file.updatedHash)continue;
+    if(file.originalHash?(!before||digest(before)!==file.originalHash):before!==null){
+      throw new Error('Unexpected existing file: '+file.name+'. No files changed.');
+    }
+    const bytes=Buffer.from(file.content,'base64');
+    if(digest(bytes)!==file.updatedHash)throw new Error('Update integrity check failed.');
+    pending.push({target,before,bytes,temp:target+'.excel-reminder.pending',installed:false});
+  }
+  const stamp=new Date().toISOString().replace(/[:.]/g,'-');
+  for(const item of pending){
+    await writeFile(item.temp,item.bytes,{flag:'wx'});item.staged=true;
+    if(item.before)await copyFile(item.target,item.target+'.before-reminder-'+stamp+'.bak',1);
+  }
+  for(const item of pending){await rename(item.temp,item.target);item.staged=false;item.installed=true}
+  console.log(pending.length?'Excel reminder installed successfully.':'Excel reminder is already installed.');
+  console.log('Close the running server window, then run start-fixed.cmd again.');
+  console.log('Open http://127.0.0.1:8787/?stock=2492 and refresh the page.');
+}catch(error){
+  for(const item of [...pending].reverse()){
+    if(item.installed){if(item.before)await writeFile(item.target,item.before);else await unlink(item.target).catch(()=>{})}
+    if(item.staged)await unlink(item.temp).catch(()=>{});
+  }
+  console.error('Update failed: '+error.message);process.exitCode=1;
+}
+`;
+const launcher = ['@echo off', 'setlocal EnableExtensions DisableDelayedExpansion', 'cd /d "%~dp0"', 'where node.exe >nul 2>&1', 'if errorlevel 1 goto missing_node', 'node.exe "%~dp0apply-excel-reminder.mjs"', 'set "radar_update_exit=%errorlevel%"', 'pause', 'exit /b %radar_update_exit%', ':missing_node', 'echo Install Node.js 22 or newer, then run this file again.', 'pause', 'exit /b 1', ''].join('\r\n');
+await mkdir(output, { recursive: true });
+await writeFile(resolve(output, 'apply-excel-reminder.mjs'), installer);
+await writeFile(resolve(output, 'install-excel-reminder.cmd'), launcher, 'ascii');
+console.log(`Created offline update files in ${output}`);
