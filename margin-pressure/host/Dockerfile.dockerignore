@@ -1,0 +1,7 @@
+**
+!index.html
+!payload.enc
+!host/
+!host/package.json
+!host/server.mjs
+!host/frontend.mjs
