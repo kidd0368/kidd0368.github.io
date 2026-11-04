@@ -1,0 +1,21 @@
+services:
+  radar:
+    build:
+      context: ..
+      dockerfile: host/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${PORT:-8787}:8787"
+    environment:
+      PUBLIC_ORIGIN: "${PUBLIC_ORIGIN:-}"
+    volumes:
+      - type: bind
+        source: "${MARGIN_DATA_FILE:-../payload.enc}"
+        target: /app/payload.enc
+        read_only: true
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    stop_grace_period: 15s

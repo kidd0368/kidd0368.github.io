@@ -17,3 +17,5 @@
 | 籌碼上漲機會追蹤 | `chip-uptrend/` | 手動更新 |
 | 暴跌後長紅的歷史機率 | `rebound-stats/` | 一次性研究 |
 | 台股崩跌反彈候選研究頁 | `crash-rebound-screen/` | 一次性研究 |
+
+「個股融資賣壓風險雷達」也提供可在自己的電腦或伺服器啟動的[主機版與部署說明](margin-pressure/host/README.md)。
